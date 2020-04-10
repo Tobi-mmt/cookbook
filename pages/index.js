@@ -1,185 +1,162 @@
 import Head from 'next/head'
+import { recipes } from "../lib/recipe"
 
 const Home = () => (
   <div className="container">
     <Head>
-      <title>Create Next App</title>
+      <title>Tobi's Kochbuch</title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
-
     <main>
-      <h1 className="title">
-        Welcome to <a href="https://nextjs.org">Next.js!</a>
-      </h1>
+      <header>
+        <h1> Tobi's Kochbuch</h1>
+      </header>
+      {recipes.map(recipe => (
+        <section key={recipe.image} className="recipe">
+          <div className="header" style={{ backgroundImage: `url(${recipe.image})` }}>
+            <div className="image" >
+            </div>
+            <div className="infos">
+              <h1 className="title">{recipe.title}</h1>
+              <div className="meta">
+                <p className="meta-item portion">{recipe.meta.portion}</p>
+                <p className="meta-item duration">{recipe.meta.duration}</p>
+                <p className="meta-item category">{recipe.meta.category}</p>
+              </div>
 
-      <p className="description">
-        Get started by editing <code>pages/index.js</code>
-      </p>
+            </div>
+          </div>
+          <div className="content">
+            <div className="description">{recipe.description.map(d => <p>{d}</p>)}</div>
+            <div className="ingredients">
+              <table>
+                {recipe.ingredients.map(ingredient => (
+                  <tr>
+                    {ingredient.section ? <>
+                      <td className="ingredients-headline">{ingredient.section}</td>
+                      <td></td>
+                    </>
+                      : <>
+                        <td>{ingredient.quantity}</td>
+                        <td>{ingredient.name}</td>
+                      </>
+                    }
+                  </tr>
+                ))}
+              </table>
+            </div>
 
-      <div className="grid">
-        <a href="https://nextjs.org/docs" className="card">
-          <h3>Documentation &rarr;</h3>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+          </div>
+        </section>
+      ))}
 
-        <a href="https://nextjs.org/learn" className="card">
-          <h3>Learn &rarr;</h3>
-          <p>Learn about Next.js in an interactive course with quizzes!</p>
-        </a>
-
-        <a
-          href="https://github.com/zeit/next.js/tree/master/examples"
-          className="card"
-        >
-          <h3>Examples &rarr;</h3>
-          <p>Discover and deploy boilerplate example Next.js projects.</p>
-        </a>
-
-        <a
-          href="https://zeit.co/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          className="card"
-        >
-          <h3>Deploy &rarr;</h3>
-          <p>
-            Instantly deploy your Next.js site to a public URL with ZEIT Now.
-          </p>
-        </a>
-      </div>
     </main>
 
-    <footer>
-      <a
-        href="https://zeit.co?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Powered by <img src="/zeit.svg" alt="ZEIT Logo" />
-      </a>
-    </footer>
-
     <style jsx>{`
-      .container {
-        min-height: 100vh;
-        padding: 0 0.5rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-
-      main {
-        padding: 5rem 0;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-
-      footer {
-        width: 100%;
-        height: 100px;
-        border-top: 1px solid #eaeaea;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      footer img {
-        margin-left: 0.5rem;
-      }
-
-      footer a {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
-
-      .title a {
-        color: #0070f3;
-        text-decoration: none;
-      }
-
-      .title a:hover,
-      .title a:focus,
-      .title a:active {
-        text-decoration: underline;
-      }
-
-      .title {
-        margin: 0;
-        line-height: 1.15;
-        font-size: 4rem;
-      }
-
-      .title,
-      .description {
+      header{
         text-align: center;
       }
-
-      .description {
-        line-height: 1.5;
-        font-size: 1.5rem;
+      header h1 {
+        font-weight: normal;
       }
-
-      code {
-        background: #fafafa;
-        border-radius: 5px;
-        padding: 0.75rem;
-        font-size: 1.1rem;
-        font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-          DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+      main{
+        max-width: 1500px;
+        margin: auto;
       }
-
-      .grid {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-
-        max-width: 800px;
-        margin-top: 3rem;
+      .recipe {
+        break-before: always;
+        box-shadow: 0 0 25px #0005;
+        margin: 5em 1.5em;
       }
-
-      .card {
-        margin: 1rem;
-        flex-basis: 45%;
-        padding: 1.5rem;
-        text-align: left;
-        color: inherit;
-        text-decoration: none;
-        border: 1px solid #eaeaea;
-        border-radius: 10px;
-        transition: color 0.15s ease, border-color 0.15s ease;
+      .recipe:first-of-type{
+        margin-top: 2em;
       }
-
-      .card:hover,
-      .card:focus,
-      .card:active {
-        color: #0070f3;
-        border-color: #0070f3;
+      .header {
+        min-height: 12cm;
+        position: relative;
+        background-size: cover;
+        background-position: left top;
+        height: 40vw;
+        max-height: 550px;
       }
-
-      .card h3 {
-        margin: 0 0 1rem 0;
-        font-size: 1.5rem;
-      }
-
-      .card p {
+      .title {
+        padding: 0;
+        font-weight: 200;
         margin: 0;
-        font-size: 1.25rem;
-        line-height: 1.5;
+        font-size: 2.5em;
       }
-
-      @media (max-width: 600px) {
-        .grid {
-          width: 100%;
-          flex-direction: column;
+      .infos {
+        position: absolute;
+        bottom: 3em;
+        background: #fffd;
+        padding: 1em 1em 1em 3em;
+      }
+      .meta {
+        display: flex;
+      }
+      .portion::before {
+        background: url("/icons/portion.png") no-repeat;
+      }
+      .duration::before {
+        background: url("/icons/duration.png") no-repeat;
+      }
+      .category::before {
+        background: url("/icons/category.png") no-repeat;
+      }
+      .meta-item {
+        margin: 0 1em 0 0;
+      }
+      .meta-item::before {
+        height: 1em;
+        width: 1em;
+        background-size: .9em;
+        background-position-y: 1px;
+        content: "";
+        display: inline-block;
+        opacity: .75;
+      }
+      .content {
+        display: flex;
+        padding: 2em;
+      }
+      .description {
+        padding-right: 2em;
+      }
+      .description p:first-of-type {
+        margin-top: 0;
+      }
+      .ingredients-headline {
+        font-weight: bold;
+        font-style: italic;
+        padding-top: 1em;
+      }
+      table tr:first-of-type .ingredients-headline{
+        padding-top: 0;
+      }
+      table tr td:first-of-type {
+        text-align: right;
+        padding-right: .5em;
+        width: 100px;
+      }
+      .ingredients {
+        padding:0 1em;
+        border-left: 1px dotted;
+        min-width: 20em;
+        margin-bottom: 2em;
+      }
+      .ingredients table {
+        margin: 0 auto;
+      }
+      .ingredients td {
+        vertical-align: top;
+        width: 200px;
+      }
+      @media (max-width: 700px) { 
+        .content {
+          flex-direction: column-reverse;
+        }
+        .ingredients {
+          border: none;
         }
       }
     `}</style>
@@ -189,8 +166,10 @@ const Home = () => (
       body {
         padding: 0;
         margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-          Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+        font-family: Helvetica Neue, sans-serif;
+      }
+      p {
+        margin: .5em;
       }
 
       * {
