@@ -1,47 +1,49 @@
 import Head from 'next/head'
-import { recipes } from "../lib/recipe"
+import { recipes } from '../lib/recipe'
 
 const Home = () => (
-  <div className="container">
+  <div className='container'>
     <Head>
       <title>Tobi's Kochbuch</title>
-      <link rel="icon" href="/favicon.ico" />
+      <link rel='icon' href='/favicon.ico' />
     </Head>
     <main>
       <header>
         <h1> Tobi's Kochbuch</h1>
       </header>
       {recipes.map(recipe => (
-        <section key={recipe.image} className="recipe">
-          <div className="header" style={{ backgroundImage: `url(${recipe.image})` }}>
-            <div className="image" >
-            </div>
-            <div className="infos">
-              <h1 className="title">{recipe.title}</h1>
-              <div className="meta">
-                <p className="meta-item portion">{recipe.meta.portion}</p>
-                <p className="meta-item duration">{recipe.meta.duration} min</p>
-                <p className="meta-item category">{recipe.meta.category}</p>
+        <section key={recipe.image} className='recipe'>
+          <div className='header' style={{ backgroundImage: `url(${recipe.image})` }}>
+            <div className='image' />
+            <div className='infos'>
+              <h1 className='title'>{recipe.title}</h1>
+              <div className='meta'>
+                <p className='meta-item portion'>{recipe.meta.portion}</p>
+                <p className='meta-item duration'>{recipe.meta.duration} min</p>
+                <p className='meta-item category'>{recipe.meta.category}</p>
               </div>
 
             </div>
           </div>
-          <div className="content">
-            <div className="description">{recipe.description.map(d => <p>{d}</p>)}</div>
-            <div className="ingredients">
+          <div className='content'>
+            <div className='description'>{recipe.description.map(d => <p key={d}>{d}</p>)}</div>
+            <div className='ingredients'>
               <table>
                 <tbody>
                   {recipe.ingredients.map(ingredient => (
-                    <tr>
-                      {ingredient.section ? <>
-                        <td></td>
-                        <td className="ingredients-headline">{ingredient.section}</td>
-                      </>
-                        : <>
-                          <td>{ingredient.quantity}</td>
-                          <td>{ingredient.name}</td>
-                        </>
-                      }
+                    <tr key={JSON.stringify(ingredient)}>
+                      {ingredient.section
+                        ? (
+                          <>
+                            <td />
+                            <td className='ingredients-headline'>{ingredient.section}</td>
+                          </>
+                        )
+                        : (
+                          <>
+                            <td>{ingredient.quantity}</td>
+                            <td>{ingredient.name}</td>
+                          </>)}
                     </tr>
                   ))}
                 </tbody>
@@ -171,7 +173,8 @@ const Home = () => (
           padding: 1em;
         }
       }
-    `}</style>
+    `}
+    </style>
 
     <style jsx global>{`
       html,
@@ -187,7 +190,8 @@ const Home = () => (
       * {
         box-sizing: border-box;
       }
-    `}</style>
+    `}
+    </style>
   </div>
 )
 
