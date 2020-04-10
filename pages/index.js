@@ -20,7 +20,7 @@ const Home = () => (
               <h1 className="title">{recipe.title}</h1>
               <div className="meta">
                 <p className="meta-item portion">{recipe.meta.portion}</p>
-                <p className="meta-item duration">{recipe.meta.duration}</p>
+                <p className="meta-item duration">{recipe.meta.duration} min</p>
                 <p className="meta-item category">{recipe.meta.category}</p>
               </div>
 
@@ -30,19 +30,21 @@ const Home = () => (
             <div className="description">{recipe.description.map(d => <p>{d}</p>)}</div>
             <div className="ingredients">
               <table>
-                {recipe.ingredients.map(ingredient => (
-                  <tr>
-                    {ingredient.section ? <>
-                      <td className="ingredients-headline">{ingredient.section}</td>
-                      <td></td>
-                    </>
-                      : <>
-                        <td>{ingredient.quantity}</td>
-                        <td>{ingredient.name}</td>
+                <tbody>
+                  {recipe.ingredients.map(ingredient => (
+                    <tr>
+                      {ingredient.section ? <>
+                        <td></td>
+                        <td className="ingredients-headline">{ingredient.section}</td>
                       </>
-                    }
-                  </tr>
-                ))}
+                        : <>
+                          <td>{ingredient.quantity}</td>
+                          <td>{ingredient.name}</td>
+                        </>
+                      }
+                    </tr>
+                  ))}
+                </tbody>
               </table>
             </div>
 
@@ -60,7 +62,7 @@ const Home = () => (
         font-weight: normal;
       }
       main{
-        max-width: 1500px;
+        max-width: 1250px;
         margin: auto;
       }
       .recipe {
@@ -75,7 +77,7 @@ const Home = () => (
         min-height: 12cm;
         position: relative;
         background-size: cover;
-        background-position: left top;
+        background-position: left center;
         height: 40vw;
         max-height: 550px;
       }
@@ -90,6 +92,8 @@ const Home = () => (
         bottom: 3em;
         background: #fffd;
         padding: 1em 1em 1em 3em;
+        overflow: hidden;
+        max-width: 100%;
       }
       .meta {
         display: flex;
@@ -154,9 +158,17 @@ const Home = () => (
       @media (max-width: 700px) { 
         .content {
           flex-direction: column-reverse;
+          padding: 2em 1em;
         }
         .ingredients {
           border: none;
+        }
+        .recipe {
+          margin: 5em 0;
+        }
+        .infos {
+          bottom: 1.5em;
+          padding: 1em;
         }
       }
     `}</style>
@@ -169,7 +181,7 @@ const Home = () => (
         font-family: Helvetica Neue, sans-serif;
       }
       p {
-        margin: .5em;
+        margin: .5em 0;
       }
 
       * {
