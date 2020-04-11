@@ -68,7 +68,6 @@ const Home = () => (
         margin: auto;
       }
       .recipe {
-        break-before: always;
         box-shadow: 0 0 25px #0005;
         margin: 5em 1.5em;
       }
@@ -189,6 +188,32 @@ const Home = () => (
 
       * {
         box-sizing: border-box;
+      }
+    `}
+    </style>
+
+    <style jsx>{`
+      @media print {
+        body {
+          font-size: 12pt;
+        }
+        .ingredients {
+          min-width: 15em;
+        }
+        main {
+          max-width: 2000px;
+        }
+        .header {
+          height: 8cm;
+          max-height: unset;
+          min-height: unset;
+        }
+        .recipe {
+          margin: 5em 1.5em;
+          break-before: page;
+          box-shadow: 0 0 5px #0002;
+        }
+        a:link:after { content: " (" attr(href) ") "; } 
       }
     `}
     </style>
