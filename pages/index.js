@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import { recipes } from '../lib/recipe'
+import { slugerize } from '../lib/slugerize'
 
 const Home = () => (
   <div className='container'>
@@ -12,7 +13,7 @@ const Home = () => (
         <h1> Tobi's Kochbuch</h1>
       </header>
       {recipes.map(recipe => (
-        <section key={recipe.image} className='recipe'>
+        <section id={slugerize(recipe.title)} key={recipe.image} className='recipe'>
           <div className='header' style={{ backgroundImage: `url(${recipe.image})` }}>
             <div className='image' />
             <div className='infos'>
