@@ -4,11 +4,16 @@ import classNames from 'classnames'
 import { Icon } from './icon'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
-const OffCanvas = ({ children, open, onClose, className, direction, ...rest }) => (
+const OffCanvas = ({ children, open, onClose, className, direction, headline, ...rest }) => (
   <>
     <div {...rest} className={classNames('off-canvas', `off-canvas--from-${direction}`, { 'off-canvas--open': open }, className)}>
-      <div name='close' className='close-icon' onClick={onClose}><Icon icon={faTimes} /></div>
-      {children}
+      <div className='header'>
+        <h2 className='headline'>{headline}</h2>
+        <div name='close' className='close-icon' onClick={onClose}><Icon icon={faTimes} /></div>
+      </div>
+      <div className='content'>
+        {children}
+      </div>
     </div>
     <div className={classNames('off-canvas__click-out', { 'off-canvas__click-out--open': open })} onClick={onClose} />
     <style jsx>{`
@@ -23,7 +28,30 @@ const OffCanvas = ({ children, open, onClose, className, direction, ...rest }) =
         transition: transform 0.2s ease-out;
         background-color: #fff;
         overflow-x: hidden;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3.5em;
+        padding: 1em 1em 1em 2em;
+        z-index: 10;
+      }
+      .headline {
+        margin: 0;
+        line-height: 1em;
+      }
+      .content {
+        height: calc(100vh - 3.5em);
         overflow-y: scroll;
+        overflow-x: hidden;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
       }
 
       @media (min-width: 700px) {
@@ -63,11 +91,6 @@ const OffCanvas = ({ children, open, onClose, className, direction, ...rest }) =
 
       .close-icon {
         cursor: pointer;
-        position: absolute;
-        top: 1em;
-        right: 1em;
-        z-index: 10;
-      }
       }
     `}
     </style>
@@ -79,12 +102,14 @@ OffCanvas.propTypes = {
   className: PropTypes.string,
   direction: PropTypes.oneOf(['left', 'right']),
   onClose: PropTypes.func,
+  headline: PropTypes.string,
   open: PropTypes.bool.isRequired
 }
 
 OffCanvas.defaultProps = {
   className: '',
   direction: 'right',
+  headline: '',
   onClose: () => { }
 }
 

@@ -23,7 +23,6 @@ const Menu = ({ onClick }) => {
 
   return (
     <div className='wrapper'>
-      <h2 className='headline'>Menü</h2>
       {Object.keys(categories).map((category, idx) => {
         return (
           <div key={category}>
@@ -37,25 +36,25 @@ const Menu = ({ onClick }) => {
         )
       })}
       <style jsx>{`
-      .headline {
-        margin-top: .6em;
-      }
-      .category {
-        color: #fff;
-        padding: .5em 2.75em;
-        width: 120%;
-        margin-left: -10%;
-      }
       .wrapper {
         padding: 0 2em 2em;
       }
+      .category {
+        position: sticky;
+        top: 0;
+        color: #fff;
+        padding: .5em 2em;
+        width: 122%;
+        margin: 0 0 0 -11%;
+      }
       .list {
-        padding-left: 1em;
+        padding-left: 0;
       }
       .list-item {
         cursor: pointer;
         list-style: none;
-        line-height: 1.3em;
+        line-height: 1.5em;
+        font-size: 1.125em;
       }
       .list-item:hover {
         list-style: disclosure-closed;
