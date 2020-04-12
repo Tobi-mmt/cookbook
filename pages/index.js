@@ -13,9 +13,6 @@ const Home = () => (
     </Head>
     <TopBar />
     <main>
-      <header>
-        <h1> Tobi's Kochbuch</h1>
-      </header>
       {recipes.map(recipe => (
         <section id={slugerize(recipe.title)} key={recipe.image} className='recipe'>
           <div className='header' style={{ backgroundImage: `url(${recipe.image})` }}>
@@ -71,12 +68,6 @@ const Home = () => (
     </main>
 
     <style jsx>{`
-      header{
-        text-align: center;
-      }
-      header h1 {
-        font-weight: normal;
-      }
       main{
         max-width: 1250px;
         margin: auto;

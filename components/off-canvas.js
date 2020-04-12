@@ -20,9 +20,10 @@ const OffCanvas = ({ children, open, onClose, className, direction, ...rest }) =
         right: 0;
         z-index: 200;
         transform: translateX(100%);
-        transition: transform 0.3s ease-in-out;
+        transition: transform 0.2s ease-out;
         background-color: #fff;
-        overflow-x: scroll;
+        overflow-x: hidden;
+        overflow-y: scroll;
       }
 
       @media (min-width: 700px) {
@@ -52,7 +53,7 @@ const OffCanvas = ({ children, open, onClose, className, direction, ...rest }) =
         background-color: #000;
         opacity: 0;
         cursor: pointer;
-        transition: visibility 0s, opacity 0.3s ease-in-out;
+        transition: visibility 0s, opacity 0.2s ease-in-out;
 
       }
       .off-canvas__click-out--open {
