@@ -14,10 +14,10 @@ const TopBar = () => {
         <div>Tobi's Kochbuch</div>
         <div onClick={() => setFilterOpen(true)} className='action-icon'> {/* <Icon icon={faFilter} /> */}</div>
       </div>
-      <OffCanvas direction='left' open={menuOpen} onClose={() => setMenuOpen(false)}>
+      <OffCanvas headline='Menü' direction='left' open={menuOpen} onClose={() => setMenuOpen(false)}>
         <Menu onClick={() => setMenuOpen(false)} />
       </OffCanvas>
-      <OffCanvas direction='right' open={filterOpen} onClose={() => setFilterOpen(false)}>
+      <OffCanvas headline='Filter' direction='right' open={filterOpen} onClose={() => setFilterOpen(false)}>
         <p>a filter</p>
       </OffCanvas>
 
