@@ -23,7 +23,7 @@ const Menu = ({ onClick }) => {
 
   return (
     <div className='wrapper'>
-      <h1 className='headline'>Menü</h1>
+      <h2 className='headline'>Menü</h2>
       {Object.keys(categories).map((category, idx) => {
         return (
           <div key={category}>
@@ -38,7 +38,7 @@ const Menu = ({ onClick }) => {
       })}
       <style jsx>{`
       .headline {
-        margin-top: .25em;
+        margin-top: .6em;
       }
       .category {
         color: #fff;
