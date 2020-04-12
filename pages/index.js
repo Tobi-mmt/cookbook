@@ -1,6 +1,9 @@
 import Head from 'next/head'
 import { recipes } from '../lib/recipe'
 import { slugerize } from '../lib/slugerize'
+import { TopBar } from '../components/top-bar'
+import { Icon } from '../components/icon'
+import { faUsers, faStopwatch, faTag } from '@fortawesome/free-solid-svg-icons'
 
 const Home = () => (
   <div className='container'>
@@ -8,6 +11,7 @@ const Home = () => (
       <title>Tobi's Kochbuch</title>
       <link rel='icon' href='/favicon.ico' />
     </Head>
+    <TopBar />
     <main>
       <header>
         <h1> Tobi's Kochbuch</h1>
@@ -19,9 +23,18 @@ const Home = () => (
             <div className='infos'>
               <h1 className='title'>{recipe.title}</h1>
               <div className='meta'>
-                <p className='meta-item portion'>{recipe.meta.portion}</p>
-                <p className='meta-item duration'>{recipe.meta.duration} min</p>
-                <p className='meta-item category'>{recipe.meta.category}</p>
+                <div className='meta-item'>
+                  <Icon icon={faUsers} />
+                  <p>{recipe.meta.portion}</p>
+                </div>
+                <div className='meta-item'>
+                  <Icon icon={faStopwatch} />
+                  <p>{recipe.meta.duration} min</p>
+                </div>
+                <div className='meta-item'>
+                  <Icon icon={faTag} />
+                  <p>{recipe.meta.category}</p>
+                </div>
               </div>
 
             </div>
@@ -100,26 +113,16 @@ const Home = () => (
       .meta {
         display: flex;
       }
-      .portion::before {
-        background: url("/icons/portion.png") no-repeat;
+      .meta-item {
+        color: #333;
+        display: flex;
+        align-items: center;
       }
-      .duration::before {
-        background: url("/icons/duration.png") no-repeat;
-      }
-      .category::before {
-        background: url("/icons/category.png") no-repeat;
+      .meta-item p {
+        margin: 0 1em 0 .25em;
       }
       .meta-item {
         margin: 0 1em 0 0;
-      }
-      .meta-item::before {
-        height: 1em;
-        width: 1em;
-        background-size: .9em;
-        background-position-y: 1px;
-        content: "";
-        display: inline-block;
-        opacity: .75;
       }
       .content {
         display: flex;
