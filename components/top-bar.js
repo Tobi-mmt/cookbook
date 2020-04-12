@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Icon } from './icon'
-import { faBars, faFilter } from '@fortawesome/free-solid-svg-icons'
+import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { OffCanvas } from './off-canvas'
 import { Menu } from './menu'
 
@@ -12,7 +12,7 @@ const TopBar = () => {
       <div className='top-bar'>
         <div onClick={() => setMenuOpen(true)} className='action-icon'><Icon icon={faBars} /></div>
         <div>Tobi's Kochbuch</div>
-        <div onClick={() => setFilterOpen(true)} className='action-icon'><Icon icon={faFilter} /></div>
+        <div onClick={() => setFilterOpen(true)} className='action-icon'> {/* <Icon icon={faFilter} /> */}</div>
       </div>
       <OffCanvas direction='left' open={menuOpen} onClose={() => setMenuOpen(false)}>
         <Menu onClick={() => setMenuOpen(false)} />
