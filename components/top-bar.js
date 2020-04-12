@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Icon } from './icon'
 import { faBars, faFilter } from '@fortawesome/free-solid-svg-icons'
 import { OffCanvas } from './off-canvas'
+import { Menu } from './menu'
 
 const TopBar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -14,12 +15,10 @@ const TopBar = () => {
         <div onClick={() => setFilterOpen(true)} className='action-icon'><Icon icon={faFilter} /></div>
       </div>
       <OffCanvas direction='left' open={menuOpen} onClose={() => setMenuOpen(false)}>
-        <p>a menu</p>
-
+        <Menu onClick={() => setMenuOpen(false)} />
       </OffCanvas>
       <OffCanvas direction='right' open={filterOpen} onClose={() => setFilterOpen(false)}>
         <p>a filter</p>
-
       </OffCanvas>
 
       <style jsx>{`
