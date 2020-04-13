@@ -10,11 +10,12 @@ const Recipe = ({ recipe }) => {
     setPortion(portion + 1)
   }
   const reducePortion = () => {
-    if (portion > 0) {
+    if (portion > 1) {
       setPortion(portion - 1)
     }
   }
   const calcQuantity = (quantity) => {
+    if (isNaN(quantity)) return quantity
     const newValue = quantity * portion / recipe.meta.portion
     return Number(Math.round(newValue + 'e' + 1) + 'e-' + 1)
   }
@@ -52,9 +53,9 @@ const Recipe = ({ recipe }) => {
                 </td>
                 <td>
                   <div className='portion-settings'>
-                    <Icon onClick={increasePortion} icon={faPlus} />
+                    <span className='icon-button'><Icon onClick={increasePortion} icon={faPlus} /></span>
                     <p>{portion}</p>
-                    <Icon onClick={reducePortion} icon={faMinus} />
+                    <span className='icon-button'><Icon onClick={reducePortion} icon={faMinus} /></span>
                   </div>
                 </td>
               </tr>
@@ -83,6 +84,12 @@ const Recipe = ({ recipe }) => {
             main{
               max-width: 1250px;
               margin: auto;
+            }
+            .icon-button {
+              cursor: pointer;
+            }
+            .icon-button:hover {
+              color: #555;
             }
             .recipe {
               box-shadow: 0 0 25px #0005;
