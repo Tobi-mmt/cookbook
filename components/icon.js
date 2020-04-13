@@ -10,6 +10,7 @@ const Icon = ({ icon, className, ...rest }) => {
       <style jsx>{`
         .icon {
           width: 1em;
+          display: flex;
         }`}
       </style>
     </div>
