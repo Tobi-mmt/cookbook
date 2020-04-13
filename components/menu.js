@@ -3,8 +3,7 @@ import ProptTypes from 'prop-types'
 import { useRouter } from 'next/router'
 import { recipes } from '../lib/recipes'
 import { slugerize } from '../lib/slugerize'
-
-const colors = ['#57B16B', '#DD5D58', '#8882A8']
+import { categoryColors } from '../lib/colors'
 
 const Menu = ({ onClick }) => {
   const router = useRouter()
@@ -26,7 +25,7 @@ const Menu = ({ onClick }) => {
       {Object.keys(categories).map((category, idx) => {
         return (
           <div key={category}>
-            <h3 className='category' style={{ backgroundColor: colors[idx] }}>{category}</h3>
+            <h3 className='category' style={{ backgroundColor: categoryColors[category] }}>{category}</h3>
             <ul className='list'>
               {Object.values(categories)[idx].map(recipe => (
                 <li className='list-item' key={recipe.title} onClick={() => handleLinkClick(`/#${slugerize(recipe.title)}`)}>{recipe.title}</li>

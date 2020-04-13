@@ -3,8 +3,10 @@ import PropTypes from 'prop-types'
 import { slugerize } from '../lib/slugerize'
 import { Icon } from '../components/icon'
 import { faUsers, faStopwatch, faTag, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
+import { categoryColors } from '../lib/colors'
 
 const Recipe = ({ recipe }) => {
+  const highlightColor = categoryColors[recipe.meta.category]
   const [portion, setPortion] = useState(recipe.meta.portion)
   const increasePortion = () => {
     setPortion(portion + 1)
@@ -27,15 +29,15 @@ const Recipe = ({ recipe }) => {
           <h1 className='title'>{recipe.title}</h1>
           <div className='meta'>
             <div className='meta-item'>
-              <Icon icon={faUsers} />
+              <span className='icon'><Icon icon={faUsers} /></span>
               <p>{portion}</p>
             </div>
             <div className='meta-item'>
-              <Icon icon={faStopwatch} />
+              <span className='icon'><Icon icon={faStopwatch} /></span>
               <p>{recipe.meta.duration} min</p>
             </div>
             <div className='meta-item'>
-              <Icon icon={faTag} />
+              <span className='icon'><Icon icon={faTag} /></span>
               <p>{recipe.meta.category}</p>
             </div>
           </div>
@@ -43,7 +45,12 @@ const Recipe = ({ recipe }) => {
         </div>
       </div>
       <div className='content'>
-        <div className='description'>{recipe.description.map(d => <p key={d}>{d}</p>)}</div>
+        <div className='description'>
+          <div className='dotted-line' />
+          <ul className='description--list'>
+            {recipe.description.map(d => <li key={d} className='description--list-item'>{d}</li>)}
+          </ul>
+        </div>
         <div className='ingredients'>
           <table>
             <tbody>
@@ -85,11 +92,15 @@ const Recipe = ({ recipe }) => {
               max-width: 1250px;
               margin: auto;
             }
+            .icon {
+              color: ${highlightColor}
+            }
             .icon-button {
               cursor: pointer;
+              color: ${highlightColor}
             }
             .icon-button:hover {
-              color: #555;
+              color: ${highlightColor}77;
             }
             .recipe {
               box-shadow: 0 0 25px #0005;
@@ -121,6 +132,7 @@ const Recipe = ({ recipe }) => {
               max-width: 100%;
             }
             .meta {
+              opacity: .75;
               display: flex;
             }
             .meta-item {
@@ -139,7 +151,32 @@ const Recipe = ({ recipe }) => {
               padding: 2em;
             }
             .description {
+              position: relative;
               padding-right: 2em;
+            }
+            .description--list {
+              padding-left: 1.15em;
+
+            }
+            .description--list-item {
+              margin-bottom: 1em;
+              list-style: none;
+            }
+            .description--list-item::before {
+              content: "•"; 
+              color: ${highlightColor};
+              display: inline-block; 
+              width: .7em;
+              height: 1em;
+              font-size: 2em;
+              margin-left: -.7em;
+            }
+            .description .dotted-line {
+              border-left: 3px dotted ${highlightColor}77;
+              position: absolute;
+              top: 0;
+              left: 0;
+              bottom: 0;
             }
             .description p:first-of-type {
               margin-top: 0;
@@ -159,7 +196,7 @@ const Recipe = ({ recipe }) => {
             }
             .ingredients {
               padding:0 1em;
-              border-left: 1px dotted;
+              border-left: 3px dotted ${highlightColor}77;
               min-width: 20em;
               margin-bottom: 2em;
             }
@@ -192,6 +229,8 @@ const Recipe = ({ recipe }) => {
               }
               .ingredients {
                 border: none;
+                padding-bottom: 1.5em;
+                margin-bottom: 1em;
               }
               .recipe {
                 margin: 5em 0;
