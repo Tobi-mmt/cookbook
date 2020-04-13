@@ -159,7 +159,7 @@ const Recipe = ({ recipe }) => {
 
             }
             .description--list-item {
-              margin-bottom: 1em;
+              margin-bottom: .5em;
               list-style: none;
             }
             .description--list-item::before {
@@ -230,6 +230,9 @@ const Recipe = ({ recipe }) => {
               .ingredients {
                 border: none;
                 padding-bottom: 1.5em;
+                margin-bottom: 1em;
+              }
+              .description--list-item {
                 margin-bottom: 1em;
               }
               .recipe {
