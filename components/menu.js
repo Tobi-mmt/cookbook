@@ -1,7 +1,7 @@
 import React from 'react'
 import ProptTypes from 'prop-types'
 import { useRouter } from 'next/router'
-import { recipes } from '../lib/recipe'
+import { recipes } from '../lib/recipes'
 import { slugerize } from '../lib/slugerize'
 
 const colors = ['#57B16B', '#DD5D58', '#8882A8']

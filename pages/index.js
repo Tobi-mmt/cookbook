@@ -1,6 +1,6 @@
 import React from 'react'
 import Head from 'next/head'
-import { recipes } from '../lib/recipe'
+import { recipes } from '../lib/recipes'
 import { TopBar } from '../components/top-bar'
 import { Recipe } from '../components/recipe'
 
