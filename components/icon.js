@@ -11,7 +11,14 @@ const Icon = ({ icon, className, ...rest }) => {
         .icon {
           width: 1em;
           display: flex;
-        }`}
+        }
+        `}
+      </style>
+      <style jsx global>{`
+        svg {
+          width: 1em;
+        }
+      `}
       </style>
     </div>
 
