@@ -1,15 +1,10 @@
 import React from 'react'
-import Head from 'next/head'
 import { recipes } from '../lib/recipes'
 import { TopBar } from '../components/top-bar'
 import { Recipe } from '../components/recipe'
 
 const Home = () => (
   <div className='container'>
-    <Head>
-      <title>Tobi's Kochbuch</title>
-      <link rel='icon' href='/favicon.ico' />
-    </Head>
     <TopBar />
     <main>
       {recipes.map(recipe => (
