@@ -13,7 +13,7 @@ const Home = () => (
     <TopBar />
     <main>
       {recipes.map(recipe => (
-        <Recipe key={recipes.title} recipe={recipe} />
+        <Recipe key={recipes.image} recipe={recipe} />
       ))}
     </main>
 
