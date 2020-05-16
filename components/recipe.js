@@ -60,9 +60,9 @@ const Recipe = ({ recipe }) => {
                 </td>
                 <td>
                   <div className='portion-settings'>
-                    <span className='icon-button'><Icon onClick={increasePortion} icon={faPlus} /></span>
-                    <p>{portion}</p>
                     <span className='icon-button'><Icon onClick={reducePortion} icon={faMinus} /></span>
+                    <p>{portion}</p>
+                    <span className='icon-button'><Icon onClick={increasePortion} icon={faPlus} /></span>
                   </div>
                 </td>
               </tr>
