@@ -9,8 +9,8 @@
     "lint": "standard"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "1.2.31",
-    "@fortawesome/free-solid-svg-icons": "5.15.0",
+    "@fortawesome/fontawesome-svg-core": "1.2.32",
+    "@fortawesome/free-solid-svg-icons": "5.15.1",
     "@fortawesome/react-fontawesome": "0.1.11",
     "classnames": "2.2.6",
     "next": "9.5.3",
