@@ -8,7 +8,7 @@ const Home = () => (
     <TopBar />
     <main>
       {recipes.map(recipe => (
-        <Recipe key={recipes.title} recipe={recipe} />
+        <Recipe key={recipes.title + recipe.image} recipe={recipe} />
       ))}
     </main>
 

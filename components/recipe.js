@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { slugerize } from '../lib/slugerize'
 import { Icon } from '../components/icon'
-import { faUsers, faStopwatch, faTag, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
+import { faUsers, faStopwatch, faTag, faPlus, faMinus, faLeaf } from '@fortawesome/free-solid-svg-icons'
 import { categoryColors } from '../lib/colors'
 
 const Recipe = ({ recipe }) => {
@@ -40,6 +40,11 @@ const Recipe = ({ recipe }) => {
               <span className='icon'><Icon icon={faTag} /></span>
               <p>{recipe.meta.category}</p>
             </div>
+            {(recipe.meta.vegan || recipe.meta.vegetarian) &&
+              <div className='meta-item'>
+                <span className='icon'><Icon icon={faLeaf} />{recipe.meta.vegan && <Icon icon={faLeaf} />}</span>
+                <p>{recipe.meta.vegan ? 'Vegan' : 'Vegi'}</p>
+              </div>}
           </div>
 
         </div>
@@ -93,6 +98,8 @@ const Recipe = ({ recipe }) => {
               margin: auto;
             }
             .icon {
+              margin-right: 0.4em;
+              display: flex;
               color: ${highlightColor}
             }
             .icon-button {
