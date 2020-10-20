@@ -4,6 +4,8 @@ import { useRouter } from 'next/router'
 import { recipes } from '../lib/recipes'
 import { slugerize } from '../lib/slugerize'
 import { categoryColors } from '../lib/colors'
+import { faLeaf } from '@fortawesome/free-solid-svg-icons'
+import { Icon } from '../components/icon'
 
 const Menu = ({ onClick }) => {
   const router = useRouter()
@@ -28,7 +30,11 @@ const Menu = ({ onClick }) => {
             <h3 className='category' style={{ backgroundColor: categoryColors[category] }}>{category}</h3>
             <ul className='list'>
               {Object.values(categories)[idx].map(recipe => (
-                <li className='list-item' key={recipe.title} onClick={() => handleLinkClick(`/#${slugerize(recipe.title)}`)}>{recipe.title}</li>
+                <li className='list-item' key={recipe.title} onClick={() => handleLinkClick(`/#${slugerize(recipe.title)}`)}>
+                  {recipe.title}&nbsp;
+                  {recipe.meta.vegetarian && <Icon style={{ display: 'inline', color: '#4CAF50' }} icon={faLeaf} />}
+                  {recipe.meta.vegan && <Icon style={{ display: 'inline', color: '#4CAF50' }} icon={faLeaf} />}
+                </li>
               ))}
             </ul>
           </div>
