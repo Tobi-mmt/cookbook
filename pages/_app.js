@@ -1,7 +1,18 @@
 import React from 'react'
 import Head from 'next/head'
+import * as Sentry from '@sentry/react'
+import { Integrations } from '@sentry/tracing'
 
 const MyApp = ({ Component, pageProps }) => {
+  if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
+    Sentry.init({
+      dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+      integrations: [
+        new Integrations.BrowserTracing()
+      ]
+    })
+  }
+
   return (
     <>
       <Head>
