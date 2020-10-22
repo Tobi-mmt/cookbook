@@ -71,22 +71,28 @@ const Recipe = ({ recipe }) => {
                   </div>
                 </td>
               </tr>
-              {recipe.ingredients.map(ingredient => (
-                <tr key={JSON.stringify(ingredient)}>
-                  {ingredient.section
-                    ? (
-                      <>
-                        <td />
-                        <td className='ingredients-headline'>{ingredient.section}</td>
-                      </>
-                    )
-                    : (
-                      <>
-                        <td>{calcQuantity(ingredient.quantity)} {ingredient.unit}</td>
-                        <td>{ingredient.name}</td>
-                      </>)}
-                </tr>
-              ))}
+              {recipe.ingredients.map(ingredient => {
+                /* eslint-disable */
+                return (
+                  <tr key={JSON.stringify(ingredient)}>
+                    {ingredient.section
+                      ? (
+                        <>
+                          <td />
+                          <td className='ingredients-headline'>{ingredient.section}</td>
+                        </>
+                      )
+                      : (
+                        <>
+                          <td>{calcQuantity(ingredient.quantity)} {ingredient.unit}</td>
+                          <td>{ingredient.name}</td>
+                        </>
+                      )
+                    }
+                  </tr>
+                )
+                /* eslint-enable */
+              })}
             </tbody>
           </table>
         </div>
