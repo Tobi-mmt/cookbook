@@ -11,6 +11,7 @@ const Icon = ({ icon, className, ...rest }) => {
         .icon {
           width: 1em;
           display: flex;
+          height: 1em;
         }
         `}
       </style>
