@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Image from 'next/image'
 import PropTypes from 'prop-types'
 import { slugerize } from '../lib/slugerize'
 import { Icon } from '../components/icon'
@@ -23,8 +24,10 @@ const Recipe = ({ recipe }) => {
   }
   return (
     <section id={slugerize(recipe.title)} className='recipe'>
-      <div className='header' style={{ backgroundImage: `url(${recipe.image})` }}>
-        <div className='image' />
+      <div className='header'>
+        <div className='image'>
+          <Image objectFit='cover' src={recipe.image} layout='fill' alt={recipe.title} />
+        </div>
         <div className='infos'>
           <h1 className='title'>{recipe.title}</h1>
           <div className='meta'>
@@ -129,6 +132,19 @@ const Recipe = ({ recipe }) => {
               background-position: left center;
               height: 40vw;
               max-height: 550px;
+            }
+            .image {
+              position: absolute;
+              left: 0;
+              right: 0;
+              height: 100%;
+              overflow: hidden;
+            }
+            .image > div {
+              height: 100%;
+            }
+            .image > div > img {
+              width: auto;
             }
             .title {
               padding: 0;
