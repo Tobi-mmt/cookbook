@@ -46,7 +46,7 @@ const Recipe = ({ recipe }) => {
             {(recipe.meta.vegan || recipe.meta.vegetarian) &&
               <div className='meta-item'>
                 <span className='icon'><Icon icon={faLeaf} />{recipe.meta.vegan && <Icon icon={faLeaf} />}</span>
-                <p>{recipe.meta.vegan ? 'Vegan' : 'Vegi'}</p>
+                <p>{recipe.meta.vegan ? 'Vegan' : 'Veggi'}</p>
               </div>}
           </div>
 
