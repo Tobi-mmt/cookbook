@@ -23,6 +23,7 @@ const Home = () => (
     <style jsx global>{`
       html,
       body {
+        font-size: 16px;
         padding: 0;
         margin: 0;
         font-family: Helvetica Neue, sans-serif;
@@ -33,6 +34,12 @@ const Home = () => (
 
       * {
         box-sizing: border-box;
+      }
+      @media only screen and (max-width: 800px) {
+        html,
+        body {
+          font-size: 18px;
+        }
       }
     `}
     </style>

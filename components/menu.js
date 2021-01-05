@@ -42,7 +42,7 @@ const Menu = ({ onClick }) => {
       })}
       <style jsx>{`
       .wrapper {
-        padding: 0 2em 2em;
+        padding: 0 2em 3.5em 2em;
       }
       .category {
         position: sticky;
@@ -63,6 +63,11 @@ const Menu = ({ onClick }) => {
       }
       .list-item:hover {
         list-style: disclosure-closed;
+      }
+      @media only screen and (max-width: 800px) {
+        .list-item {
+          line-height: 1.7em;
+        }
       }
       `}
       </style>
