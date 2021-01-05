@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { recipes } from '../lib/recipes'
 import { slugerize } from '../lib/slugerize'
 import { categoryColors } from '../lib/colors'
-import { faLeaf } from '@fortawesome/free-solid-svg-icons'
+import { faLeaf, faBacon } from '@fortawesome/free-solid-svg-icons'
 import { Icon } from '../components/icon'
 
 const Menu = ({ onClick }) => {
@@ -32,7 +32,7 @@ const Menu = ({ onClick }) => {
               {Object.values(categories)[idx].map(recipe => (
                 <li className='list-item' key={recipe.title} onClick={() => handleLinkClick(`/#${slugerize(recipe.title)}`)}>
                   {recipe.title}&nbsp;
-                  {recipe.meta.vegetarian && <Icon style={{ display: 'inline', color: '#4CAF50' }} icon={faLeaf} />}
+                  {(!recipe.meta.vegetarian && !recipe.meta.vegan) && <Icon style={{ display: 'inline', color: '#AA3C3B' }} icon={faBacon} />}
                   {recipe.meta.vegan && <Icon style={{ display: 'inline', color: '#4CAF50' }} icon={faLeaf} />}
                 </li>
               ))}
