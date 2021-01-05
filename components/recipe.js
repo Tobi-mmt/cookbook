@@ -3,7 +3,7 @@ import Image from 'next/image'
 import PropTypes from 'prop-types'
 import { slugerize } from '../lib/slugerize'
 import { Icon } from '../components/icon'
-import { faUsers, faStopwatch, faPlus, faMinus, faLeaf } from '@fortawesome/free-solid-svg-icons'
+import { faUsers, faStopwatch, faPlus, faMinus, faLeaf, faBacon } from '@fortawesome/free-solid-svg-icons'
 import { categoryColors } from '../lib/colors'
 
 const Recipe = ({ recipe }) => {
@@ -39,10 +39,15 @@ const Recipe = ({ recipe }) => {
               <span className='icon'><Icon icon={faStopwatch} /></span>
               <p>{recipe.meta.duration}&nbsp;min</p>
             </div>
-            {(recipe.meta.vegan || recipe.meta.vegetarian) &&
+            {recipe.meta.vegan &&
               <div className='meta-item'>
-                <span className='icon'><Icon icon={faLeaf} />{recipe.meta.vegan && <Icon icon={faLeaf} />}</span>
-                <p>{recipe.meta.vegan ? 'Vegan' : 'Veggi'}</p>
+                <span className='icon'><Icon icon={faLeaf} /></span>
+                <p>Vegan</p>
+              </div>}
+            {(!recipe.meta.vegan && !recipe.meta.vegetarian) &&
+              <div className='meta-item'>
+                <span className='icon'><Icon icon={faBacon} /></span>
+                <p>Fleisch</p>
               </div>}
           </div>
 
@@ -83,7 +88,7 @@ const Recipe = ({ recipe }) => {
                       )
                       : (
                         <>
-                          <td>{calcQuantity(ingredient.quantity)} {ingredient.unit}</td>
+                          <td>{calcQuantity(ingredient.quantity)}&nbsp;{ingredient.unit}</td>
                           <td>{ingredient.name}</td>
                         </>
                       )
