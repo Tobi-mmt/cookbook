@@ -3,7 +3,7 @@ import Image from 'next/image'
 import PropTypes from 'prop-types'
 import { slugerize } from '../lib/slugerize'
 import { Icon } from '../components/icon'
-import { faUsers, faStopwatch, faTag, faPlus, faMinus, faLeaf } from '@fortawesome/free-solid-svg-icons'
+import { faUsers, faStopwatch, faPlus, faMinus, faLeaf } from '@fortawesome/free-solid-svg-icons'
 import { categoryColors } from '../lib/colors'
 
 const Recipe = ({ recipe }) => {
@@ -37,11 +37,7 @@ const Recipe = ({ recipe }) => {
             </div>
             <div className='meta-item'>
               <span className='icon'><Icon icon={faStopwatch} /></span>
-              <p>{recipe.meta.duration} min</p>
-            </div>
-            <div className='meta-item'>
-              <span className='icon'><Icon icon={faTag} /></span>
-              <p>{recipe.meta.category}</p>
+              <p>{recipe.meta.duration}&nbsp;min</p>
             </div>
             {(recipe.meta.vegan || recipe.meta.vegetarian) &&
               <div className='meta-item'>
