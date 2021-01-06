@@ -28,32 +28,35 @@ const Menu = ({ onClick }) => {
         return (
           <div key={category}>
             <h3 className='category' style={{ backgroundColor: categoryColors[category] }}>{category}</h3>
-            <ul className='list'>
-              {Object.values(categories)[idx].map(recipe => (
-                <li className='list-item' key={recipe.title} onClick={() => handleLinkClick(`/#${slugerize(recipe.title)}`)}>
-                  {recipe.title}&nbsp;
-                  {(!recipe.meta.vegetarian && !recipe.meta.vegan) && <Icon style={{ display: 'inline', color: '#AA3C3B' }} icon={faBacon} />}
-                  {recipe.meta.vegan && <Icon style={{ display: 'inline', color: '#4CAF50' }} icon={faLeaf} />}
-                </li>
-              ))}
-            </ul>
+            <div>
+              <ul className='list'>
+                {Object.values(categories)[idx].map(recipe => (
+                  <li className='list-item' key={recipe.title} onClick={() => handleLinkClick(`/#${slugerize(recipe.title)}`)}>
+                    {recipe.title}&nbsp;
+                    {(!recipe.meta.vegetarian && !recipe.meta.vegan) && <Icon style={{ display: 'inline', color: '#AA3C3B' }} icon={faBacon} />}
+                    {recipe.meta.vegan && <Icon style={{ display: 'inline', color: '#4CAF50' }} icon={faLeaf} />}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         )
       })}
       <style jsx>{`
       .wrapper {
-        padding: 0 2em 3.5em 2em;
+        padding-bottom: 3.5em;
+        display: flex;
+        flex-direction: column;
       }
       .category {
         position: sticky;
         top: 0;
         color: #fff;
-        padding: .5em 2em;
-        width: 122%;
-        margin: 0 0 0 -11%;
+        padding: .75em 1.71em;
+        margin: 0;
       }
       .list {
-        padding-left: 0;
+        padding: 0 2em;
       }
       .list-item {
         cursor: pointer;
