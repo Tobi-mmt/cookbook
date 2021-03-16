@@ -10,8 +10,8 @@
     "postinstall": "husky install"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "1.2.34",
-    "@fortawesome/free-solid-svg-icons": "5.15.2",
+    "@fortawesome/fontawesome-svg-core": "1.2.35",
+    "@fortawesome/free-solid-svg-icons": "5.15.3",
     "@fortawesome/react-fontawesome": "0.1.14",
     "@sentry/react": "6.2.2",
     "@sentry/tracing": "6.2.2",
