@@ -117,7 +117,7 @@ const Recipe = ({ recipe }) => {
               color: ${highlightColor}
             }
             .icon-button:hover {
-              color: ${highlightColor}77;
+              color: ${`${highlightColor}77`};
             }
             .recipe {
               box-shadow: 0 0 25px #0005;
@@ -202,7 +202,7 @@ const Recipe = ({ recipe }) => {
               margin-left: -.7em;
             }
             .description .dotted-line {
-              border-left: 3px dotted ${highlightColor}77;
+              border-left: 3px dotted ${`${highlightColor}77`};
               position: absolute;
               top: 0;
               left: 0;
@@ -226,7 +226,7 @@ const Recipe = ({ recipe }) => {
             }
             .ingredients {
               padding:0 1em;
-              border-left: 3px dotted ${highlightColor}77;
+              border-left: 3px dotted ${`${highlightColor}77`};
               min-width: 20em;
               margin-bottom: 2em;
             }
