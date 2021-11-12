@@ -1,4 +1,5 @@
-import type { Recipe } from '../../types';
+import type { Recipe, Category } from '../../types';
+import { categoryColors } from '../colors';
 
 import { potatoSalad } from './potato-salad';
 import { tarteFlambee } from './tarte-flambee';
@@ -54,12 +55,20 @@ const unsortedRecipes: Recipe[] = [
 	cherryPunch
 ];
 
-export const recipes: Recipe[] = unsortedRecipes.sort((a, b) => {
-	if (a.title < b.title) {
-		return -1;
-	}
-	if (a.title > b.title) {
-		return 1;
-	}
-	return 0;
-});
+const getCatIndex = (category: Category) => {
+	return Object.keys(categoryColors).indexOf(category);
+};
+
+export const recipes: Recipe[] = unsortedRecipes
+	.sort((a, b) => {
+		if (a.title < b.title) {
+			return -1;
+		}
+		if (a.title > b.title) {
+			return 1;
+		}
+		return 0;
+	})
+	.sort((a, b) => {
+		return getCatIndex(a.meta.category) - getCatIndex(b.meta.category);
+	});
