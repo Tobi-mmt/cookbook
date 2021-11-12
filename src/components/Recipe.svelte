@@ -22,7 +22,7 @@
 	const calcQuantity = (quantity: number, portion: number) => {
 		if (isNaN(quantity)) return quantity;
 		const newValue = (quantity * portion) / recipe.meta.portion;
-		return Number(Math.round(newValue + 1) + 1);
+		return Number(Math.round(Number(newValue + 'e' + 1)) + 'e-' + 1);
 	};
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
