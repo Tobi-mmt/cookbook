@@ -4,3 +4,7 @@ node_modules
 /.svelte-kit
 /package
 .env
+
+# cypress
+cypress/screenshots
+cypress/videos
