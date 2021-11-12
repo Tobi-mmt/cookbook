@@ -26,7 +26,7 @@ import { cherryPunch } from './cherry-punch';
 import { mushroomPan } from './mushroom-pan';
 import { dal } from './dal';
 
-export const recipes: Recipe[] = [
+const unsortedRecipes: Recipe[] = [
 	potatoSalad,
 	tarteFlambee,
 	spinatFeta,
@@ -53,3 +53,13 @@ export const recipes: Recipe[] = [
 	nougatBar,
 	cherryPunch
 ];
+
+export const recipes: Recipe[] = unsortedRecipes.sort((a, b) => {
+	if (a.title < b.title) {
+		return -1;
+	}
+	if (a.title > b.title) {
+		return 1;
+	}
+	return 0;
+});
