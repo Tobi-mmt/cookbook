@@ -10,7 +10,7 @@ export const nougatBar: Recipe = {
 	title: 'Nougatstangen',
 	image: '/recipes/nougatstangen.webp',
 	description: [
-		'Backofen auf 190° Umluft vorheizen.',
+		'Backofen auf 190 °C Umluft vorheizen.',
 		'Butter schaumig schlagen.',
 		'Alle Zutaten – bis auf Mehl und gemahlene Haselnüsse – in eine Schüssel geben und vermengen.',
 		'Mehl esslöffelweise unterrühren.',

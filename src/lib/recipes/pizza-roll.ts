@@ -12,7 +12,7 @@ export const pizzaRoll: Recipe = {
 		'Bötchen in 2 Hälften zerschneiden.',
 		'Schinken, Salami und Paprika in kleine Quadrate schneiden.',
 		'Alle Zutaten vermischen, mit Salz und Pfeffer abschmecken und dick auf den Brötchenhälften verteilen.',
-		'Bei 180 °C ca. 10 Minuten im Ofen auf mittlere Schiene backen.'
+		'Bei 180 °C Umluft ca. 10 Minuten im Ofen auf mittlere Schiene backen.'
 	],
 	ingredients: [
 		{ quantity: 200, unit: 'g', name: 'Schinken' },
