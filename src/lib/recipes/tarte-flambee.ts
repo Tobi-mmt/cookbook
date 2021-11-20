@@ -9,7 +9,7 @@ export const tarteFlambee: Recipe = {
 	title: 'Flammkuchen',
 	image: '/recipes/flammkuchen.webp',
 	description: [
-		'Backofen auf 250° vorheizen.',
+		'Backofen auf 250 °C Ober-Unterhitze vorheizen.',
 		'Alle Zutaten für den Teig in eine Schüssel geben und gut durchkneten.',
 		'Den Teig ganz dünn ausrollen.',
 		'Schmand und Crème double mischen, würzen und dick auf dem Teig verstreichen.',

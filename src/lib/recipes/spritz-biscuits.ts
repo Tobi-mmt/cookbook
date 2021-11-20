@@ -10,7 +10,7 @@ export const spritzBiscuits: Recipe = {
 	title: 'Spritzgebäck',
 	image: '/recipes/butter-s.webp',
 	description: [
-		'Backofen auf 180° Umluft vorheizen.',
+		'Backofen auf 180 °C Umluft vorheizen.',
 		'Butter schaumig schlagen.',
 		'Alle Zutaten in eine Schüssel geben und vermengen.',
 		'Wenn der Teig zu flüssig ist, mehr Mehl dazu geben.',

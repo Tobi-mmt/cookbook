@@ -10,7 +10,7 @@ export const vanillaCroissant: Recipe = {
 	title: 'Vanillekipferl',
 	image: '/recipes/vanillekipferl.webp',
 	description: [
-		'Backofen auf 150° Umluft vorheizen.',
+		'Backofen auf 150 °C Umluft vorheizen.',
 		'Alle Zutaten in eine Schüssel geben und vermengen.',
 		'Arbeitsfläche mit Mehl bestreuen und etwa 0,5 cm dicke und 5 cm lange Rollen formen, zu Kipferl biegen und auf dem Backblech verteilen.',
 		'Backblech in Ofen geben und 15–25 Minuten backen lassen.',

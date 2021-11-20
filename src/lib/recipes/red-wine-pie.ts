@@ -10,8 +10,8 @@ export const redWinePie: Recipe = {
 	title: 'Rotweinkuchen',
 	image: '/recipes/rotweinkuchen.webp',
 	description: [
-		'Backofen auf 180° vorheizen.',
-		'Butter, Zucker und die Eier in einer Schüssel schaumig aufschlagen.',
+		'Backofen auf 180 °C Umluft vorheizen.',
+		'In einer extra Schüssel die Eier schaumig aufschlagen. Unter Rühren Butter hinzugeben und danach den Zucker.',
 		'Den Rest in einer extra Schüssel vermengen. Den Inhalt der ersten Schüssel unterheben.',
 		'Backform mit etwas Butter einfetten und den Teig hineingeben.',
 		'Die Form in den Ofen geben und 50–60 Minuten backen lassen.'

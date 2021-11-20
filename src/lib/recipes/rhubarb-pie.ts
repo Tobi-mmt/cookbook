@@ -18,7 +18,7 @@ export const rhubarbPie: Recipe = {
 		'Die Zutaten vom Guss – außer der Schlagsahne – in einer Schüssel anrühren.',
 		'Schlagsahne steif schlagen und ebenfalls in die Schüssel geben.',
 		'Rhabarber in die Form mit dem Teig geben und den Guss darüber geben. Etwas Zimt darüber streuen.',
-		'Den Kuchen nun auf der 2. Schiene von unten etwa 60 Minuten lang bei 160° C Umluft backen lassen.'
+		'Den Kuchen nun auf der 2. Schiene von unten etwa 60 Minuten lang bei 160 °C Umluft backen lassen.'
 	],
 	ingredients: [
 		{ section: 'Teig' },
