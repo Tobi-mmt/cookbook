@@ -30,6 +30,6 @@ export const beanStew: Recipe = {
 		{ quantity: 500, unit: 'g', name: 'Prinzessbohnen' },
 		{ quantity: 1, unit: 'EL', name: 'Bohnenkraut' },
 		{ quantity: 1, unit: 'TL', name: 'Liebstöckel' },
-		{ unit: 'nach Bedarf', name: 'Pfeffer' },
+		{ unit: 'nach Bedarf', name: 'Pfeffer' }
 	]
 };
