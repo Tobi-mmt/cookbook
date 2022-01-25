@@ -5,6 +5,9 @@ node_modules
 /package
 .env
 
+# IDE
+.idea/
+
 # cypress
 cypress/screenshots
 cypress/videos
