@@ -17,7 +17,7 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-vercel": "1.0.0-next.43",
-		"@sveltejs/kit": "next",
+		"@sveltejs/kit": "1.0.0-next.269",
 		"@typescript-eslint/eslint-plugin": "5.12.0",
 		"@typescript-eslint/parser": "5.12.0",
 		"cypress": "9.4.1",
