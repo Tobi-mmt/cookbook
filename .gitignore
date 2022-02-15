@@ -11,3 +11,6 @@ node_modules
 # cypress
 cypress/screenshots
 cypress/videos
+
+# vercel
+.vercel_build_output
