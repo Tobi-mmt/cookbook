@@ -1,10 +1,35 @@
 {
 	"extends": ["config:base"],
 	"schedule": ["before 6am every weekday"],
+	"prConcurrentLimit": 5,
 	"packageRules": [
 		{
 			"updateTypes": ["minor", "patch", "pin", "digest"],
 			"automerge": true
+		},
+		{
+			"matchDepTypes": ["devDependencies"],
+			"prPriority": -1,
+			"schedule": ["before 6am on monday"]
+		},
+		{
+			"matchPackagePatterns": ["eslint", "prettier", "@typescript-eslint/"],
+			"matchPackageNames": ["pretty-quick", "husky", "lint-staged"],
+			"groupName": "linter"
+		},
+		{
+			"matchPackagePatterns": ["test", "jest", "cypress"],
+			"groupName": "tests"
+		},
+		{
+			"matchPackagePatterns": ["@sveltejs/", "svelte-"],
+			"matchPackageNames": ["svelte"],
+			"groupName": "svelte"
+		},
+		{
+			"matchPackagePatterns": ["@types/"],
+			"matchPackageNames": ["typescript", "tslib"],
+			"groupName": "typescript"
 		}
 	]
 }
