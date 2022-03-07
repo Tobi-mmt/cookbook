@@ -92,17 +92,17 @@
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
 
-"@sveltejs/adapter-vercel@1.0.0-next.45":
-  version "1.0.0-next.45"
-  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-vercel/-/adapter-vercel-1.0.0-next.45.tgz#ec1af5941fe2117b4e2a0979cb2fae804fcaba64"
-  integrity sha512-WoOMu4FSWjVeRiPq2NKfdZhobfOLmDykObZmm8JHptMDb0/I5SB+6wstzAeaNtQr2ZbQkUy0k7EX95riJifEEQ==
+"@sveltejs/adapter-vercel@1.0.0-next.46":
+  version "1.0.0-next.46"
+  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-vercel/-/adapter-vercel-1.0.0-next.46.tgz#3852a57fadfaa4f896618afbaae90591fd7e460b"
+  integrity sha512-6Rwf3kZF6uX2JxDMoYgZWZe5TjVTTWZa57VukdNGjnlAT3CrfsEOBWyskX/8hx7AiYX5fucZaAtYPNZpUmueIA==
   dependencies:
     esbuild "^0.14.21"
 
-"@sveltejs/kit@1.0.0-next.287":
-  version "1.0.0-next.287"
-  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-1.0.0-next.287.tgz#4bd1b5ae67b22eacbd693282bd08c308123000c7"
-  integrity sha512-aiCCuSpE9U8tX+29fnPfh9qHzWm8dBP7hkWvzcb1SZqbij8WXHyntUg/LXmhqlb8zKflEMLWa8iS+coqYDPmPQ==
+"@sveltejs/kit@1.0.0-next.294":
+  version "1.0.0-next.294"
+  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-1.0.0-next.294.tgz#a96c4b2ca70ce53f82296d7d5b926d0002755da7"
+  integrity sha512-whTYeri/oaV672KErlhCAvAawlsnd8iu/MQmjdu85TApDYolLe8FDTg6GQ55+0IJbx1N7dOer/HopWzKudPgFA==
   dependencies:
     "@sveltejs/vite-plugin-svelte" "^1.0.0-next.32"
     sade "^1.7.4"
