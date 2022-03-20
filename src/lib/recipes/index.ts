@@ -28,6 +28,7 @@ import { mushroomPan } from './mushroom-pan';
 import { dal } from './dal';
 import { beanStew } from './bean-stew';
 import { persianBeans } from './persian-beans';
+import { lentilBroccoliCurry } from './lentil-broccoli-curry';
 
 const unsortedRecipes: Recipe[] = [
 	potatoSalad,
@@ -56,7 +57,8 @@ const unsortedRecipes: Recipe[] = [
 	nougatBar,
 	cherryPunch,
 	beanStew,
-	persianBeans
+	persianBeans,
+	lentilBroccoliCurry
 ];
 
 const getCatIndex = (category: Category) => {
