@@ -29,6 +29,7 @@ import { dal } from './dal';
 import { beanStew } from './bean-stew';
 import { persianBeans } from './persian-beans';
 import { lentilBroccoliCurry } from './lentil-broccoli-curry';
+import { fennelRisotto } from './fennel-risotto';
 
 const unsortedRecipes: Recipe[] = [
 	potatoSalad,
@@ -58,7 +59,8 @@ const unsortedRecipes: Recipe[] = [
 	cherryPunch,
 	beanStew,
 	persianBeans,
-	lentilBroccoliCurry
+	lentilBroccoliCurry,
+	fennelRisotto
 ];
 
 const getCatIndex = (category: Category) => {
