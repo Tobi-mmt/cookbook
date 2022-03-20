@@ -41,6 +41,6 @@
 		}
 	},
 	"lint-staged": {
-		"*.{js,jsx,svelte,json,md,html}": "yarn format"
+		"*.{ts,tsx,js,jsx,svelte,json,md,html}": "yarn format"
 	}
 }
