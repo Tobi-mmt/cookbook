@@ -27,6 +27,7 @@ import { cherryPunch } from './cherry-punch';
 import { mushroomPan } from './mushroom-pan';
 import { dal } from './dal';
 import { beanStew } from './bean-stew';
+import { persianBeans } from './persian-beans';
 
 const unsortedRecipes: Recipe[] = [
 	potatoSalad,
@@ -54,7 +55,8 @@ const unsortedRecipes: Recipe[] = [
 	spritzBiscuits,
 	nougatBar,
 	cherryPunch,
-	beanStew
+	beanStew,
+	persianBeans
 ];
 
 const getCatIndex = (category: Category) => {
