@@ -8,7 +8,7 @@ export const persianBeans: Recipe = {
 		vegetarian: true,
 		vegan: false
 	},
-	title: 'Persiche Bohnenpfanne',
+	title: 'Persische Bohnenpfanne',
 	image: '/recipes/persian-beans.webp',
 	description: [
 		'Bohnen spülen und im Sieb abtropfen lassen.',
