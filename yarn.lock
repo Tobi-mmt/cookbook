@@ -92,17 +92,17 @@
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
 
-"@sveltejs/adapter-vercel@1.0.0-next.46":
-  version "1.0.0-next.46"
-  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-vercel/-/adapter-vercel-1.0.0-next.46.tgz#3852a57fadfaa4f896618afbaae90591fd7e460b"
-  integrity sha512-6Rwf3kZF6uX2JxDMoYgZWZe5TjVTTWZa57VukdNGjnlAT3CrfsEOBWyskX/8hx7AiYX5fucZaAtYPNZpUmueIA==
+"@sveltejs/adapter-vercel@1.0.0-next.47":
+  version "1.0.0-next.47"
+  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-vercel/-/adapter-vercel-1.0.0-next.47.tgz#892af109f0eb60dd7cd4884d0aacb484af852a12"
+  integrity sha512-VV3vP8KqL9XOc7xfQLVhXTM5jrTme+r1qJy98u5/dhAhkdjqrGDwAKo/s7MoB3rTYxLb2b8I4QxAaoz2Y2aIBg==
   dependencies:
     esbuild "^0.14.21"
 
-"@sveltejs/kit@1.0.0-next.295":
-  version "1.0.0-next.295"
-  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-1.0.0-next.295.tgz#2874cf4f6eb172124b050242d8a30099b3c3aa70"
-  integrity sha512-4pO/swXByhU+7bhNikTjh1d4QxAMP9TZ74p7sdPuyJf5cg7Zrfk1nBtaMt0R+8+5j1xfC/XWRcxa3WnhT9bQMA==
+"@sveltejs/kit@1.0.0-next.301":
+  version "1.0.0-next.301"
+  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-1.0.0-next.301.tgz#d5c6b3fde3682bbab835d31d9acf2470248b210f"
+  integrity sha512-F/XP1VEu+fpvgY04JekNxAFupccNMKOyXtbox0LwNJvBulL15/Tzy6tf4g+9t2Jy7mprwI3h0ZC9G/nVujRFnQ==
   dependencies:
     "@sveltejs/vite-plugin-svelte" "^1.0.0-next.32"
     sade "^1.7.4"
@@ -2130,10 +2130,10 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
-svelte-check@2.4.5:
-  version "2.4.5"
-  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-2.4.5.tgz#a2001993034d495118980bd95577fb3e7980661a"
-  integrity sha512-nRft8BbG2wcxyCdHDZ7X43xLcvDzua3xLwq6wzHGcAF3ka3Jyhv2rvgq0+SF9NwHLMefp9C2XkM6etzsxK/cMQ==
+svelte-check@2.4.6:
+  version "2.4.6"
+  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-2.4.6.tgz#dfdb6b4a68d9b2cececdedd4e17d895eb82314b3"
+  integrity sha512-luzdly7RJhyXucQe8ID/7CqDgXdMrPYXmyZBjCbp+cixzTopZotuWevrB5hWDOnOU19m2cyetigIIa7WDHnCmQ==
   dependencies:
     chokidar "^3.4.1"
     fast-glob "^3.2.7"
