@@ -14,9 +14,8 @@ export const lentil: Recipe = {
 		'Die Linsen 12 Stunden in kaltem Wasser einweichen lassen.',
 		'Zwiebeln und Knoblauch in Margarine anbraten.',
 		'Mehl hinzu geben, bis die Konsistenz breiig ist und eine goldgelbe Farbe angenommen hat.',
-		'Mit Wasser ablöschen und mit einem Rührbesen gut verrühren.',
-		'Gemüsebrühe für 1 L Brühe hinzugeben (nur Pulver, ohne Wasser).',
-		'Suppengrün am Stück hinzugeben und etwa 30 Minuten weich kochen lassen.',
+		'Mit Gemüsebrühe ablöschen und mit einem Rührbesen gut verrühren.',
+		'Linsen und Suppengrün am Stück hinzugeben und etwa 30 Minuten weich kochen lassen.',
 		'Suppengrün heraus Sieben, im Mixer pürieren und wieder zurück in den Topf geben.',
 		'Balsamico Essig und Weinessig 50/50 mischen und mit Tomatenmark in die Soße geben.',
 		'Zusammen mit Spätzle servieren.'
@@ -26,9 +25,8 @@ export const lentil: Recipe = {
 		{ quantity: 2, unit: 'große', name: 'Zwiebeln' },
 		{ quantity: 1, unit: 'Zehe', name: 'Knoblauch' },
 		{ quantity: 1, unit: 'EL', name: 'Mehl' },
-		{ quantity: 1.3, unit: 'L', name: 'Wasser' },
-		{ quantity: 1, unit: 'EL', name: 'Gemüsebrühepulver' },
-		{ quantity: 1, unit: 'Bund', name: 'Suppengrün' },
+		{ quantity: 1, unit: 'L', name: 'Gemüsebrühe' },
+		{ quantity: 400, unit: 'g', name: 'Suppengrün Bund' },
 		{ quantity: 1, unit: 'EL', name: 'Tomatenmark' },
 		{ quantity: 1, unit: 'Spritzer', name: 'Balsamico & Weinessig' }
 	]
