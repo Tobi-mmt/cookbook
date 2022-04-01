@@ -4,7 +4,8 @@ export const pizzaRoll: Recipe = {
 	meta: {
 		portion: 8,
 		duration: 20,
-		category: 'Herzhaft'
+		category: 'Herzhaft',
+		nutritionType: 'Fleisch'
 	},
 	title: 'Pizzabrötchen',
 	image: '/recipes/pizzabroetchen.webp',

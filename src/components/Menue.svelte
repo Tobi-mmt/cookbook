@@ -22,10 +22,10 @@
 					{#each recipies as recipe}
 						<li class="list-item" on:click={() => handleLinkClick(`/#${slugerize(recipe.title)}`)}>
 							{recipe.title}&nbsp;
-							{#if !recipe.meta.vegetarian && !recipe.meta.vegan}
+							{#if recipe.meta.nutritionType === 'Fleisch'}
 								<Icon name="steak" style="color: #AA3C3B" />
 							{/if}
-							{#if recipe.meta.vegan}
+							{#if recipe.meta.nutritionType === 'Vegan'}
 								<Icon name="leaf" style="color: #4CAF50" />
 							{/if}
 						</li>

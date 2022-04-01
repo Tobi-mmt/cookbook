@@ -5,7 +5,7 @@ export const yeastDumplings: Recipe = {
 		portion: 10,
 		duration: 120,
 		category: 'Süßspeise',
-		vegetarian: true
+		nutritionType: 'Vegetarisch'
 	},
 	title: 'Dampfnudeln',
 	image: '/recipes/dampfnudeln.webp',

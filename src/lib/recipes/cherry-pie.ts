@@ -5,7 +5,7 @@ export const cherryPie: Recipe = {
 		portion: 10,
 		duration: 50,
 		category: 'Süßspeise',
-		vegetarian: true
+		nutritionType: 'Vegetarisch'
 	},
 	title: 'Kirschkuchen mit Streuseln',
 	image: '/recipes/kirschkuchen.webp',

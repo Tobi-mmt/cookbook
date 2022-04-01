@@ -4,7 +4,8 @@ export const sauerbraten: Recipe = {
 	meta: {
 		portion: 8,
 		duration: 180,
-		category: 'Herzhaft'
+		category: 'Herzhaft',
+		nutritionType: 'Fleisch'
 	},
 	title: 'Sauerbraten',
 	image: '/recipes/sauerbraten.webp',

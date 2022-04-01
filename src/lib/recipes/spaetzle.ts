@@ -5,7 +5,7 @@ export const spaetzle: Recipe = {
 		portion: 5,
 		duration: 40,
 		category: 'Herzhaft',
-		vegetarian: true
+		nutritionType: 'Vegetarisch'
 	},
 	title: 'Spätzle',
 	image: '/recipes/spaetzle.webp',

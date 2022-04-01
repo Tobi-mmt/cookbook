@@ -5,7 +5,7 @@ export const nougatBar: Recipe = {
 		portion: 80,
 		duration: 120,
 		category: 'Süßspeise',
-		vegetarian: true
+		nutritionType: 'Vegetarisch'
 	},
 	title: 'Nougatstangen',
 	image: '/recipes/nougatstangen.webp',

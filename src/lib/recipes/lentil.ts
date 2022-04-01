@@ -5,8 +5,7 @@ export const lentil: Recipe = {
 		portion: 5,
 		duration: 60,
 		category: 'Herzhaft',
-		vegetarian: true,
-		vegan: true
+		nutritionType: 'Vegan'
 	},
 	title: 'Linsen',
 	image: '/recipes/linsen.webp',

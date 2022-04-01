@@ -5,7 +5,7 @@ export const redWinePie: Recipe = {
 		portion: 7,
 		duration: 70,
 		category: 'Süßspeise',
-		vegetarian: true
+		nutritionType: 'Vegetarisch'
 	},
 	title: 'Rotweinkuchen',
 	image: '/recipes/rotweinkuchen.webp',

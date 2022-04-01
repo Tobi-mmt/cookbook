@@ -4,7 +4,8 @@ export const pepperMedaillon: Recipe = {
 	meta: {
 		portion: 2,
 		duration: 40,
-		category: 'Herzhaft'
+		category: 'Herzhaft',
+		nutritionType: 'Fleisch'
 	},
 	title: 'Medaillons in Pfefferrahmsoße',
 	image: '/recipes/schweinemedaillons.webp',

@@ -5,7 +5,7 @@ export const spinatFeta: Recipe = {
 		portion: 2,
 		duration: 30,
 		category: 'Herzhaft',
-		vegetarian: true
+		nutritionType: 'Vegetarisch'
 	},
 	title: 'Blätterteig mit Spinat & Feta',
 	image: '/recipes/blaetterteig_mit_spinat.webp',

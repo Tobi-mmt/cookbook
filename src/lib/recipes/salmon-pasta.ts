@@ -4,7 +4,8 @@ export const salmonPasta: Recipe = {
 	meta: {
 		portion: 5,
 		duration: 40,
-		category: 'Herzhaft'
+		category: 'Herzhaft',
+		nutritionType: 'Fleisch'
 	},
 	title: 'Lachsnudeln',
 	image: '/recipes/lachsnudeln.webp',

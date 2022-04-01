@@ -5,7 +5,7 @@ export const vanillaCroissant: Recipe = {
 		portion: 50,
 		duration: 60,
 		category: 'Süßspeise',
-		vegetarian: true
+		nutritionType: 'Vegetarisch'
 	},
 	title: 'Vanillekipferl',
 	image: '/recipes/vanillekipferl.webp',

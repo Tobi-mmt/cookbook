@@ -5,8 +5,7 @@ export const fennelRisotto: Recipe = {
 		portion: 2,
 		duration: 30,
 		category: 'Herzhaft',
-		vegetarian: true,
-		vegan: false
+		nutritionType: 'Vegetarisch'
 	},
 	title: 'Risotto mit Fenchel und Champignons',
 	image: '/recipes/fennel-risotto.webp',

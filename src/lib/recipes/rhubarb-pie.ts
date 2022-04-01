@@ -5,7 +5,7 @@ export const rhubarbPie: Recipe = {
 		portion: 10,
 		duration: 30,
 		category: 'Süßspeise',
-		vegetarian: true
+		nutritionType: 'Vegetarisch'
 	},
 	title: 'Rhabarberkuchen',
 	image: '/recipes/rhabarberkuchen.webp',

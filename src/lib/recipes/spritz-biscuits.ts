@@ -5,7 +5,7 @@ export const spritzBiscuits: Recipe = {
 		portion: 50,
 		duration: 60,
 		category: 'Süßspeise',
-		vegetarian: true
+		nutritionType: 'Vegetarisch'
 	},
 	title: 'Spritzgebäck',
 	image: '/recipes/butter-s.webp',

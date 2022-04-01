@@ -5,7 +5,7 @@ export const stoveSegetables: Recipe = {
 		portion: 3,
 		duration: 40,
 		category: 'Herzhaft',
-		vegetarian: true
+		nutritionType: 'Vegetarisch'
 	},
 	title: 'Ofengemüse in Rotweinmarinade',
 	image: '/recipes/ofengemuese.webp',

@@ -5,8 +5,7 @@ export const lentilBroccoliCurry: Recipe = {
 		portion: 2,
 		duration: 40,
 		category: 'Herzhaft',
-		vegetarian: true,
-		vegan: true
+		nutritionType: 'Vegan'
 	},
 	title: 'Linsencurry mit Brokkoli und Karotten',
 	image: '/recipes/lentil-broccoli-curry.webp',

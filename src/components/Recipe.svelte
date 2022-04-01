@@ -1,5 +1,6 @@
 <script lang="ts">
-	import type { Recipe, Section } from '../types';
+	import type { Recipe, Section, IconName, NutritionType } from '../types';
+
 	import { slugerize } from '../lib/slugerize';
 	import { categoryColors } from '../lib/colors';
 	import Icon from './Icon.svelte';
@@ -8,6 +9,12 @@
 	export let recipe: Recipe;
 
 	let portion = recipe.meta.portion;
+
+	const getIconName = (nutritionType: NutritionType): IconName => {
+		if (nutritionType === 'Vegan') return 'leaf';
+		if (nutritionType === 'Fleisch') return 'steak';
+		if (nutritionType === 'Vegetarisch') return 'leaf';
+	};
 
 	const increasePortion = () => {
 		portion = portion + 1;
@@ -59,18 +66,10 @@
 					<span class="icon"><Icon name="sand-clock" /></span>
 					<p>{recipe.meta.duration}&nbsp;min</p>
 				</div>
-				{#if recipe.meta.vegan}
-					<div class="meta-item">
-						<span class="icon"><Icon name="leaf" /></span>
-						<p>Vegan</p>
-					</div>
-				{/if}
-				{#if !recipe.meta.vegan && !recipe.meta.vegetarian}
-					<div class="meta-item">
-						<span class="icon"><Icon name="steak" /></span>
-						<p>Fleisch</p>
-					</div>
-				{/if}
+				<div class="meta-item">
+					<span class="icon"><Icon name={getIconName(recipe.meta.nutritionType)} /></span>
+					<p>{recipe.meta.nutritionType}</p>
+				</div>
 			</div>
 		</div>
 	</div>
