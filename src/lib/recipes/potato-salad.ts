@@ -5,8 +5,7 @@ export const potatoSalad: Recipe = {
 		portion: 6,
 		duration: 20,
 		category: 'Salat',
-		vegetarian: true,
-		vegan: true
+		nutritionType: 'Vegan'
 	},
 	title: 'Kartoffelsalat',
 	image: '/recipes/kartoffelsalat.webp',

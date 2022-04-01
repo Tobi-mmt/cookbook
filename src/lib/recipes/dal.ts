@@ -5,8 +5,7 @@ export const dal: Recipe = {
 		portion: 2,
 		duration: 40,
 		category: 'Herzhaft',
-		vegetarian: true,
-		vegan: true
+		nutritionType: 'Vegan'
 	},
 	title: 'Dal',
 	image: '/recipes/dal.webp',

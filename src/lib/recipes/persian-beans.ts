@@ -5,8 +5,7 @@ export const persianBeans: Recipe = {
 		portion: 2,
 		duration: 30,
 		category: 'Herzhaft',
-		vegetarian: true,
-		vegan: false
+		nutritionType: 'Vegetarisch'
 	},
 	title: 'Persische Bohnenpfanne',
 	image: '/recipes/persian-beans.webp',

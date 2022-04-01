@@ -1,12 +1,12 @@
 import type { Recipe } from '../../types';
+import { veganGravy } from './vegan-gravy';
 
 export const beanStew: Recipe = {
 	meta: {
 		portion: 2,
 		duration: 60,
 		category: 'Herzhaft',
-		vegetarian: true,
-		vegan: true
+		nutritionType: 'Vegan'
 	},
 	title: 'Bohneneintopf mit veganem Speck',
 	image: '/recipes/bean-stew.webp',

@@ -5,8 +5,7 @@ export const veganGravy: Recipe = {
 		portion: 5,
 		duration: 30,
 		category: 'Herzhaft',
-		vegetarian: true,
-		vegan: true
+		nutritionType: 'Vegan'
 	},
 	title: 'Vegane Bratensoße',
 	image: '/recipes/bratensosse.webp',

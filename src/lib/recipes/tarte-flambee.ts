@@ -4,7 +4,8 @@ export const tarteFlambee: Recipe = {
 	meta: {
 		portion: 4,
 		duration: 15,
-		category: 'Herzhaft'
+		category: 'Herzhaft',
+		nutritionType: 'Fleisch'
 	},
 	title: 'Flammkuchen',
 	image: '/recipes/flammkuchen.webp',

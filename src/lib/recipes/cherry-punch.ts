@@ -5,8 +5,7 @@ export const cherryPunch: Recipe = {
 		portion: 10,
 		duration: 10,
 		category: 'Getränke',
-		vegetarian: true,
-		vegan: true
+		nutritionType: 'Vegan'
 	},
 	title: 'Sauerkirschbowle',
 	image: '/recipes/sauerkirschbowle.webp',

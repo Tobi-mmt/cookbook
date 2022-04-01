@@ -5,8 +5,7 @@ export const pizzaDough: Recipe = {
 		portion: 2,
 		duration: 20,
 		category: 'Herzhaft',
-		vegetarian: true,
-		vegan: true
+		nutritionType: 'Vegan'
 	},
 	title: 'Pizzateig',
 	image: '/recipes/pizzateig.webp',

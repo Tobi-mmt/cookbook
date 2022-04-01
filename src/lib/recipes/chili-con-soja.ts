@@ -5,8 +5,7 @@ export const chiliConSoja: Recipe = {
 		portion: 5,
 		duration: 100,
 		category: 'Herzhaft',
-		vegetarian: true,
-		vegan: true
+		nutritionType: 'Vegan'
 	},
 	title: 'Chili con Soja',
 	image: '/recipes/chilli-con-carne.webp',

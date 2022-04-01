@@ -9,13 +9,15 @@ export type Ingredient = {
 export type Section = {
 	section: string;
 };
+
+export type NutritionType = 'Vegan' | 'Vegetarisch' | 'Fleisch';
+
 export interface Recipe {
 	meta: {
 		portion: number;
 		duration: number;
 		category: Category;
-		vegetarian?: boolean;
-		vegan?: boolean;
+		nutritionType: NutritionType;
 	};
 	title: string;
 	image: string;

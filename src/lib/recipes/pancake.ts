@@ -5,7 +5,7 @@ export const pancake: Recipe = {
 		portion: 12,
 		duration: 20,
 		category: 'Süßspeise',
-		vegetarian: true
+		nutritionType: 'Vegetarisch'
 	},
 	title: 'Pfannkuchen',
 	image: '/recipes/pfannkuchen.webp',

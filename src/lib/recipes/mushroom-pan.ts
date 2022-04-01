@@ -5,8 +5,7 @@ export const mushroomPan: Recipe = {
 		portion: 4,
 		duration: 60,
 		category: 'Herzhaft',
-		vegetarian: true,
-		vegan: true
+		nutritionType: 'Vegan'
 	},
 	title: 'Pilzschmorpfanne',
 	image: '/recipes/pilzschmorpfanne.webp',

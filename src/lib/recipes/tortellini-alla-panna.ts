@@ -5,7 +5,7 @@ export const tortelliniAllaPanna: Recipe = {
 		portion: 3,
 		duration: 20,
 		category: 'Herzhaft',
-		vegetarian: true
+		nutritionType: 'Vegetarisch'
 	},
 	title: 'Tortellini alla panna',
 	image: '/recipes/tortelini-sahne.webp',
