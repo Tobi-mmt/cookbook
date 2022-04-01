@@ -175,7 +175,8 @@
 	.title {
 		padding: 0;
 		font-weight: 200;
-		margin: 0;
+		margin: 0 0 0.25em 0;
+		line-height: 1em;
 		font-size: 2.5em;
 	}
 	.infos {
