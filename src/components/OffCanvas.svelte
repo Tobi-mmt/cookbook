@@ -97,4 +97,9 @@
 		cursor: pointer;
 		font-size: 1.25em;
 	}
+	@media only screen and (max-width: 800px) {
+		.header {
+			padding-left: 1em;
+		}
+	}
 </style>

@@ -57,11 +57,20 @@
 		list-style: none;
 		line-height: 1.5em;
 		font-size: 1.125em;
+		transition: color 0.25s;
+		color: #777;
 	}
-	.list-item:hover {
-		list-style: disclosure-closed;
+	.list-item:hover,
+	.list-item:focus {
+		color: #000;
 	}
 	@media only screen and (max-width: 800px) {
+		.category {
+			padding: 0.75em 0.88em;
+		}
+		.list {
+			padding: 0 1em;
+		}
 		.list-item {
 			line-height: 1.7em;
 		}
