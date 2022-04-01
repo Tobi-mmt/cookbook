@@ -55,6 +55,7 @@
 		padding: 0;
 		margin: 0;
 		font-family: Roboto, sans-serif;
+		color: #333;
 	}
 	:global(p) {
 		margin: 0.5em 0;
