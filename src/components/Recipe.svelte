@@ -92,9 +92,17 @@
 						</td>
 						<td>
 							<div class="portion-settings">
-								<span class="icon-button" on:click={reducePortion}><Icon name="minus" /></span>
+								<button
+									class="icon-button"
+									on:click={reducePortion}
+									aria-label="Eine Portion weniger"><Icon name="minus" /></button
+								>
 								<p>{portion}</p>
-								<span class="icon-button" on:click={increasePortion}><Icon name="plus" /></span>
+								<button
+									class="icon-button"
+									on:click={increasePortion}
+									aria-label="Eine Portion mehr"><Icon name="plus" /></button
+								>
 							</div>
 						</td>
 					</tr>
@@ -129,10 +137,16 @@
 		color: var(--highlight-color);
 	}
 	.icon-button {
-		color: var(--highlight-color);
+		background: var(--highlight-color);
 		cursor: pointer;
+		color: #fff;
+		outline: none;
+		border: none;
+		padding: 0.35em 0.5em;
+		border-radius: 2.5px;
 	}
-	.icon-button:hover {
+	.icon-button:hover,
+	.icon-button:focus {
 		opacity: 0.7;
 	}
 	.recipe {
