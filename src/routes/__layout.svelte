@@ -10,6 +10,39 @@
 </div>
 
 <style>
+	/* roboto-100 - latin */
+	@font-face {
+		font-family: 'Roboto';
+		font-style: normal;
+		font-weight: 100;
+		src: local(''), url('/fonts/roboto/roboto-v29-latin-100.woff2') format('woff2'),
+			/* Chrome 26+, Opera 23+, Firefox 39+ */ url('/fonts/roboto/roboto-v29-latin-100.woff')
+				format('woff');
+		/* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+	}
+
+	/* roboto-regular - latin */
+	@font-face {
+		font-family: 'Roboto';
+		font-style: normal;
+		font-weight: 400;
+		src: local(''), url('/fonts/roboto/roboto-v29-latin-regular.woff2') format('woff2'),
+			/* Chrome 26+, Opera 23+, Firefox 39+ */ url('/fonts/roboto/roboto-v29-latin-regular.woff')
+				format('woff');
+		/* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+	}
+
+	/* roboto-700 - latin */
+	@font-face {
+		font-family: 'Roboto';
+		font-style: normal;
+		font-weight: 700;
+		src: local(''), url('/fonts/roboto/roboto-v29-latin-700.woff2') format('woff2'),
+			/* Chrome 26+, Opera 23+, Firefox 39+ */ url('/fonts/roboto/roboto-v29-latin-700.woff')
+				format('woff');
+		/* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+	}
+
 	:root {
 		--category-salat: '#57B16B';
 		--category-hearty: '#DD5D58';
@@ -21,7 +54,7 @@
 		font-size: 16px;
 		padding: 0;
 		margin: 0;
-		font-family: Helvetica Neue, sans-serif;
+		font-family: Roboto, sans-serif;
 	}
 	:global(p) {
 		margin: 0.5em 0;
