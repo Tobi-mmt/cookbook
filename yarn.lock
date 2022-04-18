@@ -99,10 +99,10 @@
   dependencies:
     esbuild "^0.14.21"
 
-"@sveltejs/kit@1.0.0-next.310":
-  version "1.0.0-next.310"
-  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-1.0.0-next.310.tgz#d4085327e536a8ab54165e64f0fe14a5ac4afa8f"
-  integrity sha512-pTyMyaoyHS+V5cQZIQMfQXmLkhw1VaRwT9avOSgwDc0QBpnNw2LdzwoPYsUr96ca5B6cfT3SMUNolxErTNHmPQ==
+"@sveltejs/kit@1.0.0-next.314":
+  version "1.0.0-next.314"
+  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-1.0.0-next.314.tgz#3bd995cec8d348ae46430b7dbfa8640caf8618bb"
+  integrity sha512-EkXjEd30XO8+AydBLARxAtI6Ak8V0KFSEJ07sNsrkGq9J70sWPL7yGenhGaeq6S852XZAqeyWd6uGQZmQLR4Wg==
   dependencies:
     "@sveltejs/vite-plugin-svelte" "^1.0.0-next.32"
     sade "^1.7.4"
@@ -2256,10 +2256,10 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
-svelte-check@2.6.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-2.6.0.tgz#ddb590236a9f78a0a7ffa80d9de6460432003b57"
-  integrity sha512-POL3IqLUuGqb9DdvuXQaSTNXYnw/odK4hqW86+2LwGcZTdbUPKBBln7pq74wXmcnRE+12bXMY1CvbcUNa2d5nw==
+svelte-check@2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-2.7.0.tgz#10d579dc89bf2e145a04786cc9fa8dabfb018a2a"
+  integrity sha512-GrvG24j0+i8AOm0k0KyJ6Dqc+TAR2yzB7rtS4nljHStunVxCTr/1KYlv4EsOeoqtHLzeWMOd5D2O6nDdP/yw4A==
   dependencies:
     chokidar "^3.4.1"
     fast-glob "^3.2.7"
@@ -2275,10 +2275,10 @@ svelte-hmr@^0.14.9:
   resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.14.9.tgz#35f277efc789e1a6230185717347cddb2f8e9833"
   integrity sha512-bKE9+4qb4sAnA+TKHiYurUl970rjA0XmlP9TEP7K/ncyWz3m81kA4HOgmlZK/7irGK7gzZlaPDI3cmf8fp/+tg==
 
-svelte-preprocess@4.10.5:
-  version "4.10.5"
-  resolved "https://registry.yarnpkg.com/svelte-preprocess/-/svelte-preprocess-4.10.5.tgz#c4d20fd67b92559e5cac80281154c813c1c17353"
-  integrity sha512-VKXPRScCzAZqeBZOGq4LLwtNrAu++mVn7XvQox3eFDV7Ciq0Lg70Q8QWjH9iXF7J+pMlXhPsSFwpCb2E+hoeyA==
+svelte-preprocess@4.10.6:
+  version "4.10.6"
+  resolved "https://registry.yarnpkg.com/svelte-preprocess/-/svelte-preprocess-4.10.6.tgz#5f9a53e7ed3b85fc7e0841120c725b76ac5a1ba8"
+  integrity sha512-I2SV1w/AveMvgIQlUF/ZOO3PYVnhxfcpNyGt8pxpUVhPfyfL/CZBkkw/KPfuFix5FJ9TnnNYMhACK3DtSaYVVQ==
   dependencies:
     "@types/pug" "^2.0.4"
     "@types/sass" "^1.16.0"
