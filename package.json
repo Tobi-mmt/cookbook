@@ -16,8 +16,8 @@
 		"e2e": "cypress run"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-vercel": "1.0.0-next.47",
-		"@sveltejs/kit": "1.0.0-next.314",
+		"@sveltejs/adapter-vercel": "1.0.0-next.49",
+		"@sveltejs/kit": "1.0.0-next.320",
 		"@typescript-eslint/eslint-plugin": "5.19.0",
 		"@typescript-eslint/parser": "5.19.0",
 		"cypress": "9.5.4",
