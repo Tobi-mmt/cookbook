@@ -35,6 +35,7 @@ export const persianBeans: Recipe = {
 		{ quantity: 1, unit: 'TL', name: 'Zucker' },
 		{ quantity: 2, unit: 'Zehen', name: 'Knoblauch' },
 		{ quantity: 160, unit: 'ml', name: 'Wasser' },
-		{ quantity: 0.5, unit: 'TL', name: 'Kreuzkümmel' }
+		{ quantity: 0.5, unit: 'TL', name: 'Kreuzkümmel' },
+		{ quantity: 4, name: 'Eier' }
 	]
 };
