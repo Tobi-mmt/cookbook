@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 it('Find Bratensoße on page', function () {
 	cy.visit('/');
 	cy.contains("Tobi's");
