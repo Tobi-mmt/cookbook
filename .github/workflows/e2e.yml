@@ -19,7 +19,7 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Run Cypress
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4
         with:
           browser: chrome
           cache-key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
