@@ -21,8 +21,13 @@ export interface Recipe {
 	};
 	title: string;
 	image: string;
-	description: string[];
+	steps: Step[];
 	ingredients: (Ingredient | Section)[];
+}
+
+export interface Step {
+	description: string;
+	linkedIngredients?: Ingredient[];
 }
 
 export type IconName =

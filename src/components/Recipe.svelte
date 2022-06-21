@@ -32,6 +32,10 @@
 		return Number(Math.round(Number(newValue + 'e' + 1)) + 'e-' + 1);
 	};
 
+	const optionalText = (text?: string | number) => {
+		return text ? text : '';
+	};
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const isSection = (ingredient: any): ingredient is Section => {
 		return Boolean(ingredient.section);
@@ -74,13 +78,30 @@
 		</div>
 	</div>
 	<div class="content">
-		<div class="description">
+		<div class="step">
 			<div class="dotted-line" />
-			<ul class="description--list">
-				{#each recipe.description as description}
-					<li class="description--list-item">{description}</li>
+			<ol class="step--list">
+				{#each recipe.steps as step, stepIndex}
+					<li class="step--list-item">
+						<span class="step--list-item--decoration">{stepIndex + 1}</span>
+						<span>{step.description}</span>
+						<div class="step--list-item--ingredients">
+							{#if step?.linkedIngredients}
+								{#each step?.linkedIngredients as linkedIngredient, ingredientIndex}
+									<span>
+										{#if linkedIngredient.quantity}
+											{calcQuantity(linkedIngredient.quantity, portion)}
+										{/if}
+										{optionalText(linkedIngredient.unit)}
+										{optionalText(linkedIngredient.name)}
+										{#if ingredientIndex < step?.linkedIngredients.length - 1},{/if}
+									</span>
+								{/each}
+							{/if}
+						</div>
+					</li>
 				{/each}
-			</ul>
+			</ol>
 		</div>
 		<div class="ingredients">
 			<table>
@@ -206,27 +227,37 @@
 		display: flex;
 		padding: 2em;
 	}
-	.description {
+	.step {
 		position: relative;
 		padding-right: 2em;
 	}
-	.description--list {
+	.step--list {
 		padding-left: 1.15em;
 	}
-	.description--list-item {
-		margin-bottom: 0.5em;
+	.step--list-item {
+		margin-bottom: 1.5em;
 		list-style: none;
+		position: relative;
 	}
-	.description--list-item::before {
-		content: '•';
-		color: var(--highlight-color);
+	.step--list-item--decoration {
+		color: #fff;
+		background-color: var(--highlight-color);
 		display: inline-block;
-		width: 0.7em;
-		height: 1em;
-		font-size: 2em;
-		margin-left: -0.7em;
+		width: 1.75em;
+		height: 1.75em;
+		font-size: 0.75em;
+		margin-left: -2.25em;
+		margin-right: 0.15em;
+		border-radius: 50%;
+		text-align: center;
+		padding-top: 0.25em;
+		position: absolute;
 	}
-	.description .dotted-line {
+	.step--list-item--ingredients {
+		font-size: 0.75em;
+		opacity: 0.7;
+	}
+	.step .dotted-line {
 		border-left: 3px dotted;
 		border-color: var(--highlight-color-light);
 		position: absolute;
@@ -286,7 +317,7 @@
 			padding-bottom: 1.5em;
 			margin-bottom: 1em;
 		}
-		.description--list-item {
+		.step--list-item {
 			margin-bottom: 1em;
 		}
 		.recipe {
