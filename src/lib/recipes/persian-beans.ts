@@ -28,7 +28,6 @@ export const persianBeans: Recipe = {
 		{ quantity: 1, name: 'Zwiebel' },
 		{ quantity: 0.5, name: 'Zitrone' },
 		{ quantity: 100, unit: 'g', name: 'Tomaten' },
-		{ quantity: 4, name: 'Tomaten' },
 		{ quantity: 400, unit: 'g', name: 'weiße Bohnen aus der Dose' },
 		{ quantity: 2, unit: 'EL', name: 'Butter' },
 		{ quantity: 0.5, unit: 'TL', name: 'Kurkuma' },
