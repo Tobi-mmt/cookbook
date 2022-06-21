@@ -21,7 +21,7 @@ export interface Recipe {
 	};
 	title: string;
 	image: string;
-	steps: Step[];
+	steps: (Step | Section)[];
 	ingredients: (Ingredient | Section)[];
 }
 

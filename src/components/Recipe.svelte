@@ -83,22 +83,29 @@
 			<ol class="step--list">
 				{#each recipe.steps as step, stepIndex}
 					<li class="step--list-item">
-						<span class="step--list-item--decoration">{stepIndex + 1}</span>
-						<span>{step.description}</span>
-						<div class="step--list-item--ingredients">
-							{#if step?.linkedIngredients}
-								{#each step?.linkedIngredients as linkedIngredient, ingredientIndex}
-									<span>
-										{#if linkedIngredient.quantity}
-											{calcQuantity(linkedIngredient.quantity, portion)}
-										{/if}
-										{optionalText(linkedIngredient.unit)}
-										{optionalText(linkedIngredient.name)}
-										{#if ingredientIndex < step?.linkedIngredients.length - 1},{/if}
-									</span>
-								{/each}
-							{/if}
-						</div>
+						{#if isSection(step)}
+							<span class="step--list-item--decoration step--list-item--decoration_big"
+								>{stepIndex + 1}</span
+							>
+							<h2 class="step--list-item--section">{step.section}</h2>
+						{:else}
+							<span class="step--list-item--decoration">{stepIndex + 1}</span>
+							<span>{step.description}</span>
+							<div class="step--list-item--ingredients">
+								{#if step?.linkedIngredients}
+									{#each step?.linkedIngredients as linkedIngredient, ingredientIndex}
+										<span>
+											{#if linkedIngredient.quantity}
+												{calcQuantity(linkedIngredient.quantity, portion)}
+											{/if}
+											{optionalText(linkedIngredient.unit)}
+											{optionalText(linkedIngredient.name)}
+											{#if ingredientIndex < step?.linkedIngredients.length - 1},{/if}
+										</span>
+									{/each}
+								{/if}
+							</div>
+						{/if}
 					</li>
 				{/each}
 			</ol>
@@ -239,6 +246,13 @@
 		list-style: none;
 		position: relative;
 	}
+	.step--list-item--section {
+		font-weight: 500;
+		margin-top: 3em;
+	}
+	.step--list-item:first-child .step--list-item--section {
+		margin-top: 0;
+	}
 	.step--list-item--decoration {
 		color: #fff;
 		background-color: var(--highlight-color);
@@ -252,6 +266,10 @@
 		text-align: center;
 		padding-top: 0.25em;
 		position: absolute;
+	}
+	.step--list-item--decoration_big {
+		font-size: 1em;
+		margin-left: -1.95em;
 	}
 	.step--list-item--ingredients {
 		font-size: 0.75em;
