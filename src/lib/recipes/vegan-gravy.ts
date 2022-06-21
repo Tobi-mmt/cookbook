@@ -1,5 +1,25 @@
 import type { Recipe } from '../../types';
 
+const ingredients = {
+	onion: { quantity: 1, name: 'rote Zwiebel' },
+	mushroom: { quantity: 150, unit: 'g', name: 'Champignons' },
+	carrot: { quantity: 1, name: 'Karotte' },
+	oil: { quantity: 2, unit: 'EL', name: 'Rapsöl' },
+	butter: { quantity: 1, unit: 'EL', name: 'Margarine' },
+	tomato: { quantity: 2, unit: 'EL', name: 'Tomatenmark' },
+	flour: { quantity: 1, unit: 'EL', name: 'Mehl' },
+	sugar: { quantity: 2, unit: 'TL', name: 'brauner Zucker' },
+	wine: { quantity: 50, unit: 'ml', name: 'Rotwein' },
+	stock: { quantity: 400, unit: 'ml', name: 'Gemüsebrühe' },
+	soy: { quantity: 1, unit: 'EL', name: 'Sojasauce' },
+	bayLeaf: { quantity: 1, name: 'Lorbeerblatt' },
+	juniperBerry: { quantity: 5, name: 'Wacholderbeeren' },
+	thyme: { quantity: 1, unit: 'TL', name: 'Thymian' },
+	mustard: { quantity: 2, unit: 'TL', name: 'Senf' },
+	salt: { quantity: 0.5, unit: 'TL', name: 'Salz' },
+	pepper: { quantity: 1, unit: 'Prise', name: 'Pfeffer' }
+};
+
 export const veganGravy: Recipe = {
 	meta: {
 		portion: 5,
@@ -9,30 +29,45 @@ export const veganGravy: Recipe = {
 	},
 	title: 'Vegane Bratensoße',
 	image: '/recipes/bratensosse.webp',
-	description: [
-		'Zwiebel, Karotte und Champignons würfeln und in einem Topf mit Öl scharf anbraten, bis es braun wird.',
-		'Margarine, Tomatenmark, Mehl und braunen Zucker dazugeben.',
-		'Mit Rotwein, Gemüsebrühe und Sojasoße ablöschen.',
-		'Rest unterrühren und  10 min bei niedriger Hitze köcheln lassen.',
-		'Zum Schluss entweder die Soße durch ein feines Sieb passieren (400 ml) oder Lorbeerblatt und Wacholderbeeren entfernen und den Rest mit einem Mixer pürieren (600 ml)'
+	steps: [
+		{
+			description:
+				'Zwiebel, Karotte und Champignons würfeln und in einem Topf mit Öl scharf anbraten, bis es braun wird.',
+			linkedIngredients: [
+				ingredients.onion,
+				ingredients.carrot,
+				ingredients.mushroom,
+				ingredients.oil
+			]
+		},
+		{
+			description: 'Margarine, Tomatenmark, Mehl und braunen Zucker dazugeben.',
+			linkedIngredients: [
+				ingredients.butter,
+				ingredients.tomato,
+				ingredients.flour,
+				ingredients.sugar
+			]
+		},
+		{
+			description: 'Mit Rotwein, Gemüsebrühe und Sojasoße ablöschen.',
+			linkedIngredients: [ingredients.wine, ingredients.stock, ingredients.soy]
+		},
+		{
+			description: 'Rest unterrühren und 10 min bei niedriger Hitze köcheln lassen.',
+			linkedIngredients: [
+				ingredients.bayLeaf,
+				ingredients.juniperBerry,
+				ingredients.thyme,
+				ingredients.mustard,
+				ingredients.salt,
+				ingredients.pepper
+			]
+		},
+		{
+			description:
+				'Zum Schluss entweder die Soße durch ein feines Sieb passieren (ca. 400ml) oder Lorbeerblatt und Wacholderbeeren entfernen und den Rest mit einem Mixer pürieren (ca. 600ml)'
+		}
 	],
-	ingredients: [
-		{ quantity: 1, name: 'rote Zwiebel' },
-		{ quantity: 150, unit: 'g', name: 'Champignons' },
-		{ quantity: 1, name: 'Karotte' },
-		{ quantity: 2, unit: 'EL', name: 'Öl' },
-		{ quantity: 1, unit: 'EL', name: 'Margarine' },
-		{ quantity: 2, unit: 'EL', name: 'Tomatenmark' },
-		{ quantity: 1, unit: 'EL', name: 'Mehl' },
-		{ quantity: 2, unit: 'TL', name: 'brauner Zucker' },
-		{ quantity: 50, unit: 'ml', name: 'Rotwein' },
-		{ quantity: 400, unit: 'ml', name: 'Gemüsebrühe' },
-		{ quantity: 1, unit: 'EL', name: 'Sojasauce' },
-		{ quantity: 1, name: 'Lorbeerblatt' },
-		{ quantity: 5, name: 'Wacholderbeeren' },
-		{ quantity: 1, unit: 'TL', name: 'Thymian' },
-		{ quantity: 2, unit: 'TL', name: 'Senf' },
-		{ quantity: 0.5, unit: 'TL', name: 'Salz' },
-		{ quantity: 1, unit: 'Prise', name: 'Pfeffer' }
-	]
+	ingredients: Object.values(ingredients)
 };

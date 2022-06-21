@@ -49,7 +49,7 @@ export const persianBeans: Recipe = {
 		},
 		{
 			description:
-				'Bohnen, Kreuzkümmel, Wasser, Zucken und Zitronensaft hinzugeben und mit Salz und Pfeffer abschmecken.',
+				'Bohnen, Kreuzkümmel, Wasser, Zucker und Zitronensaft hinzugeben und mit Salz und Pfeffer abschmecken.',
 			linkedIngredients: [ingredients.cumin, ingredients.water, ingredients.sugar]
 		},
 		{

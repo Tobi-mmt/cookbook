@@ -1,5 +1,14 @@
 import type { Recipe } from '../../types';
 
+const ingredients = {
+	butter: { quantity: 250, unit: 'g', name: 'Butter' },
+	sugar: { quantity: 250, unit: 'g', name: 'Zucker' },
+	vanillaSugar: { quantity: 1, unit: 'Pck.', name: 'Vanillezucker' },
+	egg: { quantity: 2, name: 'Eier' },
+	flour: { quantity: 450, unit: 'g', name: 'Mehl' },
+	bakingPowder: { quantity: 1, unit: 'TL', name: 'Backpulver' }
+};
+
 export const spritzBiscuits: Recipe = {
 	meta: {
 		portion: 50,
@@ -9,21 +18,25 @@ export const spritzBiscuits: Recipe = {
 	},
 	title: 'Spritzgebäck',
 	image: '/recipes/butter-s.webp',
-	description: [
-		'Backofen auf 180 °C Umluft vorheizen.',
-		'Butter schaumig schlagen.',
-		'Alle Zutaten in eine Schüssel geben und vermengen.',
-		'Wenn der Teig zu flüssig ist, mehr Mehl dazu geben.',
-		'Teig in Spritzbeutel geben und in gewünschter Form auf das Backpapier drücken.',
-		'Backblech in Ofen geben und 15–20 Minuten backen lassen.',
-		'Abkühlen lassen und optional ein Ende des Gebäcks in Schokolade tauchen.'
+	steps: [
+		{ description: 'Backofen auf 180 °C Umluft vorheizen.' },
+		{ description: 'Butter schaumig schlagen.', linkedIngredients: [ingredients.butter] },
+		{
+			description: 'Alle Zutaten in eine Schüssel geben und vermengen.',
+			linkedIngredients: [
+				ingredients.sugar,
+				ingredients.vanillaSugar,
+				ingredients.egg,
+				ingredients.flour,
+				ingredients.bakingPowder
+			]
+		},
+		{ description: 'Wenn der Teig zu flüssig ist, mehr Mehl dazu geben.' },
+		{
+			description: 'Teig in Spritzbeutel geben und in gewünschter Form auf das Backpapier drücken.'
+		},
+		{ description: 'Backblech in Ofen geben und 15–20 Minuten backen lassen.' },
+		{ description: 'Abkühlen lassen und optional ein Ende des Gebäcks in Schokolade tauchen.' }
 	],
-	ingredients: [
-		{ quantity: 250, unit: 'g', name: 'Butter' },
-		{ quantity: 250, unit: 'g', name: 'Zucker' },
-		{ quantity: 1, unit: 'Pck.', name: 'Vanille-Zucker' },
-		{ quantity: 2, name: 'Eier' },
-		{ quantity: 450, unit: 'g', name: 'Mehl' },
-		{ quantity: 1, unit: 'TL', name: 'Backpulver' }
-	]
+	ingredients: Object.values(ingredients)
 };

@@ -5,7 +5,6 @@ import { potatoSalad } from './potato-salad';
 import { tarteFlambee } from './tarte-flambee';
 import { spinatFeta } from './spinta-feta';
 import { pepperMedaillon } from './pepper-medaillon';
-import { tortelliniAllaPanna } from './tortellini-alla-panna';
 import { chiliConSoja } from './chili-con-soja';
 import { pizzaRoll } from './pizza-roll';
 import { lentil } from './lentil';
@@ -33,36 +32,35 @@ import { fennelRisotto } from './fennel-risotto';
 import { carrotSalad } from './carrot-salad';
 
 const unsortedRecipes: Recipe[] = [
-	// potatoSalad,
-	// tarteFlambee,
-	// spinatFeta,
-	// pepperMedaillon,
-	// tortelliniAllaPanna,
-	// chiliConSoja,
-	// pizzaRoll,
-	// lentil,
-	// spaetzle,
-	// pizzaDough,
-	// sauerbraten,
-	// stoveSegetables,
-	// salmonPasta,
-	// veganGravy,
-	// mushroomPan,
-	// dal,
-	// cherryPie,
-	// pancake,
-	// yeastDumplings,
-	// rhubarbPie,
-	// redWinePie,
-	// vanillaCroissant,
-	// spritzBiscuits,
-	// nougatBar,
-	// cherryPunch,
-	// beanStew,
-	persianBeans
-	// lentilBroccoliCurry,
-	// fennelRisotto,
-	// carrotSalad
+	potatoSalad,
+	tarteFlambee,
+	spinatFeta,
+	pepperMedaillon,
+	chiliConSoja,
+	pizzaRoll,
+	lentil,
+	spaetzle,
+	pizzaDough,
+	sauerbraten,
+	stoveSegetables,
+	salmonPasta,
+	veganGravy,
+	mushroomPan,
+	dal,
+	cherryPie,
+	pancake,
+	yeastDumplings,
+	rhubarbPie,
+	redWinePie,
+	vanillaCroissant,
+	spritzBiscuits,
+	nougatBar,
+	cherryPunch,
+	beanStew,
+	persianBeans,
+	lentilBroccoliCurry,
+	fennelRisotto,
+	carrotSalad
 ];
 
 const getCatIndex = (category: Category) => {
