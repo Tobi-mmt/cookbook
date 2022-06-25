@@ -80,4 +80,8 @@
 	.icofont-close:before {
 		content: '\eee4';
 	}
+
+	.icofont-search:before {
+		content: '\ed1b';
+	}
 </style>
