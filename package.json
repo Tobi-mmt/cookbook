@@ -42,5 +42,8 @@
 	},
 	"lint-staged": {
 		"*.{ts,tsx,js,jsx,svelte,json,md,html}": "yarn format"
+	},
+	"dependencies": {
+		"fuse.js": "^6.6.2"
 	}
 }
