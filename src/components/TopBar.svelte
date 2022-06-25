@@ -2,9 +2,10 @@
 	import Icon from './Icon.svelte';
 	import OffCanvas from './OffCanvas.svelte';
 	import Menu from './Menue.svelte';
+	import Search from './Search.svelte';
 
 	let menuOpen = false;
-	let filterOpen = false;
+	let isSearchOpen = false;
 </script>
 
 <div class="top-bar">
@@ -14,25 +15,16 @@
 		<Icon style="font-size: 3em;" name="spoon-and-fork" />
 		<span class="word"> Kochbuch</span>
 	</div>
-	<div on:click={() => (filterOpen = true)} class="action-icon"><!--<Icon name="filter" />--></div>
+	<div on:click={() => (isSearchOpen = true)} class="action-icon"><Icon name="search" /></div>
 </div>
 
+<Search bind:searchOpen={isSearchOpen} />
 <OffCanvas headline="Menü" direction="left" open={menuOpen} onClose={() => (menuOpen = false)}>
 	<Menu
 		onItemClick={() => {
 			menuOpen = false;
 		}}
 	/>
-</OffCanvas>
-<OffCanvas
-	headline="Filter"
-	direction="right"
-	open={filterOpen}
-	onClose={() => {
-		filterOpen = false;
-	}}
->
-	<p>a filter</p>
 </OffCanvas>
 
 <style>

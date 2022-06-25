@@ -1,4 +1,5 @@
 export const slugerize = (input: string): string => {
-	if (!input) return;
-	return encodeURIComponent(input.replace(/ /g, '-'));
+	const inputCopy = input.slice();
+	if (!inputCopy) return;
+	return encodeURIComponent(inputCopy.replace(/ /g, '-'));
 };
