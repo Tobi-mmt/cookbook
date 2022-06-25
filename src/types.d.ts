@@ -41,4 +41,5 @@ export type IconName =
 	| 'steak'
 	| 'spoon-and-fork'
 	| 'filter'
-	| 'close';
+	| 'close'
+	| 'search';
