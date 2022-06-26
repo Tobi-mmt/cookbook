@@ -5,7 +5,7 @@
 	import Fuse from 'fuse.js';
 	import { recipes } from '../lib/recipes';
 
-	export let searchOpen = false;
+	export let searchOpen: boolean;
 	let searchValue = '';
 	let searchResults = [];
 	let inputRef: HTMLInputElement;
@@ -33,8 +33,8 @@
 </script>
 
 {#if searchOpen}
-	<div class="off-canvas" transition:fade={{ duration: 250 }}>
-		<div class="off-canvas__background">
+	<div class="modal" transition:fade={{ duration: 250 }}>
+		<div class="modal__background">
 			<!-- svelte-ignore a11y-autofocus -->
 			<input
 				autofocus
@@ -51,14 +51,13 @@
 					}
 				}}
 			/>
-			<div class="results">
-				<ListNavigation {searchResults} bind:searchOpen {searchValue} />
-			</div>
+
+			<ListNavigation {searchResults} bind:searchOpen {searchValue} />
 		</div>
 	</div>
 
 	<div
-		class="off-canvas__click-out"
+		class="modal__click-out"
 		transition:fade={{ duration: 250 }}
 		on:click={() => (searchOpen = false)}
 	/>
@@ -80,7 +79,7 @@
 		position: sticky;
 		top: 2px;
 	}
-	.off-canvas {
+	.modal {
 		width: 90%;
 		max-width: 1202px;
 		max-height: 82vh;
@@ -92,7 +91,7 @@
 		left: 50%;
 		transform: translate(-50%);
 	}
-	.off-canvas__click-out {
+	.modal__click-out {
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -104,7 +103,7 @@
 		cursor: pointer;
 		transition: visibility 0s, opacity 0.2s ease-in-out;
 	}
-	.off-canvas__background {
+	.modal__background {
 		background-color: #fff;
 		border-radius: 4px;
 	}

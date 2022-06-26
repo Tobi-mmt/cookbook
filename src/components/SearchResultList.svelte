@@ -1,28 +1,12 @@
 <script lang="ts">
-	import Fuse from 'fuse.js';
-	import { recipes } from '../lib/recipes';
+	import type Fuse from 'fuse.js';
+	import type { Recipe } from 'src/types';
 	import { slugerize } from '../lib/slugerize';
 	import { goto } from '$app/navigation';
 
-	export let searchOpen = false;
-	export let searchValue = '';
-	export let searchResults = [];
-
-	const fuseOptions = {
-		minMatchCharLength: 2,
-		threshold: 0.5,
-		keys: [
-			{
-				name: 'title',
-				weight: 0.8
-			},
-			{
-				name: 'ingredients.name',
-				weight: 0.2
-			}
-		]
-	};
-	const fuse = new Fuse(recipes, fuseOptions);
+	export let searchOpen: boolean;
+	export let searchValue: string;
+	export let searchResults: Fuse.FuseResult<Recipe>[];
 
 	const handleKeydown = (event: KeyboardEvent) => {
 		const { key } = event;
@@ -30,6 +14,7 @@
 		event.preventDefault();
 
 		const current = document.activeElement as HTMLUListElement;
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		const items = [...document.querySelectorAll<HTMLUListElement>('li.search-list-item')];
 		const currentIndex = items.indexOf(current);
