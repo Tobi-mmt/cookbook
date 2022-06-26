@@ -12,6 +12,6 @@
 	<meta name="author" content="Tobias" />
 </svelte:head>
 
-{#each recipes as recipe}
-	<Recipe {recipe} />
+{#each recipes as recipe, idx}
+	<Recipe {recipe} disableIntersectionObserver={idx === 0} />
 {/each}
