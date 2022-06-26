@@ -3,11 +3,12 @@
 	import Fuse from 'fuse.js';
 	import { recipes } from '../lib/recipes';
 	import { slugerize } from '../lib/slugerize';
+	import { goto } from '$app/navigation';
 
 	export let searchOpen = false;
 	let searchValue = '';
 	let searchResults = [];
-	let inputRef;
+	let inputRef: HTMLInputElement;
 
 	const fuseOptions = {
 		minMatchCharLength: 2,
@@ -29,7 +30,39 @@
 		const { value } = event.target as HTMLInputElement;
 		searchResults = fuse.search(value, { limit: 8 });
 	};
+
+	const handleKeydown = (event: KeyboardEvent) => {
+		const { key } = event;
+		if (key !== 'ArrowUp' && key !== 'ArrowDown') return;
+		event.preventDefault();
+
+		const current = document.activeElement as HTMLUListElement;
+		// @ts-ignore
+		const items = [...document.querySelectorAll<HTMLUListElement>('li.search-list-item')];
+		const currentIndex = items.indexOf(current);
+		let newIndex: number;
+
+		if (currentIndex === -1) {
+			newIndex = 0;
+		} else {
+			if (key === 'ArrowUp') newIndex = (currentIndex + items.length - 1) % items.length;
+			else newIndex = (currentIndex + 1) % items.length;
+		}
+
+		current.blur();
+		items[newIndex].focus();
+	};
+
+	const handleListItemNavigation = (event: KeyboardEvent) => {
+		if (event.key === 'Enter') {
+			const { href } = (event.target as HTMLUListElement).firstChild as HTMLAnchorElement;
+			goto(href);
+			searchOpen = false;
+		}
+	};
 </script>
+
+<svelte:window on:keydown={handleKeydown} />
 
 {#if searchOpen}
 	<div class="off-canvas" transition:fade={{ duration: 250 }}>
@@ -55,10 +88,15 @@
 					{#if searchValue.length > 1}
 						{#if searchResults.length}
 							{#each searchResults as searchResult}
-								<li>
+								<li
+									class="search-list-item"
+									tabindex="0"
+									on:keydown={handleListItemNavigation}
+									data-href={`#${slugerize(searchResult.item.title)}`}
+								>
 									<a
 										href={`#${slugerize(searchResult.item.title)}`}
-										class="results__list__item"
+										class={'results__list__item'}
 										on:click={() => (searchOpen = false)}
 									>
 										<p class="category">{searchResult.item.meta.category}</p>
@@ -111,7 +149,9 @@
 		text-decoration: none;
 		color: inherit;
 	}
-	.results__list__item:hover {
+	li:focus .results__list__item,
+	li:active .results__list__item,
+	li:hover .results__list__item {
 		background-color: aliceblue;
 		cursor: pointer;
 	}
