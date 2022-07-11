@@ -1,21 +1,13 @@
 <script lang="ts">
-	import type { Recipe, Section, IconName, NutritionType } from '../types';
+	import type { Recipe, Section } from '../types';
 
-	import { slugerize } from '../lib/slugerize';
 	import { categoryColors } from '../lib/colors';
+	import { getIconName } from '../lib/iconName';
 	import Icon from './Icon.svelte';
-	import IntersectionObserver from '../components/IntersectionObserver.svelte';
 
 	export let recipe: Recipe;
-	export let disableIntersectionObserver = false;
 
 	let portion = recipe.meta.portion;
-
-	const getIconName = (nutritionType: NutritionType): IconName => {
-		if (nutritionType === 'Vegan') return 'leaf';
-		if (nutritionType === 'Fleisch') return 'steak';
-		if (nutritionType === 'Vegetarisch') return 'leaf';
-	};
 
 	const increasePortion = () => {
 		portion = portion + 1;
@@ -44,122 +36,117 @@
 </script>
 
 <section
-	id={slugerize(recipe.title)}
-	class="recipe"
 	style={`
   --highlight-color: ${categoryColors[recipe.meta.category]};
   --highlight-color-light: ${categoryColors[recipe.meta.category]}77;
   `}
 >
-	<IntersectionObserver let:intersecting top={1000} bottom={1000} once={true}>
-		{#if intersecting || disableIntersectionObserver}
-			<div>
-				<div class="header">
-					<div
-						class="image"
-						style={`background-image: url('${recipe.image}');`}
-						role="img"
-						aria-label={recipe.title}
-					/>
-					<div class="infos">
-						<h1 class="title">{recipe.title}</h1>
-						<div class="meta">
-							<div class="meta-item">
-								<span class="icon"><Icon name="users-alt-6" /></span>
-								<p>{portion}</p>
-							</div>
-							<div class="meta-item">
-								<span class="icon"><Icon name="sand-clock" /></span>
-								<p>{recipe.meta.duration}&nbsp;min</p>
-							</div>
-							<div class="meta-item">
-								<span class="icon"><Icon name={getIconName(recipe.meta.nutritionType)} /></span>
-								<p>{recipe.meta.nutritionType}</p>
-							</div>
-						</div>
+	<div>
+		<div class="header">
+			<div
+				class="image"
+				style={`background-image: url('${recipe.image}');`}
+				role="img"
+				aria-label={recipe.title}
+			/>
+			<div class="infos">
+				<p class="category">{recipe.meta.category}</p>
+				<h1 class="title">{recipe.title}</h1>
+				<div class="meta">
+					<div class="meta-item">
+						<span class="icon"><Icon name="users-alt-6" /></span>
+						<p>{portion}</p>
 					</div>
-				</div>
-				<div class="content">
-					<div class="step">
-						<div class="dotted-line" />
-						<ol class="step--list">
-							{#each recipe.steps as step, stepIndex}
-								<li class="step--list-item">
-									{#if isSection(step)}
-										<span class="step--list-item--decoration step--list-item--decoration_big"
-											>{stepIndex + 1}</span
-										>
-										<h2 class="step--list-item--section">{step.section}</h2>
-									{:else}
-										<span class="step--list-item--decoration">{stepIndex + 1}</span>
-										<span>{step.description}</span>
-										<div class="step--list-item--ingredients">
-											{#if step?.linkedIngredients}
-												{#each step?.linkedIngredients as linkedIngredient, ingredientIndex}
-													<span>
-														{#if linkedIngredient.quantity}
-															{calcQuantity(linkedIngredient.quantity, portion)}
-														{/if}
-														{optionalText(linkedIngredient.unit)}
-														{optionalText(linkedIngredient.name)}
-														{#if ingredientIndex < step?.linkedIngredients.length - 1},{/if}
-													</span>
-												{/each}
-											{/if}
-										</div>
-									{/if}
-								</li>
-							{/each}
-						</ol>
+					<div class="meta-item">
+						<span class="icon"><Icon name="sand-clock" /></span>
+						<p>{recipe.meta.duration}&nbsp;min</p>
 					</div>
-					<div class="ingredients">
-						<table>
-							<tbody>
-								<tr class="portion-settings--wrapper">
-									<td class="portion-label">
-										<p>Portionen</p>
-									</td>
-									<td>
-										<div class="portion-settings">
-											<button
-												class="icon-button"
-												on:click={reducePortion}
-												aria-label="Eine Portion weniger"><Icon name="minus" /></button
-											>
-											<p>{portion}</p>
-											<button
-												class="icon-button"
-												on:click={increasePortion}
-												aria-label="Eine Portion mehr"><Icon name="plus" /></button
-											>
-										</div>
-									</td>
-								</tr>
-								{#each recipe.ingredients as ingredient}
-									<tr>
-										{#if isSection(ingredient)}
-											<td />
-											<td class="ingredients-headline">{ingredient.section}</td>
-										{:else}
-											<td>
-												{#if ingredient.quantity}
-													{calcQuantity(ingredient.quantity, portion)}
-												{/if}
-												{#if ingredient.unit}{ingredient.unit}{/if}
-											</td>
-											<td>
-												{#if ingredient.name}{ingredient.name}{/if}
-											</td>
-										{/if}
-									</tr>
-								{/each}
-							</tbody>
-						</table>
+					<div class="meta-item">
+						<span class="icon"><Icon name={getIconName(recipe.meta.nutritionType)} /></span>
+						<p>{recipe.meta.nutritionType}</p>
 					</div>
 				</div>
 			</div>
-		{/if}
-	</IntersectionObserver>
+		</div>
+		<div class="content">
+			<div class="step">
+				<div class="dotted-line" />
+				<ol class="step--list">
+					{#each recipe.steps as step, stepIndex}
+						<li class="step--list-item">
+							{#if isSection(step)}
+								<span class="step--list-item--decoration step--list-item--decoration_big"
+									>{stepIndex + 1}</span
+								>
+								<h2 class="step--list-item--section">{step.section}</h2>
+							{:else}
+								<span class="step--list-item--decoration">{stepIndex + 1}</span>
+								<span>{step.description}</span>
+								<div class="step--list-item--ingredients">
+									{#if step?.linkedIngredients}
+										{#each step?.linkedIngredients as linkedIngredient, ingredientIndex}
+											<span>
+												{#if linkedIngredient.quantity}
+													{calcQuantity(linkedIngredient.quantity, portion)}
+												{/if}
+												{optionalText(linkedIngredient.unit)}
+												{optionalText(linkedIngredient.name)}
+												{#if ingredientIndex < step?.linkedIngredients.length - 1},{/if}
+											</span>
+										{/each}
+									{/if}
+								</div>
+							{/if}
+						</li>
+					{/each}
+				</ol>
+			</div>
+			<div class="ingredients">
+				<table>
+					<tbody>
+						<tr class="portion-settings--wrapper">
+							<td class="portion-label">
+								<p>Portionen</p>
+							</td>
+							<td>
+								<div class="portion-settings">
+									<button
+										class="icon-button"
+										on:click={reducePortion}
+										aria-label="Eine Portion weniger"><Icon name="minus" /></button
+									>
+									<p>{portion}</p>
+									<button
+										class="icon-button"
+										on:click={increasePortion}
+										aria-label="Eine Portion mehr"><Icon name="plus" /></button
+									>
+								</div>
+							</td>
+						</tr>
+						{#each recipe.ingredients as ingredient}
+							<tr>
+								{#if isSection(ingredient)}
+									<td />
+									<td class="ingredients-headline">{ingredient.section}</td>
+								{:else}
+									<td>
+										{#if ingredient.quantity}
+											{calcQuantity(ingredient.quantity, portion)}
+										{/if}
+										{#if ingredient.unit}{ingredient.unit}{/if}
+									</td>
+									<td>
+										{#if ingredient.name}{ingredient.name}{/if}
+									</td>
+								{/if}
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 </section>
 
 <style>
@@ -180,14 +167,6 @@
 	.icon-button:hover,
 	.icon-button:focus {
 		opacity: 0.7;
-	}
-	.recipe {
-		box-shadow: 0 0 25px #0005;
-		margin: 5em 1.5em;
-		min-height: 600px;
-	}
-	.recipe:first-of-type {
-		margin-top: 2em;
 	}
 	.header {
 		min-height: 12cm;
@@ -213,32 +192,40 @@
 		line-height: 1em;
 		font-size: 2.5em;
 	}
+	.category {
+		color: #888;
+		font-weight: 300;
+	}
 	.infos {
 		position: absolute;
-		bottom: 3em;
+		bottom: 0em;
 		background: #fffd;
-		padding: 1em 1em 1em 3em;
-		overflow: hidden;
-		max-width: 100%;
+		padding: 1em 1.5em;
+		width: 100%;
+		text-align: center;
 	}
 	.meta {
 		opacity: 0.75;
 		display: flex;
+		justify-content: center;
 	}
 	.meta-item {
 		color: #333;
 		display: flex;
 		align-items: center;
+		margin: 0 1em 0 0;
+	}
+	.meta-item:last-of-type {
+		margin: 0;
 	}
 	.meta-item p {
-		margin: 0 1em 0 0.25em;
-	}
-	.meta-item {
-		margin: 0 1em 0 0;
+		margin: 0;
 	}
 	.content {
 		display: flex;
 		padding: 2em;
+		margin: auto;
+		max-width: 1250px;
 	}
 	.step {
 		position: relative;
@@ -344,27 +331,8 @@
 		.step--list-item {
 			margin-bottom: 1em;
 		}
-		.recipe {
-			margin: 5em 0;
-		}
-		.infos {
-			bottom: 1.5em;
-			padding: 1em;
-		}
-	}
-	@media print {
-		.ingredients {
-			min-width: 15em;
-		}
-		.header {
-			height: 8cm;
-			max-height: unset;
-			min-height: unset;
-		}
-		.recipe {
-			margin: 5em 1.5em;
-			break-before: page;
-			box-shadow: 0 0 5px #0002;
+		.title {
+			font-size: 2.25em;
 		}
 	}
 </style>

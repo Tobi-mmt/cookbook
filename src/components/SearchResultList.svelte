@@ -48,7 +48,7 @@
 			{#each searchResults as searchResult}
 				<li class="search-list-item" tabindex="0" on:keydown={handleListItemNavigation}>
 					<a
-						href={`#${slugerize(searchResult.item.title)}`}
+						href={`/recipe/${searchResult.item.id}/${slugerize(searchResult.item.title)}`}
 						class={'results__list__item'}
 						on:click={() => (searchOpen = false)}
 					>

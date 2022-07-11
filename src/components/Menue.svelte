@@ -20,7 +20,10 @@
 			<div>
 				<ul class="list">
 					{#each recipies as recipe}
-						<li class="list-item" on:click={() => handleLinkClick(`/#${slugerize(recipe.title)}`)}>
+						<li
+							class="list-item"
+							on:click={() => handleLinkClick(`/recipe/${recipe.id}/${slugerize(recipe.title)}`)}
+						>
 							{recipe.title}&nbsp;
 							{#if recipe.meta.nutritionType === 'Fleisch'}
 								<Icon name="steak" style="color: #AA3C3B" />
