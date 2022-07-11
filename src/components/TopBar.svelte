@@ -10,11 +10,12 @@
 
 <div class="top-bar">
 	<div on:click={() => (menuOpen = true)} class="action-icon"><Icon name="navigation-menu" /></div>
-	<div class="word-icon">
+	<a class="word-icon" href="/">
 		<span class="word">Tobi's </span>
 		<Icon style="font-size: 3em;" name="spoon-and-fork" />
 		<span class="word"> Kochbuch</span>
-	</div>
+	</a>
+
 	<div on:click={() => (isSearchOpen = true)} class="action-icon"><Icon name="search" /></div>
 </div>
 
@@ -43,6 +44,7 @@
 		display: flex;
 		align-items: center;
 		color: #333;
+		text-decoration: none;
 	}
 	.word {
 		margin: 0 0.5em;

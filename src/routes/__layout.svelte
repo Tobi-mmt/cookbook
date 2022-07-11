@@ -70,17 +70,9 @@
 		}
 	}
 
-	main {
-		max-width: 1250px;
-		margin: auto;
-	}
-
 	@media print {
 		:global(body) {
 			font-size: 12pt;
-		}
-		main {
-			max-width: 2000px;
 		}
 		:global(a:link:after) {
 			content: ' (' attr(href) ') ';
