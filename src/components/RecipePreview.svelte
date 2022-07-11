@@ -1,9 +1,9 @@
 <script lang="ts">
 	import type { Recipe } from '../types';
 
-	import { slugerize } from '../lib/slugerize';
-	import { categoryColors } from '../lib/colors';
-	import { getIconName } from '../lib/iconName';
+	import { slugerize } from '$lib/slugerize';
+	import { categoryColors } from '$lib/colors';
+	import { getIconName } from '$lib/iconName';
 	import Icon from './Icon.svelte';
 	import IntersectionObserver from '../components/IntersectionObserver.svelte';
 
@@ -11,43 +11,45 @@
 	export let disableIntersectionObserver = false;
 </script>
 
-<div
-	id={slugerize(recipe.title)}
-	class="recipe-preview"
-	style={`
+<a href={`/recipe/${recipe.id}/${slugerize(recipe.title)}`}>
+	<div
+		id={slugerize(recipe.title)}
+		class="recipe-preview"
+		style={`
   --highlight-color: ${categoryColors[recipe.meta.category]};
   --highlight-color-light: ${categoryColors[recipe.meta.category]}77;
   `}
->
-	<IntersectionObserver let:intersecting top={500} bottom={500} once={true}>
-		{#if intersecting || disableIntersectionObserver}
-			<div>
-				<div class="header">
-					<div
-						class="image"
-						style={`background-image: url('${recipe.image}');`}
-						role="img"
-						aria-label={recipe.title}
-					/>
-					<div class="infos">
-						<p class="category">{recipe.meta.category}</p>
-						<h1 class="title">{recipe.title}</h1>
-						<div class="meta">
-							<div class="meta-item">
-								<span class="icon"><Icon name="sand-clock" /></span>
-								<p>{recipe.meta.duration}&nbsp;min</p>
-							</div>
-							<div class="meta-item">
-								<span class="icon"><Icon name={getIconName(recipe.meta.nutritionType)} /></span>
-								<p>{recipe.meta.nutritionType}</p>
+	>
+		<IntersectionObserver let:intersecting top={500} bottom={500} once={true}>
+			{#if intersecting || disableIntersectionObserver}
+				<div>
+					<div class="header">
+						<div
+							class="image"
+							style={`background-image: url('${recipe.image}');`}
+							role="img"
+							aria-label={recipe.title}
+						/>
+						<div class="infos">
+							<p class="category">{recipe.meta.category}</p>
+							<h1 class="title">{recipe.title}</h1>
+							<div class="meta">
+								<div class="meta-item">
+									<span class="icon"><Icon name="sand-clock" /></span>
+									<p>{recipe.meta.duration}&nbsp;min</p>
+								</div>
+								<div class="meta-item">
+									<span class="icon"><Icon name={getIconName(recipe.meta.nutritionType)} /></span>
+									<p>{recipe.meta.nutritionType}</p>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		{/if}
-	</IntersectionObserver>
-</div>
+			{/if}
+		</IntersectionObserver>
+	</div>
+</a>
 
 <style>
 	.icon {
@@ -56,7 +58,11 @@
 		color: var(--highlight-color);
 	}
 	.recipe-preview {
-		box-shadow: 0 0 25px #0005;
+		box-shadow: 5px 5px 15px #0003;
+		transition: box-shadow 0.25s;
+	}
+	a:hover > .recipe-preview {
+		box-shadow: 5px 5px 15px #0005;
 	}
 	.header {
 		min-height: 12cm;

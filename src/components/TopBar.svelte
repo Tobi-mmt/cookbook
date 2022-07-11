@@ -32,7 +32,7 @@
 	.top-bar {
 		align-items: center;
 		background: #fff;
-		box-shadow: 0 0 25px #0005;
+		box-shadow: 0 0 15px #0003;
 		display: flex;
 		justify-content: space-between;
 		padding: 0.5em 1.5em;
