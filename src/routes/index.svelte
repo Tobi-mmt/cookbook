@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { recipes } from '../lib/recipes';
 	import RecipePreview from '../components/RecipePreview.svelte';
-
-	import { slugerize } from '$lib/slugerize';
 </script>
 
 <svelte:head>
@@ -16,9 +14,7 @@
 
 <div class="recipe-grid">
 	{#each recipes as recipe, idx}
-		<a href={`/recipe/${recipe.id}/${slugerize(recipe.title)}`}>
-			<RecipePreview {recipe} disableIntersectionObserver={idx <= 50} />
-		</a>
+		<RecipePreview {recipe} disableIntersectionObserver={idx <= 50} />
 	{/each}
 </div>
 
