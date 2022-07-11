@@ -11,6 +11,7 @@ const ingredients = {
 };
 
 export const potatoSalad: Recipe = {
+	id: 'dad8a5cc03bf3e2', // generated with "yarn get-random-id"
 	meta: {
 		portion: 6,
 		duration: 20,

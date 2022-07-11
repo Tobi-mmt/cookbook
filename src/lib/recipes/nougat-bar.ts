@@ -19,6 +19,7 @@ const ingredients = {
 };
 
 export const nougatBar: Recipe = {
+	id: '7dc870e4888223c', // generated with "yarn get-random-id"
 	meta: {
 		portion: 80,
 		duration: 120,

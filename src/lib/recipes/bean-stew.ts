@@ -13,6 +13,7 @@ const ingredients = {
 	pepper: { unit: 'nach Bedarf', name: 'Pfeffer' }
 };
 export const beanStew: Recipe = {
+	id: '77832c8e46d83fa', // generated with "yarn get-random-id"
 	meta: {
 		portion: 2,
 		duration: 60,

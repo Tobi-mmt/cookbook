@@ -13,6 +13,7 @@ export type Section = {
 export type NutritionType = 'Vegan' | 'Vegetarisch' | 'Fleisch';
 
 export interface Recipe {
+	id: string;
 	meta: {
 		portion: number;
 		duration: number;

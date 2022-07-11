@@ -15,6 +15,7 @@ const ingredients = {
 };
 
 export const dal: Recipe = {
+	id: '9abdc64367c7ef9', // generated with "yarn get-random-id"
 	meta: {
 		portion: 2,
 		duration: 40,

@@ -12,6 +12,7 @@ const ingredients = {
 };
 
 export const pepperMedaillon: Recipe = {
+	id: '6cf38a4ae10cb73', // generated with "yarn get-random-id"
 	meta: {
 		portion: 2,
 		duration: 40,

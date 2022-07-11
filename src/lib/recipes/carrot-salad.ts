@@ -15,6 +15,7 @@ const ingredients = {
 };
 
 export const carrotSalad: Recipe = {
+	id: 'c36ffe8815a8fbc', // generated with "yarn get-random-id"
 	meta: {
 		portion: 7,
 		duration: 40,

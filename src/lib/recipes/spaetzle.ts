@@ -9,6 +9,7 @@ const ingredients = {
 };
 
 export const spaetzle: Recipe = {
+	id: '619c1e18f0760d4', // generated with "yarn get-random-id"
 	meta: {
 		portion: 5,
 		duration: 40,

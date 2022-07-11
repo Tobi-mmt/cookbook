@@ -17,6 +17,7 @@ const ingredients = {
 };
 
 export const mushroomPan: Recipe = {
+	id: '73dfd163f27192a', // generated with "yarn get-random-id"
 	meta: {
 		portion: 4,
 		duration: 60,

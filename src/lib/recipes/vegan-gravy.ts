@@ -21,6 +21,7 @@ const ingredients = {
 };
 
 export const veganGravy: Recipe = {
+	id: 'a933602f061a674', // generated with "yarn get-random-id"
 	meta: {
 		portion: 5,
 		duration: 30,

@@ -12,6 +12,7 @@ const ingredients = {
 };
 
 export const lentil: Recipe = {
+	id: '04f8d4ebbe949b0', // generated with "yarn get-random-id"
 	meta: {
 		portion: 5,
 		duration: 60,

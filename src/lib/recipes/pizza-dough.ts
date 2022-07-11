@@ -8,6 +8,7 @@ const ingredients = {
 };
 
 export const pizzaDough: Recipe = {
+	id: 'f30a3b728e281c9', // generated with "yarn get-random-id"
 	meta: {
 		portion: 2,
 		duration: 20,

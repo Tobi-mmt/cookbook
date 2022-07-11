@@ -13,6 +13,7 @@ const ingredients = {
 };
 
 export const spinatFeta: Recipe = {
+	id: '967ac074bbc3d06', // generated with "yarn get-random-id"
 	meta: {
 		portion: 2,
 		duration: 30,

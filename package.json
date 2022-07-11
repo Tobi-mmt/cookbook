@@ -13,7 +13,8 @@
 		"lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
 		"format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. .",
 		"postinstall": "husky install",
-		"e2e": "cypress run"
+		"e2e": "cypress run",
+		"get-random-id": "echo $RANDOM | md5 | head -c 15; echo;"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-vercel": "1.0.0-next.60",

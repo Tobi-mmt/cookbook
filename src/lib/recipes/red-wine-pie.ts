@@ -14,6 +14,7 @@ const ingredients = {
 };
 
 export const redWinePie: Recipe = {
+	id: 'a2da9168f15465a', // generated with "yarn get-random-id"
 	meta: {
 		portion: 7,
 		duration: 70,

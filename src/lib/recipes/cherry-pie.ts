@@ -28,6 +28,7 @@ const ingredients = {
 };
 
 export const cherryPie: Recipe = {
+	id: 'c0af6df3a5a0ba5', // generated with "yarn get-random-id"
 	meta: {
 		portion: 10,
 		duration: 50,
