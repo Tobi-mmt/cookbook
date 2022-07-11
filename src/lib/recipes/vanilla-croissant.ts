@@ -16,6 +16,7 @@ const ingredients = {
 };
 
 export const vanillaCroissant: Recipe = {
+	id: 'c3b6c8cfc0a9eb0', // generated with "yarn get-random-id"
 	meta: {
 		portion: 50,
 		duration: 60,

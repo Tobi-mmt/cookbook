@@ -16,6 +16,7 @@ const ingredients = {
 };
 
 export const chiliConSoja: Recipe = {
+	id: '29102fad633dc89', // generated with "yarn get-random-id"
 	meta: {
 		portion: 5,
 		duration: 100,

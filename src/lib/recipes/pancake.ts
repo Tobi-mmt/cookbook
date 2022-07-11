@@ -9,6 +9,7 @@ const ingredients = {
 };
 
 export const pancake: Recipe = {
+	id: 'd4ebaa7d1705a3c', // generated with "yarn get-random-id"
 	meta: {
 		portion: 12,
 		duration: 20,

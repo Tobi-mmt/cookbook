@@ -10,6 +10,7 @@ const ingredients = {
 };
 
 export const spritzBiscuits: Recipe = {
+	id: '6d2781ecd5f402d', // generated with "yarn get-random-id"
 	meta: {
 		portion: 50,
 		duration: 60,

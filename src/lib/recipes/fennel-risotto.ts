@@ -17,6 +17,7 @@ const ingredients = {
 };
 
 export const fennelRisotto: Recipe = {
+	id: '09048473dbc1072', // generated with "yarn get-random-id"
 	meta: {
 		portion: 2,
 		duration: 30,

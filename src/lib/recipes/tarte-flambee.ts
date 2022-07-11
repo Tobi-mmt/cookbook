@@ -16,6 +16,7 @@ const ingredients = {
 };
 
 export const tarteFlambee: Recipe = {
+	id: '8ac4d9df5b4a7ce', // generated with "yarn get-random-id"
 	meta: {
 		portion: 4,
 		duration: 15,

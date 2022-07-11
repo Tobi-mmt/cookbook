@@ -16,6 +16,7 @@ const ingredients = {
 };
 
 export const salmonPasta: Recipe = {
+	id: 'fffbe78941911d4', // generated with "yarn get-random-id"
 	meta: {
 		portion: 5,
 		duration: 40,

@@ -23,6 +23,7 @@ const ingredients = {
 };
 
 export const rhubarbPie: Recipe = {
+	id: '0cbe988fb13f1ce', // generated with "yarn get-random-id"
 	meta: {
 		portion: 10,
 		duration: 30,

@@ -18,6 +18,7 @@ const ingredients = {
 };
 
 export const lentilBroccoliCurry: Recipe = {
+	id: '1ff1f1079687389', // generated with "yarn get-random-id"
 	meta: {
 		portion: 2,
 		duration: 40,

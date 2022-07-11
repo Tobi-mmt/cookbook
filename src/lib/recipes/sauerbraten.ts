@@ -21,6 +21,7 @@ const ingredients = {
 };
 
 export const sauerbraten: Recipe = {
+	id: '6e6f6aac7a64ac9', // generated with "yarn get-random-id"
 	meta: {
 		portion: 8,
 		duration: 180,

@@ -15,6 +15,7 @@ const ingredients = {
 };
 
 export const yeastDumplings: Recipe = {
+	id: 'b14415790b6dd2d', // generated with "yarn get-random-id"
 	meta: {
 		portion: 10,
 		duration: 120,

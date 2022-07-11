@@ -14,6 +14,7 @@ const ingredients = {
 };
 
 export const stoveSegetables: Recipe = {
+	id: '8919f04870dcb2c', // generated with "yarn get-random-id"
 	meta: {
 		portion: 3,
 		duration: 40,

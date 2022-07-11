@@ -10,6 +10,7 @@ const ingredients = {
 };
 
 export const cherryPunch: Recipe = {
+	id: 'a1222bbc43739e7', // generated with "yarn get-random-id"
 	meta: {
 		portion: 10,
 		duration: 10,
