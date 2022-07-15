@@ -20,8 +20,8 @@
 
 <style>
 	.recipe-grid {
-		--grid-column-count: 4; /* This gets overridden by an inline style. */
-		--grid-item-min-width: 350px;
+		--grid-column-count: 3; /* This gets overridden by an inline style. */
+		--grid-item-min-width: 250px;
 		--grid-item-max-width: calc((100% - (4 - 1) * 96px) / var(--grid-column-count));
 
 		display: grid;
@@ -32,5 +32,16 @@
 		gap: 5em 2.5em;
 		max-width: 1250px;
 		margin: 2em auto;
+		padding: 2em;
+	}
+
+	@media (max-width: 700px) {
+		.recipe-grid {
+			--grid-item-min-width: 170px;
+			gap: 1em 0.5em;
+			font-size: 0.7em;
+			padding: 0;
+			margin: 1em auto;
+		}
 	}
 </style>

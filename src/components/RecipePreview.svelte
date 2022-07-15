@@ -65,7 +65,7 @@
 		box-shadow: 5px 5px 15px #0005;
 	}
 	.header {
-		min-height: 12cm;
+		min-height: 20em;
 		position: relative;
 		background-size: cover;
 		background-position: left center;
@@ -90,7 +90,7 @@
 		color: #333;
 	}
 	.category {
-		color: #888;
+		color: #333;
 		font-weight: 300;
 	}
 	.infos {
@@ -113,5 +113,14 @@
 	}
 	.meta-item:last-of-type {
 		margin: 0;
+	}
+
+	@media (max-width: 700px) {
+		.title {
+			font-size: 2em;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
 	}
 </style>
