@@ -29,7 +29,9 @@
 </svelte:head>
 
 {#if recipe}
-	<RecipeComponent {recipe} />
+	{#key recipe}
+		<RecipeComponent {recipe} />
+	{/key}
 {:else}
 	<h1>Kein Rezept gefunden</h1>
 	<p>Gehe zur <a href="/">Übersicht</a> oder benutze die Suche, um ein Rezept zu finden.</p>
