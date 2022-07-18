@@ -14,3 +14,4 @@ cypress/videos
 
 # vercel
 .vercel_build_output
+.vercel
