@@ -17,8 +17,8 @@
 		"get-random-id": "echo $RANDOM | md5 | head -c 15; echo;"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-vercel": "1.0.0-next.63",
-		"@sveltejs/kit": "1.0.0-next.377",
+		"@sveltejs/adapter-vercel": "1.0.0-next.65",
+		"@sveltejs/kit": "1.0.0-next.392",
 		"@typescript-eslint/eslint-plugin": "5.30.7",
 		"@typescript-eslint/parser": "5.30.7",
 		"cypress": "10.0.3",

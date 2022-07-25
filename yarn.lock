@@ -125,18 +125,18 @@
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
 
-"@sveltejs/adapter-vercel@1.0.0-next.63":
-  version "1.0.0-next.63"
-  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-vercel/-/adapter-vercel-1.0.0-next.63.tgz#ffbd8f21845272fda4db88648ea6d24351ea65cf"
-  integrity sha512-awb1zmT+hAAHv+x7gOY/8Ch64spxKX6H/DQb+S/VGYRQ6i1WvNgsBUF9vk88KR//7tUY8y/xiTLAb99hJ57WhA==
+"@sveltejs/adapter-vercel@1.0.0-next.65":
+  version "1.0.0-next.65"
+  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-vercel/-/adapter-vercel-1.0.0-next.65.tgz#17cd1a46168e014bb93ca0b35ee5e76e935e4c69"
+  integrity sha512-RV3HL7Ic7pGgIoBSHPwN1pBX96Km1X683oHImPHAKX9h/WOvJZ3bY5+IWNRcR8tx9rPB5gfMRg+msvPSBr3RVw==
   dependencies:
     "@vercel/nft" "^0.20.0"
     esbuild "^0.14.48"
 
-"@sveltejs/kit@1.0.0-next.377":
-  version "1.0.0-next.377"
-  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-1.0.0-next.377.tgz#e74565b35e78d068a26640a3b5492e70dd2787c5"
-  integrity sha512-DH2v2yUBUuDZ7vzjPXUd/yt1AMR3BIkZN0ubLAvS2C+q5Wbvk7ZvAJhfPZ3OYc3ZpQXe4ZGEcptOjvEYvd1lLA==
+"@sveltejs/kit@1.0.0-next.392":
+  version "1.0.0-next.392"
+  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-1.0.0-next.392.tgz#cbded7a0a9d00ac5d59b063bfe57c37051a2d5df"
+  integrity sha512-od4rDJ/Soq0I7mda7sTbAnNKERHSDEGNa7QBpLA859xgBkwC1JnEIymYOh9dm+hMyHhB0bUoRoaur0qxKLqOOw==
   dependencies:
     "@sveltejs/vite-plugin-svelte" "^1.0.1"
     chokidar "^3.5.3"
