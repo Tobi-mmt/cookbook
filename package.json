@@ -17,8 +17,8 @@
 		"get-random-id": "echo $RANDOM | md5 | head -c 15; echo;"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-vercel": "1.0.0-next.77",
-		"@sveltejs/kit": "1.0.0-next.511",
+		"@sveltejs/adapter-vercel": "1.0.0-next.79",
+		"@sveltejs/kit": "1.0.0-next.516",
 		"@typescript-eslint/eslint-plugin": "5.39.0",
 		"@typescript-eslint/parser": "5.39.0",
 		"cypress": "10.9.0",
@@ -29,8 +29,8 @@
 		"lint-staged": "13.0.3",
 		"prettier": "2.7.1",
 		"prettier-plugin-svelte": "2.8.0",
-		"svelte": "3.50.1",
-		"svelte-check": "2.9.1",
+		"svelte": "3.52.0",
+		"svelte-check": "2.9.2",
 		"svelte-preprocess": "4.10.7",
 		"tslib": "2.4.0",
 		"typescript": "4.8.4",
