@@ -23,32 +23,34 @@
   `}
 	>
 		<IntersectionObserver let:intersecting top={500} bottom={500} once={true}>
-			{#if intersecting || disableIntersectionObserver}
-				<div>
-					<div class="header">
+			<div>
+				<div class="header">
+					{#if intersecting || disableIntersectionObserver}
 						<div
 							class="image"
 							style={`background-image: url('${useThumpImage(recipe.image)}');`}
 							role="img"
 							aria-label={recipe.title}
 						/>
-						<div class="infos">
-							<p class="category">{recipe.meta.category}</p>
-							<h1 class="title">{recipe.title}</h1>
-							<div class="meta">
-								<div class="meta-item">
-									<span class="icon"><Icon name="sand-clock" /></span>
-									<p>{recipe.meta.duration}&nbsp;min</p>
-								</div>
-								<div class="meta-item">
-									<span class="icon"><Icon name={getIconName(recipe.meta.nutritionType)} /></span>
-									<p>{recipe.meta.nutritionType}</p>
-								</div>
+					{:else}
+						<div class="image" style="background-color: #eee" />
+					{/if}
+					<div class="infos">
+						<p class="category">{recipe.meta.category}</p>
+						<h1 class="title">{recipe.title}</h1>
+						<div class="meta">
+							<div class="meta-item">
+								<span class="icon"><Icon name="sand-clock" /></span>
+								<p>{recipe.meta.duration}&nbsp;min</p>
+							</div>
+							<div class="meta-item">
+								<span class="icon"><Icon name={getIconName(recipe.meta.nutritionType)} /></span>
+								<p>{recipe.meta.nutritionType}</p>
 							</div>
 						</div>
 					</div>
 				</div>
-			{/if}
+			</div>
 		</IntersectionObserver>
 	</div>
 </a>
