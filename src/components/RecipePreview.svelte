@@ -9,6 +9,8 @@
 
 	export let recipe: Recipe;
 	export let disableIntersectionObserver = false;
+
+	const useThumpImage = (imagePath: string) => imagePath.replace('.webp', '-thump.webp');
 </script>
 
 <a href={`/recipe/${recipe.id}/${slugerize(recipe.title)}`}>
@@ -26,7 +28,7 @@
 					<div class="header">
 						<div
 							class="image"
-							style={`background-image: url('${recipe.image}');`}
+							style={`background-image: url('${useThumpImage(recipe.image)}');`}
 							role="img"
 							aria-label={recipe.title}
 						/>
