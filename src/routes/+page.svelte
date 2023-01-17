@@ -14,7 +14,7 @@
 
 <div class="recipe-grid">
 	{#each recipes as recipe, idx}
-		<RecipePreview {recipe} disableIntersectionObserver={idx <= 50} />
+		<RecipePreview {recipe} disableIntersectionObserver={idx <= 7} />
 	{/each}
 </div>
 
