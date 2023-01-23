@@ -1,16 +1,14 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import sharp from 'sharp';
 
-const urlPrexif = process.env.NODE_ENV === 'production' ? '/' : 'static/';
-
-export const GET: RequestHandler = async ({ url: { searchParams }, params: { imageName } }) => {
+export const GET: RequestHandler = async ({ url, params: { imageName } }) => {
 	const imageOptions = { width: 1700 };
-	if (searchParams.has('width')) imageOptions.width = parseInt(searchParams.get('width'));
+	if (url.searchParams.has('width')) imageOptions.width = parseInt(url.searchParams.get('width'));
 
 	try {
-		const image = await sharp(`${urlPrexif}recipes/${imageName}`)
-			.resize({ width: imageOptions.width })
-			.toBuffer();
+		const fetchedImage = await fetch(`${url.origin}/recipes/${imageName}`);
+		const body = await fetchedImage.arrayBuffer();
+		const image = await sharp(Buffer.from(body)).resize({ width: imageOptions.width }).toBuffer();
 
 		return new Response(image, {
 			status: 200,
