@@ -1,4 +1,4 @@
-/** @type {import('@sveltejs/kit').RequestHandler} */
+import type { RequestHandler } from '@sveltejs/kit';
 import { recipes } from '$lib/recipes';
 import { slugerize } from '$lib/slugerize';
 
@@ -23,13 +23,12 @@ function generateSiteMap() {
  `;
 }
 
-export async function get() {
-	return {
+export const GET: RequestHandler = async () => {
+	return new Response(generateSiteMap(), {
 		status: 200,
 		headers: {
 			'access-control-allow-origin': '*',
 			'Content-Type': 'text/xml'
-		},
-		body: generateSiteMap()
-	};
-}
+		}
+	});
+};
