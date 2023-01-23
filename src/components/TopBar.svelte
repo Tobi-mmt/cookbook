@@ -9,14 +9,30 @@
 </script>
 
 <div class="top-bar">
-	<div on:click={() => (menuOpen = true)} class="action-icon"><Icon name="navigation-menu" /></div>
+	<div
+		on:click={() => (menuOpen = true)}
+		role="button"
+		aria-label="Menü öffnen"
+		on:keypress={() => (menuOpen = true)}
+		class="action-icon"
+	>
+		<Icon name="navigation-menu" />
+	</div>
 	<a class="word-icon" href="/">
 		<span class="word">Tobi's </span>
 		<Icon style="font-size: 3em;" name="spoon-and-fork" />
 		<span class="word"> Kochbuch</span>
 	</a>
 
-	<div on:click={() => (isSearchOpen = true)} class="action-icon"><Icon name="search" /></div>
+	<div
+		role="button"
+		aria-label="Suche öffnen"
+		on:click={() => (isSearchOpen = true)}
+		on:keypress={() => (isSearchOpen = true)}
+		class="action-icon"
+	>
+		<Icon name="search" />
+	</div>
 </div>
 
 <Search bind:searchOpen={isSearchOpen} />
