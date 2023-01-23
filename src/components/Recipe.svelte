@@ -294,7 +294,6 @@
 		padding: 0 1em;
 		border-left: 3px dotted;
 		border-color: var(--highlight-color-light);
-		min-width: 20em;
 		margin-bottom: 2em;
 	}
 	.ingredients .portion-settings--wrapper {
