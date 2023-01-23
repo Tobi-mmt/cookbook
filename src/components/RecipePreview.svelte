@@ -6,11 +6,10 @@
 	import { getIconName } from '$lib/iconName';
 	import Icon from './Icon.svelte';
 	import IntersectionObserver from '../components/IntersectionObserver.svelte';
+	import { useSmallImage } from '$lib/image';
 
 	export let recipe: Recipe;
 	export let disableIntersectionObserver = false;
-
-	const useThumpImage = (imagePath: string) => imagePath.replace('.webp', '-thump.webp');
 </script>
 
 <a href={`/recipe/${recipe.id}/${slugerize(recipe.title)}`}>
@@ -28,7 +27,7 @@
 					{#if intersecting || disableIntersectionObserver}
 						<div
 							class="image"
-							style={`background-image: url('${useThumpImage(recipe.image)}');`}
+							style={`background-image: url('${useSmallImage(recipe.image)}');`}
 							role="img"
 							aria-label={recipe.title}
 						/>

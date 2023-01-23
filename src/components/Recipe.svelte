@@ -3,6 +3,7 @@
 
 	import { categoryColors } from '../lib/colors';
 	import { getIconName } from '../lib/iconName';
+	import { useSmallImage } from '$lib/image';
 	import Icon from './Icon.svelte';
 
 	export let recipe: Recipe;
@@ -45,7 +46,7 @@
 		<div class="header">
 			<div
 				class="image"
-				style={`background-image: url('${recipe.image}');`}
+				style={`background-image: url('${useSmallImage(recipe.image, 1500)}');`}
 				role="img"
 				aria-label={recipe.title}
 			/>

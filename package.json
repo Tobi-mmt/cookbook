@@ -46,6 +46,7 @@
 		"*.{ts,tsx,js,jsx,svelte,json,md,html}": "yarn format"
 	},
 	"dependencies": {
-		"fuse.js": "6.6.2"
+		"fuse.js": "6.6.2",
+		"sharp": "^0.31.3"
 	}
 }
