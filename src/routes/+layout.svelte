@@ -19,6 +19,7 @@
 			/* Chrome 26+, Opera 23+, Firefox 39+ */ url('/fonts/roboto/roboto-v29-latin-100.woff')
 				format('woff');
 		/* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+		font-display: swap;
 	}
 
 	/* roboto-regular - latin */
@@ -30,6 +31,7 @@
 			/* Chrome 26+, Opera 23+, Firefox 39+ */ url('/fonts/roboto/roboto-v29-latin-regular.woff')
 				format('woff');
 		/* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+		font-display: swap;
 	}
 
 	/* roboto-700 - latin */
@@ -41,6 +43,7 @@
 			/* Chrome 26+, Opera 23+, Firefox 39+ */ url('/fonts/roboto/roboto-v29-latin-700.woff')
 				format('woff');
 		/* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+		font-display: swap;
 	}
 
 	:root {

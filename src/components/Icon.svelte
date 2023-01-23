@@ -20,6 +20,7 @@
 		font-style: 'Regular';
 		src: url('/fonts/iconfont/icofont.woff2') format('woff2'),
 			url('/fonts/iconfont/icofont.woff') format('woff');
+		font-display: swap;
 	}
 
 	[class^='icofont-'],
