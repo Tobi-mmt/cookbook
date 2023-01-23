@@ -1,12 +1,14 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import sharp from 'sharp';
 
+const urlPrexif = process.env.NODE_ENV === 'production' ? '/' : 'static/';
+
 export const GET: RequestHandler = async ({ url: { searchParams }, params: { imageName } }) => {
 	const imageOptions = { width: 1700 };
 	if (searchParams.has('width')) imageOptions.width = parseInt(searchParams.get('width'));
 
 	try {
-		const image = await sharp(`static/recipes/${imageName}`)
+		const image = await sharp(`${urlPrexif}recipes/${imageName}`)
 			.resize({ width: imageOptions.width })
 			.toBuffer();
 
