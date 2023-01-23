@@ -23,6 +23,7 @@
 						<li
 							class="list-item"
 							on:click={() => handleLinkClick(`/recipe/${recipe.id}/${slugerize(recipe.title)}`)}
+							on:keypress={() => handleLinkClick(`/recipe/${recipe.id}/${slugerize(recipe.title)}`)}
 						>
 							{recipe.title}&nbsp;
 							{#if recipe.meta.nutritionType === 'Fleisch'}
@@ -54,6 +55,7 @@
 	}
 	.list {
 		padding: 0 2em;
+		margin: 1em 0;
 	}
 	.list-item {
 		cursor: pointer;

@@ -10,7 +10,15 @@
 <div class={`off-canvas off-canvas--from-${direction} off-canvas--${open ? 'open' : 'closed'}`}>
 	<div class="header">
 		<h2 class="headline">{headline}</h2>
-		<div name="close" class="close-icon" on:click={onClose}><Icon name="close" /></div>
+		<div
+			class="close-icon"
+			role="button"
+			aria-label="Schließen"
+			on:click={onClose}
+			on:keypress={onClose}
+		>
+			<Icon name="close" />
+		</div>
 	</div>
 	<div class="content">
 		<slot />
@@ -19,6 +27,7 @@
 <div
 	class={`off-canvas__click-out off-canvas__click-out--${open ? 'open' : 'closed'}`}
 	on:click={onClose}
+	on:keypress={onClose}
 />
 
 <style jsx>
