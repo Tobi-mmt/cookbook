@@ -25,6 +25,10 @@ export const persianBeans: Recipe = {
 	},
 	title: 'Persische Bohnenpfanne',
 	image: '/recipes/persian-beans.webp',
+	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	placeholderImage:
+		'data:image/png;base64,UklGRrAAAABXRUJQVlA4IKQAAABQAgCdASoPAAoAAUAmJbACdAYrJbYHGQbSEAAA/cRIzbvxD3jwJM1znf5rUV9yXvjJjLLHtJdlv/DQkANYXPr/OTK4LOkdtZ/ZVGfvZ/TvooEs7cB3jeHuI/eNurCOEF2dyXRmVUxIP5/+ujVrMsC95SQZfQMeH9ADy0c6bfEuBmwSf///GF3b8i13EE/hvFfrsRWsJluiHvF+zeceY+lZ3WAAAA==',
+
 	steps: [
 		{
 			description: 'Bohnen spülen und im Sieb abtropfen lassen.',

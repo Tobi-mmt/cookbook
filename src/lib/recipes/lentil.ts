@@ -21,6 +21,10 @@ export const lentil: Recipe = {
 	},
 	title: 'Linsen',
 	image: '/recipes/linsen.webp',
+	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	placeholderImage:
+		'data:image/png;base64,UklGRpYAAABXRUJQVlA4IIoAAABQAgCdASoPAAoAAUAmJZgCdAYrdyjRyC0uhgAA/vdvHEVMD1KdldwYhCMdGYJFmsydx/qQJ98Wez0z0l3R+f9E+PT+bleHx/Za8XrKYdl+6cbkP+xubGy+1AFsHvSl+5Suxm1xOyKqzfEkrOPwBkyb42kQ9hobZ/UXw98lcNAqFKsqCn2j0gsAAAA=',
+
 	steps: [
 		{
 			description: 'Die Linsen 12 Stunden in kaltem Wasser einweichen lassen.',

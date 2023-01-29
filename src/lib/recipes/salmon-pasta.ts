@@ -25,6 +25,9 @@ export const salmonPasta: Recipe = {
 	},
 	title: 'Lachsnudeln',
 	image: '/recipes/lachsnudeln.webp',
+	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	placeholderImage:
+		'data:image/png;base64,UklGRpwAAABXRUJQVlA4IJAAAAAwAgCdASoPAAoAAUAmJYgCdAYtVyGtjsZ8aAD+4p1CLv6AHzdtgI7qr4JS13Zz56YFBtBXsDawkPo1o97irxsi8QpiqJ0UUwFogPFAo75/Eo/R3XU2x1cC00wCtQ3/COU57q31prThgit99y/SjPlK94f/BG7ocahXydj/jLTRB4pHKLcIxdUeP1prpNCAAAA=',
 	steps: [
 		{
 			description: 'Zwiebeln und Knoblauch schneiden und leicht anbraten.',

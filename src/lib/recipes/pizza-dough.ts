@@ -17,6 +17,10 @@ export const pizzaDough: Recipe = {
 	},
 	title: 'Pizzateig',
 	image: '/recipes/pizzateig.webp',
+	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	placeholderImage:
+		'data:image/png;base64,UklGRpQAAABXRUJQVlA4IIgAAABQAgCdASoPAAoAAUAmJYwCdAYt9y8K5FOS4kgA/pw7O+06/tVbT/eP4JYd0KBgJS9Abj5eBf3P3KvjzwZq3ZgM/W/Oe6s0oixVpeGkAi/P5qTdKSsFkIXulQYeMX0u0QxKh9Dg34hbmrXLSKk+aNV8wn/dD1TbnqHFdjv8AIDKconmDJv72AAA',
+
 	steps: [
 		{ description: 'Das Rezept ergibt Teig für 2 Pizzen.' },
 		{

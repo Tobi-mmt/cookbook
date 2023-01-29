@@ -22,6 +22,9 @@ export const beanStew: Recipe = {
 	},
 	title: 'Bohneneintopf mit veganem Speck',
 	image: '/recipes/bean-stew.webp',
+	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	placeholderImage:
+		'data:image/png;base64,UklGRowAAABXRUJQVlA4IIAAAACwAgCdASoPAAoAAUAmJbACdLoAEJeZYLImoZuPBEAA/u9q/Bl2nYvPWA9ceGz4s885NPx3B6AfYTsN1L9Wfzr4p/GTVzDbzcNZ3xzoPtWeT1owWEBmVEL4WbMDpvJ+zsdG7tH2RxnDmNr/9hyduFlGt2uIG/QNNVx9g2jm7X38AA==',
 	steps: [
 		{
 			description: 'Zwiebeln, Karotten, Kartoffeln und Tofu würfeln.',

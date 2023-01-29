@@ -22,6 +22,7 @@ export interface Recipe {
 	};
 	title: string;
 	image: string;
+	placeholderImage: string;
 	steps: (Step | Section)[];
 	ingredients: (Ingredient | Section)[];
 }
@@ -44,3 +45,9 @@ export type IconName =
 	| 'filter'
 	| 'close'
 	| 'search';
+
+declare global {
+	interface Document extends Document {
+		lazyloadInstance?: any;
+	}
+}
