@@ -14,7 +14,8 @@
 		"format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. .",
 		"postinstall": "husky install",
 		"e2e": "cypress run",
-		"get-random-id": "echo $RANDOM | md5 | head -c 15; echo;"
+		"get-random-id": "echo $RANDOM | md5 | head -c 15; echo;",
+		"get-thumbnail": "node ./scripts/getThumbnail.js"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-vercel": "1.0.5",
@@ -47,6 +48,7 @@
 	},
 	"dependencies": {
 		"fuse.js": "6.6.2",
-		"sharp": "^0.31.3"
+		"sharp": "^0.31.3",
+		"vanilla-lazyload": "^17.8.3"
 	}
 }

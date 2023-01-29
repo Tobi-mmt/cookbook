@@ -24,6 +24,9 @@ export const carrotSalad: Recipe = {
 	},
 	title: 'Karottensalat',
 	image: '/recipes/carrot-salad.webp',
+	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	placeholderImage:
+		'data:image/png;base64,UklGRqwAAABXRUJQVlA4IKAAAACQAgCdASoPAAsAAUAmJbACdLoAEJOUJ+BGP+arQAD+4MfmsR313WaSuhJkvqsa5b3AaOPj/66zA5uSbVuLnsgxquJ0vtB+o5eafyrsYPEQsf8cRKscrebyQQPMy5nOkbX9zeaWLFa2AHtid6ZA5aQXBJsaf/87k/L4avLiCSpteXSvgUA6rI4f/PfXQmPArGpG+CTfFR8d3Q6TCmVIAAAA',
 	steps: [
 		{
 			description:

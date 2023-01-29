@@ -32,6 +32,9 @@ export const rhubarbPie: Recipe = {
 	},
 	title: 'Rhabarberkuchen',
 	image: '/recipes/rhabarberkuchen.webp',
+	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	placeholderImage:
+		'data:image/png;base64,UklGRpoAAABXRUJQVlA4II4AAACwAgCdASoPAAoAAUAmJbACdLoAEImUrUdFyKOntQAA/P/8dDmvOP/XS/SLidSB3yxWfop4UUpjRpWLz8LtPE7q0TJeAumk5Ta0PxrIstIaM6uPhKdE5YkMD2C3VHvarkbCzhpnmrfNCqvFN38v/Bgi9f+kCw86edanH2tiqeh0u8b1Bbk67cc78/lduAAA',
 	steps: [
 		{
 			description:

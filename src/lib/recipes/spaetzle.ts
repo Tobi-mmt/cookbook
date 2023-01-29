@@ -18,6 +18,9 @@ export const spaetzle: Recipe = {
 	},
 	title: 'Spätzle',
 	image: '/recipes/spaetzle.webp',
+	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	placeholderImage:
+		'data:image/png;base64,UklGRr4AAABXRUJQVlA4ILIAAACwAgCdASoPAAoAAUAmJbACdLoAEInpAB40GxRwAwAA/ie5Ed6pnhHh20vH/C0SWnKIwCTGZId/Z2Ehyq7BlRf/T8+0p/rYkrzPf+79+sJ/+0oS4qDtrtbAHw4SkfqGUVkwmq3YluycOv5IpavS/0yDSmpyVD+HlXnIfmv9rL/rWm6n9RSVXLzLLQiTv/hizm95MZCVB21yA6PtUxzHLEnj/k+mHUkG0XwU9Ej+zsS2DiAA',
 	steps: [
 		{
 			description:

@@ -20,6 +20,10 @@ export const potatoSalad: Recipe = {
 	},
 	title: 'Kartoffelsalat',
 	image: '/recipes/kartoffelsalat.webp',
+	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	placeholderImage:
+		'data:image/png;base64,UklGRpIAAABXRUJQVlA4IIYAAACwAgCdASoPAAoAAUAmJbACdLoAfheREhgr7TQDrygA/v3M3M5ZYDmY6SC2DVJBnEKuWeip18QJA75hmdTXXzyF9go2/LcVDWXalnrqo+pU3WwDxM8w4h7/9fIbp/Fi2+H/6gk8rPa5FaX1/9qgj/9sNgvr+6GeeG/DkvS46oVoc1GIqwAAAA==',
+
 	steps: [
 		{
 			description: 'Die Kartoffeln schälen und kochen, bis sie durch sind.',

@@ -23,6 +23,9 @@ export const redWinePie: Recipe = {
 	},
 	title: 'Rotweinkuchen',
 	image: '/recipes/rotweinkuchen.webp',
+	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	placeholderImage:
+		'data:image/png;base64,UklGRpQAAABXRUJQVlA4IIgAAAAQAgCdASoPAAoAAUAmJQBOgCG/T5aOY7rAAP7tEXz7TaXkvo1HKloD+WY7Mf8SX/r6WdeVngx9CYwSf09qVTHv4hTDDuMlgIkc6VGvQItJ25a3abjvKwPmooTDZk7NnP6Jn3ntEtF3+QKxjy3IXj9F0ovgfY3yn8p+y5HCyOX1/lCDKfk5AAAA',
 	steps: [
 		{ description: 'Backofen auf 180 °C Umluft vorheizen.' },
 		{

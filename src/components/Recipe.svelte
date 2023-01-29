@@ -6,9 +6,18 @@
 	import { useSmallImage } from '$lib/image';
 	import Icon from './Icon.svelte';
 
+	import { browser } from '$app/environment';
+	import { onMount } from 'svelte';
+
 	export let recipe: Recipe;
 
 	let portion = recipe.meta.portion;
+
+	onMount(() => {
+		if (browser) {
+			document.lazyloadInstance.update();
+		}
+	});
 
 	const increasePortion = () => {
 		portion = portion + 1;
@@ -44,12 +53,14 @@
 >
 	<div>
 		<div class="header">
-			<div
-				class="image"
-				style={`background-image: url('${useSmallImage(recipe.image, 1500)}');`}
-				role="img"
-				aria-label={recipe.title}
-			/>
+			<div class="imageWrapper" style="background-color: #eee">
+				<img
+					class="lazy"
+					src={recipe.placeholderImage}
+					alt={recipe.title}
+					data-src={useSmallImage(recipe.image, 1500)}
+				/>
+			</div>
 			<div class="infos">
 				<p class="category">{recipe.meta.category}</p>
 				<h1 class="title">{recipe.title}</h1>
@@ -177,7 +188,7 @@
 		height: 40vw;
 		max-height: 550px;
 	}
-	.image {
+	.imageWrapper {
 		background-position: center;
 		background-size: cover;
 		position: absolute;
@@ -185,6 +196,11 @@
 		right: 0;
 		height: 100%;
 		overflow: hidden;
+	}
+	.imageWrapper img {
+		height: 100%;
+		width: 100%;
+		object-fit: cover;
 	}
 	.title {
 		padding: 0;

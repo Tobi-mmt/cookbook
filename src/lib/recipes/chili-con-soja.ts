@@ -25,6 +25,10 @@ export const chiliConSoja: Recipe = {
 	},
 	title: 'Chili con Soja',
 	image: '/recipes/chilli-con-carne.webp',
+	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	placeholderImage:
+		'data:image/png;base64,UklGRsgAAABXRUJQVlA4ILwAAABwAwCdASoPAAsAAUAmJbACdDBLyUxeMrM83ysxG6GeUcqScgAA/vC1amf+nFcxxQXn/9nfQdKOqhdUAf6hBkGx4X4ou18tT8u33CL6n2x+HseGTfl9BHpTL/FrAbbECeRnpVprL/7ntw0Z848isDoUJZOg836Lf/19TjSdmUi8mIVPhtZII5P/ugyXeAQUMY/87XO6f47J+eS2Nrpp19Yj/4NMHk8pijb00q79z+mjWSD7qGifaxGRcwAAAA==',
+
 	steps: [
 		{
 			description:
