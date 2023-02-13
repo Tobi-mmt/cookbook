@@ -234,7 +234,7 @@
 		padding: 0 2em;
 	}
 	.step--list {
-		padding-left: 1.15em;
+		padding-left: 0;
 	}
 	.step--list-item {
 		list-style: none;

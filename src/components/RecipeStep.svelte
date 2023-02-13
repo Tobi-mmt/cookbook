@@ -7,7 +7,20 @@
 
 <div class="wrapper" on:click={() => (checked = !checked)} on:keydown={() => (checked = !checked)}>
 	<span class={`decoration ${checked && 'decoration__active'}`}>
-		<span class={`decoration--text ${checked && 'decoration--text__active'}`}>✔</span>
+		<span class={`decoration--text ${checked && 'decoration--text__active'}`}>
+			<svg
+				width="24"
+				height="24"
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke-width="1.5"
+				stroke="currentColor"
+				class="w-6 h-6"
+			>
+				<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+			</svg>
+		</span>
 	</span>
 	<span>{step.description}</span>
 	<div class="ingredients">
@@ -44,11 +57,10 @@
 		display: inline-block;
 		width: 2rem;
 		height: 2rem;
-		font-size: 1rem;
 		margin-left: -2.75rem;
 		border-radius: 999px;
 		text-align: center;
-		padding-top: 0.35rem;
+		padding-top: 0.3rem;
 		position: absolute;
 		margin-top: -0.4rem;
 		border: 1px dashed var(--highlight-color);
