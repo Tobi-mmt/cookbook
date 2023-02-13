@@ -8,6 +8,7 @@
 
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
+	import RecipeStep from './RecipeStep.svelte';
 
 	export let recipe: Recipe;
 
@@ -82,7 +83,6 @@
 		</div>
 		<div class="content">
 			<div class="step">
-				<div class="dotted-line" />
 				<ol class="step--list">
 					{#each recipe.steps as step, stepIndex}
 						<li class="step--list-item">
@@ -92,22 +92,7 @@
 								>
 								<h2 class="step--list-item--section">{step.section}</h2>
 							{:else}
-								<span class="step--list-item--decoration">{stepIndex + 1}</span>
-								<span>{step.description}</span>
-								<div class="step--list-item--ingredients">
-									{#if step?.linkedIngredients}
-										{#each step?.linkedIngredients as linkedIngredient, ingredientIndex}
-											<span>
-												{#if linkedIngredient.quantity}
-													{calcQuantity(linkedIngredient.quantity, portion)}
-												{/if}
-												{optionalText(linkedIngredient.unit)}
-												{optionalText(linkedIngredient.name)}
-												{#if ingredientIndex < step?.linkedIngredients.length - 1},{/if}
-											</span>
-										{/each}
-									{/if}
-								</div>
+								<RecipeStep {step} />
 							{/if}
 						</li>
 					{/each}
@@ -246,13 +231,12 @@
 	}
 	.step {
 		position: relative;
-		padding-right: 2em;
+		padding: 0 2em;
 	}
 	.step--list {
 		padding-left: 1.15em;
 	}
 	.step--list-item {
-		margin-bottom: 1.5em;
 		list-style: none;
 		position: relative;
 	}
@@ -263,35 +247,9 @@
 	.step--list-item:first-child .step--list-item--section {
 		margin-top: 0;
 	}
-	.step--list-item--decoration {
-		color: #fff;
-		background-color: var(--highlight-color);
-		display: inline-block;
-		width: 1.75em;
-		height: 1.75em;
-		font-size: 0.75em;
-		margin-left: -2.25em;
-		margin-right: 0.15em;
-		border-radius: 50%;
-		text-align: center;
-		padding-top: 0.25em;
-		position: absolute;
-	}
 	.step--list-item--decoration_big {
 		font-size: 1em;
 		margin-left: -1.95em;
-	}
-	.step--list-item--ingredients {
-		font-size: 0.75em;
-		opacity: 0.7;
-	}
-	.step .dotted-line {
-		border-left: 3px dotted;
-		border-color: var(--highlight-color-light);
-		position: absolute;
-		top: 0;
-		left: 0;
-		bottom: 0;
 	}
 	.ingredients-headline {
 		font-weight: bold;
@@ -308,7 +266,7 @@
 	}
 	.ingredients {
 		padding: 0 1em;
-		border-left: 3px dotted;
+		border-left: 1px solid;
 		border-color: var(--highlight-color-light);
 		margin-bottom: 2em;
 	}
@@ -342,9 +300,6 @@
 		.ingredients {
 			border: none;
 			padding-bottom: 1.5em;
-			margin-bottom: 1em;
-		}
-		.step--list-item {
 			margin-bottom: 1em;
 		}
 		.title {

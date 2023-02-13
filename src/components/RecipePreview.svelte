@@ -66,6 +66,8 @@
 	.recipe-preview {
 		box-shadow: 5px 5px 15px #0003;
 		transition: box-shadow 0.25s;
+		border-radius: 5px;
+		overflow: hidden;
 	}
 	a:hover > .recipe-preview {
 		box-shadow: 5px 5px 15px #0005;

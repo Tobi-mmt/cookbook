@@ -60,6 +60,7 @@
 		class="modal__click-out"
 		transition:fade={{ duration: 250 }}
 		on:click={() => (searchOpen = false)}
+		on:keydown={() => (searchOpen = false)}
 	/>
 {/if}
 
@@ -105,6 +106,6 @@
 	}
 	.modal__background {
 		background-color: #fff;
-		border-radius: 4px;
+		border-radius: 5px;
 	}
 </style>
