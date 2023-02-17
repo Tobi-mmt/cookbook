@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { Recipe, Section } from '../types';
 
-	import { categoryColors } from '../lib/colors';
-	import { getIconName } from '../lib/iconName';
+	import { categoryColors } from '$lib/colors';
+	import { getIconName } from '$lib/iconName';
 	import { getSourceSet } from '$lib/image';
 	import Icon from './Icon.svelte';
 
@@ -22,14 +22,10 @@
 		}
 	};
 
-	const calcQuantity = (quantity: number, portion: number) => {
+	const calcQuantity = (quantity: number, portion: number, recipePortion: number) => {
 		if (isNaN(quantity)) return quantity;
-		const newValue = (quantity * portion) / recipe.meta.portion;
+		const newValue = (quantity * portion) / recipePortion;
 		return Number(Math.round(Number(newValue + 'e' + 1)) + 'e-' + 1);
-	};
-
-	const optionalText = (text?: string | number) => {
-		return text ? text : '';
 	};
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -89,7 +85,11 @@
 								>
 								<h2 class="step--list-item--section">{step.section}</h2>
 							{:else}
-								<RecipeStep {step} />
+								<RecipeStep
+									{step}
+									calcQuantityFunction={(quantety) =>
+										calcQuantity(quantety, portion, recipe.meta.portion)}
+								/>
 							{/if}
 						</li>
 					{/each}
@@ -126,7 +126,7 @@
 								{:else}
 									<td>
 										{#if ingredient.quantity}
-											{calcQuantity(ingredient.quantity, portion)}
+											{calcQuantity(ingredient.quantity, portion, recipe.meta.portion)}
 										{/if}
 										{#if ingredient.unit}{ingredient.unit}{/if}
 									</td>
