@@ -1,0 +1,23 @@
+name: Benchmark
+on: deployment_status
+
+jobs:
+  lighthouse:
+    # only runs this job on successful deploy
+    if: github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: setup
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Lighthouse Check
+        run: npx @lhci/cli autorun
+        env:
+          PREVIEW_URL: ${{ github.event.deployment_status.target_url }}
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
