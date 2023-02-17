@@ -5,18 +5,11 @@
 	import { categoryColors } from '$lib/colors';
 	import { getIconName } from '$lib/iconName';
 	import Icon from './Icon.svelte';
+	import IntersectionObserver from './IntersectionObserver.svelte';
 	import { useSmallImage } from '$lib/image';
 
-	import { browser } from '$app/environment';
-	import { onMount } from 'svelte';
-
 	export let recipe: Recipe;
-
-	onMount(() => {
-		if (browser) {
-			document.lazyloadInstance.update();
-		}
-	});
+	export let disableIntersectionObserver = false;
 </script>
 
 <a href={`/recipe/${recipe.id}/${slugerize(recipe.title)}`}>
@@ -28,32 +21,35 @@
   --highlight-color-light: ${categoryColors[recipe.meta.category]}77;
   `}
 	>
-		<div>
-			<div class="header">
-				<div class="imageWrapper" style="background-color: #eee">
-					<img
-						class="lazy"
-						src={recipe.placeholderImage}
-						alt={recipe.title}
-						data-src={useSmallImage(recipe.image)}
-					/>
-				</div>
-				<div class="infos">
-					<p class="category">{recipe.meta.category}</p>
-					<h1 class="title">{recipe.title}</h1>
-					<div class="meta">
-						<div class="meta-item">
-							<span class="icon"><Icon name="sand-clock" /></span>
-							<p>{recipe.meta.duration}&nbsp;min</p>
-						</div>
-						<div class="meta-item">
-							<span class="icon"><Icon name={getIconName(recipe.meta.nutritionType)} /></span>
-							<p>{recipe.meta.nutritionType}</p>
+		<IntersectionObserver let:intersecting top={500} bottom={500} once={true}>
+			<div>
+				<div class="header">
+					<div class="imageWrapper">
+						<div
+							class="imagePlaceholder"
+							style={`background-image: url(${recipe.placeholderImage});`}
+						/>
+						{#if intersecting || disableIntersectionObserver}
+							<img class="image" src={useSmallImage(recipe.image)} alt={recipe.title} />
+						{/if}
+					</div>
+					<div class="infos">
+						<p class="category">{recipe.meta.category}</p>
+						<h1 class="title">{recipe.title}</h1>
+						<div class="meta">
+							<div class="meta-item">
+								<span class="icon"><Icon name="sand-clock" /></span>
+								<p>{recipe.meta.duration}&nbsp;min</p>
+							</div>
+							<div class="meta-item">
+								<span class="icon"><Icon name={getIconName(recipe.meta.nutritionType)} /></span>
+								<p>{recipe.meta.nutritionType}</p>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		</IntersectionObserver>
 	</div>
 </a>
 
@@ -80,7 +76,15 @@
 		height: 40vw;
 		max-height: 550px;
 	}
+	.image {
+		position: absolute;
+		height: 100%;
+		width: 100%;
+		object-fit: cover;
+		color: transparent;
+	}
 	.imageWrapper {
+		position: relative;
 		object-fit: cover;
 		position: absolute;
 		left: 0;
@@ -88,7 +92,12 @@
 		height: 100%;
 		overflow: hidden;
 	}
-	.imageWrapper img {
+	.imagePlaceholder {
+		position: absolute;
+		background-color: #eee;
+		background-size: cover;
+		background-position: center;
+		filter: blur(8px);
 		height: 100%;
 		width: 100%;
 		object-fit: cover;
