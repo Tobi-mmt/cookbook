@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { recipes } from '../lib/recipes';
+	import { recipes } from '$lib/recipes';
 	import RecipePreview from '../components/RecipePreview.svelte';
 </script>
 

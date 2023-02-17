@@ -3,7 +3,7 @@
 
 	import { fade } from 'svelte/transition';
 	import Fuse from 'fuse.js';
-	import { recipes } from '../lib/recipes';
+	import { recipes } from '$lib/recipes';
 
 	export let searchOpen: boolean;
 	let searchValue = '';

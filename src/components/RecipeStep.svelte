@@ -2,6 +2,7 @@
 	import type { Step } from 'src/types';
 
 	export let step: Step;
+	export let calcQuantityFunction: (quantity: number) => number;
 	let checked = false;
 </script>
 
@@ -27,7 +28,7 @@
 		{#if step?.linkedIngredients}
 			{#each step?.linkedIngredients as linkedIngredient, ingredientIndex}
 				<span>
-					{#if linkedIngredient.quantity}{linkedIngredient.quantity}{/if}
+					{#if linkedIngredient.quantity}{calcQuantityFunction(linkedIngredient.quantity)}{/if}
 					{#if linkedIngredient.unit}{linkedIngredient.unit}{/if}
 					{#if linkedIngredient.name}{linkedIngredient.name}{/if}
 					{#if ingredientIndex < step?.linkedIngredients.length - 1},{/if}

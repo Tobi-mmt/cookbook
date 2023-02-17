@@ -1,8 +1,8 @@
 <script lang="ts">
 	import Icon from './Icon.svelte';
-	import { categoryColors } from '../lib/colors';
-	import { slugerize } from '../lib/slugerize';
-	import { categorizedRecipe } from '../lib/categorizedRecipes';
+	import { categoryColors } from '$lib/colors';
+	import { slugerize } from '$lib/slugerize';
+	import { categorizedRecipe } from '$lib/categorizedRecipes';
 	import { goto } from '$app/navigation';
 
 	export let onItemClick: () => void;

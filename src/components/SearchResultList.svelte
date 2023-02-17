@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type Fuse from 'fuse.js';
 	import type { Recipe } from 'src/types';
-	import { slugerize } from '../lib/slugerize';
+	import { slugerize } from '$lib/slugerize';
 	import { goto } from '$app/navigation';
 
 	export let searchOpen: boolean;
