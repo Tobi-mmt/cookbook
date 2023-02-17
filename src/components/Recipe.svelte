@@ -6,19 +6,11 @@
 	import { useSmallImage } from '$lib/image';
 	import Icon from './Icon.svelte';
 
-	import { browser } from '$app/environment';
-	import { onMount } from 'svelte';
 	import RecipeStep from './RecipeStep.svelte';
 
 	export let recipe: Recipe;
 
 	let portion = recipe.meta.portion;
-
-	onMount(() => {
-		if (browser) {
-			document.lazyloadInstance.update();
-		}
-	});
 
 	const increasePortion = () => {
 		portion = portion + 1;
@@ -54,13 +46,12 @@
 >
 	<div>
 		<div class="header">
-			<div class="imageWrapper" style="background-color: #eee">
-				<img
-					class="lazy"
-					src={recipe.placeholderImage}
-					alt={recipe.title}
-					data-src={useSmallImage(recipe.image, 1500)}
+			<div class="imageWrapper">
+				<div
+					class="imagePlaceholder"
+					style={`background-image: url(${recipe.placeholderImage});`}
 				/>
+				<img class="image" src={useSmallImage(recipe.image, 1500)} alt={recipe.title} />
 			</div>
 			<div class="infos">
 				<p class="category">{recipe.meta.category}</p>
@@ -173,16 +164,28 @@
 		height: 40vw;
 		max-height: 550px;
 	}
+	.image {
+		position: absolute;
+		height: 100%;
+		width: 100%;
+		object-fit: cover;
+		color: transparent;
+	}
 	.imageWrapper {
-		background-position: center;
-		background-size: cover;
+		position: relative;
+		object-fit: cover;
 		position: absolute;
 		left: 0;
 		right: 0;
 		height: 100%;
 		overflow: hidden;
 	}
-	.imageWrapper img {
+	.imagePlaceholder {
+		position: absolute;
+		background-color: #eee;
+		background-size: cover;
+		background-position: center;
+		filter: blur(8px);
 		height: 100%;
 		width: 100%;
 		object-fit: cover;

@@ -13,8 +13,8 @@
 </svelte:head>
 
 <div class="recipe-grid">
-	{#each recipes as recipe}
-		<RecipePreview {recipe} />
+	{#each recipes as recipe, idx}
+		<RecipePreview {recipe} disableIntersectionObserver={idx <= 7} />
 	{/each}
 </div>
 

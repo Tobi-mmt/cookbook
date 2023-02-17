@@ -48,7 +48,6 @@
 	},
 	"dependencies": {
 		"fuse.js": "6.6.2",
-		"sharp": "^0.31.3",
-		"vanilla-lazyload": "^17.8.3"
+		"sharp": "^0.31.3"
 	}
 }

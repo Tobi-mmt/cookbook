@@ -45,9 +45,3 @@ export type IconName =
 	| 'filter'
 	| 'close'
 	| 'search';
-
-declare global {
-	interface Document extends Document {
-		lazyloadInstance?: any;
-	}
-}
