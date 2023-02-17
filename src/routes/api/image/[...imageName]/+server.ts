@@ -1,8 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import sharp from 'sharp';
 
-const ONE_DAY_IN_SECONDS = 24 * 60 * 60;
-const ONE_WEEK_IN_SECONDS = 7 * ONE_DAY_IN_SECONDS;
+const ONE_YEAR_IN_SECONDS = 24 * 60 * 60 * 365;
 
 export const GET: RequestHandler = async ({ url, params: { imageName } }) => {
 	const imageOptions = { width: 1700 };
@@ -19,7 +18,7 @@ export const GET: RequestHandler = async ({ url, params: { imageName } }) => {
 				'access-control-allow-origin': '*',
 				'Content-Type': `image/webp`,
 				'Content-Length': image.length,
-				'Cache-Control': `s-maxage=${ONE_DAY_IN_SECONDS}, stale-while-revalidate=${ONE_WEEK_IN_SECONDS}`
+				'Cache-Control': `s-maxage=${ONE_YEAR_IN_SECONDS}, stale-while-revalidate`
 			}
 		});
 	} catch (e: any) {
