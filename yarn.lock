@@ -347,10 +347,10 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
 
-"@sveltejs/adapter-vercel@2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-vercel/-/adapter-vercel-2.0.2.tgz#8246b7946d8eac47a4e6b65f0ae278aef0a530b7"
-  integrity sha512-Mn80jy3rPNWB9iBp93MHXWwOh1qyxNzMNal0Dd80rD3As5Qi5L3lGhr1cIZ3T3Y3giwAVxzjMiHEflaUb8sjqg==
+"@sveltejs/adapter-vercel@2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-vercel/-/adapter-vercel-2.0.3.tgz#6e596b16d9167e0d3f15fc14714627126933d070"
+  integrity sha512-Sp2bwcGD0zVGKsIh2PBMO2vwhJjrqPNazTF/rIm7C0A0iMNDwOugUTYxBIOoXhRZ+9afOmuQRM6p7zbB4JXfZA==
   dependencies:
     "@vercel/nft" "^0.22.1"
     esbuild "^0.16.3"
