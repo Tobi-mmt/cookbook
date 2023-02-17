@@ -3,7 +3,7 @@
 
 	import { categoryColors } from '../lib/colors';
 	import { getIconName } from '../lib/iconName';
-	import { useSmallImage } from '$lib/image';
+	import { getSourceSet } from '$lib/image';
 	import Icon from './Icon.svelte';
 
 	import RecipeStep from './RecipeStep.svelte';
@@ -51,7 +51,13 @@
 					class="imagePlaceholder"
 					style={`background-image: url(${recipe.placeholderImage});`}
 				/>
-				<img class="image" src={useSmallImage(recipe.image, 1500)} alt={recipe.title} />
+				<img
+					class="image"
+					src={recipe.image}
+					srcset={getSourceSet(recipe.image)}
+					sizes="100vw"
+					alt={recipe.title}
+				/>
 			</div>
 			<div class="infos">
 				<p class="category">{recipe.meta.category}</p>
