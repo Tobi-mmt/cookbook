@@ -10,12 +10,14 @@ const config = {
 	kit: {
 		adapter: vercel(),
 		csp: {
+			mode: 'auto',
 			directives: {
 				'default-src': ['self'],
-				'script-src': ['self', 'unsafe-eval'],
+				'script-src': ['self', 'unsafe-eval', 'unsafe-inline'],
 				'img-src': ['self', 'data:'],
 				'object-src': ['none'],
-				'base-uri': ['none']
+				'base-uri': ['none'],
+				'style-src': ['self', 'unsafe-inline']
 			}
 		}
 	}
