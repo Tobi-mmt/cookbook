@@ -7,10 +7,7 @@ module.exports = {
 			]
 		},
 		assert: {
-			preset: 'lighthouse:no-pwa',
-			assertions: {
-				'csp-xss': 'warn'
-			}
+			preset: 'lighthouse:no-pwa'
 		},
 		upload: {
 			target: 'temporary-public-storage'
