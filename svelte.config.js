@@ -8,7 +8,16 @@ const config = {
 	preprocess: preprocess(),
 
 	kit: {
-		adapter: vercel()
+		adapter: vercel(),
+		csp: {
+			directives: {
+				'default-src': ['self'],
+				'script-src': ['self', 'unsafe-eval'],
+				'img-src': ['self', 'data:'],
+				'object-src': ['none'],
+				'base-uri': ['none']
+			}
+		}
 	}
 };
 
