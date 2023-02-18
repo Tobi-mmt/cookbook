@@ -18,8 +18,8 @@
 		"get-thumbnail": "node ./scripts/getThumbnail.js"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-vercel": "2.0.3",
-		"@sveltejs/kit": "1.7.1",
+		"@sveltejs/adapter-vercel": "2.0.4",
+		"@sveltejs/kit": "1.7.2",
 		"@typescript-eslint/eslint-plugin": "5.52.0",
 		"@typescript-eslint/parser": "5.52.0",
 		"cypress": "12.6.0",
