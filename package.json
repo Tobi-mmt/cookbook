@@ -20,10 +20,10 @@
 	"devDependencies": {
 		"@sveltejs/adapter-vercel": "2.0.4",
 		"@sveltejs/kit": "1.7.2",
-		"@typescript-eslint/eslint-plugin": "5.52.0",
-		"@typescript-eslint/parser": "5.52.0",
+		"@typescript-eslint/eslint-plugin": "5.54.0",
+		"@typescript-eslint/parser": "5.54.0",
 		"cypress": "12.7.0",
-		"eslint": "8.34.0",
+		"eslint": "8.35.0",
 		"eslint-config-prettier": "8.6.0",
 		"eslint-plugin-svelte3": "4.0.0",
 		"husky": "8.0.3",
