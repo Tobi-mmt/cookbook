@@ -40,7 +40,7 @@
   --highlight-color-light: ${categoryColors[recipe.meta.category]}77;
   `}
 >
-	<div>
+	<div itemtype="https://schema.org/Recipe">
 		<div class="header">
 			<div class="imageWrapper">
 				<div
@@ -48,6 +48,7 @@
 					style={`background-image: url(${recipe.placeholderImage});`}
 				/>
 				<img
+					itemprop="image"
 					class="image"
 					src={recipe.image}
 					srcset={getSourceSet(recipe.image)}
@@ -57,15 +58,15 @@
 			</div>
 			<div class="infos">
 				<p class="category">{recipe.meta.category}</p>
-				<h1 class="title">{recipe.title}</h1>
+				<h1 itemprop="name" class="title">{recipe.title}</h1>
 				<div class="meta">
 					<div class="meta-item">
 						<span class="icon"><Icon name="users-alt-6" /></span>
-						<p>{portion}</p>
+						<p itemprop="recipeYield">{portion}</p>
 					</div>
 					<div class="meta-item">
 						<span class="icon"><Icon name="sand-clock" /></span>
-						<p>{recipe.meta.duration}&nbsp;min</p>
+						<p itemprop="prepTime">{recipe.meta.duration}&nbsp;min</p>
 					</div>
 					<div class="meta-item">
 						<span class="icon"><Icon name={getIconName(recipe.meta.nutritionType)} /></span>
@@ -119,11 +120,13 @@
 							</td>
 						</tr>
 						{#each recipe.ingredients as ingredient}
-							<tr>
-								{#if isSection(ingredient)}
+							{#if isSection(ingredient)}
+								<tr>
 									<td />
 									<td class="ingredients-headline">{ingredient.section}</td>
-								{:else}
+								</tr>
+							{:else}
+								<tr itemprop="recipeIngredient">
 									<td>
 										{#if ingredient.quantity}
 											{calcQuantity(ingredient.quantity, portion, recipe.meta.portion)}
@@ -133,8 +136,8 @@
 									<td>
 										{#if ingredient.name}{ingredient.name}{/if}
 									</td>
-								{/if}
-							</tr>
+								</tr>
+							{/if}
 						{/each}
 					</tbody>
 				</table>
