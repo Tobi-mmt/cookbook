@@ -30,18 +30,23 @@ export const salmonPasta: Recipe = {
 		'data:image/png;base64,UklGRpwAAABXRUJQVlA4IJAAAAAwAgCdASoPAAoAAUAmJYgCdAYtVyGtjsZ8aAD+4p1CLv6AHzdtgI7qr4JS13Zz56YFBtBXsDawkPo1o97irxsi8QpiqJ0UUwFogPFAo75/Eo/R3XU2x1cC00wCtQ3/COU57q31prThgit99y/SjPlK94f/BG7ocahXydj/jLTRB4pHKLcIxdUeP1prpNCAAAA=',
 	steps: [
 		{
+			description:
+				'Lachs in Würfel schneiden, in eine Schale geben und mit dem Saft der Zitrone vermischen und kurz einziehen lassen.',
+			linkedIngredients: [ingredients.salmon, ingredients.lemon]
+		},
+		{
 			description: 'Zwiebeln und Knoblauch schneiden und leicht anbraten.',
 			linkedIngredients: [ingredients.onion, ingredients.garlic]
 		},
 		{ description: 'Mit Weißwein ablöschen.', linkedIngredients: [ingredients.wine] },
 		{
-			description: 'Sahne, Schmelzkäse und Parmesan dazu geben.',
-			linkedIngredients: [ingredients.cream, ingredients.cheeese, ingredients.parmesan]
-		},
-		{
-			description:
-				'Lachs in Würfel schneiden, in eine Schale geben und mit dem Saft einer der Zitrone vermischen und kurz einziehen lassen.',
-			linkedIngredients: [ingredients.salmon, ingredients.lemon]
+			description: 'Spinat, Sahne, Schmelzkäse und Parmesan dazu geben.',
+			linkedIngredients: [
+				ingredients.spinach,
+				ingredients.cream,
+				ingredients.cheeese,
+				ingredients.parmesan
+			]
 		},
 		{ description: 'Lachs in einer Pfanne leicht anbraten.' },
 		{
