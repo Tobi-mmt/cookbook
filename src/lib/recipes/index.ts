@@ -30,6 +30,7 @@ import { persianBeans } from './persian-beans';
 import { lentilBroccoliCurry } from './lentil-broccoli-curry';
 import { fennelRisotto } from './fennel-risotto';
 import { carrotSalad } from './carrot-salad';
+import { wildGarlicSoup } from './wild-garlic-soup';
 
 const unsortedRecipes: Recipe[] = [
 	potatoSalad,
@@ -60,7 +61,8 @@ const unsortedRecipes: Recipe[] = [
 	persianBeans,
 	lentilBroccoliCurry,
 	fennelRisotto,
-	carrotSalad
+	carrotSalad,
+	wildGarlicSoup
 ];
 
 const getCatIndex = (category: Category) => {
