@@ -7,7 +7,14 @@ module.exports = {
 			]
 		},
 		assert: {
-			preset: 'lighthouse:no-pwa'
+			preset: 'lighthouse:no-pwa',
+			assertions: {
+				'bf-cache': 'warn',
+				'is-crawlable': 'warn',
+				'categories:performance': ['warn', { minScore: 0.9 }],
+				'categories:accessibility': ['error', { minScore: 1 }],
+				'categories:seo': ['warn', { minScore: 0.9 }]
+			}
 		},
 		upload: {
 			target: 'temporary-public-storage'
