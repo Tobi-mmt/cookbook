@@ -30,7 +30,7 @@ export const veganGravy: Recipe = {
 	},
 	title: 'Vegane Bratensoße',
 	image: '/recipes/bratensosse.webp',
-	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	// placeholderImage generated with "yarn get-thumbnail PATH/TO/IMAGE.webp"
 	placeholderImage:
 		'data:image/png;base64,UklGRogAAABXRUJQVlA4IHwAAAAwAgCdASoPAAoAAUAmJZgCdAYt9adlxp0X4AD+8H3LfFjj9woqGFd/09lPfABdbjRM5CN+RrNt44WGjf2ReiG5QSBb2cnQoPVehA4B7qTgtQyND1Biw4t0hKyAO4UPP91y7EEPkhqGK+yGt+L1HZ55PWSAP2ff5AJ6WAAA',
 	steps: [

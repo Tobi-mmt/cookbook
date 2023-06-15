@@ -21,7 +21,7 @@ export const pepperMedaillon: Recipe = {
 	},
 	title: 'Medaillons in Pfefferrahmsoße',
 	image: '/recipes/schweinemedaillons.webp',
-	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	// placeholderImage generated with "yarn get-thumbnail PATH/TO/IMAGE.webp"
 	placeholderImage:
 		'data:image/png;base64,UklGRooAAABXRUJQVlA4IH4AAACQAgCdASoPAAoAAUAmJbACdDBKyIfMrtlvNH25AAD+wqPTsovbPi9cWfHUppuIPWbAysbbBM7/8175aa8wRgiVYuYmQP47h5UKFUas/h+dMpED/TXHPPeG//GKpfip/ilQN3/s23L/+DWaOPpKOHQrxvrFG+vx/f2FtAPwAAA=',
 

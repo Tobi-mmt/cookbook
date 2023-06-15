@@ -19,7 +19,7 @@ export const cherryPunch: Recipe = {
 	},
 	title: 'Sauerkirschbowle',
 	image: '/recipes/sauerkirschbowle.webp',
-	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	// placeholderImage generated with "yarn get-thumbnail PATH/TO/IMAGE.webp"
 	placeholderImage:
 		'data:image/png;base64,UklGRqgAAABXRUJQVlA4IJwAAABQAgCdASoPAAsAAUAmJQBOgMUy4Fpm821Tt9AA/vpOsC9BLIxNGpQm2BEG69cqU0ZhjDC/hJRg4eDlYLGkpDl4R407u2onYNAbql0y90u8/YHx8JN6Ab3bMPp5Ddzszgpfn/Vl+TH3gSITjxs1hv2ru+jhU5YXv8nNNL+x3H3lN69RsFJSQggLmSOLSjl3qGezbWR26apxawtAAAA=',
 

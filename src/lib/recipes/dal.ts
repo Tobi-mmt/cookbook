@@ -24,7 +24,7 @@ export const dal: Recipe = {
 	},
 	title: 'Dal',
 	image: '/recipes/dal.webp',
-	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	// placeholderImage generated with "yarn get-thumbnail PATH/TO/IMAGE.webp"
 	placeholderImage:
 		'data:image/png;base64,UklGRsgAAABXRUJQVlA4ILwAAADwAgCdASoPAA8AAUAmJbACdLoAfh4REJgaWi7/JZnvgAD++PV+3KOOPwufxUGAawsMe6nPwc+elGg4Z7a+bmvEPt4UfWooZ/svzorobFrN9Jr4JenNFwn4GjtG79j6gv6Dur4oDFQrhc+lOkWew01VW/YcD82HE92h6qTX3/PhZrN6e/ik/N/IxZWMRlwahQM96v9g4vAbT0l80TaKlCHHhavKUNhnMbfdDYbxbCe6mwXJ8qVNsiYqMAAAAA==',
 

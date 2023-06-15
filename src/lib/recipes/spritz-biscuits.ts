@@ -19,7 +19,7 @@ export const spritzBiscuits: Recipe = {
 	},
 	title: 'Spritzgebäck',
 	image: '/recipes/butter-s.webp',
-	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	// placeholderImage generated with "yarn get-thumbnail PATH/TO/IMAGE.webp"
 	placeholderImage:
 		'data:image/png;base64,UklGRrAAAABXRUJQVlA4IKQAAACQAgCdASoPAAoAAUAmJYwCdEf/i1m+YMPuwVl4AAD+1iAetWXgLkWXvddvFz9LOLTa933PwoZgDHe5uPp3FRvYOVZCiA+MS6R6nR+jJQrNvR9kljR4Ufa5SHxCyzPb1vUfb6v0H4dBige/1+sKYF04kgY/9IgxnPMOkVvuCkIfhp2oRgf6puj2h6z917pymwHCm14rCMe3uXexR85BgN514gAAAA==',
 	steps: [

@@ -26,7 +26,7 @@ export const mushroomPan: Recipe = {
 	},
 	title: 'Pilzschmorpfanne',
 	image: '/recipes/pilzschmorpfanne.webp',
-	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	// placeholderImage generated with "yarn get-thumbnail PATH/TO/IMAGE.webp"
 	placeholderImage:
 		'data:image/png;base64,UklGRrQAAABXRUJQVlA4IKgAAABwAgCdASoPAAoAAUAmJZgCdAYuHqiqUNj5dvQAAP7tK4lXiZNoegcroWqV2X8uq/VypskWGMPoaeMFl1V/+u0wDF+oNH+eGWmi1dxhoHH1CHvZKaBEP8dOwn6ejwSj4sFiEj+2YmPMhfp38CpaSr/Z0A2vfjhmoV3V1bo7/1ixfJU3iZ+31xv8LoDfkgQ8qpofM5Rxb+VXr+At2bcbrOosV3Y+qdkAAAA=',
 

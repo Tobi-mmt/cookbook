@@ -25,7 +25,7 @@ export const vanillaCroissant: Recipe = {
 	},
 	title: 'Vanillekipferl',
 	image: '/recipes/vanillekipferl.webp',
-	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	// placeholderImage generated with "yarn get-thumbnail PATH/TO/IMAGE.webp"
 	placeholderImage:
 		'data:image/png;base64,UklGRqgAAABXRUJQVlA4IJwAAABwAgCdASoPAAoAAUAmJbACdEf/jDl85ZiZBApcAP763AmKnebSys/5f3BwPTMMmLRkA+Mv+c0cEuodB1+zm/P0UnAfeq3XDjPVgYfj/XuntubrQ+RNMkC4g89+ZidX6yE1ewDJ8WP++Sy5bKX9kfxFlnc3h8zcZ2xvQcAP3qfm1iP7uNGBwfpCk+Ns3+83WNPDA6iy4MOvO+4bAAA=',
 	steps: [

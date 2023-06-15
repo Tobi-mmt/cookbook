@@ -20,7 +20,7 @@ export const pizzaRoll: Recipe = {
 	},
 	title: 'Pizzabrötchen',
 	image: '/recipes/pizzabroetchen.webp',
-	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	// placeholderImage generated with "yarn get-thumbnail PATH/TO/IMAGE.webp"
 	placeholderImage:
 		'data:image/png;base64,UklGRq4AAABXRUJQVlA4IKIAAABwAgCdASoPAAsAAUAmJbACdDBUiIcJvva7NvxAAP6qH8K8XSBhUafX3yq+dHUX+iGmT3MsRr2Ef5U8zNeVf+Pw3DW2QBGGt/stn5KGmZwkx0JCQqfk0CXXYTfPGBVTfFPuxZppqPVeDKKCM7sO67wSyVsiUdAfAvXQfDlZ2dHmCLG4Dki5e1kt5q/FF6L4ZKOQccxVP+TNMgEKYKyXLHfBAAA=',
 

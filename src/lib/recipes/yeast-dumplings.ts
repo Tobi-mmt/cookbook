@@ -24,7 +24,7 @@ export const yeastDumplings: Recipe = {
 	},
 	title: 'Dampfnudeln',
 	image: '/recipes/dampfnudeln.webp',
-	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	// placeholderImage generated with "yarn get-thumbnail PATH/TO/IMAGE.webp"
 	placeholderImage:
 		'data:image/png;base64,UklGRrIAAABXRUJQVlA4IKYAAACQAgCdASoPAAsAAUAmJbACdB2gDYxvNUCaIvO3AAD++piaLB5pmJeP00+Ej9nH8cn7zRSyGTMFMEy93+/jXFt00n6ewO/tDCyM++R/TkvbWjsv42Zr2rO2d/Xf+g/HT+P+Im84neGl1XWFP/kR/TwinWjUw79v7FWwftz23AwGYjHs739T5g1kS+/ideK7IPrFbbhEuv30uLr+3D3zo3pqQnJDAAAA',
 	steps: [

@@ -28,7 +28,7 @@ export const nougatBar: Recipe = {
 	},
 	title: 'Nougatstangen',
 	image: '/recipes/nougatstangen.webp',
-	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	// placeholderImage generated with "yarn get-thumbnail PATH/TO/IMAGE.webp"
 	placeholderImage:
 		'data:image/png;base64,UklGRqoAAABXRUJQVlA4IJ4AAACwAgCdASoPAAoAAUAmJbACdLoAEI3+vpJdQ2p120AA/vazv9ziWlbviPP+KJW8EhVFvIz6lXxGAllMqaGnD49Vc+B/pF2FRyfpFkdif8lJvtv0i/yK178/sB9P9P4u1ULxtzI88dJ1Xzzi5aZpTzKjc5MQmN8faJi7g+I6budhEYhxfWj3wa1/rbfs1OQrnKDVw6//jePAruU2SgAAAA==',
 	steps: [

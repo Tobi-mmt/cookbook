@@ -25,7 +25,7 @@ export const tarteFlambee: Recipe = {
 	},
 	title: 'Flammkuchen',
 	image: '/recipes/flammkuchen.webp',
-	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	// placeholderImage generated with "yarn get-thumbnail PATH/TO/IMAGE.webp"
 	placeholderImage:
 		'data:image/png;base64,UklGRpIAAABXRUJQVlA4IIYAAABwAgCdASoPAAsAAUAmJbACdFQAFO6UJqjy3zSAAP739bps5Ryh8iDkA+51Q+qZsavigSvzGBvVz00lr3KmbgO80GWBzWdjio5UOx2ar8OzZpsYxuebSGZG+oGb2uLqc0EDpiB/SH1Y/b7xgJ7N0wP3qIn0GPvgsxhtWKY0+l1EB3eXNQKAAA==',
 	steps: [

@@ -22,7 +22,7 @@ export const spinatFeta: Recipe = {
 	},
 	title: 'Blätterteig mit Spinat & Feta',
 	image: '/recipes/blaetterteig_mit_spinat.webp',
-	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	// placeholderImage generated with "yarn get-thumbnail PATH/TO/IMAGE.webp"
 	placeholderImage:
 		'data:image/png;base64,UklGRqwAAABXRUJQVlA4IKAAAABwAgCdASoPAAoAAUAmJagCdAYtf2444+cl0PAAAP76PB+xe+W2DVXo113uhAhL1DP3+jb+Fk35a9h19+6dlM6ed/mS9tiARk/k+TmCKf+o7LlpZRpmniWjHBLW2iwoAakC9/h78syLexJmPjpvHenZrruaWtgMOu8/JuSUZyf6ZRb+HHI89msCCks/CYGix6BYkUgSc6rKGfVp163hQAAA',
 	steps: [

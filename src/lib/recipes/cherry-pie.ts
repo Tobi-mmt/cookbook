@@ -37,7 +37,7 @@ export const cherryPie: Recipe = {
 	},
 	title: 'Kirschkuchen mit Streuseln',
 	image: '/recipes/kirschkuchen.webp',
-	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	// placeholderImage generated with "yarn get-thumbnail PATH/TO/IMAGE.webp"
 	placeholderImage:
 		'data:image/png;base64,UklGRpwAAABXRUJQVlA4IJAAAACwAgCdASoPAAsAAUAmJbACdDBWiIiL0fuNFEs0zAAA/ugtQaeVy0OwSYF7ZAQkYJbv5E+gZdiPb2y/bHA8kPn0RON91J42B1sXZzpAH76Ysp0ZZAx2/56GZ5U6U9aD46CrNY5Am9/qlxnkaEWbRDTOr0mTSFk+UBTWYF5n7UROMWv165RJPx5nnJv/l3AAAAA=',
 	steps: [
