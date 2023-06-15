@@ -14,7 +14,7 @@
 
 <div class="recipe-grid">
 	{#each recipes as recipe, idx}
-		<RecipePreview {recipe} disableIntersectionObserver={idx <= 7} />
+		<RecipePreview {recipe} disableIntersectionObserver={idx <= 5} />
 	{/each}
 </div>
 
@@ -37,7 +37,6 @@
 
 	@media (max-width: 700px) {
 		.recipe-grid {
-			--grid-item-min-width: 170px;
 			gap: 1em 0.5em;
 			font-size: 0.7em;
 			padding: 0;
