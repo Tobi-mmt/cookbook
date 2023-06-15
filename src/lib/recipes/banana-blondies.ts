@@ -27,7 +27,7 @@ export const bananaBlondies: Recipe = {
 	title: 'Bananen Blondies',
 	image: '/recipes/banana-blonies.webp',
 	description:
-		'Bananen Blondies sind eine gesunde Alternative zu Brownies. Sie sind vegan, glutenfrei und ohne raffinierten Zucker. Die Bananen Blondies sind super saftig und schmecken herrlich schokoladig. Sie sind schnell und einfach zubereitet und eignen sich perfekt als gesunder Snack für zwischendurch oder als Dessert.',
+		'Die Bananen Blondies sind super saftig und schmecken herrlich schokoladig. Sie sind schnell und einfach zubereitet und eignen sich perfekt als gesunder Snack für zwischendurch oder als Dessert.',
 	// placeholderImage generated with "yarn get-thumbnail PATH/TO/IMAGE.webp"
 	placeholderImage:
 		'data:image/png;base64,UklGRqoAAABXRUJQVlA4IJ4AAACwAgCdASoPAAoAAUAmJaACdLoAEJiUrWzc6rv/NIAA/th+wlIO06LjVcpb3K1nCIoWfHFtJhiPzX3Mo+J/VvwGoPsPSAgHfe3eD74rNAcb631n9tziC1Jr5ur7S1J/et8u9+OBmLc3xjyycUnet08lz0DCwsO28ov/RLTaGrhG1dQzSzl7/liHA4ggVdfQ/xX4wMQGrjyyTnZUnEAAAA==',
