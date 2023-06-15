@@ -75,72 +75,77 @@
 				</div>
 			</div>
 		</div>
-		<div class="content">
-			<div class="step">
-				<ol class="step--list">
-					{#each recipe.steps as step, stepIndex}
-						<li class="step--list-item">
-							{#if isSection(step)}
-								<span class="step--list-item--decoration step--list-item--decoration_big"
-									>{stepIndex + 1}</span
-								>
-								<h2 class="step--list-item--section">{step.section}</h2>
-							{:else}
-								<RecipeStep
-									{step}
-									calcQuantityFunction={(quantety) =>
-										calcQuantity(quantety, portion, recipe.meta.portion)}
-								/>
-							{/if}
-						</li>
-					{/each}
-				</ol>
-			</div>
-			<div class="ingredients">
-				<table>
-					<tbody>
-						<tr class="portion-settings--wrapper">
-							<td class="portion-label">
-								<p>Portionen</p>
-							</td>
-							<td>
-								<div class="portion-settings">
-									<button
-										class="icon-button"
-										on:click={reducePortion}
-										aria-label="Eine Portion weniger"><Icon name="minus" /></button
+		<div class="content-wrapper">
+			{#if recipe.description}
+				<p class="description">{recipe.description}</p>
+			{/if}
+			<div class="content">
+				<div class="step">
+					<ol class="step--list">
+						{#each recipe.steps as step, stepIndex}
+							<li class="step--list-item">
+								{#if isSection(step)}
+									<span class="step--list-item--decoration step--list-item--decoration_big"
+										>{stepIndex + 1}</span
 									>
-									<p>{portion}</p>
-									<button
-										class="icon-button"
-										on:click={increasePortion}
-										aria-label="Eine Portion mehr"><Icon name="plus" /></button
-									>
-								</div>
-							</td>
-						</tr>
-						{#each recipe.ingredients as ingredient}
-							{#if isSection(ingredient)}
-								<tr>
-									<td />
-									<td class="ingredients-headline">{ingredient.section}</td>
-								</tr>
-							{:else}
-								<tr itemprop="recipeIngredient">
-									<td>
-										{#if ingredient.quantity}
-											{calcQuantity(ingredient.quantity, portion, recipe.meta.portion)}
-										{/if}
-										{#if ingredient.unit}{ingredient.unit}{/if}
-									</td>
-									<td>
-										{#if ingredient.name}{ingredient.name}{/if}
-									</td>
-								</tr>
-							{/if}
+									<h2 class="step--list-item--section">{step.section}</h2>
+								{:else}
+									<RecipeStep
+										{step}
+										calcQuantityFunction={(quantety) =>
+											calcQuantity(quantety, portion, recipe.meta.portion)}
+									/>
+								{/if}
+							</li>
 						{/each}
-					</tbody>
-				</table>
+					</ol>
+				</div>
+				<div class="ingredients">
+					<table>
+						<tbody>
+							<tr class="portion-settings--wrapper">
+								<td class="portion-label">
+									<p>Portionen</p>
+								</td>
+								<td>
+									<div class="portion-settings">
+										<button
+											class="icon-button"
+											on:click={reducePortion}
+											aria-label="Eine Portion weniger"><Icon name="minus" /></button
+										>
+										<p>{portion}</p>
+										<button
+											class="icon-button"
+											on:click={increasePortion}
+											aria-label="Eine Portion mehr"><Icon name="plus" /></button
+										>
+									</div>
+								</td>
+							</tr>
+							{#each recipe.ingredients as ingredient}
+								{#if isSection(ingredient)}
+									<tr>
+										<td />
+										<td class="ingredients-headline">{ingredient.section}</td>
+									</tr>
+								{:else}
+									<tr itemprop="recipeIngredient">
+										<td>
+											{#if ingredient.quantity}
+												{calcQuantity(ingredient.quantity, portion, recipe.meta.portion)}
+											{/if}
+											{#if ingredient.unit}{ingredient.unit}{/if}
+										</td>
+										<td>
+											{#if ingredient.name}{ingredient.name}{/if}
+										</td>
+									</tr>
+								{/if}
+							{/each}
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -206,6 +211,9 @@
 		line-height: 1em;
 		font-size: 2.5em;
 	}
+	.description {
+		margin-bottom: 2em;
+	}
 	.category {
 		color: #888;
 		font-weight: 300;
@@ -235,11 +243,13 @@
 	.meta-item p {
 		margin: 0;
 	}
-	.content {
-		display: flex;
+	.content-wrapper {
 		padding: 2em;
 		margin: auto;
 		max-width: 1250px;
+	}
+	.content {
+		display: flex;
 	}
 	.step {
 		position: relative;
