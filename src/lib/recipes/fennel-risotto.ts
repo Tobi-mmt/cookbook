@@ -26,7 +26,7 @@ export const fennelRisotto: Recipe = {
 	},
 	title: 'Risotto mit Fenchel und Champignons',
 	image: '/recipes/fennel-risotto.webp',
-	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	// placeholderImage generated with "yarn get-thumbnail PATH/TO/IMAGE.webp"
 	placeholderImage:
 		'data:image/png;base64,UklGRr4AAABXRUJQVlA4ILIAAABwAgCdASoPAAoAAUAmJaACdAaXHnLcxRwN9j7gAP7oq0Njg409GQsM+PEX+KY8HXNyH95UqQc/H+OxGch+1hZPqT/K+cla7+fwrop/kAOM38HVaD+bkzUjuXpedXNH3o3znXx80qzd/wVHqaDBL95MP8qvOYtaKyRLMuQicgw1438ew0o4oGE6CtyLzW0T91NsBowaQqOB7PmAwD5/iuJ18mb212DvRsUvCAID/Tp3lFAA',
 

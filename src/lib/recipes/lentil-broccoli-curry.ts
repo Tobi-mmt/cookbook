@@ -27,7 +27,7 @@ export const lentilBroccoliCurry: Recipe = {
 	},
 	title: 'Linsencurry mit Brokkoli und Karotten',
 	image: '/recipes/lentil-broccoli-curry.webp',
-	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	// placeholderImage generated with "yarn get-thumbnail PATH/TO/IMAGE.webp"
 	placeholderImage:
 		'data:image/png;base64,UklGRrIAAABXRUJQVlA4IKYAAAAwAwCdASoPAAoAAUAmJbACdEf/jDgs8zy0YRXGxT8RQJ+AAP62yz6cUb4v/H7/18EbNtMKyu4Yv4DnA7yfcrhm0V0cNmfk7rUj0+rOv6L5IW2Q+AcBuZefsbZ82FPtPb8ROagx+koRvrWPs920sjNfIW6g6hRt56LOzGtVrtcPf/mIdzo0oLKUr/ztkmb75/a47zJ+xG801vVMp96rkz74zmn3gAAA',
 	steps: [

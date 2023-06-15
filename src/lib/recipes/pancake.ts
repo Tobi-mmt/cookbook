@@ -18,7 +18,7 @@ export const pancake: Recipe = {
 	},
 	title: 'Pfannkuchen',
 	image: '/recipes/pfannkuchen.webp',
-	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	// placeholderImage generated with "yarn get-thumbnail PATH/TO/IMAGE.webp"
 	placeholderImage:
 		'data:image/png;base64,UklGRpAAAABXRUJQVlA4IIQAAABwAgCdASoPAAgAAUAmJbACdAYph8AO2AjGujsAAP7+OHHyfrvqMD1b/tu3Xx06SB9iXlpNxP6uGX7YpsNMMnREOVcRzIi+56KLxxsWjxhv+1ZF0FGXo+V4FUZNoRYd7GFtvxhxyHTv+NTP+DtW24k3f0Jw95eEZs59cyVQp/PUnIAAAAA=',
 

@@ -30,7 +30,7 @@ export const sauerbraten: Recipe = {
 	},
 	title: 'Sauerbraten',
 	image: '/recipes/sauerbraten.webp',
-	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	// placeholderImage generated with "yarn get-thumbnail PATH/TO/IMAGE.webp"
 	placeholderImage:
 		'data:image/png;base64,UklGRpwAAABXRUJQVlA4IJAAAABwAgCdASoPAAkAAUAmJbACdAYtx5aK9XxdVMcgAP7uP//gxjnhm4ykX9w+HhQohWZP9hOLTLW4v8PPfvXCIAeGK5+PKHXuILHq3uFJ56iz0WsQ/eLocpeQ1muJQ7u86coaRENe3v2a4NdO1FjNR/R//b6N4Bp9yQ+95LI786a/44t8JQaTgz4/1mle4nbIAAA=',
 	steps: [

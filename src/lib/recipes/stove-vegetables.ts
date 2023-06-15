@@ -23,7 +23,7 @@ export const stoveSegetables: Recipe = {
 	},
 	title: 'Ofengemüse in Rotweinmarinade',
 	image: '/recipes/ofengemuese.webp',
-	// placeholderImage generated with "yarn get-placeholder-image PATH/TO/IMAGE.webp"
+	// placeholderImage generated with "yarn get-thumbnail PATH/TO/IMAGE.webp"
 	placeholderImage:
 		'data:image/png;base64,UklGRsQAAABXRUJQVlA4ILgAAADwAgCdASoPAAoAAUAmJbACdLoAfiq3Zqr4aat+TzrizAD+5qnv74/k2sUp0b18IypNv+k7nS4KlqZWPLDJf/m4+BaM2SJmyr/9Fw4AWa5s9bLNcU0yoPQOWgP+P8MYgieQVgUvr7MuypFemW9nEsvq6vYDeM8xJWWbSC2MUYupmh1VPdsMut9ulJfOW8kIwziQbv91/lh1EVQN+sdiKrTNZWwik/2rPH+oyNz2+8wfdV9F3bqC6AAA',
 	steps: [
