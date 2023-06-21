@@ -39,7 +39,7 @@ export const cherryPie: Recipe = {
 	image: '/recipes/kirschkuchen.webp',
 	// placeholderImage generated with "yarn get-thumbnail PATH/TO/IMAGE.webp"
 	placeholderImage:
-		'data:image/png;base64,UklGRpwAAABXRUJQVlA4IJAAAACwAgCdASoPAAsAAUAmJbACdDBWiIiL0fuNFEs0zAAA/ugtQaeVy0OwSYF7ZAQkYJbv5E+gZdiPb2y/bHA8kPn0RON91J42B1sXZzpAH76Ysp0ZZAx2/56GZ5U6U9aD46CrNY5Am9/qlxnkaEWbRDTOr0mTSFk+UBTWYF5n7UROMWv165RJPx5nnJv/l3AAAAA=',
+		'data:image/png;base64,UklGRqIAAABXRUJQVlA4IJYAAACQAgCdASoPAAsAAUAmJbACdDBSyIbL08/5wnSh0AD++aKWKg4GInb59aqPo+6A3FAE5mdwSXHJRpR2rL/berojk3klchTbzbysT8f72D3ZRHvllTw5Yiv8xCrrcW68jNtiJYHkSngsZv1wRcAAWfLAoDVHPHGNTsEf35+pj+Iysy+zz6OkUX9vubCwv9nZIAKtNsMAUAA=',
 	steps: [
 		{
 			description:
