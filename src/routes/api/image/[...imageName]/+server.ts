@@ -17,11 +17,11 @@ export const GET: RequestHandler = async ({ url, params: { imageName } }) => {
 			headers: {
 				'access-control-allow-origin': '*',
 				'Content-Type': `image/webp`,
-				'Content-Length': image.length,
+				'Content-Length': image.length.toString(),
 				'Cache-Control': `s-maxage=${ONE_YEAR_IN_SECONDS}, stale-while-revalidate`
 			}
 		});
-	} catch (e: any) {
+	} catch (e: unknown) {
 		return new Response(`An error occured: ${e}`, { status: 500 });
 	}
 };
