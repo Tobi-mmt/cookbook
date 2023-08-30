@@ -34,6 +34,7 @@ import { wildGarlicSoup } from './wild-garlic-soup';
 import { bananaBlondies } from './banana-blondies';
 import { orecchiettePuttanesca } from './puttanesca';
 import { mangoldGorgonzola } from './mangold-gorgonzola';
+import { sourBroth } from './sour-broth';
 
 const unsortedRecipes: Recipe[] = [
 	potatoSalad,
@@ -68,7 +69,8 @@ const unsortedRecipes: Recipe[] = [
 	wildGarlicSoup,
 	bananaBlondies,
 	orecchiettePuttanesca,
-	mangoldGorgonzola
+	mangoldGorgonzola,
+	sourBroth
 ];
 
 const getCatIndex = (category: Category) => {
