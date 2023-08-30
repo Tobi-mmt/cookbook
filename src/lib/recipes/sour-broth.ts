@@ -9,7 +9,8 @@ const ingredients = {
 	juniper: { quantity: 5, name: 'Wachholderbeeren' },
 	cloves: { quantity: 3, name: 'Nelken' },
 	bayLeaves: { quantity: 2, name: 'Lorbeerblätter' },
-	hamSausage: { quantity: 200, unit: 'g', name: 'geräucherte Schinnkenwurst' },
+	tomatoMark: { quantity: 1, unit: 'EL', name: 'Tomatenmark' },
+	hamSausage: { quantity: 100, unit: 'g', name: 'geräucherte Schinnkenwurst' },
 	potatoes: { quantity: 250, unit: 'g', name: 'Kartoffeln oder Kartoffelsalat' },
 
 	salt: { name: 'Salz' },
@@ -62,8 +63,9 @@ export const sourBroth: Recipe = {
 		},
 		{
 			description:
-				'Kartoffeln/Kartoffelsalat und Schinkenwurst hinzugeben und mit Salz und Pfeffer abschmecken.',
+				'Tomatenmark, Kartoffeln/Kartoffelsalat und Schinkenwurst hinzugeben und mit Salz und Pfeffer abschmecken.',
 			linkedIngredients: [
+				ingredients.tomatoMark,
 				ingredients.potatoes,
 				ingredients.hamSausage,
 				ingredients.salt,
