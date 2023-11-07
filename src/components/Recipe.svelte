@@ -143,6 +143,28 @@
 									</tr>
 								{/if}
 							{/each}
+							<tr>
+								<td colspan="2">
+									{#if typeof window !== 'undefined'}
+										<a
+											class="bring-button"
+											href="https://api.getbring.com/rest/bringrecipes/deeplink?url={window.location
+												.href}&source=web&baseQuantity={recipe.meta
+												.portion}&requestedQuantity={portion}"
+											target="_blank"
+										>
+											<img
+												class="bring-logo"
+												src="/bring.svg"
+												alt="bring! logo"
+												width="20"
+												height="27"
+											/>
+											<span>Auf die Einkaufsliste</span>
+										</a>
+									{/if}
+								</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>
@@ -165,6 +187,7 @@
 		border: none;
 		padding: 0.35em 0.5em;
 		border-radius: 2.5px;
+		transition: all 0.2s ease-in-out;
 	}
 	.icon-button:hover,
 	.icon-button:focus {
@@ -313,6 +336,32 @@
 	.ingredients td {
 		vertical-align: top;
 		width: 200px;
+	}
+	.bring-button {
+		font-size: 0.9em;
+		background: #27343a;
+		color: white;
+		padding: 0.25em 0.5em;
+		border: 0;
+		border-radius: 8px;
+		box-sizing: border-box;
+		cursor: pointer;
+		display: flex;
+		flex-direction: row;
+		height: 100%;
+		justify-items: center;
+		align-items: center;
+		margin: 2em auto 16px;
+		min-height: 44px;
+		text-decoration: none;
+		transition: all 0.2s ease-in-out;
+	}
+	.bring-button:hover {
+		opacity: 0.8;
+	}
+	.bring-logo {
+		margin-right: 1.5em;
+		margin-left: 1em;
 	}
 	@media (max-width: 700px) {
 		.content {
