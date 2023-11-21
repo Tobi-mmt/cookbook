@@ -95,7 +95,9 @@
 		background-color: #000;
 		opacity: 0;
 		cursor: pointer;
-		transition: visibility 0s, opacity 0.2s ease-in-out;
+		transition:
+			visibility 0s,
+			opacity 0.2s ease-in-out;
 	}
 	.off-canvas__click-out--open {
 		opacity: 0.25;

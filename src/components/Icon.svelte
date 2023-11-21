@@ -18,7 +18,8 @@
 		font-family: 'IcoFont';
 		font-weight: normal;
 		font-style: 'Regular';
-		src: url('/fonts/iconfont/icofont.woff2') format('woff2'),
+		src:
+			url('/fonts/iconfont/icofont.woff2') format('woff2'),
 			url('/fonts/iconfont/icofont.woff') format('woff');
 		font-display: swap;
 	}

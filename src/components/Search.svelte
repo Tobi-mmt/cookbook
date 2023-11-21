@@ -102,7 +102,9 @@
 		background-color: #000;
 		opacity: 0.25;
 		cursor: pointer;
-		transition: visibility 0s, opacity 0.2s ease-in-out;
+		transition:
+			visibility 0s,
+			opacity 0.2s ease-in-out;
 	}
 	.modal__background {
 		background-color: #fff;
