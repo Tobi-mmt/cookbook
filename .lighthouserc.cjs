@@ -13,7 +13,8 @@ module.exports = {
 				'is-crawlable': 'warn',
 				'categories:performance': ['error', { minScore: 0.9 }],
 				'categories:accessibility': ['error', { minScore: 1 }],
-				'categories:seo': ['error', { minScore: 0.9 }]
+				'categories:seo': ['error', { minScore: 0.9 }],
+				'total-byte-weight': ['error', { maxNumericValue: 1000 * 1024 }] // 1 MB
 			}
 		},
 		upload: {
