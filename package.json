@@ -2,7 +2,7 @@
 	"name": "cookbook-svelte",
 	"version": "0.0.1",
 	"engines": {
-		"node": "18"
+		"node": "20"
 	},
 	"scripts": {
 		"dev": "vite dev",
