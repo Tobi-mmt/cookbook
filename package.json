@@ -15,7 +15,8 @@
 		"postinstall": "husky install",
 		"e2e": "cypress run",
 		"get-random-id": "echo $RANDOM | md5 | head -c 15; echo;",
-		"get-thumbnail": "node ./scripts/getThumbnail.js"
+		"get-thumbnail": "node ./scripts/getThumbnail.js",
+		"prepare": "husky"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-vercel": "5.1.0",
