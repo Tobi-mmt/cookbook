@@ -384,12 +384,12 @@
   resolved "https://registry.yarnpkg.com/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.13.0.tgz#6abd79db7ff8d01a58865ba20a63cfd23d9e2a10"
   integrity sha512-UKXUQNbO3DOhzLRwHSpa0HnhhCgNODvfoPWv2FCXme8N/ANFfhIPMGuOT+QuKd16+B5yxZ0HdpNlqPvTMS1qfw==
 
-"@sveltejs/adapter-vercel@5.3.0":
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-vercel/-/adapter-vercel-5.3.0.tgz#42c246c3f1c1a7a57f0cb13fe6ab0411c3829672"
-  integrity sha512-JzTJVmAWmbyNe3pQU2l0M1ggt4FjIVnKHEQOrqW4XVxYtNGdq3znuMqFSdzsR+5LaIEFqZaLIpm82XZsZroBoQ==
+"@sveltejs/adapter-vercel@5.3.1":
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-vercel/-/adapter-vercel-5.3.1.tgz#03b5345229c014224115947881dc92a7a11971cb"
+  integrity sha512-0iz+Y2ZWM1royXNkNS4TGNYFsMazRckYN+GrJsRq1utzss1Xfoax7C5eafzrsQLPitoLeXBgE31K5abrJ7UgxA==
   dependencies:
-    "@vercel/nft" "^0.26.1"
+    "@vercel/nft" "^0.27.1"
     esbuild "^0.20.2"
 
 "@sveltejs/kit@2.5.10":
@@ -410,23 +410,23 @@
     sirv "^2.0.4"
     tiny-glob "^0.2.9"
 
-"@sveltejs/vite-plugin-svelte-inspector@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@sveltejs/vite-plugin-svelte-inspector/-/vite-plugin-svelte-inspector-2.0.0.tgz#365afaa0dd63517838ce4686a3dc3982be348a9b"
-  integrity sha512-gjr9ZFg1BSlIpfZ4PRewigrvYmHWbDrq2uvvPB1AmTWKuM+dI1JXQSUu2pIrYLb/QncyiIGkFDFKTwJ0XqQZZg==
+"@sveltejs/vite-plugin-svelte-inspector@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@sveltejs/vite-plugin-svelte-inspector/-/vite-plugin-svelte-inspector-2.1.0.tgz#116ba2b73be43c1d7d93de749f37becc7e45bb8c"
+  integrity sha512-9QX28IymvBlSCqsCll5t0kQVxipsfhFFL+L2t3nTWfXnddYwxBuAEtTtlaVQpRz9c37BhJjltSeY4AJSC03SSg==
   dependencies:
     debug "^4.3.4"
 
-"@sveltejs/vite-plugin-svelte@3.1.0":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@sveltejs/vite-plugin-svelte/-/vite-plugin-svelte-3.1.0.tgz#f9a1ff15e0206b4ed43fe06294d31b1319dcd654"
-  integrity sha512-sY6ncCvg+O3njnzbZexcVtUqOBE3iYmQPJ9y+yXSkOwG576QI/xJrBnQSRXFLGwJNBa0T78JEKg5cIR0WOAuUw==
+"@sveltejs/vite-plugin-svelte@3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@sveltejs/vite-plugin-svelte/-/vite-plugin-svelte-3.1.1.tgz#e71bb0631ca40a3a1d272315beaff9bdd5482841"
+  integrity sha512-rimpFEAboBBHIlzISibg94iP09k/KYdHgVhJlcsTfn7KMBhc70jFX/GRWkRdFCc2fdnk+4+Bdfej23cMDnJS6A==
   dependencies:
-    "@sveltejs/vite-plugin-svelte-inspector" "^2.0.0"
+    "@sveltejs/vite-plugin-svelte-inspector" "^2.1.0"
     debug "^4.3.4"
     deepmerge "^4.3.1"
     kleur "^4.1.5"
-    magic-string "^0.30.9"
+    magic-string "^0.30.10"
     svelte-hmr "^0.16.0"
     vitefu "^0.2.5"
 
@@ -565,15 +565,15 @@
   dependencies:
     server-only "^0.0.1"
 
-"@vercel/nft@^0.26.1":
-  version "0.26.2"
-  resolved "https://registry.yarnpkg.com/@vercel/nft/-/nft-0.26.2.tgz#c5018201dbb324d7fac455be6cee03d34ebd9ce8"
-  integrity sha512-bxe2iShmKZi7476xYamyKvhhKwQ6JPEtQ2FSq1AjMUH2buMd8LQMkdoHinTqZYc+1sMTh3G0ARdjzNvV1FEisA==
+"@vercel/nft@^0.27.1":
+  version "0.27.1"
+  resolved "https://registry.yarnpkg.com/@vercel/nft/-/nft-0.27.1.tgz#79415f8f65b362dca2f89f44dd58281917cc13bd"
+  integrity sha512-K6upzYHCV1cq2gP83r1o8uNV1vwvAlozvMqp7CEjYWxo0CMI8/4jKcDkVjlypVhrfZ54SXwh9QbH0ZIk/vQCsw==
   dependencies:
     "@mapbox/node-pre-gyp" "^1.0.5"
     "@rollup/pluginutils" "^4.0.0"
     acorn "^8.6.0"
-    acorn-import-attributes "^1.9.2"
+    acorn-import-attributes "^1.9.5"
     async-sema "^3.1.1"
     bindings "^1.4.0"
     estree-walker "2.0.2"
@@ -588,10 +588,10 @@ abbrev@1:
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
   integrity sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==
 
-acorn-import-attributes@^1.9.2:
-  version "1.9.2"
-  resolved "https://registry.yarnpkg.com/acorn-import-attributes/-/acorn-import-attributes-1.9.2.tgz#bc3765bca6ec0c5c69d2293afd582216215279b0"
-  integrity sha512-O+nfJwNolEA771IYJaiLWK1UAwjNsQmZbTRqqwBYxCgVQTmpFEMvBw6LOIQV0Me339L5UMVYFyRohGnGlQDdIQ==
+acorn-import-attributes@^1.9.5:
+  version "1.9.5"
+  resolved "https://registry.yarnpkg.com/acorn-import-attributes/-/acorn-import-attributes-1.9.5.tgz#7eb1557b1ba05ef18b5ed0ec67591bfab04688ef"
+  integrity sha512-n02Vykv5uA3eHGM/Z2dQrcD56kL8TyDb2p1+0P83PClMnC/nc+anbQRhIOWnSq4Ke/KvDPrY3C9hDtC/A3eHnQ==
 
 acorn-jsx@^5.3.2:
   version "5.3.2"
@@ -2241,17 +2241,17 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
+magic-string@^0.30.10:
+  version "0.30.10"
+  resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.30.10.tgz#123d9c41a0cb5640c892b041d4cfb3bd0aa4b39e"
+  integrity sha512-iIRwTIf0QKV3UAnYK4PU8uiEc4SRh5jX0mwpIwETPpHdhVM4f53RSwS/vXvN1JhGX+Cs7B8qIq3d6AH49O5fAQ==
+  dependencies:
+    "@jridgewell/sourcemap-codec" "^1.4.15"
+
 magic-string@^0.30.4, magic-string@^0.30.5:
   version "0.30.5"
   resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.30.5.tgz#1994d980bd1c8835dc6e78db7cbd4ae4f24746f9"
   integrity sha512-7xlpfBaQaP/T6Vh8MO/EqXSW5En6INHEvEXQiuff7Gku0PWjU3uf6w/j9o7O+SpB5fOAkrI5HeoNgwjEO0pFsA==
-  dependencies:
-    "@jridgewell/sourcemap-codec" "^1.4.15"
-
-magic-string@^0.30.9:
-  version "0.30.9"
-  resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.30.9.tgz#8927ae21bfdd856310e07a1bc8dd5e73cb6c251d"
-  integrity sha512-S1+hd+dIrC8EZqKyT9DstTH/0Z+f76kmmvZnkfQVmOpDEF9iVgdYif3Q/pIWHmCoo59bQVGW0kVL3e2nl+9+Sw==
   dependencies:
     "@jridgewell/sourcemap-codec" "^1.4.15"
 
@@ -3174,10 +3174,10 @@ supports-color@^8.1.1:
   dependencies:
     has-flag "^4.0.0"
 
-svelte-check@3.7.1:
-  version "3.7.1"
-  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-3.7.1.tgz#d24d0535b22d9d9d8b50aa41f894f59544e9e577"
-  integrity sha512-U4uJoLCzmz2o2U33c7mPDJNhRYX/DNFV11XTUDlFxaKLsO7P+40gvJHMPpoRfa24jqZfST4/G9fGNcUGMO8NAQ==
+svelte-check@3.8.0:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-3.8.0.tgz#e0850b876d3d32760465bfb26d06b32c4c9f98a1"
+  integrity sha512-7Nxn+3X97oIvMzYJ7t27w00qUf1Y52irE2RU2dQAd5PyvfGp4E7NLhFKVhb6PV2fx7dCRMpNKDIuazmGthjpSQ==
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.17"
     chokidar "^3.4.1"
