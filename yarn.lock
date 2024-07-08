@@ -384,10 +384,10 @@
   resolved "https://registry.yarnpkg.com/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.13.0.tgz#6abd79db7ff8d01a58865ba20a63cfd23d9e2a10"
   integrity sha512-UKXUQNbO3DOhzLRwHSpa0HnhhCgNODvfoPWv2FCXme8N/ANFfhIPMGuOT+QuKd16+B5yxZ0HdpNlqPvTMS1qfw==
 
-"@sveltejs/adapter-vercel@5.4.0":
-  version "5.4.0"
-  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-vercel/-/adapter-vercel-5.4.0.tgz#a49d6dc45c1c617c82077881e6fc194ba028cf74"
-  integrity sha512-wVamxMvJkK793J2gMLO8/vlu29tzSZkMbFc594+GWTH0n6rheZ33orVYK2Cu3oDlDl/5A03YK+zaXYWxUUc0VA==
+"@sveltejs/adapter-vercel@5.4.1":
+  version "5.4.1"
+  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-vercel/-/adapter-vercel-5.4.1.tgz#bfee91ceb49c628dac872568e2f75747ce705f11"
+  integrity sha512-JLcD1OgMnu9lQ8EssxVGxv7w0waWuyVzItTT1eqIH98Krufd9qfr1uC9zgo82z3dJ9v1AfPEbvIX5tonceg7XQ==
   dependencies:
     "@vercel/nft" "^0.27.1"
     esbuild "^0.21.5"
