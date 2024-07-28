@@ -36,6 +36,7 @@ import { orecchiettePuttanesca } from './puttanesca';
 import { mangoldGorgonzola } from './mangold-gorgonzola';
 import { sourBroth } from './sour-broth';
 import { mustardDillSauce } from './mustard-dill-sauce';
+import { halloumiCurry } from './halloumi-curry';
 
 const unsortedRecipes: Recipe[] = [
 	potatoSalad,
@@ -72,7 +73,8 @@ const unsortedRecipes: Recipe[] = [
 	orecchiettePuttanesca,
 	mangoldGorgonzola,
 	sourBroth,
-	mustardDillSauce
+	mustardDillSauce,
+	halloumiCurry
 ];
 
 const getCatIndex = (category: Category) => {
