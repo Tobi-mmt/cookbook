@@ -2,7 +2,7 @@
 	import Icon from './Icon.svelte';
 	import { categoryColors } from '$lib/colors';
 	import { slugerize } from '$lib/slugerize';
-	import { categorizedRecipe } from '$lib/categorizedRecipes';
+	import { categorizedRecipes } from '$lib/categorizedRecipes';
 	import { goto } from '$app/navigation';
 
 	export let onItemClick: () => void;
@@ -14,7 +14,7 @@
 </script>
 
 <div class="wrapper">
-	{#each Object.entries(categorizedRecipe) as [category, recipies]}
+	{#each Object.entries(categorizedRecipes) as [category, recipies]}
 		<div>
 			<h3 class="category" style={`background-color: ${categoryColors[category]} `}>{category}</h3>
 			<div>
