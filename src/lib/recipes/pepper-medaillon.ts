@@ -37,7 +37,8 @@ export const pepperMedaillon: Recipe = {
 		},
 		{
 			description:
-				'Filet in einer Pfanne mit heißem Öl von allen Seiten scharf anbraten, sodass das Fleisch medium wird.'
+				'Filet in einer Pfanne mit heißer Butter von allen Seiten scharf anbraten, sodass das Fleisch medium wird.',
+			linkedIngredients: [ingredients.butter]
 		},
 		{
 			description:
