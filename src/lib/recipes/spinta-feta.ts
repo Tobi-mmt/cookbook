@@ -37,8 +37,8 @@ export const spinatFeta: Recipe = {
 			linkedIngredients: [ingredients.spinach]
 		},
 		{
-			description: 'Käse und ein verquirltes Ei hinzufügen und alles gut vermischen.',
-			linkedIngredients: [ingredients.cheese, ingredients.egg]
+			description: 'Feta, Käse und ein verquirltes Ei hinzufügen und alles gut vermischen.',
+			linkedIngredients: [ingredients.feta, ingredients.cheese, ingredients.egg]
 		},
 		{
 			description: 'Den Blätterteig ausrollen und in Quadrate schneiden, etwa 10 x 10 cm groß.',

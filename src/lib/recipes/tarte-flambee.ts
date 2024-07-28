@@ -49,7 +49,10 @@ export const tarteFlambee: Recipe = {
 			description:
 				'Im Backofen auf einem Blech (KEIN Gitter!) in der unteren Schiene 20 Minuten backen.'
 		},
-		{ description: 'Mit Schnittlauch Röllchen bestreut servieren.' }
+		{
+			description: 'Mit Schnittlauch Röllchen bestreut servieren.',
+			linkedIngredients: [ingredients.chive]
+		}
 	],
 	ingredients: Object.values(ingredients)
 };

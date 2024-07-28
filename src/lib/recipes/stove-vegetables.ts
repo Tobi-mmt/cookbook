@@ -42,7 +42,12 @@ export const stoveSegetables: Recipe = {
 		{
 			description:
 				'Zusammen mit den Flüssigkeiten und den Gewürzen in eine große Schüssel geben und gut durchmischen. Mit Salz und Peffer abschmecken.',
-			linkedIngredients: [ingredients.wine, ingredients.vinegar, ingredients.orange]
+			linkedIngredients: [
+				ingredients.oil,
+				ingredients.wine,
+				ingredients.vinegar,
+				ingredients.orange
+			]
 		},
 		{
 			description: 'Alles in eine Backform geben und den Käse darüber verteilen.',
