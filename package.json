@@ -14,6 +14,7 @@
 		"format": "prettier --ignore-path .gitignore --write .",
 		"postinstall": "husky install",
 		"e2e": "cypress run",
+		"test": "vitest",
 		"get-random-id": "echo $RANDOM | md5 | head -c 15; echo;",
 		"get-thumbnail": "node ./scripts/getThumbnail.js",
 		"prepare": "husky"
@@ -37,7 +38,8 @@
 		"svelte-preprocess": "6.0.2",
 		"tslib": "2.6.3",
 		"typescript": "5.4.5",
-		"vite": "5.3.4"
+		"vite": "5.3.4",
+		"vitest": "2.0.4"
 	},
 	"type": "module",
 	"husky": {
