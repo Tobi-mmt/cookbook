@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type Fuse from 'fuse.js';
+	import type { FuseResult } from 'fuse.js';
 	import type { Recipe } from 'src/types';
 	import { slugerize } from '$lib/slugerize';
 	import { goto } from '$app/navigation';
 
 	export let searchOpen: boolean;
 	export let searchValue: string;
-	export let searchResults: Fuse.FuseResult<Recipe>[];
+	export let searchResults: FuseResult<Recipe>[];
 
 	const handleKeydown = (event: KeyboardEvent) => {
 		const { key } = event;
