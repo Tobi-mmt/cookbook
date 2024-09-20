@@ -3,14 +3,8 @@
 	import { categoryColors } from '$lib/colors';
 	import { slugerize } from '$lib/slugerize';
 	import { categorizedRecipes } from '$lib/categorizedRecipes';
-	import { goto } from '$app/navigation';
 
 	export let onItemClick: () => void;
-
-	const handleLinkClick = (href: string) => {
-		goto(href);
-		onItemClick();
-	};
 </script>
 
 <div class="wrapper">
@@ -18,12 +12,15 @@
 		<div>
 			<h3 class="category" style={`background-color: ${categoryColors[category]} `}>{category}</h3>
 			<div>
-				<ul class="list">
+				<nav class="list">
 					{#each recipies as recipe}
-						<li
+						<a
+							role="button"
+							tabindex="0"
 							class="list-item"
-							on:click={() => handleLinkClick(`/recipe/${recipe.id}/${slugerize(recipe.title)}`)}
-							on:keypress={() => handleLinkClick(`/recipe/${recipe.id}/${slugerize(recipe.title)}`)}
+							href={`/recipe/${recipe.id}/${slugerize(recipe.title)}`}
+							on:click={onItemClick}
+							on:keypress={onItemClick}
 						>
 							{recipe.title}&nbsp;
 							{#if recipe.meta.nutritionType === 'Fleisch'}
@@ -32,9 +29,9 @@
 							{#if recipe.meta.nutritionType === 'Vegan'}
 								<Icon name="leaf" style="color: #4CAF50" />
 							{/if}
-						</li>
+						</a>
 					{/each}
-				</ul>
+				</nav>
 			</div>
 		</div>
 	{/each}
@@ -58,7 +55,9 @@
 		margin: 1em 0;
 	}
 	.list-item {
-		cursor: pointer;
+		display: block;
+		width: 100%;
+		text-decoration: none;
 		list-style: none;
 		line-height: 1.5em;
 		font-size: 1.125em;

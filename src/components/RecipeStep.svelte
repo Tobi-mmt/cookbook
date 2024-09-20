@@ -6,7 +6,14 @@
 	let checked = false;
 </script>
 
-<div class="wrapper" on:click={() => (checked = !checked)} on:keydown={() => (checked = !checked)}>
+<div
+	role="checkbox"
+	aria-checked={checked}
+	tabindex="0"
+	class="wrapper"
+	on:click={() => (checked = !checked)}
+	on:keydown={() => (checked = !checked)}
+>
 	<span class={`decoration ${checked && 'decoration__active'}`}>
 		<span class={`decoration--text ${checked && 'decoration--text__active'}`}>
 			<svg

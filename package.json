@@ -11,7 +11,7 @@
 		"check": "svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --ignore-path .gitignore --check . && eslint --ignore-pattern '.gitignore' .",
-		"format": "prettier --ignore-path .gitignore --write .",
+		"format": "prettier --ignore-path .gitignore --write . && eslint --ignore-pattern '.gitignore' --fix .",
 		"e2e": "cypress run",
 		"test": "vitest",
 		"get-random-id": "echo $RANDOM | md5 | head -c 15; echo;",
