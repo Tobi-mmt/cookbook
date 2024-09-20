@@ -11,6 +11,7 @@
 	<div class="header">
 		<h2 class="headline">{headline}</h2>
 		<div
+			tabindex="0"
 			class="close-icon"
 			role="button"
 			aria-label="Schließen"
@@ -25,6 +26,8 @@
 	</div>
 </div>
 <div
+	role="button"
+	tabindex="0"
 	class={`off-canvas__click-out off-canvas__click-out--${open ? 'open' : 'closed'}`}
 	on:click={onClose}
 	on:keypress={onClose}

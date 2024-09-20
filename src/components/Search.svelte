@@ -57,6 +57,8 @@
 	</div>
 
 	<div
+		tabindex="0"
+		role="button"
 		class="modal__click-out"
 		transition:fade={{ duration: 250 }}
 		on:click={() => (searchOpen = false)}

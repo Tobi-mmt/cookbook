@@ -16,7 +16,7 @@
 		const current = document.activeElement as HTMLUListElement;
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
-		const items = [...document.querySelectorAll<HTMLUListElement>('li.search-list-item')];
+		const items = [...document.querySelectorAll<HTMLButtonElement>('button.search-list-item')];
 		const currentIndex = items.indexOf(current);
 		let newIndex: number;
 
@@ -42,11 +42,11 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
-<ul class="results__list">
+<div class="results__list">
 	{#if searchValue.length > 1}
 		{#if searchResults.length}
 			{#each searchResults as searchResult}
-				<li class="search-list-item" tabindex="0" on:keydown={handleListItemNavigation}>
+				<button class="search-list-item" tabindex={0} on:keydown={handleListItemNavigation}>
 					<a
 						href={`/recipe/${searchResult.item.id}/${slugerize(searchResult.item.title)}`}
 						class={'results__list__item'}
@@ -55,7 +55,7 @@
 						<p class="category">{searchResult.item.meta.category}</p>
 						<p class="title">{searchResult.item.title}</p>
 					</a>
-				</li>
+				</button>
 			{/each}
 		{:else}
 			<li><p>Keine Ergebnisse</p></li>
@@ -63,7 +63,7 @@
 	{:else}
 		<li><p>Suche nach Rezepten oder einer Zutat</p></li>
 	{/if}
-</ul>
+</div>
 
 <style>
 	.results__list {
@@ -77,9 +77,17 @@
 		text-decoration: none;
 		color: inherit;
 	}
-	li:focus .results__list__item,
-	li:active .results__list__item,
-	li:hover .results__list__item {
+	.search-list-item {
+		border: none;
+		background-color: transparent;
+		padding: 0;
+		margin: 0;
+		width: 100%;
+		text-align: left;
+	}
+	button:focus .results__list__item,
+	button:active .results__list__item,
+	button:hover .results__list__item {
 		background-color: aliceblue;
 		cursor: pointer;
 	}

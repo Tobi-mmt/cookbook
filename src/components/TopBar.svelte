@@ -10,6 +10,7 @@
 
 <div class="top-bar">
 	<div
+		tabindex="0"
 		on:click={() => (menuOpen = true)}
 		role="button"
 		aria-label="Menü öffnen"
@@ -25,6 +26,7 @@
 	</a>
 
 	<div
+		tabindex="0"
 		role="button"
 		aria-label="Suche öffnen"
 		on:click={() => (isSearchOpen = true)}
