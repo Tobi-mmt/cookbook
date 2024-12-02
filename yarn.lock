@@ -728,15 +728,15 @@
   dependencies:
     import-meta-resolve "^4.1.0"
 
-"@sveltejs/kit@2.8.3":
-  version "2.8.3"
-  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.8.3.tgz#e67f7af2b1f792819877c2cbbc9f8ab7dee411a7"
-  integrity sha512-DVBVwugfzzn0SxKA+eAmKqcZ7aHZROCHxH7/pyrOi+HLtQ721eEsctGb9MkhEuqj6q/9S/OFYdn37vdxzFPdvw==
+"@sveltejs/kit@2.9.0":
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.9.0.tgz#6c0218f2cd3a4d2294b5e2dbe204fee7540ecea4"
+  integrity sha512-W3E7ed3ChB6kPqRs2H7tcHp+Z7oiTFC6m+lLyAQQuyXeqw6LdNuuwEUla+5VM0OGgqQD+cYD6+7Xq80vVm17Vg==
   dependencies:
     "@types/cookie" "^0.6.0"
     cookie "^0.6.0"
     devalue "^5.1.0"
-    esm-env "^1.0.0"
+    esm-env "^1.2.1"
     import-meta-resolve "^4.1.0"
     kleur "^4.1.5"
     magic-string "^0.30.5"
@@ -1720,10 +1720,10 @@ eslint@9.15.0:
     natural-compare "^1.4.0"
     optionator "^0.9.3"
 
-esm-env@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/esm-env/-/esm-env-1.0.0.tgz#b124b40b180711690a4cb9b00d16573391950413"
-  integrity sha512-Cf6VksWPsTuW01vU9Mk/3vRue91Zevka5SjyNf3nEpokFRuqt/KjUQoGAwq9qMmhpLTHmXzSIrFRw8zxWzmFBA==
+esm-env@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/esm-env/-/esm-env-1.2.1.tgz#34c2a0ba60582948afbe7bd779bc66f9d3aece7e"
+  integrity sha512-U9JedYYjCnadUlXk7e1Kr+aENQhtUaoaV9+gZm1T8LC/YBAPJx3NSPIAurFOC0U5vrdSevnUJS2/wUVxGwPhng==
 
 espree@^10.0.1:
   version "10.1.0"
