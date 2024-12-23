@@ -46,7 +46,7 @@
 				<div
 					class="imagePlaceholder"
 					style={`background-image: url(${recipe.placeholderImage});`}
-				/>
+				></div>
 				<img
 					itemprop="image"
 					class="image"
@@ -126,7 +126,7 @@
 							{#each recipe.ingredients as ingredient}
 								{#if isSection(ingredient)}
 									<tr>
-										<td />
+										<td></td>
 										<td class="ingredients-headline">{ingredient.section}</td>
 									</tr>
 								{:else}

@@ -4,7 +4,7 @@
 	export let name: IconName;
 </script>
 
-<i {style} class={`icofont-${name}`} />
+<i {style} class={`icofont-${name}`}></i>
 
 <style>
 	/*! 

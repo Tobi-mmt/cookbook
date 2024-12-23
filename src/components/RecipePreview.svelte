@@ -28,7 +28,7 @@
 						<div
 							class="imagePlaceholder"
 							style={`background-image: url(${recipe.placeholderImage});`}
-						/>
+						></div>
 						{#if intersecting || disableIntersectionObserver}
 							<img
 								class="image"
