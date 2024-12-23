@@ -31,7 +31,7 @@
 	class={`off-canvas__click-out off-canvas__click-out--${open ? 'open' : 'closed'}`}
 	on:click={onClose}
 	on:keypress={onClose}
-/>
+></div>
 
 <style jsx>
 	.off-canvas {

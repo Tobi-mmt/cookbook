@@ -63,7 +63,7 @@
 		transition:fade={{ duration: 250 }}
 		on:click={() => (searchOpen = false)}
 		on:keydown={() => (searchOpen = false)}
-	/>
+	></div>
 {/if}
 
 <style>
