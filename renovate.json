@@ -1,11 +1,11 @@
 {
-	"extends": ["config:base"],
+	"extends": ["config:recommended"],
 	"schedule": ["before 6am every weekday"],
 	"prConcurrentLimit": 5,
 	"rebaseWhen": "conflicted",
 	"packageRules": [
 		{
-			"updateTypes": ["minor", "patch", "pin", "digest"],
+			"matchUpdateTypes": ["minor", "patch", "pin", "digest"],
 			"automerge": true
 		},
 		{
@@ -14,22 +14,26 @@
 			"schedule": ["before 6am on monday"]
 		},
 		{
-			"matchPackagePatterns": ["eslint", "prettier", "@typescript-eslint/"],
-			"matchPackageNames": ["pretty-quick", "husky", "lint-staged"],
+			"matchPackageNames": [
+				"pretty-quick",
+				"husky",
+				"lint-staged",
+				"/eslint/",
+				"/prettier/",
+				"/@typescript-eslint//"
+			],
 			"groupName": "linter"
 		},
 		{
-			"matchPackagePatterns": ["test", "jest", "cypress"],
-			"groupName": "tests"
+			"groupName": "tests",
+			"matchPackageNames": ["/test/", "/jest/", "/cypress/"]
 		},
 		{
-			"matchPackagePatterns": ["@sveltejs/", "svelte-"],
-			"matchPackageNames": ["svelte"],
+			"matchPackageNames": ["svelte", "/@sveltejs//", "/svelte-/"],
 			"groupName": "svelte"
 		},
 		{
-			"matchPackagePatterns": ["@types/"],
-			"matchPackageNames": ["typescript", "tslib"],
+			"matchPackageNames": ["typescript", "tslib", "/@types//"],
 			"groupName": "typescript"
 		}
 	]
