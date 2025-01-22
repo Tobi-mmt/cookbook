@@ -2,6 +2,7 @@
 	"extends": ["config:base"],
 	"schedule": ["before 6am every weekday"],
 	"prConcurrentLimit": 5,
+	"rebaseWhen": "conflicted",
 	"packageRules": [
 		{
 			"updateTypes": ["minor", "patch", "pin", "digest"],
