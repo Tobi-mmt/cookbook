@@ -7,7 +7,7 @@
 	import Icon from './Icon.svelte';
 
 	import RecipeStep from './RecipeStep.svelte';
-
+	import WakeLock from './WakeLock.svelte';
 	export let recipe: Recipe;
 
 	let portion = recipe.meta.portion;
@@ -81,6 +81,7 @@
 			{/if}
 			<div class="content">
 				<div class="step">
+					<WakeLock />
 					<ol class="step--list">
 						{#each recipe.steps as step, stepIndex}
 							<li class="step--list-item">
