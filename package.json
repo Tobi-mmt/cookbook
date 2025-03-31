@@ -17,7 +17,7 @@
 		"test": "vitest",
 		"get-random-id": "echo $RANDOM | md5 | head -c 15; echo;",
 		"get-thumbnail": "node ./scripts/getThumbnail.js",
-		"prepare": "husky"
+		"prepare": "husky && svelte-kit sync"
 	},
 	"devDependencies": {
 		"@eslint/js": "9.23.0",
