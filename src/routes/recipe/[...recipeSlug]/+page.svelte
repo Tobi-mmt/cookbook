@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { Recipe } from 'src/types';
-	import RecipeComponent from '../../../components/Recipe.svelte';
+	import type { Recipe } from '$types';
+	import RecipeComponent from '$components/Recipe.svelte';
 
 	export let data: { recipe: Recipe };
 </script>

@@ -22,6 +22,12 @@ const config = {
 				'base-uri': ['none'],
 				'style-src': ['self', 'unsafe-inline']
 			}
+		},
+		alias: {
+			$components: './src/components',
+			$routes: './src/routes',
+			$types: './src/types',
+			$utils: './src/utils'
 		}
 	}
 };

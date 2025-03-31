@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ListNavigation from './SearchResultList.svelte';
+	import ListNavigation from '$components/SearchResultList.svelte';
 
 	import { fade } from 'svelte/transition';
 	import Fuse from 'fuse.js';

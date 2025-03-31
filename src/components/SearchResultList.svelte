@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { FuseResult } from 'fuse.js';
-	import type { Recipe } from 'src/types';
+	import type { Recipe } from '$types';
 	import { slugerize } from '$lib/slugerize';
 	import { goto } from '$app/navigation';
 
@@ -45,11 +45,11 @@
 <div class="results__list">
 	{#if searchValue.length > 1}
 		{#if searchResults.length}
-			{#each searchResults as searchResult}
+			{#each searchResults as searchResult (searchResult.item.id)}
 				<button class="search-list-item" tabindex={0} on:keydown={handleListItemNavigation}>
 					<a
 						href={`/recipe/${searchResult.item.id}/${slugerize(searchResult.item.title)}`}
-						class={'results__list__item'}
+						class="results__list__item"
 						on:click={() => (searchOpen = false)}
 					>
 						<p class="category">{searchResult.item.meta.category}</p>

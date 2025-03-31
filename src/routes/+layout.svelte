@@ -1,5 +1,5 @@
 <script>
-	import TopBar from '../components/TopBar.svelte';
+	import TopBar from '$components/TopBar.svelte';
 	import { dev } from '$app/environment';
 	import { inject } from '@vercel/analytics';
 

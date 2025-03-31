@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Icon from './Icon.svelte';
-	import OffCanvas from './OffCanvas.svelte';
-	import Menu from './Menue.svelte';
-	import Search from './Search.svelte';
+	import Icon from '$components/Icon.svelte';
+	import OffCanvas from '$components/OffCanvas.svelte';
+	import Menu from '$components/Menue.svelte';
+	import Search from '$components/Search.svelte';
 
 	let menuOpen = false;
 	let isSearchOpen = false;

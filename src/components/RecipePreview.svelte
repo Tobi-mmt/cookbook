@@ -1,11 +1,11 @@
 <script lang="ts">
-	import type { Recipe } from '../types';
+	import type { Recipe } from '$types';
 
 	import { slugerize } from '$lib/slugerize';
 	import { categoryColors } from '$lib/colors';
 	import { getIconName } from '$lib/iconName';
-	import Icon from './Icon.svelte';
-	import IntersectionObserver from './IntersectionObserver.svelte';
+	import Icon from '$components/Icon.svelte';
+	import IntersectionObserver from '$components/IntersectionObserver.svelte';
 	import { getSourceSet } from '$lib/image';
 
 	export let recipe: Recipe;
