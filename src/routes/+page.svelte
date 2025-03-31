@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { recipes } from '$lib/recipes';
-	import RecipePreview from '../components/RecipePreview.svelte';
+	import RecipePreview from '$components/RecipePreview.svelte';
 </script>
 
 <svelte:head>
@@ -13,7 +13,7 @@
 </svelte:head>
 
 <div class="recipe-grid">
-	{#each recipes as recipe, idx}
+	{#each recipes as recipe, idx (recipe.id)}
 		<RecipePreview {recipe} disableIntersectionObserver={idx <= 5} />
 	{/each}
 </div>

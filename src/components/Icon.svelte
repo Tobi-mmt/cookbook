@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { IconName } from '../types';
+	import type { IconName } from '$types';
 	export let style = '';
 	export let name: IconName;
 </script>

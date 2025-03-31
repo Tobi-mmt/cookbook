@@ -83,7 +83,7 @@
 				<div class="step">
 					<WakeLock />
 					<ol class="step--list">
-						{#each recipe.steps as step, stepIndex}
+						{#each recipe.steps as step, stepIndex (stepIndex)}
 							<li class="step--list-item">
 								{#if isSection(step)}
 									<span class="step--list-item--decoration step--list-item--decoration_big"
@@ -124,7 +124,7 @@
 									</div>
 								</td>
 							</tr>
-							{#each recipe.ingredients as ingredient}
+							{#each recipe.ingredients as ingredient ('section' in ingredient ? ingredient.section : ingredient.name)}
 								{#if isSection(ingredient)}
 									<tr>
 										<td></td>

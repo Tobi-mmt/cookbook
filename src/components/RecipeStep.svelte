@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Step } from 'src/types';
+	import type { Step } from '$types';
 
 	export let step: Step;
 	export let calcQuantityFunction: (quantity: number) => number;
@@ -33,7 +33,7 @@
 	<span>{step.description}</span>
 	<div class="ingredients">
 		{#if step?.linkedIngredients}
-			{#each step?.linkedIngredients as linkedIngredient, ingredientIndex}
+			{#each step?.linkedIngredients as linkedIngredient, ingredientIndex (ingredientIndex)}
 				<span>
 					{#if linkedIngredient.quantity}{calcQuantityFunction(linkedIngredient.quantity)}{/if}
 					{#if linkedIngredient.unit}{linkedIngredient.unit}{/if}
