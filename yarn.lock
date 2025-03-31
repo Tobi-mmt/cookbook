@@ -771,15 +771,15 @@
   dependencies:
     import-meta-resolve "^4.1.0"
 
-"@sveltejs/kit@2.15.2":
-  version "2.15.2"
-  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.15.2.tgz#a6e9357856089da5233bdbf03e8d4cb7483a0c49"
-  integrity sha512-p208T1kdM6zd8k4YXIUM60pLWQ8dZqehXSiqn4NulXHyHibX53uIAL2xtNL8GjxX2IVPqPRT978MwVYhCKExdQ==
+"@sveltejs/kit@2.20.2":
+  version "2.20.2"
+  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.20.2.tgz#ec1e431083fdb924dd583d5520b94b94f003e67e"
+  integrity sha512-Dv8TOAZC9vyfcAB9TMsvUEJsRbklRTeNfcYBPaeH6KnABJ99i3CvCB2eNx8fiiliIqe+9GIchBg4RodRH5p1BQ==
   dependencies:
     "@types/cookie" "^0.6.0"
     cookie "^0.6.0"
     devalue "^5.1.0"
-    esm-env "^1.2.1"
+    esm-env "^1.2.2"
     import-meta-resolve "^4.1.0"
     kleur "^4.1.5"
     magic-string "^0.30.5"
@@ -787,7 +787,6 @@
     sade "^1.8.1"
     set-cookie-parser "^2.6.0"
     sirv "^3.0.0"
-    tiny-glob "^0.2.9"
 
 "@sveltejs/vite-plugin-svelte-inspector@^4.0.1":
   version "4.0.1"
@@ -1774,6 +1773,11 @@ esm-env@^1.2.1:
   resolved "https://registry.yarnpkg.com/esm-env/-/esm-env-1.2.1.tgz#34c2a0ba60582948afbe7bd779bc66f9d3aece7e"
   integrity sha512-U9JedYYjCnadUlXk7e1Kr+aENQhtUaoaV9+gZm1T8LC/YBAPJx3NSPIAurFOC0U5vrdSevnUJS2/wUVxGwPhng==
 
+esm-env@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/esm-env/-/esm-env-1.2.2.tgz#263c9455c55861f41618df31b20cb571fc20b75e"
+  integrity sha512-Epxrv+Nr/CaL4ZcFGPJIYLWFom+YeV1DqMLHJoEd9SYRxNbaFruBwfEX/kkHUJf55j2+TUbmDcmuilbP1TmXHA==
+
 espree@^10.0.1:
   version "10.1.0"
   resolved "https://registry.yarnpkg.com/espree/-/espree-10.1.0.tgz#8788dae611574c0f070691f522e4116c5a11fc56"
@@ -2133,16 +2137,6 @@ globals@^14.0.0:
   version "14.0.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-14.0.0.tgz#898d7413c29babcf6bafe56fcadded858ada724e"
   integrity sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==
-
-globalyzer@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/globalyzer/-/globalyzer-0.1.0.tgz#cb76da79555669a1519d5a8edf093afaa0bf1465"
-  integrity sha512-40oNTM9UfG6aBmuKxk/giHn5nQ8RVz/SS4Ir6zgzOv9/qC3kKZ9v4etGTcJbEl/NyVQH7FGU7d+X1egr57Md2Q==
-
-globrex@^0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/globrex/-/globrex-0.1.2.tgz#dd5d9ec826232730cd6793a5e33a9302985e6098"
-  integrity sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==
 
 gopd@^1.2.0:
   version "1.2.0"
@@ -3339,14 +3333,6 @@ through@^2.3.8:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
   integrity sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==
-
-tiny-glob@^0.2.9:
-  version "0.2.9"
-  resolved "https://registry.yarnpkg.com/tiny-glob/-/tiny-glob-0.2.9.tgz#2212d441ac17928033b110f8b3640683129d31e2"
-  integrity sha512-g/55ssRPUjShh+xkfx9UPDXqhckHEsHr4Vd9zX55oSdGZc/MD0m3sferOkwWtp98bv+kcVfEHtRJgBVJzelrzg==
-  dependencies:
-    globalyzer "0.1.0"
-    globrex "^0.1.2"
 
 tinybench@^2.9.0:
   version "2.9.0"
