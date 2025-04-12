@@ -38,6 +38,7 @@ import { sourBroth } from './sour-broth';
 import { mustardDillSauce } from './mustard-dill-sauce';
 import { halloumiCurry } from './halloumi-curry';
 import { leekSoup } from './leek-soup';
+import { padThai } from './pad-thai';
 
 const unsortedRecipes: Recipe[] = [
 	potatoSalad,
@@ -76,7 +77,8 @@ const unsortedRecipes: Recipe[] = [
 	sourBroth,
 	mustardDillSauce,
 	halloumiCurry,
-	leekSoup
+	leekSoup,
+	padThai
 ];
 
 const getCatIndex = (category: Category) => {
