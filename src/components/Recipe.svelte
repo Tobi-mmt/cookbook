@@ -86,9 +86,6 @@
 						{#each recipe.steps as step, stepIndex (stepIndex)}
 							<li class="step--list-item">
 								{#if isSection(step)}
-									<span class="step--list-item--decoration step--list-item--decoration_big"
-										>{stepIndex + 1}</span
-									>
 									<h2 class="step--list-item--section">{step.section}</h2>
 								{:else}
 									<RecipeStep
