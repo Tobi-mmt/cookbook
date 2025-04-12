@@ -37,8 +37,9 @@
 				<span>
 					{#if linkedIngredient.quantity}{calcQuantityFunction(linkedIngredient.quantity)}{/if}
 					{#if linkedIngredient.unit}{linkedIngredient.unit}{/if}
-					{#if linkedIngredient.name}{linkedIngredient.name}{/if}
-					{#if ingredientIndex < step?.linkedIngredients.length - 1},{/if}
+					{#if linkedIngredient.name}{linkedIngredient.name}{/if}{#if ingredientIndex < step?.linkedIngredients.length - 1}<span
+							>,&nbsp</span
+						>{/if}
 				</span>
 			{/each}
 		{/if}
