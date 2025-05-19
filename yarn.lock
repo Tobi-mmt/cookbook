@@ -781,12 +781,10 @@
   resolved "https://registry.yarnpkg.com/@sveltejs/acorn-typescript/-/acorn-typescript-1.0.5.tgz#f518101d1b2e12ce80854f1cd850d3b9fb91d710"
   integrity sha512-IwQk4yfwLdibDlrXVE04jTZYlLnwsTT2PIOQQGNLWfjavGifnk1JD1LcZjZaBTRcxZu2FfPfNLOE04DSu9lqtQ==
 
-"@sveltejs/adapter-auto@6.0.0":
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-auto/-/adapter-auto-6.0.0.tgz#aac1245053c00cb05552b8a3b0ef77643d120f03"
-  integrity sha512-7mR2/G7vlXakaOj6QBSG9dwBfTgWjV+UnEMB5Z6Xu0ZbdXda6c0su1fNkg0ab0zlilSkloMA2NjCna02/DR7sA==
-  dependencies:
-    import-meta-resolve "^4.1.0"
+"@sveltejs/adapter-auto@6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-auto/-/adapter-auto-6.0.1.tgz#29973229e53fcc3d102a51704ea66a420ccd2e65"
+  integrity sha512-mcWud3pYGPWM2Pphdj8G9Qiq24nZ8L4LB7coCUckUEy5Y7wOWGJ/enaZ4AtJTcSm5dNK1rIkBRoqt+ae4zlxcQ==
 
 "@sveltejs/kit@2.20.8":
   version "2.20.8"
@@ -3292,10 +3290,10 @@ supports-color@^8.1.1:
   dependencies:
     has-flag "^4.0.0"
 
-svelte-check@4.1.7:
-  version "4.1.7"
-  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-4.1.7.tgz#3c61e965160dacb5dc6a643c85f715c00d19ce7e"
-  integrity sha512-1jX4BzXrQJhC/Jt3SqYf6Ntu//vmfc6VWp07JkRfK2nn+22yIblspVUo96gzMkg0Zov8lQicxhxsMzOctwcMQQ==
+svelte-check@4.2.1:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-4.2.1.tgz#d332582f24b40967f3c56b8e2d74c306044cecdf"
+  integrity sha512-e49SU1RStvQhoipkQ/aonDhHnG3qxHSBtNfBRb9pxVXoa+N7qybAo32KgA9wEb2PCYFNaDg7bZCdhLD1vHpdYA==
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.25"
     chokidar "^4.0.1"
@@ -3315,10 +3313,10 @@ svelte-eslint-parser@^1.2.0:
     postcss-scss "^4.0.9"
     postcss-selector-parser "^7.0.0"
 
-svelte@5.28.2:
-  version "5.28.2"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.28.2.tgz#b0c4a6ad14e1562cc2255baac479fa16d75b9c0d"
-  integrity sha512-FbWBxgWOpQfhKvoGJv/TFwzqb4EhJbwCD17dB0tEpQiw1XyUEKZJtgm4nA4xq3LLsMo7hu5UY/BOFmroAxKTMg==
+svelte@5.30.2:
+  version "5.30.2"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.30.2.tgz#cfc6552655683312a5b9f4effc360034978d4b18"
+  integrity sha512-zfGFEwwPeILToOxOqQyFq/vc8euXrX2XyoffkBNgn/k8D1nxbLt5+mNaqQBmZF/vVhBGmkY6VmNK18p9Gf0auQ==
   dependencies:
     "@ampproject/remapping" "^2.3.0"
     "@jridgewell/sourcemap-codec" "^1.5.0"
