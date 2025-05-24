@@ -10,7 +10,7 @@ const ingredients = {
 	coconutMilk: { quantity: 300, unit: 'ml', name: 'Kokosmilch' },
 	vegetableBroth: { quantity: 100, unit: 'ml', name: 'Gemüsebrühe' },
 	redPepperFlakes: { quantity: 1 / 2, unit: 'TL', name: 'Chiliflocken' },
-	nutritionalYeast: { quantity: 7, unit: 'g', name: 'Hefeflocken' },
+	nutritionalYeast: { quantity: 70, unit: 'g', name: 'Hefeflocken' },
 	kale: { quantity: 1, unit: 'Handvoll', name: 'Grünkohl, zerrissen' },
 	salt: { name: 'Salz' },
 	blackPepper: { name: 'Schwarzer Pfeffer' }
