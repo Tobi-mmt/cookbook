@@ -290,10 +290,6 @@
 	.step--list-item:first-child .step--list-item--section {
 		margin-top: 0;
 	}
-	.step--list-item--decoration_big {
-		font-size: 1em;
-		margin-left: -1.95em;
-	}
 	.ingredients-headline {
 		font-weight: bold;
 		font-style: italic;
