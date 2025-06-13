@@ -3,7 +3,6 @@
 
 	import { categoryColors } from '$lib/colors';
 	import { getIconName } from '$lib/iconName';
-	import { getSourceSet } from '$lib/image';
 	import Icon from './Icon.svelte';
 
 	import RecipeStep from './RecipeStep.svelte';
@@ -47,11 +46,10 @@
 					class="imagePlaceholder"
 					style={`background-image: url(${recipe.placeholderImage});`}
 				></div>
-				<img
+				<enhanced:img
 					itemprop="image"
 					class="image"
 					src={recipe.image}
-					srcset={getSourceSet(recipe.image)}
 					sizes="100vw"
 					alt={recipe.title}
 				/>
@@ -121,7 +119,7 @@
 									</div>
 								</td>
 							</tr>
-							{#each recipe.ingredients as ingredient ('section' in ingredient ? ingredient.section : ingredient.name)}
+							{#each recipe.ingredients as ingredient ('section' in ingredient ? ingredient.section : `${ingredient.name}-${ingredient.quantity}`)}
 								{#if isSection(ingredient)}
 									<tr>
 										<td></td>

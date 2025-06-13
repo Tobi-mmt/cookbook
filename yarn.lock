@@ -493,7 +493,7 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.29.tgz#5a40109a1ab5f84d6fd8fc928b19f367cbe7e7b1"
   integrity sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==
 
-"@rollup/pluginutils@^5.1.3":
+"@rollup/pluginutils@^5.0.5", "@rollup/pluginutils@^5.1.3":
   version "5.1.4"
   resolved "https://registry.yarnpkg.com/@rollup/pluginutils/-/pluginutils-5.1.4.tgz#bb94f1f9eaaac944da237767cdfee6c5b2262d4a"
   integrity sha512-USm05zrsFxYLPdWWq+K3STlWiT/3ELn3RcV5hJMghpeAIhxfsUIg6mt12CBJBInWMV4VneoV7SfGv8xIwo2qNQ==
@@ -614,6 +614,17 @@
   dependencies:
     "@vercel/nft" "^0.29.2"
     esbuild "^0.25.4"
+
+"@sveltejs/enhanced-img@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@sveltejs/enhanced-img/-/enhanced-img-0.6.0.tgz#10ff18fdff5b95b7882e88ca680f3bd12396d836"
+  integrity sha512-B9rHh6zHnFex6fWxD8rkmUsMvkAG+cZiv+5/NfXyLcDvDFqUQbcADACeioVFuUxNXDXAe3y+Ui3JVmekk8R/zg==
+  dependencies:
+    magic-string "^0.30.5"
+    sharp "^0.34.1"
+    svelte-parse-markup "^0.1.5"
+    vite-imagetools "^7.1.0"
+    zimmerframe "^1.1.2"
 
 "@sveltejs/kit@2.21.5":
   version "2.21.5"
@@ -2136,6 +2147,11 @@ ignore@^7.0.0:
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-7.0.5.tgz#4cb5f6cd7d4c7ab0365738c7aea888baa6d7efd9"
   integrity sha512-Hs59xBNfUIunMFgWAbGX5cq6893IbWg4KnrjbYwX3tx0ztorVgTDA6B2sxf8ejHJ4wz8BqGUMYlnzNBer5NvGg==
 
+imagetools-core@^7.1.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/imagetools-core/-/imagetools-core-7.1.0.tgz#0b1870806275dbe3aea9d8c1adb77f92d07e2378"
+  integrity sha512-8Aa4NecBBGmTkaAUjcuRYgTPKHCsBEWYmCnvKCL6/bxedehtVVFyZPdXe8DD0Nevd6UWBq85ifUaJ8498lgqNQ==
+
 import-fresh@^3.2.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/import-fresh/-/import-fresh-3.3.1.tgz#9cecb56503c0ada1f2741dbbd6546e4b13b57ccf"
@@ -2971,7 +2987,7 @@ set-cookie-parser@^2.6.0:
   resolved "https://registry.yarnpkg.com/set-cookie-parser/-/set-cookie-parser-2.7.1.tgz#3016f150072202dfbe90fadee053573cc89d2943"
   integrity sha512-IOc8uWeOZgnb3ptbCURJWNjWUPcO3ZnTTdzsurqERrP6nPyv+paC55vJM0LpOlT2ne+Ix+9+CRG1MNLlyZ4GjQ==
 
-sharp@^0.34.0:
+sharp@^0.34.0, sharp@^0.34.1:
   version "0.34.2"
   resolved "https://registry.yarnpkg.com/sharp/-/sharp-0.34.2.tgz#648bd639854dbe48047b0b420213c186d036b32d"
   integrity sha512-lszvBmB9QURERtyKT2bNmsgxXK0ShJrL/fvqlonCo7e6xBF8nT8xU6pW+PMIbLsz0RxQk3rgH9kd8UmvOzlMJg==
@@ -3263,6 +3279,11 @@ svelte-eslint-parser@^1.2.0:
     postcss-scss "^4.0.9"
     postcss-selector-parser "^7.0.0"
 
+svelte-parse-markup@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/svelte-parse-markup/-/svelte-parse-markup-0.1.5.tgz#23cc33a3ec7dc403bb359baa05496a4e0644d6e2"
+  integrity sha512-T6mqZrySltPCDwfKXWQ6zehipVLk4GWfH1zCMGgRtLlOIFPuw58ZxVYxVvotMJgJaurKi1i14viB2GIRKXeJTQ==
+
 svelte@5.34.1:
   version "5.34.1"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.34.1.tgz#90113879402e8f8f46f41985d5d3e6768332bd20"
@@ -3472,6 +3493,15 @@ verror@1.10.0:
     assert-plus "^1.0.0"
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
+
+vite-imagetools@^7.1.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/vite-imagetools/-/vite-imagetools-7.1.0.tgz#a6353b817fe96bac6238174c0adcab99e0fb2f69"
+  integrity sha512-Mqh1uUY2DEMuBOogFz5Rd7cAs70VP6wsdQh2IShrJ+qGk5f7yQa4pN8w0YMLlGIKYW1JfM8oXrznUwVkhG+qxg==
+  dependencies:
+    "@rollup/pluginutils" "^5.0.5"
+    imagetools-core "^7.1.0"
+    sharp "^0.34.1"
 
 vite-node@3.2.2:
   version "3.2.2"
