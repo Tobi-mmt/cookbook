@@ -14,7 +14,7 @@
 
 <div class="recipe-grid">
 	{#each recipes as recipe, idx (recipe.id)}
-		<RecipePreview {recipe} disableIntersectionObserver={idx <= 5} />
+		<RecipePreview {recipe} loading={idx <= 5 ? 'eager' : 'lazy'} />
 	{/each}
 </div>
 
