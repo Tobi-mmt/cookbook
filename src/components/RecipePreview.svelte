@@ -6,7 +6,6 @@
 	import { getIconName } from '$lib/iconName';
 	import Icon from '$components/Icon.svelte';
 	import IntersectionObserver from '$components/IntersectionObserver.svelte';
-	import { getSourceSet } from '$lib/image';
 
 	export let recipe: Recipe;
 	export let disableIntersectionObserver = false;
@@ -30,10 +29,9 @@
 							style={`background-image: url(${recipe.placeholderImage});`}
 						></div>
 						{#if intersecting || disableIntersectionObserver}
-							<img
+							<enhanced:img
 								class="image"
 								src={recipe.image}
-								srcset={getSourceSet(recipe.image, [250, 350, 500, 750])}
 								sizes="(min-width: 1320px) 369px, (min-width: 900px) 29.25vw, (min-width: 740px) calc(54.29vw - 90px), (min-width: 700px) calc(660vw - 4450px), (min-width: 540px) 32.86vw, (min-width: 360px) 50vw, 100vw"
 								alt={recipe.title}
 							/>
