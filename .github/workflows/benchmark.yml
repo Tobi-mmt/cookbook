@@ -18,7 +18,7 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Lighthouse Check
-        run: npx @lhci/cli autorun
+        run: npx @lhci/cli@v0.14.0 autorun
         env:
           PREVIEW_URL: ${{ github.event.deployment_status.target_url }}
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
