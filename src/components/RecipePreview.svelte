@@ -5,10 +5,9 @@
 	import { categoryColors } from '$lib/colors';
 	import { getIconName } from '$lib/iconName';
 	import Icon from '$components/Icon.svelte';
-	import IntersectionObserver from '$components/IntersectionObserver.svelte';
 
 	export let recipe: Recipe;
-	export let disableIntersectionObserver = false;
+	export let loading: 'eager' | 'lazy' = 'lazy';
 </script>
 
 <a href={`/recipe/${recipe.id}/${slugerize(recipe.title)}`}>
@@ -20,40 +19,37 @@
   --highlight-color-light: ${categoryColors[recipe.meta.category]}77;
   `}
 	>
-		<IntersectionObserver let:intersecting top={500} bottom={500} once={true}>
-			<div>
-				<div class="header">
-					<div class="imageWrapper">
-						<div
-							class="imagePlaceholder"
-							style={`background-image: url(${recipe.placeholderImage});`}
-						></div>
-						{#if intersecting || disableIntersectionObserver}
-							<enhanced:img
-								class="image"
-								src={recipe.image}
-								sizes="(min-width: 1320px) 369px, (min-width: 900px) 29.25vw, (min-width: 740px) calc(54.29vw - 90px), (min-width: 700px) calc(660vw - 4450px), (min-width: 540px) 32.86vw, (min-width: 360px) 50vw, 100vw"
-								alt={recipe.title}
-							/>
-						{/if}
-					</div>
-					<div class="infos">
-						<p class="category">{recipe.meta.category}</p>
-						<h1 class="title">{recipe.title}</h1>
-						<div class="meta">
-							<div class="meta-item">
-								<span class="icon"><Icon name="sand-clock" /></span>
-								<p>{recipe.meta.duration}&nbsp;min</p>
-							</div>
-							<div class="meta-item">
-								<span class="icon"><Icon name={getIconName(recipe.meta.nutritionType)} /></span>
-								<p>{recipe.meta.nutritionType}</p>
-							</div>
+		<div>
+			<div class="header">
+				<div class="imageWrapper">
+					<div
+						class="imagePlaceholder"
+						style={`background-image: url(${recipe.placeholderImage});`}
+					></div>
+					<enhanced:img
+						class="image"
+						{loading}
+						src={recipe.image}
+						sizes="(min-width: 1320px) 369px, (min-width: 900px) 29.25vw, (min-width: 740px) calc(54.29vw - 90px), (min-width: 700px) calc(660vw - 4450px), (min-width: 540px) 32.86vw, (min-width: 360px) 50vw, 100vw"
+						alt={recipe.title}
+					/>
+				</div>
+				<div class="infos">
+					<p class="category">{recipe.meta.category}</p>
+					<h1 class="title">{recipe.title}</h1>
+					<div class="meta">
+						<div class="meta-item">
+							<span class="icon"><Icon name="sand-clock" /></span>
+							<p>{recipe.meta.duration}&nbsp;min</p>
+						</div>
+						<div class="meta-item">
+							<span class="icon"><Icon name={getIconName(recipe.meta.nutritionType)} /></span>
+							<p>{recipe.meta.nutritionType}</p>
 						</div>
 					</div>
 				</div>
 			</div>
-		</IntersectionObserver>
+		</div>
 	</div>
 </a>
 

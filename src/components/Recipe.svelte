@@ -49,6 +49,7 @@
 				<enhanced:img
 					itemprop="image"
 					class="image"
+					loading="eager"
 					src={recipe.image}
 					sizes="100vw"
 					alt={recipe.title}
