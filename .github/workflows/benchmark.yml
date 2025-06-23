@@ -16,9 +16,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install
 
       - name: Lighthouse Check
-        run: npx @lhci/cli@v0.14.0 autorun
+        run: yarn lhci autorun
         env:
           PREVIEW_URL: ${{ github.event.deployment_status.target_url }}
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
