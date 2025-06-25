@@ -53,6 +53,7 @@
 					src={recipe.image}
 					sizes="100vw"
 					alt={recipe.title}
+					fetchpriority="high"
 				/>
 			</div>
 			<div class="infos">
