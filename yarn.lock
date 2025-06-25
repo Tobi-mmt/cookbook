@@ -770,10 +770,10 @@
     vite-imagetools "^7.1.0"
     zimmerframe "^1.1.2"
 
-"@sveltejs/kit@2.21.5":
-  version "2.21.5"
-  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.21.5.tgz#e1f867ad02e11acea57ce5e97d51e41384858f74"
-  integrity sha512-P5m7yZtvD1Kx/Z6JcjgJtdMqef/tCGMDrd9B9S2q8j+FMnkeKTMxW1nidnjVzk4HEDRGf4IlBI94/niy6t3hLA==
+"@sveltejs/kit@2.22.0":
+  version "2.22.0"
+  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.22.0.tgz#16426ebf59e563e4156215646ead6b974206a0dc"
+  integrity sha512-DJm0UxVgzXq+1MUfiJK4Ridk7oIQsIets6JwHiEl97sI6nXScfXe+BeqNhzB7jQIVBb3BM51U4hNk8qQxRXBAA==
   dependencies:
     "@sveltejs/acorn-typescript" "^1.0.5"
     "@types/cookie" "^0.6.0"
@@ -4617,10 +4617,10 @@ supports-color@^8.1.1:
   dependencies:
     has-flag "^4.0.0"
 
-svelte-check@4.2.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-4.2.1.tgz#d332582f24b40967f3c56b8e2d74c306044cecdf"
-  integrity sha512-e49SU1RStvQhoipkQ/aonDhHnG3qxHSBtNfBRb9pxVXoa+N7qybAo32KgA9wEb2PCYFNaDg7bZCdhLD1vHpdYA==
+svelte-check@4.2.2:
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-4.2.2.tgz#9cf6f98fc0a9142869afe139d1294fd8d8d3aa01"
+  integrity sha512-1+31EOYZ7NKN0YDMKusav2hhEoA51GD9Ws6o//0SphMT0ve9mBTsTUEX7OmDMadUP3KjNHsSKtJrqdSaD8CrGQ==
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.25"
     chokidar "^4.0.1"
@@ -4645,10 +4645,10 @@ svelte-parse-markup@^0.1.5:
   resolved "https://registry.yarnpkg.com/svelte-parse-markup/-/svelte-parse-markup-0.1.5.tgz#23cc33a3ec7dc403bb359baa05496a4e0644d6e2"
   integrity sha512-T6mqZrySltPCDwfKXWQ6zehipVLk4GWfH1zCMGgRtLlOIFPuw58ZxVYxVvotMJgJaurKi1i14viB2GIRKXeJTQ==
 
-svelte@5.34.3:
-  version "5.34.3"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.34.3.tgz#dafc4f193b8371221096a5e78bf8c9be7f3d7b23"
-  integrity sha512-Y0QKP2rfWD+ARKe91c4JgZgc/nXa2BfOnVBUjYUMB819m7VyPszihkjdzXPIV0qlGRZYEukpgNq7hgbzTbopJw==
+svelte@5.34.8:
+  version "5.34.8"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.34.8.tgz#f03330d09f3968bed07ff3de54796438756e2fb1"
+  integrity sha512-TF+8irl7rpj3+fpaLuPRX5BqReTAqckp0Fumxa/mCeK3fo0/MnBb9W/Z2bLwtqj3C3r5Lm6NKIAw7YrgIv1Fwg==
   dependencies:
     "@ampproject/remapping" "^2.3.0"
     "@jridgewell/sourcemap-codec" "^1.5.0"
