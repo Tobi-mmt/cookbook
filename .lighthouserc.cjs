@@ -14,7 +14,8 @@ module.exports = {
 				'categories:performance': ['error', { minScore: 0.9 }],
 				'categories:accessibility': ['error', { minScore: 1 }],
 				'categories:seo': ['error', { minScore: 0.6 }],
-				'total-byte-weight': ['error', { maxNumericValue: 1000 * 1024 }] // 1 MB
+				'total-byte-weight': ['error', { maxNumericValue: 1000 * 1024 }], // 1 MB
+				'image-delivery-insight': 'warn'
 			}
 		},
 		upload: {

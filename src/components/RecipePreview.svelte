@@ -7,7 +7,7 @@
 	import Icon from '$components/Icon.svelte';
 
 	export let recipe: Recipe;
-	export let loading: 'eager' | 'lazy' = 'lazy';
+	export let priority: boolean = false;
 </script>
 
 <a href={`/recipe/${recipe.id}/${slugerize(recipe.title)}`}>
@@ -28,7 +28,8 @@
 					></div>
 					<enhanced:img
 						class="image"
-						{loading}
+						fetchpriority={priority ? 'high' : 'auto'}
+						loading={priority ? 'eager' : 'lazy'}
 						src={recipe.image}
 						sizes="(min-width: 1320px) 369px, (min-width: 900px) 29.25vw, (min-width: 740px) calc(54.29vw - 90px), (min-width: 700px) calc(660vw - 4450px), (min-width: 540px) 32.86vw, (min-width: 360px) 50vw, 100vw"
 						alt={recipe.title}

@@ -14,7 +14,7 @@
 
 <div class="recipe-grid">
 	{#each recipes as recipe, idx (recipe.id)}
-		<RecipePreview {recipe} loading={idx <= 5 ? 'eager' : 'lazy'} />
+		<RecipePreview {recipe} priority={idx <= 5} />
 	{/each}
 </div>
 
