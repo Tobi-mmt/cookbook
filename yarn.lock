@@ -490,12 +490,12 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@lhci/cli@0.15.0":
-  version "0.15.0"
-  resolved "https://registry.yarnpkg.com/@lhci/cli/-/cli-0.15.0.tgz#ca35d2daf386dd0b4ea608905c624b5b82c7d449"
-  integrity sha512-BvSlBR7SoTgBJUODq/uLnX8hjyMdTPbxQ9tcS3QtYOJTB4efA5gfDGz+n4+sq6ad7SpwjsKLb5Twr/BXvP6UMA==
+"@lhci/cli@0.15.1":
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/@lhci/cli/-/cli-0.15.1.tgz#38dcbb1af1e4e2d735726d47635a08a621ed0781"
+  integrity sha512-yhC0oXnXqGHYy1xl4D8YqaydMZ/khFAnXGY/o2m/J3PqPa/D0nj3V6TLoH02oVMFeEF2AQim7UbmdXMiXx2tOw==
   dependencies:
-    "@lhci/utils" "0.15.0"
+    "@lhci/utils" "0.15.1"
     chrome-launcher "^0.13.4"
     compression "^1.7.4"
     debug "^4.3.1"
@@ -511,10 +511,10 @@
     yargs "^15.4.1"
     yargs-parser "^13.1.2"
 
-"@lhci/utils@0.15.0":
-  version "0.15.0"
-  resolved "https://registry.yarnpkg.com/@lhci/utils/-/utils-0.15.0.tgz#80aced95e383c62c93ba25b33a60a1e1b228e043"
-  integrity sha512-oFwdTanHSEMyXkGpni0UlOD6oKqr58xH+DbenycntRAkYi61B7mv1agvFTNHnBO7N14IPrSarysk6FuAOlOnJA==
+"@lhci/utils@0.15.1":
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/@lhci/utils/-/utils-0.15.1.tgz#75279392a787c9d9f8f1c179cf73db9a88ca93fd"
+  integrity sha512-WclJnUQJeOMY271JSuaOjCv/aA0pgvuHZS29NFNdIeI14id8eiFsjith85EGKYhljgoQhJ2SiW4PsVfFiakNNw==
   dependencies:
     debug "^4.3.1"
     isomorphic-fetch "^3.0.0"
