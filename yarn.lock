@@ -867,6 +867,11 @@
   dependencies:
     "@sentry/types" "7.120.3"
 
+"@standard-schema/spec@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@standard-schema/spec/-/spec-1.0.0.tgz#f193b73dc316c4170f2e82a881da0f550d551b9c"
+  integrity sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==
+
 "@sveltejs/acorn-typescript@^1.0.5":
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/@sveltejs/acorn-typescript/-/acorn-typescript-1.0.5.tgz#f518101d1b2e12ce80854f1cd850d3b9fb91d710"
@@ -891,11 +896,12 @@
     vite-imagetools "^7.1.0"
     zimmerframe "^1.1.2"
 
-"@sveltejs/kit@2.26.1":
-  version "2.26.1"
-  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.26.1.tgz#1cc865831941f803c6a9efa375f8f646dbdb4979"
-  integrity sha512-FwDhHAoXYUGnYndrrEzEYcKdYWpSoRKq4kli29oMe83hLri4/DOGQk3xUgwjDo0LKpSmj5M/Sj29/Ug3wO0Cbg==
+"@sveltejs/kit@2.27.0":
+  version "2.27.0"
+  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.27.0.tgz#ad46449c920861b183653e45023aa69805efe32b"
+  integrity sha512-pEX1Z2Km8tqmkni+ykIIou+ojp/7gb3M9tpllN5nDWNo9zlI0dI8/hDKFyBwQvb4jYR+EyLriFtrmgJ6GvbnBA==
   dependencies:
+    "@standard-schema/spec" "^1.0.0"
     "@sveltejs/acorn-typescript" "^1.0.5"
     "@types/cookie" "^0.6.0"
     acorn "^8.14.1"
@@ -4733,10 +4739,10 @@ supports-color@^8.1.1:
   dependencies:
     has-flag "^4.0.0"
 
-svelte-check@4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-4.3.0.tgz#c8d5aeb466f6cb391d04c83ee30df38e9a02c74d"
-  integrity sha512-Iz8dFXzBNAM7XlEIsUjUGQhbEE+Pvv9odb9+0+ITTgFWZBGeJRRYqHUUglwe2EkLD5LIsQaAc4IUJyvtKuOO5w==
+svelte-check@4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-4.3.1.tgz#7b469e8156e5600da2c762e71bbceace2b19d4c8"
+  integrity sha512-lkh8gff5gpHLjxIV+IaApMxQhTGnir2pNUAqcNgeKkvK5bT/30Ey/nzBxNLDlkztCH4dP7PixkMt9SWEKFPBWg==
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.25"
     chokidar "^4.0.1"
@@ -4761,10 +4767,10 @@ svelte-parse-markup@^0.1.5:
   resolved "https://registry.yarnpkg.com/svelte-parse-markup/-/svelte-parse-markup-0.1.5.tgz#23cc33a3ec7dc403bb359baa05496a4e0644d6e2"
   integrity sha512-T6mqZrySltPCDwfKXWQ6zehipVLk4GWfH1zCMGgRtLlOIFPuw58ZxVYxVvotMJgJaurKi1i14viB2GIRKXeJTQ==
 
-svelte@5.37.0:
-  version "5.37.0"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.37.0.tgz#714e388acea18d95d1c7f852299cec03b1040d06"
-  integrity sha512-BAHgWdKncZ4F1DVBrkKAvelx2Nv3mR032ca8/yj9Gxf5s9zzK1uGXiZTjCFDvmO2e9KQfcR2lEkVjw+ZxExJow==
+svelte@5.37.3:
+  version "5.37.3"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.37.3.tgz#5dc90e214681fa0e44a2651e7889cd5e2503222c"
+  integrity sha512-7t/ejshehHd+95z3Z7ebS7wsqHDQxi/8nBTuTRwpMgNegfRBfuitCSKTUDKIBOExqfT2+DhQ2VLG8Xn+cBXoaQ==
   dependencies:
     "@ampproject/remapping" "^2.3.0"
     "@jridgewell/sourcemap-codec" "^1.5.0"
