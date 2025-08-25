@@ -2,14 +2,6 @@
 # yarn lockfile v1
 
 
-"@ampproject/remapping@^2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@ampproject/remapping/-/remapping-2.3.0.tgz#ed441b6fa600072520ce18b43d2c8cc8caecc7f4"
-  integrity sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==
-  dependencies:
-    "@jridgewell/gen-mapping" "^0.3.5"
-    "@jridgewell/trace-mapping" "^0.3.24"
-
 "@cypress/request@^3.0.9":
   version "3.0.9"
   resolved "https://registry.yarnpkg.com/@cypress/request/-/request-3.0.9.tgz#8ed6e08fea0c62998b5552301023af7268f11625"
@@ -467,6 +459,14 @@
     "@jridgewell/sourcemap-codec" "^1.4.10"
     "@jridgewell/trace-mapping" "^0.3.24"
 
+"@jridgewell/remapping@^2.3.4":
+  version "2.3.5"
+  resolved "https://registry.yarnpkg.com/@jridgewell/remapping/-/remapping-2.3.5.tgz#375c476d1972947851ba1e15ae8f123047445aa1"
+  integrity sha512-LI9u/+laYG4Ds1TDKSJW2YPrIlcVYOwi2fUC6xB43lueCjgxV4lffOCZCtYFiH6TNOX+tQKXx97T4IKHbhyHEQ==
+  dependencies:
+    "@jridgewell/gen-mapping" "^0.3.5"
+    "@jridgewell/trace-mapping" "^0.3.24"
+
 "@jridgewell/resolve-uri@^3.1.0":
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/@jridgewell/resolve-uri/-/resolve-uri-3.1.2.tgz#7a0ee601f60f99a20c7c7c5ff0c80388c1189bd6"
@@ -870,29 +870,29 @@
   resolved "https://registry.yarnpkg.com/@sveltejs/acorn-typescript/-/acorn-typescript-1.0.5.tgz#f518101d1b2e12ce80854f1cd850d3b9fb91d710"
   integrity sha512-IwQk4yfwLdibDlrXVE04jTZYlLnwsTT2PIOQQGNLWfjavGifnk1JD1LcZjZaBTRcxZu2FfPfNLOE04DSu9lqtQ==
 
-"@sveltejs/adapter-vercel@5.8.2":
-  version "5.8.2"
-  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-vercel/-/adapter-vercel-5.8.2.tgz#ef9c98bb770b129e5c58e9cb7ca3df2bef869ad5"
-  integrity sha512-RC9Zj/eE0uHccCSDSDfiE3y+4EUNx46s49vexLsNmTsdKW50a+DRwwqa5yw8KKXXGA6P6e5P1IYVZHzINs9YsA==
+"@sveltejs/adapter-vercel@5.10.2":
+  version "5.10.2"
+  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-vercel/-/adapter-vercel-5.10.2.tgz#35894a4b2e2be31470ebe5267e8892e3461ba15a"
+  integrity sha512-uWm0jtXbwvXxmELiIXSQ7tcPjlG8roadujxImIxqbKKZ64itZDwTbUsVXYEfUX59LvLjolW9jaODhL6sBTh5NQ==
   dependencies:
     "@vercel/nft" "^0.30.0"
     esbuild "^0.25.4"
 
-"@sveltejs/enhanced-img@^0.7.0":
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/@sveltejs/enhanced-img/-/enhanced-img-0.7.1.tgz#454735da493e2de2b739c1a0ee57fa5212d13355"
-  integrity sha512-CFwu2vNE6JkCmchJKz1SUNWFRtKIhNbejgonQPapIZXNMClgSvn1NP3m+L8stOFatTee/ZaqGBxZZfVY30+JDw==
+"@sveltejs/enhanced-img@^0.8.0":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@sveltejs/enhanced-img/-/enhanced-img-0.8.1.tgz#264d75cb0d9943561c2a5e91c088253bb6387f75"
+  integrity sha512-Ibom8j6F9vdmOeR+ljQ4q7TEJV0FWN1kB5wJZ2S/GuDVgCrKYrsXBw5gpSKcHwGYpKA3o9EoijPhep/GHgRUWQ==
   dependencies:
     magic-string "^0.30.5"
     sharp "^0.34.1"
     svelte-parse-markup "^0.1.5"
-    vite-imagetools "^7.1.0"
+    vite-imagetools "^8.0.0"
     zimmerframe "^1.1.2"
 
-"@sveltejs/kit@2.27.3":
-  version "2.27.3"
-  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.27.3.tgz#85ea9c62961ef81001ba8aa43a66e94fb5dfdd5a"
-  integrity sha512-jiG3NGZ8RRpi+ncjVnX+oR7uWEgzy//3YLGcTU5mHtjGraeGyNDr7GJFHlk7z0vi8bMXpXIUkEXj6p70FJmHvw==
+"@sveltejs/kit@2.36.2":
+  version "2.36.2"
+  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.36.2.tgz#9dfa3f427fc7c76ba4d78d8186c18411eab815a5"
+  integrity sha512-WlBGY060nHe4UE5QrDAJAbls5hOsG6mljtrDGkM8jJCDQ4JEcAEH04XrTVmQ0Ex1CU8nzoZto0EE75aiLA3G8Q==
   dependencies:
     "@standard-schema/spec" "^1.0.0"
     "@sveltejs/acorn-typescript" "^1.0.5"
@@ -915,10 +915,10 @@
   dependencies:
     debug "^4.4.1"
 
-"@sveltejs/vite-plugin-svelte@6.1.1":
-  version "6.1.1"
-  resolved "https://registry.yarnpkg.com/@sveltejs/vite-plugin-svelte/-/vite-plugin-svelte-6.1.1.tgz#1eeed9373cde768c63ba5a9b45733e6957655114"
-  integrity sha512-vB0Vq47Js7C11L2JrwhncIAoDNkdKDPI500SjLSb34X48dDcsSH5JpLl0cHT0sfO997BrzAS6PKjiZEey/S0VQ==
+"@sveltejs/vite-plugin-svelte@6.1.3":
+  version "6.1.3"
+  resolved "https://registry.yarnpkg.com/@sveltejs/vite-plugin-svelte/-/vite-plugin-svelte-6.1.3.tgz#59bbd556e4b015d5292c7d8b8423741bdd89fac5"
+  integrity sha512-3pppgIeIZs6nrQLazzKcdnTJ2IWiui/UucEPXKyFG35TKaHQrfkWBnv6hyJcLxFuR90t+LaoecrqTs8rJKWfSQ==
   dependencies:
     "@sveltejs/vite-plugin-svelte-inspector" "^5.0.0"
     debug "^4.4.1"
@@ -2939,10 +2939,10 @@ image-ssim@^0.2.0:
   resolved "https://registry.yarnpkg.com/image-ssim/-/image-ssim-0.2.0.tgz#83b42c7a2e6e4b85505477fe6917f5dbc56420e5"
   integrity sha512-W7+sO6/yhxy83L0G7xR8YAc5Z5QFtYEXXRV6EaE8tuYBZJnA3gVgp3q7X7muhLZVodeb9UfvjSbwt9VJwjIYAg==
 
-imagetools-core@^7.1.0:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/imagetools-core/-/imagetools-core-7.1.0.tgz#0b1870806275dbe3aea9d8c1adb77f92d07e2378"
-  integrity sha512-8Aa4NecBBGmTkaAUjcuRYgTPKHCsBEWYmCnvKCL6/bxedehtVVFyZPdXe8DD0Nevd6UWBq85ifUaJ8498lgqNQ==
+imagetools-core@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/imagetools-core/-/imagetools-core-8.0.0.tgz#6ce94477b3f359d3838af99f043472a4ccb96306"
+  integrity sha512-5i4Cx5vrBpVdvT3gvkSGAzzkUCrg/5Jm54UwWbDUSTMp4AjDI4IxiC6dI4+X1PRJYi6eKqWuE+684NJY2iOn3w==
 
 immediate@~3.0.5:
   version "3.0.6"
@@ -4760,12 +4760,12 @@ svelte-parse-markup@^0.1.5:
   resolved "https://registry.yarnpkg.com/svelte-parse-markup/-/svelte-parse-markup-0.1.5.tgz#23cc33a3ec7dc403bb359baa05496a4e0644d6e2"
   integrity sha512-T6mqZrySltPCDwfKXWQ6zehipVLk4GWfH1zCMGgRtLlOIFPuw58ZxVYxVvotMJgJaurKi1i14viB2GIRKXeJTQ==
 
-svelte@5.38.0:
-  version "5.38.0"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.38.0.tgz#dc03d1c9ea582ec302adea3f2e138f9ddb9b9900"
-  integrity sha512-cWF1Oc2IM/QbktdK89u5lt9MdKxRtQnRKnf2tq6KOhYuhLOd2hbMuTiJ+vWMzAeMDe81AzbCgLd4GVtOJ4fDRg==
+svelte@5.38.3:
+  version "5.38.3"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.38.3.tgz#f8cf62f53b000ded5e2732e30743875b19b7a50e"
+  integrity sha512-ldbPzKdjUy7IALMBn15jzBM/TNxdXMxKeQZ538zzdABUjLg7e7/OIwnlaMQ+OR6s91W7DbDmJYjxHThHH7r9xA==
   dependencies:
-    "@ampproject/remapping" "^2.3.0"
+    "@jridgewell/remapping" "^2.3.4"
     "@jridgewell/sourcemap-codec" "^1.5.0"
     "@sveltejs/acorn-typescript" "^1.0.5"
     "@types/estree" "^1.0.5"
@@ -5086,13 +5086,13 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-vite-imagetools@^7.1.0:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/vite-imagetools/-/vite-imagetools-7.1.0.tgz#a6353b817fe96bac6238174c0adcab99e0fb2f69"
-  integrity sha512-Mqh1uUY2DEMuBOogFz5Rd7cAs70VP6wsdQh2IShrJ+qGk5f7yQa4pN8w0YMLlGIKYW1JfM8oXrznUwVkhG+qxg==
+vite-imagetools@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/vite-imagetools/-/vite-imagetools-8.0.0.tgz#f15bed4ce64d8aaab58b31daa6d8f18e68c3b0c1"
+  integrity sha512-3bkkA0vQ57tMynsetY2j4QhCnZKrxFv0RScaZipzYgkjkkUBEmZL5UIVHOUHhVMfwCetAeM9e3DNwyPK1ff4xg==
   dependencies:
     "@rollup/pluginutils" "^5.0.5"
-    imagetools-core "^7.1.0"
+    imagetools-core "^8.0.0"
     sharp "^0.34.1"
 
 vite-node@3.2.4:
