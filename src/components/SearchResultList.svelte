@@ -3,6 +3,7 @@
 	import type { Recipe } from '$types';
 	import { slugerize } from '$lib/slugerize';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 
 	export let searchOpen: boolean;
 	export let searchValue: string;
@@ -34,7 +35,7 @@
 	const handleListItemNavigation = (event: KeyboardEvent) => {
 		if (event.key === 'Enter') {
 			const { href } = (event.target as HTMLUListElement).firstChild as HTMLAnchorElement;
-			goto(href);
+			goto(resolve(href, {}));
 			searchOpen = false;
 		}
 	};
@@ -48,7 +49,10 @@
 			{#each searchResults as searchResult (searchResult.item.id)}
 				<button class="search-list-item" tabindex={0} on:keydown={handleListItemNavigation}>
 					<a
-						href={`/recipe/${searchResult.item.id}/${slugerize(searchResult.item.title)}`}
+						href={resolve(`/recipe/[recipeId]/[recipeTitle]`, {
+							recipeId: searchResult.item.id,
+							recipeTitle: slugerize(searchResult.item.title)
+						})}
 						class="results__list__item"
 						on:click={() => (searchOpen = false)}
 					>

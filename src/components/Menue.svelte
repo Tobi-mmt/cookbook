@@ -3,6 +3,7 @@
 	import { categoryColors } from '$lib/colors';
 	import { slugerize } from '$lib/slugerize';
 	import { categorizedRecipes } from '$lib/categorizedRecipes';
+	import { resolve } from '$app/paths';
 
 	export let onItemClick: () => void;
 </script>
@@ -18,7 +19,10 @@
 							role="button"
 							tabindex="0"
 							class="list-item"
-							href={`/recipe/${recipe.id}/${slugerize(recipe.title)}`}
+							href={resolve(`/recipe/[recipeId]/[recipeTitle]`, {
+								recipeId: recipe.id,
+								recipeTitle: slugerize(recipe.title)
+							})}
 							on:click={onItemClick}
 							on:keypress={onItemClick}
 						>
