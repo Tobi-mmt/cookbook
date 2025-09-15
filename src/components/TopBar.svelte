@@ -3,6 +3,7 @@
 	import OffCanvas from '$components/OffCanvas.svelte';
 	import Menu from '$components/Menue.svelte';
 	import Search from '$components/Search.svelte';
+	import { resolve } from '$app/paths';
 
 	let menuOpen = false;
 	let isSearchOpen = false;
@@ -19,7 +20,7 @@
 	>
 		<Icon name="navigation-menu" />
 	</div>
-	<a class="word-icon" href="/">
+	<a class="word-icon" href={resolve('/', {})}>
 		<span class="word">Tobi's </span>
 		<Icon style="font-size: 3em;" name="spoon-and-fork" />
 		<span class="word"> Kochbuch</span>

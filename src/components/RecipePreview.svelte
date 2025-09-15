@@ -5,12 +5,18 @@
 	import { categoryColors } from '$lib/colors';
 	import { getIconName } from '$lib/iconName';
 	import Icon from '$components/Icon.svelte';
+	import { resolve } from '$app/paths';
 
 	export let recipe: Recipe;
 	export let priority: boolean = false;
 </script>
 
-<a href={`/recipe/${recipe.id}/${slugerize(recipe.title)}`}>
+<a
+	href={resolve(`/recipe/[recipeId]/[recipeTitle]`, {
+		recipeId: recipe.id,
+		recipeTitle: slugerize(recipe.title)
+	})}
+>
 	<div
 		id={slugerize(recipe.title)}
 		class="recipe-preview"

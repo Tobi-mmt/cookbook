@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Recipe } from '$types';
 	import RecipeComponent from '$components/Recipe.svelte';
+	import { resolve } from '$app/paths';
 
 	export let data: { recipe: Recipe };
 </script>
@@ -20,5 +21,7 @@
 	{/key}
 {:else}
 	<h1>Kein Rezept gefunden</h1>
-	<p>Gehe zur <a href="/">Übersicht</a> oder benutze die Suche, um ein Rezept zu finden.</p>
+	<p>
+		Gehe zur <a href={resolve('/', {})}>Übersicht</a> oder benutze die Suche, um ein Rezept zu finden.
+	</p>
 {/if}
