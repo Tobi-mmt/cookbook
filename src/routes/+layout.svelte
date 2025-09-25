@@ -1,6 +1,11 @@
 <script>
 	import TopBar from '$components/TopBar.svelte';
+	import { PUBLIC_UMAMI_WEBSITE_ID } from '$env/static/public';
 </script>
+
+<svelte:head>
+	<script defer src="/stats/script.js" data-website-id={PUBLIC_UMAMI_WEBSITE_ID}></script>
+</svelte:head>
 
 <div>
 	<TopBar />
