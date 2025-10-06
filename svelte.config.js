@@ -12,17 +12,6 @@ const config = {
 		// If your environment is not supported, or you settled on a specific environment, switch out the adapter.
 		// See https://kit.svelte.dev/docs/adapters for more information about adapters.
 		adapter: adapter(),
-		csp: {
-			mode: 'auto',
-			directives: {
-				'default-src': ['self'],
-				'script-src': ['self', 'unsafe-eval', 'unsafe-inline'],
-				'img-src': ['self', 'data:'],
-				'object-src': ['none'],
-				'base-uri': ['none'],
-				'style-src': ['self', 'unsafe-inline']
-			}
-		},
 		alias: {
 			$components: './src/components',
 			$routes: './src/routes',
