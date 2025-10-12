@@ -40,6 +40,7 @@ export const cherryPie: Recipe = {
 	},
 	title: 'Kirschkuchen mit Streuseln',
 	image: RecipeImage,
+	description: '10 Portionen entsprechen einer Springform mit einem Durchmesser von 26 cm.',
 	// placeholderImage generated with "yarn get-thumbnail PATH/TO/IMAGE.webp"
 	placeholderImage:
 		'data:image/png;base64,UklGRqIAAABXRUJQVlA4IJYAAACQAgCdASoPAAsAAUAmJbACdDBSyIbL08/5wnSh0AD++aKWKg4GInb59aqPo+6A3FAE5mdwSXHJRpR2rL/berojk3klchTbzbysT8f72D3ZRHvllTw5Yiv8xCrrcW68jNtiJYHkSngsZv1wRcAAWfLAoDVHPHGNTsEf35+pj+Iysy+zz6OkUX9vubCwv9nZIAKtNsMAUAA=',
