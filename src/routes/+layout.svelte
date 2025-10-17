@@ -4,7 +4,11 @@
 </script>
 
 <svelte:head>
-	<script defer src="/stats/script.js" data-website-id={PUBLIC_UMAMI_WEBSITE_ID}></script>
+	<script
+		defer
+		src="https://cloud.umami.is/script.js"
+		data-website-id={PUBLIC_UMAMI_WEBSITE_ID}
+	></script>
 </svelte:head>
 
 <div>
