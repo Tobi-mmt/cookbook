@@ -803,10 +803,10 @@
     vite-imagetools "^8.0.0"
     zimmerframe "^1.1.2"
 
-"@sveltejs/kit@2.47.1":
-  version "2.47.1"
-  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.47.1.tgz#46e896ed3c1cfe361f7e31b284fe13d7282390b2"
-  integrity sha512-1v+MbMHxTi6ctQyxmz3owLKqZGaBHyx4EQqTdq/PvDswPFzw3WlqhrOKOh2ZzH23+XpQGEF9G+KDIgYJE+byvg==
+"@sveltejs/kit@2.47.3":
+  version "2.47.3"
+  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.47.3.tgz#bcbfc8cc2634e8e2a1d90285bcec5be303f2812b"
+  integrity sha512-zN2yzBc2dIES2BSzLhNP2weYhwB77kgM/oAktICZVmmljyEmPZrlUwr14jjdK9/eDu7WdAuf6gTdYIJLTcN3Fw==
   dependencies:
     "@standard-schema/spec" "^1.0.0"
     "@sveltejs/acorn-typescript" "^1.0.5"
@@ -4578,10 +4578,10 @@ svelte-parse-markup@^0.1.5:
   resolved "https://registry.yarnpkg.com/svelte-parse-markup/-/svelte-parse-markup-0.1.5.tgz#23cc33a3ec7dc403bb359baa05496a4e0644d6e2"
   integrity sha512-T6mqZrySltPCDwfKXWQ6zehipVLk4GWfH1zCMGgRtLlOIFPuw58ZxVYxVvotMJgJaurKi1i14viB2GIRKXeJTQ==
 
-svelte@5.40.2:
-  version "5.40.2"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.40.2.tgz#94f8e9e5d5d2a07fd703af7335c04fa0e22d354b"
-  integrity sha512-wr/SwBVCVfeHU8FZr48vRrzSpWdBBzGo5mlErjGzeW4reJhK/CWutLZbk/eHwhKqO17ccjeTcvsqjrT4aK3wZA==
+svelte@5.42.0:
+  version "5.42.0"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.42.0.tgz#b6cc4bd91620f2d1529841e1b7cec7ef7e21e752"
+  integrity sha512-CMCg1Br3dP1NZ5Id5Vxl8wSdge9pE7/ZWTAjhtDVzyw41b2X1MjDcDoqBjxfaEx4Z5NJtQnf5fFJIOuwhCkkpg==
   dependencies:
     "@jridgewell/remapping" "^2.3.4"
     "@jridgewell/sourcemap-codec" "^1.5.0"
