@@ -5,8 +5,8 @@ if (!argument) {
 	console.log('No argument');
 	process.exit(1);
 }
-if (!argument.startsWith('static/recipes/')) {
-	console.log('Invalid argument. Image path must start with "static/recipes/"');
+if (!argument.startsWith('src/lib/recipes/')) {
+	console.log('Invalid argument. Image path must start with "src/lib/recipes/"');
 	process.exit(1);
 }
 let buffered = await sharp(argument).resize(15).toBuffer();
