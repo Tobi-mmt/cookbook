@@ -1124,6 +1124,11 @@
     "@typescript-eslint/types" "8.46.1"
     eslint-visitor-keys "^4.2.1"
 
+"@vercel/analytics@1.6.1":
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/@vercel/analytics/-/analytics-1.6.1.tgz#b4e16daf445cf6cd365a91e43d86e9e5b3428ddc"
+  integrity sha512-oH9He/bEM+6oKlv3chWuOOcp8Y6fo6/PSro8hEkgCW3pu9/OiCXiUpRUogDh3Fs3LH2sosDrx8CxeOLBEE+afg==
+
 "@vercel/nft@^1.0.0":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@vercel/nft/-/nft-1.1.1.tgz#998b0b299059aa19040400123ccaca3a5d81a749"
