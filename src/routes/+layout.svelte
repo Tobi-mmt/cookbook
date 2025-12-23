@@ -1,11 +1,10 @@
 <script>
 	import TopBar from '$components/TopBar.svelte';
-	import { PUBLIC_UMAMI_WEBSITE_ID } from '$env/static/public';
-</script>
+	import { dev } from '$app/environment';
+	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 
-<svelte:head>
-	<script defer src="/stats/script.js" data-website-id={PUBLIC_UMAMI_WEBSITE_ID}></script>
-</svelte:head>
+	injectAnalytics({ mode: dev ? 'development' : 'production' });
+</script>
 
 <div>
 	<TopBar />
