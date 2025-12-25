@@ -15,7 +15,7 @@ const ingredients = {
 	salt: { quantity: 1, unit: 'Prise', name: 'Salz' },
 	ganacheSection: { section: 'Ganache' },
 	chocolate2: { quantity: 100, unit: 'g', name: 'Schokolade' },
-	cream2: { quantity: 150, unit: 'ml', name: 'Sahne' },
+	cream2: { quantity: 100, unit: 'ml', name: 'Sahne' },
 	toppingSection: { section: 'Topping' },
 	chocolateTopping: { quantity: 100, unit: 'g', name: 'Schokolade' }
 };
