@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-	<title>Tobi's Kochbuch</title>
+	<title>Unser Kochbuch</title>
 	<meta
 		name="description"
 		content="Unsere Liebelingsrezepte, die wir über die Jahre angesammelt haben."
