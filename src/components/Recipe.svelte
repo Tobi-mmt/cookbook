@@ -231,6 +231,10 @@
 		margin: 0 0 0.25em 0;
 		line-height: 1em;
 		font-size: 2.5em;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		max-width: 100%;
 	}
 	.description {
 		margin-bottom: 2em;
