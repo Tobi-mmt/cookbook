@@ -7,12 +7,16 @@
 </script>
 
 <svelte:head>
-	<title>Tobi's Kochbuch</title>
-	<meta
-		name="description"
-		content="Meine Liebelingsrezepte, die ich über die Jahre angesammelt habe."
-	/>
-	<meta name="author" content="Tobias" />
+	<title>{data.recipe && `${data.recipe.title} - `} Tobi's Kochbuch</title>
+	{#if data.recipe && data.recipe.description}
+		<meta name="description" content={data.recipe.description} />
+	{:else}
+		<meta
+			name="description"
+			content="Unsere Liebelingsrezepte, die wir über die Jahre angesammelt haben."
+		/>
+	{/if}
+	<meta name="author" content="Tobias & Mona" />
 </svelte:head>
 
 {#if data.recipe}

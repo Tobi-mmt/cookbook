@@ -7,9 +7,9 @@
 	<title>Tobi's Kochbuch</title>
 	<meta
 		name="description"
-		content="Meine Liebelingsrezepte, die ich über die Jahre angesammelt habe."
+		content="Unsere Liebelingsrezepte, die wir über die Jahre angesammelt haben."
 	/>
-	<meta name="author" content="Tobias" />
+	<meta name="author" content="Tobias & Mona" />
 </svelte:head>
 
 <div class="recipe-grid">
