@@ -1,6 +1,6 @@
 {
-	"name": "Tobi's Kochbuch",
-	"short_name": "Tobi's Kochbuch",
+	"name": "Unser Kochbuch",
+	"short_name": "Unser Kochbuch",
 	"icons": [
 		{
 			"src": "/android-chrome-192x192.png",
@@ -11,5 +11,5 @@
 	"theme_color": "#ffffff",
 	"background_color": "#ffffff",
 	"display": "standalone",
-	"description": "Meine Liebelingsrezepte, die ich über die Jahre angesammelt habe."
+	"description": "Unsere Liebelingsrezepte, die wir über die Jahre angesammelt haben."
 }

@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-	<title>{data.recipe && `${data.recipe.title} - `} Tobi's Kochbuch</title>
+	<title>{data.recipe && `${data.recipe.title} - `} Unser Kochbuch</title>
 	{#if data.recipe && data.recipe.description}
 		<meta name="description" content={data.recipe.description} />
 	{:else}

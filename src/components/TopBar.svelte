@@ -21,7 +21,7 @@
 		<Icon name="navigation-menu" />
 	</div>
 	<a class="word-icon" href={resolve('/', {})}>
-		<span class="word">Tobi's </span>
+		<span class="word">Unser </span>
 		<Icon style="font-size: 3em;" name="spoon-and-fork" />
 		<span class="word"> Kochbuch</span>
 	</a>
