@@ -22,7 +22,7 @@ jobs:
         run: yarn install
 
       - name: Lighthouse Check
-        run: yarn lhci autorun
+        run: npx lhci autorun
         env:
           PREVIEW_URL: ${{ github.event.deployment_status.target_url }}
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
