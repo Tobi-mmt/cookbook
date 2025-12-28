@@ -3278,10 +3278,10 @@ svelte-parse-markup@^0.1.5:
   resolved "https://registry.yarnpkg.com/svelte-parse-markup/-/svelte-parse-markup-0.1.5.tgz#23cc33a3ec7dc403bb359baa05496a4e0644d6e2"
   integrity sha512-T6mqZrySltPCDwfKXWQ6zehipVLk4GWfH1zCMGgRtLlOIFPuw58ZxVYxVvotMJgJaurKi1i14viB2GIRKXeJTQ==
 
-svelte@5.46.0:
-  version "5.46.0"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.46.0.tgz#62c9ee2ebdf34efb0f2868c48c3589708a6a7e55"
-  integrity sha512-ZhLtvroYxUxr+HQJfMZEDRsGsmU46x12RvAv/zi9584f5KOX7bUrEbhPJ7cKFmUvZTJXi/CFZUYwDC6M1FigPw==
+svelte@5.46.1:
+  version "5.46.1"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.46.1.tgz#fee6626d591076e8efb853087b4912b2b248ca5f"
+  integrity sha512-ynjfCHD3nP2el70kN5Pmg37sSi0EjOm9FgHYQdC4giWG/hzO3AatzXXJJgP305uIhGQxSufJLuYWtkY8uK/8RA==
   dependencies:
     "@jridgewell/remapping" "^2.3.4"
     "@jridgewell/sourcemap-codec" "^1.5.0"
