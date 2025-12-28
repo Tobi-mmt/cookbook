@@ -30,14 +30,20 @@
 		const { value } = event.target as HTMLInputElement;
 		searchResults = fuse.search(value, { limit: 8 });
 	};
+
+	// Focus input when search opens
+	$: if (searchOpen && inputRef) {
+		// Use setTimeout to ensure the element is fully rendered and transition has started
+		setTimeout(() => {
+			inputRef?.focus();
+		}, 0);
+	}
 </script>
 
 {#if searchOpen}
 	<div class="modal" transition:fade={{ duration: 250 }}>
 		<div class="modal__background">
-			<!-- svelte-ignore a11y-autofocus -->
 			<input
-				autofocus
 				type="text"
 				placeholder="Suche"
 				class="search-input"
