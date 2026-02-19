@@ -29,27 +29,21 @@
 
 <style>
 	.recipe-grid {
-		--grid-column-count: 3; /* This gets overridden by an inline style. */
+		--grid-column-count: 5; /* This gets overridden by an inline style. */
 		--grid-item-min-width: 250px;
-		--grid-item-max-width: calc((100% - (4 - 1) * 96px) / var(--grid-column-count));
+		--grid-item-max-width: calc((100% - (3) * 96px) / var(--grid-column-count));
 
 		display: grid;
 		grid-template-columns: repeat(
 			auto-fill,
 			minmax(max(var(--grid-item-min-width), var(--grid-item-max-width)), 1fr)
 		);
-		gap: 5em 2.5em;
-		max-width: 1250px;
-		margin: 2em auto;
-		padding: 2em;
 	}
 
-	@media (max-width: 700px) {
+	@media (max-width: 599px) {
 		.recipe-grid {
-			gap: 1em 0.5em;
+			--grid-item-min-width: 200px;
 			font-size: 0.7em;
-			padding: 0;
-			margin: 1em auto;
 		}
 	}
 </style>

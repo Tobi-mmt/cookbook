@@ -151,13 +151,7 @@
 												.portion}&requestedQuantity={portion}"
 											target="_blank"
 										>
-											<img
-												class="bring-logo"
-												src="/bring.svg"
-												alt="bring! logo"
-												width="20"
-												height="27"
-											/>
+											<img src="/bring.svg" alt="bring! logo" width="20" height="27" />
 											<span>Auf die Einkaufsliste</span>
 										</a>
 									{/if}
@@ -349,6 +343,9 @@
 		height: 100%;
 		justify-items: center;
 		align-items: center;
+		display: flex;
+		padding: 0.5em 1em;
+		justify-content: space-between;
 		margin: 2em auto 16px;
 		min-height: 44px;
 		text-decoration: none;
@@ -356,10 +353,6 @@
 	}
 	.bring-button:hover {
 		opacity: 0.8;
-	}
-	.bring-logo {
-		margin-right: 1.5em;
-		margin-left: 1em;
 	}
 	@media (max-width: 700px) {
 		.content {
