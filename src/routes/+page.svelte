@@ -1,15 +1,24 @@
 <script lang="ts">
 	import { recipes } from '$lib/recipes';
 	import RecipePreview from '$components/RecipePreview.svelte';
+	import { page } from '$app/stores';
 </script>
 
 <svelte:head>
 	<title>Unser Kochbuch</title>
+	<meta property="og:title" content="Unser Kochbuch" />
 	<meta
 		name="description"
 		content="Unsere Liebelingsrezepte, die wir über die Jahre angesammelt haben."
 	/>
 	<meta name="author" content="Tobias & Mona" />
+	<meta property="og:site_name" content="Unser Kochbuch" />
+	<meta property="og:type" content="website" />
+	<meta
+		property="og:description"
+		content="Unsere Liebelingsrezepte, die wir über die Jahre angesammelt haben."
+	/>
+	<meta property="og:image" content="{$page.url.origin}/og-image.png" />
 </svelte:head>
 
 <div class="recipe-grid">
