@@ -42,6 +42,7 @@ import { padThai } from './pad-thai/recipe';
 import { harissaBeans } from './harissa-beans/recipe';
 import { chocoScheescake } from './choco-scheescake/recipe';
 import { energyBalls } from './enery-balls/recipe';
+import { gyozaCasserole } from './gyoza-casserole/recipe';
 
 const unsortedRecipes: Recipe[] = [
 	potatoSalad,
@@ -84,7 +85,8 @@ const unsortedRecipes: Recipe[] = [
 	padThai,
 	harissaBeans,
 	chocoScheescake,
-	energyBalls
+	energyBalls,
+	gyozaCasserole
 ];
 
 const getCatIndex = (category: Category) => {
