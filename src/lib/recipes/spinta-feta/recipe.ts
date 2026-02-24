@@ -54,5 +54,5 @@ export const spinatFeta: Recipe = {
 		},
 		{ description: 'Etwa 20 Minuten backen, bzw. bis die Dreiecke goldgelb sind.' }
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

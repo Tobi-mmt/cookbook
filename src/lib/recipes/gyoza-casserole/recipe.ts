@@ -97,5 +97,5 @@ export const gyozaCasserole: Recipe = {
 		}
 	],
 
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

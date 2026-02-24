@@ -84,5 +84,5 @@ export const rhubarbPie: Recipe = {
 				'Den Kuchen nun auf der 2. Schiene von unten etwa 60 Minuten lang bei 160 °C Umluft backen lassen.'
 		}
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

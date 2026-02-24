@@ -60,5 +60,5 @@ export const dal: Recipe = {
 		},
 		{ description: 'Mit etwas Fladenbrot oder Reis servieren.' }
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

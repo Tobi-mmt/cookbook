@@ -49,5 +49,5 @@ export const spaetzle: Recipe = {
 				'Die Spätzle zwischendurch, etwa alle 5–10 Minuten, aus dem Wasser schöpfen und warm halten.'
 		}
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

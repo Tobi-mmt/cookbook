@@ -77,5 +77,5 @@ export const halloumiCurry: Recipe = {
 			description: 'Curry in einer Schüssel anrichten und mit Halloumi und Koriander garnieren.'
 		}
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

@@ -73,5 +73,5 @@ export const lentilBroccoliCurry: Recipe = {
 		{ description: 'Kaffirblätter entfernen und mit Salz und Pfeffer abschmecken.' },
 		{ description: 'Auf Reis servieren.' }
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

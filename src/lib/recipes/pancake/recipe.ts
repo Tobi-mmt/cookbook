@@ -42,5 +42,5 @@ export const pancake: Recipe = {
 				'Die Pfannenkuchen in einer beschichteten Pfanne mit etwas Butter heraus braten, bis sie goldgelb sind.'
 		}
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

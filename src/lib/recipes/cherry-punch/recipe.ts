@@ -37,5 +37,5 @@ export const cherryPunch: Recipe = {
 			linkedIngredients: [ingredients.limonade, ingredients.bubbly, ingredients.wine]
 		}
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

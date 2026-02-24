@@ -4,10 +4,12 @@ export type Ingredient = {
 	quantity?: number;
 	unit?: string;
 	name: string;
+	key?: string;
 };
 
 export type Section = {
 	section: string;
+	key?: string;
 };
 
 export type NutritionType = 'Vegan' | 'Vegetarisch' | 'Fleisch';

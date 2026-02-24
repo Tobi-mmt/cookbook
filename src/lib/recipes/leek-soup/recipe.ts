@@ -68,5 +68,5 @@ export const leekSoup: Recipe = {
 			description: 'Mit frischem Brot servieren.'
 		}
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

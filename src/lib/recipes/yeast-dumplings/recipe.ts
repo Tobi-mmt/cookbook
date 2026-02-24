@@ -64,5 +64,5 @@ export const yeastDumplings: Recipe = {
 				'Das Ganze bei mittlerer Temperatur kochen lassen, bis die Milch vollständig verkocht ist und sich eine Kruste am Pfannenboden gebildet hat.'
 		}
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

@@ -69,5 +69,5 @@ export const nougatBar: Recipe = {
 			linkedIngredients: [ingredients.chocolate, ingredients.coconutFat]
 		}
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

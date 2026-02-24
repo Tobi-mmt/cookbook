@@ -65,5 +65,5 @@ export const mangoldGorgonzola: Recipe = {
 			description: 'Mit Nudeln servieren'
 		}
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

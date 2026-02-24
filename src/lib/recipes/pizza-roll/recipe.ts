@@ -45,5 +45,5 @@ export const pizzaRoll: Recipe = {
 		},
 		{ description: 'Bei 180 °C Umluft ca. 10 Minuten im Ofen auf mittlere Schiene backen.' }
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

@@ -72,5 +72,5 @@ export const wildGarlicSoup: Recipe = {
 			description: 'Mit selbstgeemachten Croutons servieren.'
 		}
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

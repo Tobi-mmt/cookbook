@@ -101,5 +101,5 @@ export const padThai: Recipe = {
 		},
 		{ description: 'Zum Schluss die Limette und Chilipulver bereitstellen.' }
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

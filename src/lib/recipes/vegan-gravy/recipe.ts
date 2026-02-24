@@ -76,5 +76,5 @@ export const veganGravy: Recipe = {
 				'Zum Schluss entweder die Soße durch ein feines Sieb passieren (ca. 400ml) oder Lorbeerblatt und Wacholderbeeren entfernen und den Rest mit einem Mixer pürieren (ca. 600ml)'
 		}
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

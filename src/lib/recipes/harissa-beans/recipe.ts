@@ -72,5 +72,5 @@ export const harissaBeans: Recipe = {
 		},
 		{ description: 'Vom Herd nehmen und mit warmen Sauerteigbrot servieren.' }
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

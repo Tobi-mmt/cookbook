@@ -59,5 +59,5 @@ export const mustardDillSauce: Recipe = {
 			linkedIngredients: [ingredients.salt, ingredients.pepper, ingredients.sugar]
 		}
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };
