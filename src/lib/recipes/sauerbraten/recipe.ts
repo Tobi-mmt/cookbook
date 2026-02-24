@@ -98,5 +98,5 @@ export const sauerbraten: Recipe = {
 		{ description: 'Fleisch wieder in die Soße geben oder extra anrichten.' },
 		{ description: 'Dazu passen Spätzle und Blaukraut/Rotkraut.' }
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

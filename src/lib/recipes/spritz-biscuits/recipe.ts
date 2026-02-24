@@ -45,5 +45,5 @@ export const spritzBiscuits: Recipe = {
 		{ description: 'Backblech in Ofen geben und 15–20 Minuten backen lassen.' },
 		{ description: 'Abkühlen lassen und optional ein Ende des Gebäcks in Schokolade tauchen.' }
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

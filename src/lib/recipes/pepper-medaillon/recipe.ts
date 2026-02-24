@@ -56,5 +56,5 @@ export const pepperMedaillon: Recipe = {
 		{ description: 'Nach etwa 7 Minuten einkochen ist alles fertig.' },
 		{ description: 'Dazu passen gut Nudeln oder Kroketten.' }
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

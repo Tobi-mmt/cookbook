@@ -68,5 +68,5 @@ export const mushroomPan: Recipe = {
 		},
 		{ description: 'Mit Salzkartoffeln oder Kartoffelpüree servieren.' }
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

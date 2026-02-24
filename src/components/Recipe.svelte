@@ -121,7 +121,7 @@
 									</div>
 								</td>
 							</tr>
-							{#each recipe.ingredients as ingredient ('section' in ingredient ? ingredient.section : `${ingredient.name}-${ingredient.quantity}`)}
+							{#each recipe.ingredients as ingredient ('section' in ingredient ? ingredient.section : `${ingredient.key || ingredient.name}-${ingredient.quantity}`)}
 								{#if isSection(ingredient)}
 									<tr>
 										<td></td>

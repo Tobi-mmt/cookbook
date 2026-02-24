@@ -74,5 +74,5 @@ export const bananaBlondies: Recipe = {
 		},
 		{ description: 'Die Bananen Blondies in Stücke schneiden und servieren.' }
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

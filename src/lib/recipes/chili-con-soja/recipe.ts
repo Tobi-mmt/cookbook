@@ -76,5 +76,5 @@ export const chiliConSoja: Recipe = {
 				'Noch besser schmeckt es, wenn man das Chili con Soja schon am Vortag zubereitet.'
 		}
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

@@ -71,5 +71,5 @@ export const persianBeans: Recipe = {
 		{ description: '4 Minuten mit Deckel köcheln lassen.' },
 		{ description: 'Mit Fladenbrot servieren.' }
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

@@ -63,5 +63,5 @@ export const beanStew: Recipe = {
 		},
 		{ description: 'Bon appétit!' }
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

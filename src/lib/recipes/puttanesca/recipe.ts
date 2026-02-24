@@ -83,5 +83,5 @@ export const orecchiettePuttanesca: Recipe = {
 				'Den Rest der Petersilie- und der Kirchererbsenmischung unterrühren, mit Pfeffer verfeinern und servieren.'
 		}
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

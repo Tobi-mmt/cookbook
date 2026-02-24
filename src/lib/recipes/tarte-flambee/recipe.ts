@@ -57,5 +57,5 @@ export const tarteFlambee: Recipe = {
 			linkedIngredients: [ingredients.chive]
 		}
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

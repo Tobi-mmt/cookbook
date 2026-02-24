@@ -76,5 +76,5 @@ export const fennelRisotto: Recipe = {
 		},
 		{ description: 'Risotto in einen Teller geben und mit Pilzen und Frühlingszwiebeln garnieren.' }
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

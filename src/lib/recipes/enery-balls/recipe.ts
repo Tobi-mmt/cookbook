@@ -49,5 +49,5 @@ export const energyBalls: Recipe = {
 			linkedIngredients: [ingredients.coconut2]
 		}
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

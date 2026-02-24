@@ -82,5 +82,5 @@ export const sourBroth: Recipe = {
 			description: 'Mit Spätzle servieren.'
 		}
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

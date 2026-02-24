@@ -52,5 +52,5 @@ export const redWinePie: Recipe = {
 		{ description: 'Backform mit etwas Butter einfetten und den Teig hineingeben.' },
 		{ description: 'Die Form in den Ofen geben und 50–60 Minuten backen lassen.' }
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

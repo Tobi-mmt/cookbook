@@ -60,5 +60,5 @@ export const vanillaCroissant: Recipe = {
 				'Die noch heißen Kipferl im Vanillezucker-Gemisch wenden und danach abkühlen lassen.'
 		}
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

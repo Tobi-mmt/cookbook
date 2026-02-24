@@ -54,5 +54,5 @@ export const potatoSalad: Recipe = {
 		},
 		{ description: 'Den fertigen Salat warm servieren – schmeckt auch kalt sehr gut.' }
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };

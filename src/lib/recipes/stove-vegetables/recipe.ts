@@ -59,5 +59,5 @@ export const stoveSegetables: Recipe = {
 		{ description: 'Bei 225 °C Ober-Unterhitze für 30 Minuten backen.' },
 		{ description: 'Mit frischem Baguette oder Brot servieren.' }
 	],
-	ingredients: Object.values(ingredients)
+	ingredients: Object.entries(ingredients).map(([key, value]) => ({ ...value, key }))
 };
