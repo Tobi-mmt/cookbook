@@ -1038,12 +1038,7 @@ acorn-jsx@^5.3.2:
   resolved "https://registry.yarnpkg.com/acorn-jsx/-/acorn-jsx-5.3.2.tgz#7ed5bb55908b3b2f1bc55c6af1653bada7f07937"
   integrity sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==
 
-acorn@^8.12.1, acorn@^8.14.1, acorn@^8.15.0, acorn@^8.6.0:
-  version "8.15.0"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.15.0.tgz#a360898bc415edaac46c8241f6383975b930b816"
-  integrity sha512-NZyJarBfL7nWwIq+FDL6Zp/yHEhePMNnnJ0y3qfieCrmNvYct8uvtiV41UvlSe6apAfk0fY1FbWx+NwfmpvtTg==
-
-acorn@^8.16.0:
+acorn@^8.12.1, acorn@^8.14.1, acorn@^8.15.0, acorn@^8.16.0, acorn@^8.6.0:
   version "8.16.0"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.16.0.tgz#4ce79c89be40afe7afe8f3adb902a1f1ce9ac08a"
   integrity sha512-UVJyE9MttOsBQIDKw1skb9nAwQuR5wuGD3+82K6JgJlm/Y+KI92oNsMNGZCYdDsVtRHSak0pcV5Dno5+4jh9sw==
@@ -1117,10 +1112,10 @@ arch@^2.2.0:
   resolved "https://registry.yarnpkg.com/arch/-/arch-2.2.0.tgz#1bc47818f305764f23ab3306b0bfc086c5a29d11"
   integrity sha512-Of/R0wqp83cgHozfIYLbBMnej79U/SVGOOyuB3VVFv1NRM/PSFMK12x9KVtiYzJqmnU5WR2qp0Z5rHb7sWGnFQ==
 
-aria-query@^5.3.1:
-  version "5.3.2"
-  resolved "https://registry.yarnpkg.com/aria-query/-/aria-query-5.3.2.tgz#93f81a43480e33a338f19163a3d10a50c01dcd59"
-  integrity sha512-COROpnaoap1E2F000S62r6A60uHZnmlvomhfyT2DlTcrY1OrBKn2UhH7qn5wTC9zMvD0AY7csdPSNwKP+7WiQw==
+aria-query@5.3.1:
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/aria-query/-/aria-query-5.3.1.tgz#ebcb2c0d7fc43e68e4cb22f774d1209cb627ab42"
+  integrity sha512-Z/ZeOgVl7bcSYZ/u/rh0fOpvEpq//LZmdbkXyc7syVzjPAhfOa9ebsdTSjEBDU4vs5nC98Kfduj1uFo0qyET3g==
 
 asn1@~0.2.3:
   version "0.2.6"
@@ -3163,10 +3158,10 @@ svelte-parse-markup@^0.1.5:
   resolved "https://registry.yarnpkg.com/svelte-parse-markup/-/svelte-parse-markup-0.1.5.tgz#23cc33a3ec7dc403bb359baa05496a4e0644d6e2"
   integrity sha512-T6mqZrySltPCDwfKXWQ6zehipVLk4GWfH1zCMGgRtLlOIFPuw58ZxVYxVvotMJgJaurKi1i14viB2GIRKXeJTQ==
 
-svelte@5.53.2:
-  version "5.53.2"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.53.2.tgz#da23077c34fb5039d76a3c47833083841392d175"
-  integrity sha512-yGONuIrcl/BMmqbm6/52Q/NYzfkta7uVlos5NSzGTfNJTTFtPPzra6rAQoQIwAqupeM3s9uuTf5PvioeiCdg9g==
+svelte@5.53.5:
+  version "5.53.5"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.53.5.tgz#9472539a0152d5e02e2c933cb8eb9918d71b21de"
+  integrity sha512-YkqERnF05g8KLdDZwZrF8/i1eSbj6Eoat8Jjr2IfruZz9StLuBqo8sfCSzjosNKd+ZrQ8DkKZDjpO5y3ht1Pow==
   dependencies:
     "@jridgewell/remapping" "^2.3.4"
     "@jridgewell/sourcemap-codec" "^1.5.0"
@@ -3174,7 +3169,7 @@ svelte@5.53.2:
     "@types/estree" "^1.0.5"
     "@types/trusted-types" "^2.0.7"
     acorn "^8.12.1"
-    aria-query "^5.3.1"
+    aria-query "5.3.1"
     axobject-query "^4.1.0"
     clsx "^2.1.1"
     devalue "^5.6.3"
