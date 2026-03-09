@@ -3113,10 +3113,10 @@ supports-color@^8.1.1:
   dependencies:
     has-flag "^4.0.0"
 
-svelte-check@4.4.4:
-  version "4.4.4"
-  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-4.4.4.tgz#600dfa2146d5f446341f524d5e20fa64675d64cf"
-  integrity sha512-F1pGqXc710Oi/wTI4d/x7d6lgPwwfx1U6w3Q35n4xsC2e8C/yN2sM1+mWxjlMcpAfWucjlq4vPi+P4FZ8a14sQ==
+svelte-check@4.4.5:
+  version "4.4.5"
+  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-4.4.5.tgz#a48ad6c5b372b9ba4bddd72b2d46c22765502c31"
+  integrity sha512-1bSwIRCvvmSHrlK52fOlZmVtUZgil43jNL/2H18pRpa+eQjzGt6e3zayxhp1S7GajPFKNM/2PMCG+DZFHlG9fw==
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.25"
     chokidar "^4.0.1"
@@ -3141,10 +3141,10 @@ svelte-parse-markup@^0.1.5:
   resolved "https://registry.yarnpkg.com/svelte-parse-markup/-/svelte-parse-markup-0.1.5.tgz#23cc33a3ec7dc403bb359baa05496a4e0644d6e2"
   integrity sha512-T6mqZrySltPCDwfKXWQ6zehipVLk4GWfH1zCMGgRtLlOIFPuw58ZxVYxVvotMJgJaurKi1i14viB2GIRKXeJTQ==
 
-svelte@5.53.6:
-  version "5.53.6"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.53.6.tgz#9ebfdd9faeb7b35d425735c63023544e487959c5"
-  integrity sha512-lP5DGF3oDDI9fhHcSpaBiJEkFLuS16h92DhM1L5K1lFm0WjOmUh1i2sNkBBk8rkxJRpob0dBE75jRfUzGZUOGA==
+svelte@5.53.8:
+  version "5.53.8"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.53.8.tgz#5a1d4ccecbebcc072fd21d4a59f9223f0e3fd9f6"
+  integrity sha512-UD++BnEc3PUFgjin381LiMHzDjT187Fy+KsPZxvaKrYPZqR0GQ/Ha8h7GDoegIF8tFl1uogoNUejKgcRk77T2Q==
   dependencies:
     "@jridgewell/remapping" "^2.3.4"
     "@jridgewell/sourcemap-codec" "^1.5.0"
