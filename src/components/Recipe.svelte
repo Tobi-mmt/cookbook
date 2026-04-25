@@ -223,11 +223,9 @@
 		padding: 0;
 		font-weight: 200;
 		margin: 0 0 0.25em 0;
-		line-height: 1em;
+		line-height: 1.1em;
 		font-size: 2.5em;
 		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
 		max-width: 100%;
 	}
 	.description {
@@ -302,7 +300,7 @@
 		width: 100px;
 	}
 	.ingredients {
-		padding: 0 1em;
+		padding-left: 2em;
 		border-left: 1px solid;
 		border-color: var(--highlight-color-light);
 		margin-bottom: 2em;
@@ -357,15 +355,22 @@
 	@media (max-width: 700px) {
 		.content {
 			flex-direction: column-reverse;
-			padding: 2em 1em;
 		}
 		.ingredients {
 			border: none;
 			padding-bottom: 1.5em;
+			padding-left: 0;
 			margin-bottom: 1em;
+		}
+		.infos {
+			padding: 1rem;
 		}
 		.title {
 			font-size: 2.25em;
+		}
+
+		.step {
+			padding-right: 0;
 		}
 	}
 </style>
