@@ -111,7 +111,7 @@
 		padding: 0 0 0.5em 0;
 		font-weight: 300;
 		margin: 0;
-		line-height: 1em;
+		line-height: 1.1em;
 		font-size: 1.75em;
 		color: #333;
 		height: 1.2em;
