@@ -27,7 +27,7 @@
 		"@sveltejs/vite-plugin-svelte": "7.0.0",
 		"@typescript-eslint/eslint-plugin": "8.59.0",
 		"@typescript-eslint/parser": "8.59.0",
-		"cypress": "15.14.0",
+		"cypress": "15.14.1",
 		"eslint": "10.2.1",
 		"eslint-config-prettier": "10.1.8",
 		"eslint-plugin-svelte": "3.17.1",
@@ -42,7 +42,7 @@
 		"typescript": "5.9.3",
 		"typescript-eslint": "8.59.0",
 		"vite": "8.0.10",
-		"vitest": "4.1.4"
+		"vitest": "4.1.5"
 	},
 	"husky": {
 		"hooks": {
