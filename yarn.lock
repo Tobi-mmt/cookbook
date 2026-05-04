@@ -732,10 +732,10 @@
     vite-imagetools "^9.0.3"
     zimmerframe "^1.1.2"
 
-"@sveltejs/kit@2.58.0":
-  version "2.58.0"
-  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.58.0.tgz#ab60fb84e84d559f2f84e07d88dfb88fb5100715"
-  integrity sha512-kT9GCN8yJTkCK1W+Gi/bvGooWAM7y7WXP+yd+rf6QOIjyoK1ERPrMwSufXJUNu2pMWIqruhFvmz+LbOqsEmKmA==
+"@sveltejs/kit@2.59.0":
+  version "2.59.0"
+  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.59.0.tgz#987f81576f36fcfccfb72cf2927e599818342ebc"
+  integrity sha512-WeJaGKvDf3uVQB4bnDHhM+BXCY34LC1v0HiPqnSpvNkjB54r8DAUP1rpk73s+5zprIirEKtUcVfgh6+fPODjzQ==
   dependencies:
     "@standard-schema/spec" "^1.0.0"
     "@sveltejs/acorn-typescript" "^1.0.5"
@@ -3134,10 +3134,10 @@ supports-color@^8.1.1:
   dependencies:
     has-flag "^4.0.0"
 
-svelte-check@4.4.6:
-  version "4.4.6"
-  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-4.4.6.tgz#c890a102e94ef31b44bea26f5f16de14db717a3b"
-  integrity sha512-kP1zG81EWaFe9ZyTv4ZXv44Csi6Pkdpb7S3oj6m+K2ec/IcDg/a8LsFsnVLqm2nxtkSwsd5xPj/qFkTBgXHXjg==
+svelte-check@4.4.7:
+  version "4.4.7"
+  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-4.4.7.tgz#2e70a379aa8d7c9233c10b9eee6f768b379cb7c6"
+  integrity sha512-JRafFTRmaPUOqmri4u1WuIKgBLiHi6wIaB57i99pmHq5BAc3ioIpzdUN/RX32ij9GhI6ALMHKvnVxu68sFZlag==
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.25"
     chokidar "^4.0.1"
