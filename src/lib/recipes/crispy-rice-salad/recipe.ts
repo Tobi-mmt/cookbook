@@ -35,7 +35,8 @@ export const crispyRiceSalad: Recipe = {
 	title: 'Crispy Reis Salat',
 	image: RecipeImage,
 	// placeholderImage generated with "yarn get-thumbnail PATH/TO/IMAGE.webp"
-	placeholderImage: '',
+	placeholderImage:
+		'data:image/png;base64,UklGRuwAAABXRUJQVlA4IOAAAABwBQCdASoPABMAPm0qkUWkIqGYBABABsS2AE6ZQdwCw4Bh4Oc99JHT10fYVbpe1HYmCQAAAP7KbOfKGCbPw4q+UvfzX4B3xJcs+TLR6dreHNFWcAKqHirisKGDw6hkguj0h/xDqdfpOXhjph5vxBznj2WhEuEnD2ukAMBqgvvhe6BKP7pIL3eVDNjxc4Zjpf1QgMD8RxwK3fzcSThH8GChR72KDxe0cx4zMZI+Ph+HDiB5QQybYHDtkp2ScFxNTe6kbVa+MIDUMbFbuze5FpgEnwx0SqH1y7D1eJ9jjAAAAA==',
 	steps: [
 		{ section: 'Vorbereitung' },
 		{
