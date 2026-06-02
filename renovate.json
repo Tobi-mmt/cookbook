@@ -3,6 +3,7 @@
 	"schedule": ["before 6am every weekday"],
 	"prConcurrentLimit": 5,
 	"rebaseWhen": "conflicted",
+	"minimumReleaseAge": "3 days",
 	"packageRules": [
 		{
 			"matchUpdateTypes": ["minor", "patch", "pin", "digest"],
