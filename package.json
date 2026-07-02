@@ -55,7 +55,10 @@
 	"dependencies": {
 		"@vercel/analytics": "2.0.1",
 		"fuse.js": "7.4.2",
-		"sharp": "^0.34.0"
+		"sharp": "^0.35.0"
+	},
+	"resolutions": {
+		"sharp": "^0.35.0"
 	},
 	"packageManager": "yarn@1.22.22"
 }
