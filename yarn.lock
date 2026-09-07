@@ -798,11 +798,6 @@
   resolved "https://registry.yarnpkg.com/@types/tmp/-/tmp-0.2.6.tgz#d785ee90c52d7cc020e249c948c36f7b32d1e217"
   integrity sha512-chhaNf2oKHlRkDGt+tiKE2Z5aJ6qalm7Z9rlLdBwmOiAAf09YQvvoLXjWK4HWPF1xU/fqvMgfNfpVoBscA/tKA==
 
-"@types/trusted-types@^2.0.7":
-  version "2.0.7"
-  resolved "https://registry.yarnpkg.com/@types/trusted-types/-/trusted-types-2.0.7.tgz#baccb07a970b91707df3a3e8ba6896c57ead2d11"
-  integrity sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==
-
 "@typescript-eslint/eslint-plugin@8.68.0":
   version "8.68.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-8.68.0.tgz#a8fbdb1cf49aafaf16071b646daad890151bd149"
@@ -3080,16 +3075,15 @@ svelte-parse-markup@^0.1.5:
   resolved "https://registry.yarnpkg.com/svelte-parse-markup/-/svelte-parse-markup-0.1.5.tgz#23cc33a3ec7dc403bb359baa05496a4e0644d6e2"
   integrity sha512-T6mqZrySltPCDwfKXWQ6zehipVLk4GWfH1zCMGgRtLlOIFPuw58ZxVYxVvotMJgJaurKi1i14viB2GIRKXeJTQ==
 
-svelte@5.56.10:
-  version "5.56.10"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.56.10.tgz#33a8ed98c67f7419603703197884ac0b3ad46836"
-  integrity sha512-Lcxbj8I/KAbpY+VjtY4ENQBV0dDCipfGAhqb51XQZ67CIQqXgsv/8dPkbILaj4Fb6/b6JAEM/PIVbILXgDQy2g==
+svelte@5.57.0:
+  version "5.57.0"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.57.0.tgz#9fb7d08311fe8b96a36588ba48575f847bc913fe"
+  integrity sha512-NdbDn7fl4be1ViUG0oq/lvG6OZy3oENolV2ONjiqqsfVoeAfzaQAKUcEX3MrQod/Bebv1PgwET9rfXhgn9s4Kg==
   dependencies:
     "@jridgewell/remapping" "^2.3.4"
     "@jridgewell/sourcemap-codec" "^1.5.0"
     "@sveltejs/acorn-typescript" "^1.0.10"
     "@types/estree" "^1.0.5"
-    "@types/trusted-types" "^2.0.7"
     acorn "^8.12.1"
     aria-query "5.3.1"
     axobject-query "^4.1.0"
