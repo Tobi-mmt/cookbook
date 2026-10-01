@@ -15,3 +15,8 @@ cypress/videos
 # vercel
 .vercel_build_output
 .vercel
+
+# local database and blob storage
+.data
+.env.local
+.env.*.local
