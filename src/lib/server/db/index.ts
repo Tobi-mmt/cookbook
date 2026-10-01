@@ -7,8 +7,8 @@ let database: Database | undefined;
 /** Lazily creates the shared connection pool, so that builds work without a database */
 export const getDb = (): Database => {
 	if (!database) {
-		if (!env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
-		const { db, pool } = createDb(env.DATABASE_URL);
+		if (!env.POSTGRES_URL) throw new Error('POSTGRES_URL is not set');
+		const { db, pool } = createDb(env.POSTGRES_URL);
 		// lets Vercel Fluid compute close idle connections before a function gets suspended
 		attachDatabasePool(pool);
 		database = db;

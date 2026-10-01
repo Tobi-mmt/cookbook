@@ -20,7 +20,7 @@ To copy the production recipes into the local database:
 
 ```bash
 vercel env pull --environment=production .env.production.local
-SOURCE_DATABASE_URL=<DATABASE_URL from that file> yarn seed:from-prod
+SOURCE_POSTGRES_URL=<POSTGRES_URL from that file> yarn seed:from-prod
 ```
 
 ## Database changes
@@ -35,7 +35,7 @@ The public pages use Vercel ISR: they are rendered once and then served from the
 
 | Name                    | Description                                                     |
 | ----------------------- | --------------------------------------------------------------- |
-| `DATABASE_URL`          | Postgres connection string (set by the Neon integration)        |
+| `POSTGRES_URL`          | Postgres connection string (set by the Neon integration)        |
 | `BLOB_READ_WRITE_TOKEN` | Vercel Blob token (set by the Blob integration), empty locally  |
 | `ADMIN_PASSWORD_HASH`   | Created with `yarn hash-password <password>`                    |
 | `SESSION_SECRET`        | Random string that signs the admin session cookie               |
