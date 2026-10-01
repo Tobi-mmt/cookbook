@@ -23,11 +23,30 @@ export interface Recipe {
 		nutritionType: NutritionType;
 	};
 	title: string;
-	image: string;
+	image: RecipeImage | null;
 	description?: string;
-	placeholderImage: string;
 	steps: (Step | Section)[];
 	ingredients: (Ingredient | Section)[];
+}
+
+export type ImageFormat = 'avif' | 'webp';
+
+export type ImageVariant = { width: number; url: string };
+
+export interface RecipeImage {
+	width: number;
+	height: number;
+	/** tiny base64 data URL used as blurred placeholder */
+	placeholder: string;
+	variants: Record<ImageFormat, ImageVariant[]>;
+}
+
+/** Lightweight recipe data used by the menu and the search */
+export interface RecipeIndexEntry {
+	id: string;
+	title: string;
+	meta: Recipe['meta'];
+	ingredients: { name: string }[];
 }
 
 export interface Step {
