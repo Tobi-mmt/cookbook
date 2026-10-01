@@ -2,12 +2,15 @@
 	import TopBar from '$components/TopBar.svelte';
 	import { dev } from '$app/environment';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
+	import { page } from '$app/stores';
 
 	injectAnalytics({ mode: dev ? 'development' : 'production' });
 </script>
 
 <div>
-	<TopBar />
+	{#if !$page.url.pathname.startsWith('/admin')}
+		<TopBar />
+	{/if}
 	<main>
 		<slot />
 	</main>
