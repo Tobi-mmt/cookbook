@@ -23,8 +23,8 @@ type LegacyRecipe = Omit<Recipe, 'image'> & { image: string; placeholderImage: s
 
 const isSection = (value: object): value is Section => 'section' in value;
 
-if (!process.env.DATABASE_URL) {
-	console.error('DATABASE_URL is not set');
+if (!process.env.POSTGRES_URL) {
+	console.error('POSTGRES_URL is not set');
 	process.exit(1);
 }
 
@@ -142,10 +142,10 @@ const comparable = (recipe: Omit<Recipe, 'image'>) =>
 		)
 	);
 
-const { db, pool } = createDb(process.env.DATABASE_URL);
+const { db, pool } = createDb(process.env.POSTGRES_URL);
 const storage = createStorage(process.env.BLOB_READ_WRITE_TOKEN);
 console.log(
-	`Storage: ${process.env.BLOB_READ_WRITE_TOKEN ? 'Vercel Blob' : 'local (.data/blob)'}, database: ${new URL(process.env.DATABASE_URL).host}`
+	`Storage: ${process.env.BLOB_READ_WRITE_TOKEN ? 'Vercel Blob' : 'local (.data/blob)'}, database: ${new URL(process.env.POSTGRES_URL).host}`
 );
 
 const legacyRecipes = await loadLegacyRecipes();

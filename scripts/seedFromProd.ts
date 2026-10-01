@@ -3,7 +3,7 @@
  * including the images, which are stored with the local storage driver.
  *
  *   vercel env pull --environment=production .env.production.local
- *   SOURCE_DATABASE_URL=<DATABASE_URL from that file> yarn seed:from-prod
+ *   SOURCE_POSTGRES_URL=<POSTGRES_URL from that file> yarn seed:from-prod
  *
  * The source database is only read.
  */
@@ -12,18 +12,18 @@ import { processAndStoreImage } from '../src/lib/server/images';
 import { getRecipeInput, listRecipeIndex, saveRecipe } from '../src/lib/server/recipes';
 import { createLocalStorage } from '../src/lib/server/storage';
 
-const { SOURCE_DATABASE_URL, DATABASE_URL } = process.env;
-if (!SOURCE_DATABASE_URL || !DATABASE_URL) {
-	console.error('SOURCE_DATABASE_URL and DATABASE_URL must be set');
+const { SOURCE_POSTGRES_URL, POSTGRES_URL } = process.env;
+if (!SOURCE_POSTGRES_URL || !POSTGRES_URL) {
+	console.error('SOURCE_POSTGRES_URL and POSTGRES_URL must be set');
 	process.exit(1);
 }
-if (SOURCE_DATABASE_URL === DATABASE_URL) {
-	console.error('SOURCE_DATABASE_URL and DATABASE_URL must differ');
+if (SOURCE_POSTGRES_URL === POSTGRES_URL) {
+	console.error('SOURCE_POSTGRES_URL and POSTGRES_URL must differ');
 	process.exit(1);
 }
 
-const source = createDb(SOURCE_DATABASE_URL);
-const target = createDb(DATABASE_URL);
+const source = createDb(SOURCE_POSTGRES_URL);
+const target = createDb(POSTGRES_URL);
 const storage = createLocalStorage();
 
 for (const { id, title } of await listRecipeIndex(source.db)) {
