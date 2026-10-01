@@ -5,6 +5,7 @@ export function load() {
 	const recipe: RecipeInput = {
 		title: '',
 		description: null,
+		sourceUrl: null,
 		portion: 2,
 		duration: 30,
 		category: 'Herzhaft',

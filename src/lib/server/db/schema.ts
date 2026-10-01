@@ -25,6 +25,7 @@ export const recipes = pgTable('recipes', {
 	category: categoryEnum('category').notNull(),
 	nutritionType: nutritionTypeEnum('nutrition_type').notNull(),
 	image: jsonb('image').$type<RecipeImage>(),
+	sourceUrl: text('source_url'),
 	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
 });

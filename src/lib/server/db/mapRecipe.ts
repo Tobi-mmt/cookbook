@@ -64,6 +64,7 @@ export const mapRecipeInput = ({
 }: RecipeRows): RecipeInput => ({
 	title: recipe.title,
 	description: recipe.description,
+	sourceUrl: recipe.sourceUrl,
 	portion: recipe.portion,
 	duration: recipe.duration,
 	category: recipe.category,

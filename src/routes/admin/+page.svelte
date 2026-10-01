@@ -22,7 +22,10 @@
 
 <div class="toolbar">
 	<h1>Rezepte ({data.recipes.length})</h1>
-	<a href={resolve('/admin/recipes/new', {})} class="button button--primary">Neues Rezept</a>
+	<div class="toolbar-actions">
+		<a href={resolve('/admin/recipes/import', {})} class="button">Importieren</a>
+		<a href={resolve('/admin/recipes/new', {})} class="button button--primary">Neues Rezept</a>
+	</div>
 </div>
 
 {#if saved}
@@ -97,6 +100,10 @@
 		justify-content: space-between;
 		align-items: center;
 		gap: 1em;
+	}
+	.toolbar-actions {
+		display: flex;
+		gap: 0.5em;
 	}
 	h1 {
 		font-weight: 200;

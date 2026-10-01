@@ -75,6 +75,10 @@
 			Beschreibung <span class="hint">(optional)</span>
 			<textarea rows="3" bind:value={recipe.description}></textarea>
 		</label>
+		<label class="field">
+			Quelle <span class="hint">(optional)</span>
+			<input type="url" bind:value={recipe.sourceUrl} />
+		</label>
 		<div class="grid">
 			<label class="field">
 				Portionen

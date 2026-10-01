@@ -108,6 +108,7 @@ export const saveRecipe = async (
 		const values = {
 			title: input.title,
 			description: input.description || null,
+			sourceUrl: input.sourceUrl || null,
 			portion: input.portion,
 			duration: input.duration,
 			category: input.category,

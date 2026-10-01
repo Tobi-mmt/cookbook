@@ -1,9 +1,13 @@
 import { fail, redirect, type RequestEvent } from '@sveltejs/kit';
+import { z } from 'zod';
 import type { RecipeImage } from '../../types';
 import { recipeInputSchema } from '../recipeInput';
 import { getDb, getStorage } from './context';
 import { imageUrls, processAndStoreImage } from './images';
 import { createRecipeId, deleteRecipe, getRecipeMeta, saveRecipe } from './recipes';
+import { extractRecipe } from './recipeImport/extract';
+import { fetchImage, fetchPage, ImportError } from './recipeImport/fetchResource';
+import { toRecipeInput } from './recipeImport/toRecipeInput';
 import { LIST_PATHS, recipePaths, revalidate } from './revalidate';
 
 /** Vercel functions accept at most 4.5 MB, the editor scales images down before the upload */
@@ -71,4 +75,45 @@ export const deleteRecipeAction = async ({ request, url }: RequestEvent) => {
 	await getStorage().deleteFiles(imageUrls(previous.image)).catch(console.error);
 
 	done(id, await revalidate(url.origin, [...LIST_PATHS, ...recipePaths(previous)]), 'deleted');
+};
+
+const importUrlSchema = z.url({ protocol: /^https?$/ });
+
+/** Stores the recipe without revalidating, it goes online when it is saved in the editor */
+export const importRecipeAction = async ({ request }: RequestEvent) => {
+	const parsedUrl = importUrlSchema.safeParse(
+		String((await request.formData()).get('url') ?? '').trim()
+	);
+	if (!parsedUrl.success) return fail(400, { error: 'Bitte eine gültige URL eingeben.' });
+	const url = parsedUrl.data;
+
+	let html: string;
+	try {
+		html = await fetchPage(url);
+	} catch (error) {
+		if (error instanceof ImportError) return fail(400, { url, error: error.message });
+		throw error;
+	}
+
+	const scraped = extractRecipe(html);
+	if (!scraped) return fail(422, { url, error: 'Auf dieser Seite wurde kein Rezept gefunden.' });
+
+	const parsed = recipeInputSchema.safeParse(toRecipeInput(scraped, url));
+	if (!parsed.success) {
+		return fail(422, { url, error: parsed.error.issues.map((issue) => issue.message).join(', ') });
+	}
+
+	const id = createRecipeId();
+	let image: RecipeImage | undefined;
+	if (scraped.image) {
+		try {
+			const body = await fetchImage(new URL(scraped.image, url).href);
+			image = await processAndStoreImage(body, id, getStorage());
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
+	await saveRecipe(getDb(), id, parsed.data, image);
+	redirect(303, `/admin/recipes/${id}?imported=1`);
 };
