@@ -3,7 +3,7 @@
 
 	import { fade } from 'svelte/transition';
 	import Fuse from 'fuse.js';
-	import { recipes } from '$lib/recipes';
+	import { recipeIndex } from '$lib/recipeIndex';
 
 	export let searchOpen: boolean;
 	let searchValue = '';
@@ -24,7 +24,7 @@
 			}
 		]
 	};
-	const fuse = new Fuse(recipes, fuseOptions);
+	$: fuse = new Fuse($recipeIndex, fuseOptions);
 
 	const handleInputchange = (event: KeyboardEvent) => {
 		const { value } = event.target as HTMLInputElement;

@@ -4,6 +4,7 @@
 	import { categoryColors } from '$lib/colors';
 	import { getIconName } from '$lib/iconName';
 	import Icon from './Icon.svelte';
+	import RecipeImage from './RecipeImage.svelte';
 
 	import RecipeStep from './RecipeStep.svelte';
 	import WakeLock from './WakeLock.svelte';
@@ -42,19 +43,22 @@
 	<div itemtype="https://schema.org/Recipe">
 		<div class="header">
 			<div class="imageWrapper">
-				<div
-					class="imagePlaceholder"
-					style={`background-image: url(${recipe.placeholderImage});`}
-				></div>
-				<enhanced:img
-					itemprop="image"
-					class="image"
-					loading="eager"
-					src={recipe.image}
-					sizes="100vw"
-					alt={recipe.title}
-					fetchpriority="high"
-				/>
+				{#if recipe.image}
+					<div
+						class="imagePlaceholder"
+						style={`background-image: url(${recipe.image.placeholder});`}
+					></div>
+					<RecipeImage
+						class="image"
+						image={recipe.image}
+						loading="eager"
+						sizes="100vw"
+						alt={recipe.title}
+						fetchpriority="high"
+					/>
+				{:else}
+					<div class="imagePlaceholder"></div>
+				{/if}
 			</div>
 			<div class="infos">
 				<p class="category">{recipe.meta.category}</p>
@@ -193,7 +197,7 @@
 		height: 40vw;
 		max-height: 550px;
 	}
-	.image {
+	.imageWrapper :global(.image) {
 		position: absolute;
 		height: 100%;
 		width: 100%;

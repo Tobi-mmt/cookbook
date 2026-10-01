@@ -4,35 +4,20 @@
 	import { resolve } from '$app/paths';
 	import { page } from '$app/stores';
 
-	export let data: { recipe: Recipe };
+	export let data: { recipe: Recipe | null };
 
 	$: imageData = (() => {
-		if (!data.recipe?.image) return null;
+		const image = data.recipe?.image;
+		if (!image) return null;
 
-		const image = data.recipe.image as { img?: { src: string; w?: number; h?: number } };
-
-		// Check if image is an object with img property
-		if (!image || typeof image !== 'object' || !image.img?.src) {
-			return null;
-		}
-
-		const img = image.img;
-		let imagePath = img.src;
-
-		// Add file extension if missing (enhanced images don't have extensions in the URL)
-		if (!imagePath.match(/\.(webp|png|jpg|jpeg|gif|svg)$/i)) {
-			imagePath = `${imagePath}.png`;
-		}
-
-		// Construct absolute URL
-		const imageUrl = imagePath.startsWith('http')
-			? imagePath
-			: `${$page.url.origin}${imagePath.startsWith('/') ? imagePath : '/' + imagePath}`;
+		// social networks recommend ~1200px, the 1600px variant is the closest one
+		const variants = image.variants.webp;
+		const variant = variants.find(({ width }) => width >= 1200) ?? variants[variants.length - 1];
 
 		return {
-			url: imageUrl,
-			width: img.w || null,
-			height: img.h || null
+			url: new URL(variant.url, $page.url.origin).href,
+			width: variant.width,
+			height: Math.round((image.height / image.width) * variant.width)
 		};
 	})();
 </script>

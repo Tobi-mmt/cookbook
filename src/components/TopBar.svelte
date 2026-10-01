@@ -4,6 +4,10 @@
 	import Menu from '$components/Menue.svelte';
 	import Search from '$components/Search.svelte';
 	import { resolve } from '$app/paths';
+	import { onMount } from 'svelte';
+	import { loadRecipeIndex } from '$lib/recipeIndex';
+
+	onMount(loadRecipeIndex);
 
 	let menuOpen = false;
 	let isSearchOpen = false;
