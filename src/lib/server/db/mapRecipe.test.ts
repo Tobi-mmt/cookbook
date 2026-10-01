@@ -11,6 +11,7 @@ const rows: RecipeRows = {
 		category: 'Herzhaft',
 		nutritionType: 'Fleisch',
 		image: null,
+		sourceUrl: null,
 		createdAt: new Date(),
 		updatedAt: new Date()
 	},

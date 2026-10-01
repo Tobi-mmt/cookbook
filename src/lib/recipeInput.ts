@@ -32,6 +32,13 @@ export const recipeInputSchema = z
 	.object({
 		title: trimmed.min(1, 'Titel fehlt'),
 		description: trimmed.nullable().optional(),
+		sourceUrl: z.preprocess(
+			(value) => (typeof value === 'string' ? value.trim() || null : value),
+			z
+				.url({ protocol: /^https?$/, error: 'Ungültige Quell-URL' })
+				.nullable()
+				.optional()
+		),
 		portion: z.number().int().positive(),
 		duration: z.number().int().positive(),
 		category: z.enum(CATEGORIES),
