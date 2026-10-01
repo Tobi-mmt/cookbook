@@ -8,3 +8,9 @@ it('Navigate to recipe detail page', function () {
 	cy.contains('Sauerkirschen');
 	cy.contains('Limonade');
 });
+
+it('Protects the admin area', function () {
+	cy.visit('/admin');
+	cy.location('pathname').should('eq', '/admin/login');
+	cy.get('input[type=password]').should('exist');
+});
