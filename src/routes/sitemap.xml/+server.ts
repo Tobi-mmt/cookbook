@@ -1,10 +1,15 @@
 import type { RequestHandler } from '@sveltejs/kit';
-import { recipes } from '$lib/recipes';
+import { getDb } from '$lib/server/context';
+import { isrConfig } from '$lib/server/isr';
+import { listRecipeIndex } from '$lib/server/recipes';
 import { slugerize } from '$lib/slugerize';
+import type { RecipeIndexEntry } from '$types';
 
 const BASE_URL = 'https://kochbuch.tobis.app';
 
-function generateSiteMap() {
+export const config = isrConfig;
+
+function generateSiteMap(recipes: RecipeIndexEntry[]) {
 	return `<?xml version="1.0" encoding="UTF-8"?>
    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
      <url>
@@ -24,7 +29,7 @@ function generateSiteMap() {
 }
 
 export const GET: RequestHandler = async () => {
-	return new Response(generateSiteMap(), {
+	return new Response(generateSiteMap(await listRecipeIndex(getDb())), {
 		status: 200,
 		headers: {
 			'access-control-allow-origin': '*',

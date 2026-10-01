@@ -1,17 +1,18 @@
-import { recipes } from './recipes';
-import type { Recipe, Category } from '../types';
+import type { Category } from '../types';
 
-type CategorizedRecipe = {
-	[key in Category]: Recipe[];
+type CategorizedRecipes<T> = {
+	[key in Category]: T[];
 };
-export const categorizedRecipes = recipes.reduce<CategorizedRecipe>(
-	(acc, recipe) => {
-		if (acc[recipe.meta.category]) {
-			acc[recipe.meta.category as Category].push(recipe);
-		} else {
-			acc[recipe.meta.category] = [recipe];
-		}
-		return acc;
-	},
-	{ Salat: [], Herzhaft: [], Süßspeise: [], Getränke: [] }
-);
+
+export const categorize = <T extends { meta: { category: Category } }>(recipes: T[]) =>
+	recipes.reduce<CategorizedRecipes<T>>(
+		(acc, recipe) => {
+			if (acc[recipe.meta.category]) {
+				acc[recipe.meta.category].push(recipe);
+			} else {
+				acc[recipe.meta.category] = [recipe];
+			}
+			return acc;
+		},
+		{ Salat: [], Herzhaft: [], Süßspeise: [], Getränke: [] }
+	);

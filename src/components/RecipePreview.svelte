@@ -6,6 +6,7 @@
 	import { getIconName } from '$lib/iconName';
 	import Icon from '$components/Icon.svelte';
 	import { resolve } from '$app/paths';
+	import RecipeImage from '$components/RecipeImage.svelte';
 
 	export let recipe: Recipe;
 	export let priority: boolean = false;
@@ -28,18 +29,22 @@
 		<div>
 			<div class="header">
 				<div class="imageWrapper">
-					<div
-						class="imagePlaceholder"
-						style={`background-image: url(${recipe.placeholderImage});`}
-					></div>
-					<enhanced:img
-						class="image"
-						fetchpriority={priority ? 'high' : 'auto'}
-						loading={priority ? 'eager' : 'lazy'}
-						src={recipe.image}
-						sizes="(min-width: 1320px) 369px, (min-width: 900px) 29.25vw, (min-width: 740px) calc(54.29vw - 90px), (min-width: 700px) calc(660vw - 4450px), (min-width: 540px) 32.86vw, (min-width: 360px) 50vw, 100vw"
-						alt={recipe.title}
-					/>
+					{#if recipe.image}
+						<div
+							class="imagePlaceholder"
+							style={`background-image: url(${recipe.image.placeholder});`}
+						></div>
+						<RecipeImage
+							class="image"
+							fetchpriority={priority ? 'high' : 'auto'}
+							loading={priority ? 'eager' : 'lazy'}
+							image={recipe.image}
+							sizes="(min-width: 1320px) 369px, (min-width: 900px) 29.25vw, (min-width: 740px) calc(54.29vw - 90px), (min-width: 700px) calc(660vw - 4450px), (min-width: 540px) 32.86vw, (min-width: 360px) 50vw, 100vw"
+							alt={recipe.title}
+						/>
+					{:else}
+						<div class="imagePlaceholder"></div>
+					{/if}
 				</div>
 				<div class="infos">
 					<p class="category">{recipe.meta.category}</p>
@@ -81,7 +86,7 @@
 		height: 40vw;
 		max-height: 550px;
 	}
-	.image {
+	.imageWrapper :global(.image) {
 		position: absolute;
 		height: 100%;
 		width: 100%;

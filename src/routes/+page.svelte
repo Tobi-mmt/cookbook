@@ -1,7 +1,9 @@
 <script lang="ts">
-	import { recipes } from '$lib/recipes';
+	import type { Recipe } from '$types';
 	import RecipePreview from '$components/RecipePreview.svelte';
 	import { page } from '$app/stores';
+
+	export let data: { recipes: Recipe[] };
 </script>
 
 <svelte:head>
@@ -22,7 +24,7 @@
 </svelte:head>
 
 <div class="recipe-grid">
-	{#each recipes as recipe, idx (recipe.id)}
+	{#each data.recipes as recipe, idx (recipe.id)}
 		<RecipePreview {recipe} priority={idx <= 5} />
 	{/each}
 </div>
