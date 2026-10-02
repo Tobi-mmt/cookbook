@@ -11,7 +11,8 @@ const config = {
 		// adapter-auto only supports some environments, see https://kit.svelte.dev/docs/adapter-auto for a list.
 		// If your environment is not supported, or you settled on a specific environment, switch out the adapter.
 		// See https://kit.svelte.dev/docs/adapters for more information about adapters.
-		adapter: adapter(),
+		// close to the database, the default region is in the US
+		adapter: adapter({ regions: ['fra1'] }),
 		csp: {
 			mode: 'auto',
 			directives: {
