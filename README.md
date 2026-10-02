@@ -8,7 +8,6 @@ Recipes are stored in Postgres (Neon) and the images in Vercel Blob. They are ma
 cp .env.example .env        # local password is "admin"
 podman compose up -d        # starts Postgres
 yarn db:migrate             # creates the tables
-yarn migrate:legacy         # imports the former recipe files (only while src/lib/recipes exists)
 yarn dev
 ```
 
