@@ -1,7 +1,7 @@
 # Local database for development: podman compose up -d
 services:
   postgres:
-    image: postgres:17
+    image: postgres:18
     environment:
       POSTGRES_USER: cookbook
       POSTGRES_PASSWORD: cookbook
