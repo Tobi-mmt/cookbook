@@ -97,8 +97,7 @@
 					placeholder="Was ist zu tun?"
 					aria-label="Beschreibung"
 					bind:value={step.text}
-					required
-				></textarea>
+					required></textarea>
 
 				{#if ingredients.some((i) => i.kind === 'ingredient')}
 					<div class="chips" role="group" aria-label="Zutaten für diesen Schritt">
