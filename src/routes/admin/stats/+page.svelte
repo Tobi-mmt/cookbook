@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import type { BreakdownStats } from '$lib/server/tracking';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
@@ -14,6 +15,8 @@
 		month: '2-digit',
 		timeZone: 'UTC'
 	});
+	const percentFormat = new Intl.NumberFormat('de-DE', { style: 'percent' });
+
 	const formatDay = (day: string) => dateFormat.format(new Date(`${day}T00:00:00Z`));
 </script>
 
@@ -96,6 +99,42 @@
 		</tbody>
 	</table>
 {/if}
+
+{#snippet breakdown(title: string, rows: BreakdownStats[])}
+	<section>
+		<h2>{title}</h2>
+		<table>
+			<thead>
+				<tr>
+					<th>{title}</th>
+					<th class="number">Besucher</th>
+					<th class="number">Aufrufe</th>
+					<th class="number">Anteil</th>
+				</tr>
+			</thead>
+			<tbody>
+				{#each rows as row (row.value)}
+					{@const share = pageViews ? row.pageViews / pageViews : 0}
+					<tr>
+						<td>{row.value ?? 'Unbekannt'}</td>
+						<td class="number">{row.visitors}</td>
+						<td class="number">{row.pageViews}</td>
+						<td class="number share" style="--share: {share * 100}%">
+							{percentFormat.format(share)}
+						</td>
+					</tr>
+				{:else}
+					<tr><td colspan="4">Keine Daten</td></tr>
+				{/each}
+			</tbody>
+		</table>
+	</section>
+{/snippet}
+
+<div class="systems">
+	{@render breakdown('Browser', data.browsers)}
+	{@render breakdown('Betriebssystem', data.operatingSystems)}
+</div>
 
 <details>
 	<summary>Alle Tage</summary>
@@ -206,6 +245,14 @@
 		font-size: 0.8em;
 		color: #888;
 		word-break: break-all;
+	}
+	.systems {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(20em, 1fr));
+		gap: 0 2em;
+	}
+	.share {
+		background: linear-gradient(to left, #e7e5ef var(--share), transparent var(--share));
 	}
 	details {
 		margin-top: 2em;

@@ -32,7 +32,7 @@ The public pages use Vercel ISR: they are rendered once and then served from the
 
 ## Tracking
 
-Visitors are counted without cookies, like [Plausible](https://plausible.io/data-policy) does it (`src/lib/server/tracking.ts`). The layout sends a beacon to `/api/event` on every navigation, because the cached ISR pages never reach the server. The server stores a hash of a random daily salt, the host, the IP and the user agent, but never the IP itself. The salt is deleted the next day, then the hashes can no longer be linked to anybody, so visitors are only unique within a day. Bots and the logged-in admin are not counted. The numbers are shown at `/admin/stats`.
+Visitors are counted without cookies, like [Plausible](https://plausible.io/data-policy) does it (`src/lib/server/tracking.ts`). The layout sends a beacon to `/api/event` on every navigation, because the cached ISR pages never reach the server. The server stores a hash of a random daily salt, the host, the IP and the user agent, but never the IP itself. The salt is deleted the next day, then the hashes can no longer be linked to anybody, so visitors are only unique within a day. Besides the page, only the browser and OS family without versions are stored. Bots and the logged-in admin are not counted. The numbers are shown at `/admin/stats`.
 
 ## Environment variables
 
