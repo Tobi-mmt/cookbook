@@ -30,6 +30,10 @@ Change `src/lib/server/db/schema.ts`, then run `yarn db:generate` to create a mi
 
 The public pages use Vercel ISR: they are rendered once and then served from the cache. After a recipe is saved or deleted, the admin revalidates the affected pages (`src/lib/server/revalidate.ts`), so changes are live within seconds without a new deployment. If revalidation fails, the pages expire after 24 hours at the latest.
 
+## Tracking
+
+Visitors are counted without cookies, like [Plausible](https://plausible.io/data-policy) does it (`src/lib/server/tracking.ts`). The layout sends a beacon to `/api/event` on every navigation, because the cached ISR pages never reach the server. The server stores a hash of a random daily salt, the host, the IP and the user agent, but never the IP itself. The salt is deleted the next day, then the hashes can no longer be linked to anybody, so visitors are only unique within a day. Bots and the logged-in admin are not counted. The numbers are shown at `/admin/stats`.
+
 ## Environment variables
 
 | Name                    | Description                                                     |
