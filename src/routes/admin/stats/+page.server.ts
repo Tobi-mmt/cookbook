@@ -1,6 +1,6 @@
 import { getDb } from '$lib/server/context';
 import { listRecipeIndex } from '$lib/server/recipes';
-import { getDailyStats, getPageStats, trackingDay } from '$lib/server/tracking';
+import { getBreakdown, getDailyStats, trackingDay } from '$lib/server/tracking';
 
 const DEFAULT_DAYS = 30;
 const RANGES = [7, 30, 90];
@@ -27,9 +27,11 @@ export async function load({ url }) {
 	if (from > to) [from, to] = [to, from];
 
 	const db = getDb();
-	const [dailyStats, pageStats, recipes] = await Promise.all([
+	const [dailyStats, pageStats, browsers, operatingSystems, recipes] = await Promise.all([
 		getDailyStats(db, from, to),
-		getPageStats(db, from, to),
+		getBreakdown(db, 'path', from, to),
+		getBreakdown(db, 'browser', from, to),
+		getBreakdown(db, 'os', from, to),
 		listRecipeIndex(db)
 	]);
 
@@ -43,9 +45,15 @@ export async function load({ url }) {
 		days: daysBetween(from, to).map(
 			(day) => statsByDay.get(day) ?? { day, visitors: 0, pageViews: 0 }
 		),
-		pages: pageStats.map((stats) => ({
-			...stats,
-			title: stats.path === '/' ? 'Startseite' : titles.get(stats.path.split('/')[2])
-		}))
+		pages: pageStats.map(({ value, ...stats }) => {
+			const path = value ?? '/';
+			return {
+				...stats,
+				path,
+				title: path === '/' ? 'Startseite' : titles.get(path.split('/')[2])
+			};
+		}),
+		browsers,
+		operatingSystems
 	};
 }

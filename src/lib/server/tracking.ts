@@ -25,6 +25,33 @@ export const visitorHash = (salt: string, host: string, ip: string, userAgent: s
 
 export const isBot = (userAgent: string | null) => !userAgent || isbot(userAgent);
 
+const BROWSERS: [string, RegExp][] = [
+	['Edge', /Edg(e|A|iOS)?\//],
+	['Opera', /OPR\/|Opera/],
+	['Samsung Internet', /SamsungBrowser/],
+	['Firefox', /Firefox|FxiOS/],
+	['Chrome', /Chrome|CriOS|Chromium/],
+	['Safari', /Safari/]
+];
+
+const OPERATING_SYSTEMS: [string, RegExp][] = [
+	['Windows', /Windows/],
+	['iOS', /iPhone|iPad|iPod/],
+	['Android', /Android/],
+	['ChromeOS', /CrOS/],
+	['macOS', /Macintosh|Mac OS X/],
+	['Linux', /Linux/]
+];
+
+const matchFirst = (patterns: [string, RegExp][], userAgent: string) =>
+	patterns.find(([, pattern]) => pattern.test(userAgent))?.[0] ?? null;
+
+/** Only the families without versions, so that they hardly help to identify anybody */
+export const parseUserAgent = (userAgent: string) => ({
+	browser: matchFirst(BROWSERS, userAgent),
+	os: matchFirst(OPERATING_SYSTEMS, userAgent)
+});
+
 const MAX_PATH_LENGTH = 200;
 
 /** Returns the pathname of a public page or null, so that nobody can fill the table with junk */
@@ -69,13 +96,16 @@ export const recordPageView = async (
 ) => {
 	const day = trackingDay(now);
 	const salt = await getDailySalt(db, day);
-	await db
-		.insert(pageViews)
-		.values({ day, path, visitorHash: visitorHash(salt, host, ip, userAgent) });
+	await db.insert(pageViews).values({
+		day,
+		path,
+		visitorHash: visitorHash(salt, host, ip, userAgent),
+		...parseUserAgent(userAgent)
+	});
 };
 
 export type DailyStats = { day: string; visitors: number; pageViews: number };
-export type PageStats = { path: string; visitors: number; pageViews: number };
+export type BreakdownStats = { value: string | null; visitors: number; pageViews: number };
 
 const inRange = (from: string, to: string) => and(gte(pageViews.day, from), lte(pageViews.day, to));
 
@@ -92,31 +122,32 @@ export const getDailyStats = (db: Database, from: string, to: string): Promise<D
 		.groupBy(pageViews.day)
 		.orderBy(pageViews.day);
 
-/** Visitors of a page are unique per day, like the visitors of the whole site */
-export const getPageStats = async (
+/** Visitors per page, browser or OS are unique per day, like the visitors of the whole site */
+export const getBreakdown = async (
 	db: Database,
+	column: 'path' | 'browser' | 'os',
 	from: string,
 	to: string
-): Promise<PageStats[]> => {
+): Promise<BreakdownStats[]> => {
 	const perDay = db
 		.select({
-			path: pageViews.path,
+			value: sql<string | null>`${pageViews[column]}`.as('value'),
 			visitors: countDistinct(pageViews.visitorHash).as('visitors'),
 			pageViews: count().as('page_views')
 		})
 		.from(pageViews)
 		.where(inRange(from, to))
-		.groupBy(pageViews.day, pageViews.path)
+		.groupBy(pageViews.day, pageViews[column])
 		.as('per_day');
 
 	const visitors = sql<number>`sum(${perDay.visitors})::int`;
 	return db
 		.select({
-			path: perDay.path,
+			value: perDay.value,
 			visitors,
 			pageViews: sql<number>`sum(${perDay.pageViews})::int`
 		})
 		.from(perDay)
-		.groupBy(perDay.path)
-		.orderBy(desc(visitors), perDay.path);
+		.groupBy(perDay.value)
+		.orderBy(desc(visitors), perDay.value);
 };

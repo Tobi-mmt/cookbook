@@ -85,6 +85,9 @@ export const pageViews = pgTable(
 		/** hash of the daily salt, host, IP and user agent, never the IP itself */
 		visitorHash: text('visitor_hash').notNull(),
 		path: text('path').notNull(),
+		/** only the browser and OS family without versions, null if unknown */
+		browser: text('browser'),
+		os: text('os'),
 		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
 	},
 	(table) => [index('page_views_day_path_idx').on(table.day, table.path)]
