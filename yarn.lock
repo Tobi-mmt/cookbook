@@ -1217,9 +1217,9 @@
   integrity sha512-MTQG6V9qQrt1tsDeF+2Uoo5aPjqbVPys1xvnIftXSJYG2SrwXRHnqEvVoYID7BTruDz4lCd2Z7rM1BdkUehk2g==
 
 "@vercel/blob@^2.8.0":
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/@vercel/blob/-/blob-2.8.0.tgz#64b68d35ed5eba236f7375157ba1396a07968168"
-  integrity sha512-Nu+HWKpkgovCh/ezlG7wCVwF7RErTzLzZMbGKFBdGBCbTKyK+s5VXPLl+0+TpNEQPH8AVaGzOpIsXUOtkqylCQ==
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/@vercel/blob/-/blob-2.8.1.tgz#fec01bdaf5cbb4d5622c1f0b37ef848d3aed4f7a"
+  integrity sha512-QFX17sMRoBnPuNyHsQsY5GsYRg9HoE8yGKKbfB/V/JK9QuyQp10R5qeNntT6EgUJ4cQ3R+sH26n5l/LacfzzEw==
   dependencies:
     "@vercel/oidc" "^3.6.1"
     async-retry "^1.3.3"
@@ -1227,14 +1227,6 @@
     is-node-process "^1.2.0"
     throttleit "^2.1.0"
     undici "^6.23.0"
-
-"@vercel/cli-config@0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@vercel/cli-config/-/cli-config-0.3.0.tgz#3657e4e6886c6e5da93796c129e0d7958dad724c"
-  integrity sha512-kQLt5Pm8wKd7/imzDY9/9u0tf8OuRkAuXI+s7j057FSUrXapAmumJSKwDqnR4ZZqdWoUcNLlFAgVIAdiwcGTcw==
-  dependencies:
-    xdg-app-paths "5"
-    zod "4.1.11"
 
 "@vercel/cli-config@0.3.1":
   version "0.3.1"
@@ -1286,11 +1278,11 @@
     jose "^5.9.6"
 
 "@vercel/oidc@^3.6.1":
-  version "3.8.9"
-  resolved "https://registry.yarnpkg.com/@vercel/oidc/-/oidc-3.8.9.tgz#4f93c73be236bcffb9176d29437f65fae3da025d"
-  integrity sha512-TcbdH3YtGS2KU98T99dN4sbf+E4vbJZsJTRN97wKQ7QWQ0BR7U02QX3KN4+5GHxBtKTj1c5CnvTTitc2ZRad0A==
+  version "3.8.10"
+  resolved "https://registry.yarnpkg.com/@vercel/oidc/-/oidc-3.8.10.tgz#bc4c2489bb53ab52fed7194c4c6649ea4e2af400"
+  integrity sha512-sPw1kIfQEA6/2dB+zlAJHnhhNBRJ8t/t4HfFvKO+g0EPBA7NbCKyGovuhgAV6Mnl865ka7HqCEguIy596czdAw==
   dependencies:
-    "@vercel/cli-config" "0.3.0"
+    "@vercel/cli-config" "0.3.1"
     "@vercel/cli-exec" "1.0.1"
     jose "^5.9.6"
 
