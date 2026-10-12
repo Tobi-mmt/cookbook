@@ -4,6 +4,8 @@
 	import { page } from '$app/stores';
 
 	let { children }: { children: Snippet } = $props();
+
+	const isStats = $derived(/^\/admin\/stats(\/|$)/.test($page.url.pathname));
 </script>
 
 <svelte:head>
@@ -14,13 +16,22 @@
 	{#if !$page.url.pathname.startsWith('/admin/login')}
 		<header class="admin-header">
 			<a href={resolve('/admin', {})} class="admin-title">Kochbuch verwalten</a>
-			<nav>
-				<a href={resolve('/admin/stats', {})}>Statistik</a>
-				<a href={resolve('/', {})} target="_blank">Zur Webseite</a>
+			<nav aria-label="Verwaltung">
+				<a href={resolve('/admin', {})} class="nav-link" aria-current={isStats ? undefined : 'page'}
+					>Rezepte</a
+				>
+				<a
+					href={resolve('/admin/stats', {})}
+					class="nav-link"
+					aria-current={isStats ? 'page' : undefined}>Statistik</a
+				>
+			</nav>
+			<div class="header-actions">
+				<a href={resolve('/', {})} target="_blank" class="button">Zur Webseite ↗</a>
 				<form method="POST" action="/admin/logout">
 					<button type="submit" class="button">Abmelden</button>
 				</form>
-			</nav>
+			</div>
 		</header>
 	{/if}
 	{@render children()}
@@ -30,16 +41,19 @@
 	.admin {
 		max-width: 1100px;
 		margin: 0 auto;
-		padding: 1em 1.5em 4em;
+		padding: 0 1.5em 4em;
 	}
 	.admin-header {
+		position: sticky;
+		top: 0;
+		z-index: 10;
 		display: flex;
-		justify-content: space-between;
 		align-items: center;
 		flex-wrap: wrap;
-		gap: 1em;
+		gap: 0.5em 2em;
+		background: #fff;
 		border-bottom: 1px solid #ddd;
-		padding-bottom: 1em;
+		padding: 1em 0 0;
 		margin-bottom: 1.5em;
 	}
 	.admin-title {
@@ -47,11 +61,45 @@
 		font-weight: 200;
 		color: inherit;
 		text-decoration: none;
+		padding-bottom: 0.5em;
 	}
 	nav {
 		display: flex;
+		align-self: stretch;
+		gap: 1.5em;
+	}
+	.nav-link {
+		display: flex;
 		align-items: center;
-		gap: 1em;
+		padding-bottom: 0.5em;
+		border-bottom: 3px solid transparent;
+		margin-bottom: -1px;
+		color: #555;
+		text-decoration: none;
+	}
+	.nav-link:hover {
+		color: inherit;
+	}
+	.nav-link[aria-current='page'] {
+		color: inherit;
+		font-weight: 700;
+		border-bottom-color: #8882a8;
+	}
+	.header-actions {
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
+		margin-left: auto;
+		padding-bottom: 0.5em;
+	}
+	@media (max-width: 700px) {
+		.admin-header {
+			gap: 0.5em 1em;
+		}
+		nav {
+			order: 3;
+			width: 100%;
+		}
 	}
 	.admin :global(input),
 	.admin :global(textarea),
