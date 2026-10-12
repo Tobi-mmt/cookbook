@@ -15,6 +15,7 @@
 		<header class="admin-header">
 			<a href={resolve('/admin', {})} class="admin-title">Kochbuch verwalten</a>
 			<nav>
+				<a href={resolve('/admin/stats', {})}>Statistik</a>
 				<a href={resolve('/', {})} target="_blank">Zur Webseite</a>
 				<form method="POST" action="/admin/logout">
 					<button type="submit" class="button">Abmelden</button>
