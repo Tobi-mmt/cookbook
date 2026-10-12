@@ -15,6 +15,13 @@
 			"when": 1790863335681,
 			"tag": "0001_source_url",
 			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "7",
+			"when": 1791806897426,
+			"tag": "0002_tracking",
+			"breakpoints": true
 		}
 	]
 }
