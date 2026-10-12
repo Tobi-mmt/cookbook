@@ -160,8 +160,8 @@
 
 <p class="hint">
 	Besucher werden ohne Cookies und ohne gespeicherte IP-Adresse gezählt und sind nur innerhalb eines
-	Tages eindeutig. Wer an mehreren Tagen kommt, zählt im Zeitraum mehrfach. Eigene Besuche als
-	angemeldeter Admin und Bots werden nicht gezählt.
+	Tages eindeutig. Wer an mehreren Tagen kommt, zählt im Zeitraum mehrfach. Bots werden nicht
+	gezählt.
 </p>
 
 <style>
