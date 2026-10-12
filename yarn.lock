@@ -1211,11 +1211,6 @@
     "@typescript-eslint/types" "8.71.0"
     eslint-visitor-keys "^5.0.0"
 
-"@vercel/analytics@2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@vercel/analytics/-/analytics-2.0.1.tgz#d7d7bd37af7cfbeea95db5f132ae4889f4d26407"
-  integrity sha512-MTQG6V9qQrt1tsDeF+2Uoo5aPjqbVPys1xvnIftXSJYG2SrwXRHnqEvVoYID7BTruDz4lCd2Z7rM1BdkUehk2g==
-
 "@vercel/blob@^2.8.0":
   version "2.8.1"
   resolved "https://registry.yarnpkg.com/@vercel/blob/-/blob-2.8.1.tgz#fec01bdaf5cbb4d5622c1f0b37ef848d3aed4f7a"
@@ -2627,6 +2622,11 @@ is-unicode-supported@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/is-unicode-supported/-/is-unicode-supported-0.1.0.tgz#3f26c76a809593b52bfa2ecb5710ed2779b522a7"
   integrity sha512-knxG2q4UC3u8stRGyAVJCOdxFmv5DZiRcdlIaAQXAbSfJya+OhopNotLQrstBhququ4ZpuKbDc/8S6mgXgPFPw==
+
+isbot@^5.2.2:
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/isbot/-/isbot-5.2.2.tgz#4c6c4c9b1391a91e490077f9323418693140c416"
+  integrity sha512-iQcBXcd+Rv/pkubRyGh2utW2j1oPG5hZY6TUhVPpqK4G+o3IbxpJNx04hgksjc/N7GK5pEorUxDeg31cFgEk/w==
 
 isexe@^2.0.0:
   version "2.0.0"
