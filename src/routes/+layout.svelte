@@ -1,10 +1,13 @@
 <script>
 	import TopBar from '$components/TopBar.svelte';
-	import { dev } from '$app/environment';
-	import { injectAnalytics } from '@vercel/analytics/sveltekit';
+	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
 
-	injectAnalytics({ mode: dev ? 'development' : 'production' });
+	// cookieless page view tracking, see src/lib/server/tracking.ts
+	afterNavigate(({ to }) => {
+		if (!to || to.url.pathname.startsWith('/admin') || navigator.webdriver) return;
+		navigator.sendBeacon('/api/event', JSON.stringify({ path: to.url.pathname }));
+	});
 </script>
 
 <div>
