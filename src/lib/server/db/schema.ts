@@ -1,4 +1,6 @@
 import {
+	date,
+	index,
 	integer,
 	jsonb,
 	numeric,
@@ -66,6 +68,26 @@ export const stepIngredients = pgTable(
 		quantity: numeric('quantity', { mode: 'number' })
 	},
 	(table) => [primaryKey({ columns: [table.stepId, table.ingredientId] })]
+);
+
+/** One random salt per day, older salts are deleted so that visitor hashes can no longer be linked to an IP */
+export const trackingSalts = pgTable('tracking_salts', {
+	day: date('day').primaryKey(),
+	salt: text('salt').notNull(),
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
+});
+
+export const pageViews = pgTable(
+	'page_views',
+	{
+		id: serial('id').primaryKey(),
+		day: date('day').notNull(),
+		/** hash of the daily salt, host, IP and user agent, never the IP itself */
+		visitorHash: text('visitor_hash').notNull(),
+		path: text('path').notNull(),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
+	},
+	(table) => [index('page_views_day_path_idx').on(table.day, table.path)]
 );
 
 export type RecipeRow = typeof recipes.$inferSelect;
