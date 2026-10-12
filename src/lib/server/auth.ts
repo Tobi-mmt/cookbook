@@ -9,7 +9,7 @@ const scryptAsync = promisify(scrypt) as (
 
 const KEY_LENGTH = 64;
 export const SESSION_COOKIE = 'admin_session';
-export const SESSION_MAX_AGE = 60 * 60 * 24 * 30;
+export const SESSION_MAX_AGE = 60 * 60 * 24;
 
 /** Creates a hash in the format `scrypt:<salt>:<hash>` (no `$`, which .env files would expand) for the ADMIN_PASSWORD_HASH env variable */
 export const hashPassword = async (password: string) => {
@@ -48,6 +48,10 @@ export const verifySession = (
 	const expected = Buffer.from(sign(expires, secret));
 	const actual = Buffer.from(signature);
 	return (
-		actual.length === expected.length && timingSafeEqual(actual, expected) && Number(expires) > now
+		actual.length === expected.length &&
+		timingSafeEqual(actual, expected) &&
+		Number(expires) > now &&
+		// also ends sessions that were created with a longer maximum age
+		Number(expires) <= now + SESSION_MAX_AGE * 1000
 	);
 };

@@ -34,6 +34,19 @@ describe('session', () => {
 		expect(verifySession(session, secret, now + SESSION_MAX_AGE * 1000 + 1)).toBe(false);
 	});
 
+	test('expires after one day', () => {
+		const now = Date.now();
+		const session = createSession(secret, now);
+		expect(verifySession(session, secret, now + 23 * 60 * 60 * 1000)).toBe(true);
+		expect(verifySession(session, secret, now + 24 * 60 * 60 * 1000 + 1)).toBe(false);
+	});
+
+	test('rejects sessions that last longer than the maximum age', () => {
+		const now = Date.now();
+		const session = createSession(secret, now - 1000 + 30 * SESSION_MAX_AGE * 1000);
+		expect(verifySession(session, secret, now)).toBe(false);
+	});
+
 	test('rejects manipulated sessions and other secrets', () => {
 		const [expires, signature] = createSession(secret).split('.');
 		expect(verifySession(`${Number(expires) + 1000}.${signature}`, secret)).toBe(false);
