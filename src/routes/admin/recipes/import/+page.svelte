@@ -76,6 +76,11 @@
 	.import input {
 		flex: 1;
 	}
+	@media (max-width: 500px) {
+		.import {
+			flex-direction: column;
+		}
+	}
 	.progress,
 	.import-error {
 		display: flex;
