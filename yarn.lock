@@ -883,6 +883,11 @@
   resolved "https://registry.yarnpkg.com/@keyv/serialize/-/serialize-1.1.1.tgz#0c01dd3a3483882af7cf3878d4e71d505c81fc4a"
   integrity sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==
 
+"@lucide/svelte@^1.56.0":
+  version "1.56.0"
+  resolved "https://registry.yarnpkg.com/@lucide/svelte/-/svelte-1.56.0.tgz#3854914b39d3971b1ab86a444fba3a3bf551cbb1"
+  integrity sha512-YzbcmneHmPog3wAdXSl7oORgJhFc6klu8rRLMmm5uXwPQ8B0740c7dcNd3oJ72nCPvlbCW1XEmsWa4I0SDIogw==
+
 "@mapbox/node-pre-gyp@^2.0.0":
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/@mapbox/node-pre-gyp/-/node-pre-gyp-2.0.3.tgz#236aa1f62c101ce4c9db15697cb652ec69dca379"

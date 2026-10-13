@@ -2,6 +2,8 @@
 	import { resolve } from '$app/paths';
 	import type { Snippet } from 'svelte';
 	import { page } from '$app/stores';
+	import ExternalLink from '@lucide/svelte/icons/external-link';
+	import LogOut from '@lucide/svelte/icons/log-out';
 
 	let { children }: { children: Snippet } = $props();
 
@@ -27,9 +29,13 @@
 				>
 			</nav>
 			<div class="header-actions">
-				<a href={resolve('/', {})} target="_blank" class="button">Zur Webseite ↗</a>
+				<a href={resolve('/', {})} target="_blank" class="button" title="Zur Webseite">
+					<ExternalLink size={18} aria-hidden="true" /><span class="label">Zur Webseite</span>
+				</a>
 				<form method="POST" action="/admin/logout">
-					<button type="submit" class="button">Abmelden</button>
+					<button type="submit" class="button" title="Abmelden">
+						<LogOut size={18} aria-hidden="true" /><span class="label">Abmelden</span>
+					</button>
 				</form>
 			</div>
 		</header>
@@ -93,12 +99,27 @@
 		padding-bottom: 0.5em;
 	}
 	@media (max-width: 700px) {
+		.admin {
+			padding: 0 1em 4em;
+		}
 		.admin-header {
 			gap: 0.5em 1em;
+		}
+		.admin-title {
+			font-size: 1.2em;
 		}
 		nav {
 			order: 3;
 			width: 100%;
+		}
+		/* icons only, the title attribute and the screen reader text keep the meaning */
+		.header-actions .label {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip-path: inset(50%);
+			white-space: nowrap;
 		}
 	}
 	.admin :global(input),
@@ -121,13 +142,21 @@
 		font: inherit;
 		font-size: 0.9em;
 		padding: 0.4em 0.9em;
+		align-items: center;
+		justify-content: center;
+		gap: 0.4em;
+		min-height: 2.4em;
 		border: 1px solid #bbb;
 		border-radius: 4px;
 		background: #fff;
 		color: inherit;
 		cursor: pointer;
 		text-decoration: none;
-		display: inline-block;
+		display: inline-flex;
+	}
+	.admin :global(.button--icon) {
+		padding: 0.4em;
+		min-width: 2.4em;
 	}
 	.admin :global(.button:hover) {
 		background: #f3f3f3;
