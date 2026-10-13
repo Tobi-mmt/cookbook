@@ -1,5 +1,5 @@
 import { randomBytes } from 'node:crypto';
-import { asc, eq, inArray } from 'drizzle-orm';
+import { asc, eq, getTableColumns, inArray, type Column } from 'drizzle-orm';
 import type { Recipe, RecipeImage, RecipeIndexEntry } from '../../types';
 import type { RecipeInput } from '../recipeInput';
 import { sortRecipes } from '../sortRecipes';
@@ -10,29 +10,20 @@ import { ingredients, recipes, stepIngredients, steps } from './db/schema';
 /** 15 hex chars, same format as the former `yarn get-random-id` */
 export const createRecipeId = () => randomBytes(8).toString('hex').slice(0, 15);
 
+/** All queries run in parallel, so that a cold page render waits for only one database round trip */
 const loadRows = async (db: Database, recipeIds?: string[]): Promise<RecipeRows[]> => {
-	const recipeRows = await db
-		.select()
-		.from(recipes)
-		.where(recipeIds ? inArray(recipes.id, recipeIds) : undefined);
-	if (!recipeRows.length) return [];
+	const ofRecipes = (column: Column) => (recipeIds ? inArray(column, recipeIds) : undefined);
 
-	const ids = recipeRows.map((row) => row.id);
-	const [ingredientRows, stepRows] = await Promise.all([
-		db.select().from(ingredients).where(inArray(ingredients.recipeId, ids)),
-		db.select().from(steps).where(inArray(steps.recipeId, ids))
+	const [recipeRows, ingredientRows, stepRows, linkRows] = await Promise.all([
+		db.select().from(recipes).where(ofRecipes(recipes.id)),
+		db.select().from(ingredients).where(ofRecipes(ingredients.recipeId)),
+		db.select().from(steps).where(ofRecipes(steps.recipeId)),
+		db
+			.select(getTableColumns(stepIngredients))
+			.from(stepIngredients)
+			.innerJoin(steps, eq(stepIngredients.stepId, steps.id))
+			.where(ofRecipes(steps.recipeId))
 	]);
-	const linkRows = stepRows.length
-		? await db
-				.select()
-				.from(stepIngredients)
-				.where(
-					inArray(
-						stepIngredients.stepId,
-						stepRows.map((row) => row.id)
-					)
-				)
-		: [];
 
 	return recipeRows.map((recipe) => {
 		const recipeSteps = stepRows.filter((row) => row.recipeId === recipe.id);
