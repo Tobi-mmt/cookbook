@@ -1,5 +1,9 @@
 <script lang="ts">
 	import type { IngredientInput } from '$lib/recipeInput';
+	import ArrowDown from '@lucide/svelte/icons/arrow-down';
+	import ArrowUp from '@lucide/svelte/icons/arrow-up';
+	import Plus from '@lucide/svelte/icons/plus';
+	import Trash2 from '@lucide/svelte/icons/trash-2';
 	import { move, newClientId } from './listUtils';
 
 	let {
@@ -55,23 +59,28 @@
 			<div class="row-actions">
 				<button
 					type="button"
-					class="button"
+					class="button button--icon"
 					aria-label="Nach oben"
+					title="Nach oben"
 					disabled={index === 0}
-					onclick={() => move(ingredients, index, -1)}>↑</button
+					onclick={() => move(ingredients, index, -1)}
+					><ArrowUp size={18} aria-hidden="true" /></button
 				>
 				<button
 					type="button"
-					class="button"
+					class="button button--icon"
 					aria-label="Nach unten"
+					title="Nach unten"
 					disabled={index === ingredients.length - 1}
-					onclick={() => move(ingredients, index, 1)}>↓</button
+					onclick={() => move(ingredients, index, 1)}
+					><ArrowDown size={18} aria-hidden="true" /></button
 				>
 				<button
 					type="button"
-					class="button button--danger"
+					class="button button--icon button--danger"
 					aria-label="Entfernen"
-					onclick={() => remove(index)}>✕</button
+					title="Entfernen"
+					onclick={() => remove(index)}><Trash2 size={18} aria-hidden="true" /></button
 				>
 			</div>
 		</li>
@@ -79,8 +88,12 @@
 </ol>
 
 <div class="add">
-	<button type="button" class="button" onclick={() => add('ingredient')}>+ Zutat</button>
-	<button type="button" class="button" onclick={() => add('section')}>+ Abschnitt</button>
+	<button type="button" class="button" onclick={() => add('ingredient')}
+		><Plus size={18} aria-hidden="true" /> Zutat</button
+	>
+	<button type="button" class="button" onclick={() => add('section')}
+		><Plus size={18} aria-hidden="true" /> Abschnitt</button
+	>
 </div>
 
 <style>
@@ -125,10 +138,18 @@
 	@media (max-width: 600px) {
 		.row:not(.section) {
 			flex-wrap: wrap;
+			padding-bottom: 0.6em;
+			border-bottom: 1px solid #eee;
 		}
-		.name {
+		.row:not(.section) .name {
 			flex-basis: 100%;
 			order: -1;
+		}
+		.quantity,
+		.unit {
+			flex: 1;
+			width: auto;
+			min-width: 0;
 		}
 	}
 </style>

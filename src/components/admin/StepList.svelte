@@ -1,5 +1,9 @@
 <script lang="ts">
 	import type { IngredientInput, StepInput } from '$lib/recipeInput';
+	import ArrowDown from '@lucide/svelte/icons/arrow-down';
+	import ArrowUp from '@lucide/svelte/icons/arrow-up';
+	import Plus from '@lucide/svelte/icons/plus';
+	import Trash2 from '@lucide/svelte/icons/trash-2';
 	import { move } from './listUtils';
 
 	let { steps = $bindable(), ingredients }: { steps: StepInput[]; ingredients: IngredientInput[] } =
@@ -62,23 +66,26 @@
 				<div class="row-actions">
 					<button
 						type="button"
-						class="button"
+						class="button button--icon"
 						aria-label="Nach oben"
+						title="Nach oben"
 						disabled={index === 0}
-						onclick={() => moveStep(index, -1)}>↑</button
+						onclick={() => moveStep(index, -1)}><ArrowUp size={18} aria-hidden="true" /></button
 					>
 					<button
 						type="button"
-						class="button"
+						class="button button--icon"
 						aria-label="Nach unten"
+						title="Nach unten"
 						disabled={index === steps.length - 1}
-						onclick={() => moveStep(index, 1)}>↓</button
+						onclick={() => moveStep(index, 1)}><ArrowDown size={18} aria-hidden="true" /></button
 					>
 					<button
 						type="button"
-						class="button button--danger"
+						class="button button--icon button--danger"
 						aria-label="Entfernen"
-						onclick={() => remove(index)}>✕</button
+						title="Entfernen"
+						onclick={() => remove(index)}><Trash2 size={18} aria-hidden="true" /></button
 					>
 				</div>
 			</div>
@@ -146,8 +153,12 @@
 </ol>
 
 <div class="add">
-	<button type="button" class="button" onclick={() => add('step')}>+ Schritt</button>
-	<button type="button" class="button" onclick={() => add('section')}>+ Abschnitt</button>
+	<button type="button" class="button" onclick={() => add('step')}
+		><Plus size={18} aria-hidden="true" /> Schritt</button
+	>
+	<button type="button" class="button" onclick={() => add('section')}
+		><Plus size={18} aria-hidden="true" /> Abschnitt</button
+	>
 </div>
 
 <style>
@@ -230,6 +241,17 @@
 	}
 	.partial-row input {
 		width: 6em;
+	}
+	@media (max-width: 600px) {
+		.step {
+			padding: 0.6em;
+		}
+		.chip {
+			padding: 0.35em 0.8em;
+		}
+		.partial-row span:first-child {
+			flex: 1;
+		}
 	}
 	.add {
 		display: flex;

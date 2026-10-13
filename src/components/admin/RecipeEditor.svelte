@@ -229,4 +229,18 @@
 		justify-content: flex-end;
 		gap: 0.5em;
 	}
+	@media (max-width: 600px) {
+		.editor {
+			gap: 1.25em;
+		}
+		.grid {
+			grid-template-columns: 1fr 1fr;
+		}
+		.footer {
+			padding: 0.75em 0;
+		}
+		.footer-actions .button {
+			flex: 1;
+		}
+	}
 </style>
