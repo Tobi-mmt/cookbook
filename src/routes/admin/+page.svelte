@@ -5,6 +5,13 @@
 	import { enhance } from '$app/forms';
 	import { categoryColors } from '$lib/colors';
 	import { slugerize } from '$lib/slugerize';
+	import Check from '@lucide/svelte/icons/check';
+	import Download from '@lucide/svelte/icons/download';
+	import ExternalLink from '@lucide/svelte/icons/external-link';
+	import Pencil from '@lucide/svelte/icons/pencil';
+	import Plus from '@lucide/svelte/icons/plus';
+	import Trash2 from '@lucide/svelte/icons/trash-2';
+	import X from '@lucide/svelte/icons/x';
 
 	let { data, form }: { data: { recipes: RecipeIndexEntry[] }; form: { error?: string } | null } =
 		$props();
@@ -23,8 +30,12 @@
 <div class="toolbar">
 	<h1>Rezepte ({data.recipes.length})</h1>
 	<div class="toolbar-actions">
-		<a href={resolve('/admin/recipes/import', {})} class="button">Importieren</a>
-		<a href={resolve('/admin/recipes/new', {})} class="button button--primary">Neues Rezept</a>
+		<a href={resolve('/admin/recipes/import', {})} class="button">
+			<Download size={18} aria-hidden="true" /> Importieren
+		</a>
+		<a href={resolve('/admin/recipes/new', {})} class="button button--primary">
+			<Plus size={18} aria-hidden="true" /> Neues Rezept
+		</a>
 	</div>
 </div>
 
@@ -43,63 +54,67 @@
 	<p class="error">{form.error}</p>
 {/if}
 
-<table>
-	<thead>
-		<tr>
-			<th>Titel</th>
-			<th>Kategorie</th>
-			<th>Ernährung</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		{#each data.recipes as recipe (recipe.id)}
-			<tr>
-				<td><a href={resolve('/admin/recipes/[id]', { id: recipe.id })}>{recipe.title}</a></td>
-				<td>
-					<span class="category" style="--color: {categoryColors[recipe.meta.category]}"
-						>{recipe.meta.category}</span
+<ul class="recipes">
+	{#each data.recipes as recipe (recipe.id)}
+		<li class="recipe" style="--color: {categoryColors[recipe.meta.category]}">
+			<a class="recipe-title" href={resolve('/admin/recipes/[id]', { id: recipe.id })}>
+				{recipe.title}
+				<span class="recipe-meta">{recipe.meta.category} · {recipe.meta.nutritionType}</span>
+			</a>
+			<div class="actions">
+				{#if confirmDelete === recipe.id}
+					<form method="POST" action="?/delete" use:enhance>
+						<input type="hidden" name="id" value={recipe.id} />
+						<button type="submit" class="button button--danger">
+							<Check size={18} aria-hidden="true" /> Löschen
+						</button>
+					</form>
+					<button
+						type="button"
+						class="button button--icon"
+						aria-label="Abbrechen"
+						title="Abbrechen"
+						onclick={() => (confirmDelete = null)}><X size={18} aria-hidden="true" /></button
 					>
-				</td>
-				<td>{recipe.meta.nutritionType}</td>
-				<td class="actions">
+				{:else}
 					<a
-						class="button"
+						class="button button--icon"
 						href={resolve('/recipe/[recipeId]/[recipeTitle]', {
 							recipeId: recipe.id,
 							recipeTitle: slugerize(recipe.title)
 						})}
 						target="_blank"
-						rel="noreferrer">Ansehen</a
+						rel="noreferrer"
+						aria-label="„{recipe.title}“ ansehen"
+						title="Ansehen"><ExternalLink size={18} aria-hidden="true" /></a
 					>
-					<a class="button" href={resolve('/admin/recipes/[id]', { id: recipe.id })}>Bearbeiten</a>
-					{#if confirmDelete === recipe.id}
-						<form method="POST" action="?/delete" use:enhance>
-							<input type="hidden" name="id" value={recipe.id} />
-							<button type="submit" class="button button--danger">Wirklich löschen</button>
-						</form>
-						<button type="button" class="button" onclick={() => (confirmDelete = null)}
-							>Abbrechen</button
-						>
-					{:else}
-						<button
-							type="button"
-							class="button button--danger"
-							onclick={() => (confirmDelete = recipe.id)}>Löschen</button
-						>
-					{/if}
-				</td>
-			</tr>
-		{/each}
-	</tbody>
-</table>
+					<a
+						class="button button--icon"
+						href={resolve('/admin/recipes/[id]', { id: recipe.id })}
+						aria-label="„{recipe.title}“ bearbeiten"
+						title="Bearbeiten"><Pencil size={18} aria-hidden="true" /></a
+					>
+					<button
+						type="button"
+						class="button button--icon button--danger"
+						aria-label="„{recipe.title}“ löschen"
+						title="Löschen"
+						onclick={() => (confirmDelete = recipe.id)}
+						><Trash2 size={18} aria-hidden="true" /></button
+					>
+				{/if}
+			</div>
+		</li>
+	{/each}
+</ul>
 
 <style>
 	.toolbar {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		gap: 1em;
+		flex-wrap: wrap;
+		gap: 0.5em 1em;
 	}
 	.toolbar-actions {
 		display: flex;
@@ -107,49 +122,49 @@
 	}
 	h1 {
 		font-weight: 200;
+		margin: 0.5em 0;
 	}
-	table {
-		width: 100%;
-		border-collapse: collapse;
-		margin-top: 1em;
+	.recipes {
+		list-style: none;
+		padding: 0;
+		margin: 1em 0 0;
+		border-top: 2px solid #ddd;
 	}
-	th {
-		text-align: left;
-		font-weight: 500;
-		border-bottom: 2px solid #ddd;
-	}
-	th,
-	td {
-		padding: 0.5em;
-	}
-	tr + tr td {
-		border-top: 1px solid #eee;
-	}
-	td a:not(.button) {
-		color: inherit;
-	}
-	.category {
+	.recipe {
+		display: flex;
+		align-items: center;
+		gap: 0.5em 1em;
+		padding: 0.5em 0 0.5em 0.75em;
+		border-bottom: 1px solid #eee;
 		border-left: 4px solid var(--color);
-		padding-left: 0.5em;
+	}
+	.recipe-title {
+		flex: 1;
+		min-width: 0;
+		color: inherit;
+		text-decoration: none;
+		overflow-wrap: anywhere;
+	}
+	.recipe-title:hover {
+		text-decoration: underline;
+	}
+	.recipe-meta {
+		display: block;
+		font-size: 0.8em;
+		color: #777;
 	}
 	.actions {
 		display: flex;
-		gap: 0.5em;
-		justify-content: flex-end;
-		flex-wrap: wrap;
+		gap: 0.35em;
+		flex-shrink: 0;
 	}
-	@media (max-width: 700px) {
-		thead,
-		td:nth-child(2),
-		td:nth-child(3) {
-			display: none;
+	@media (max-width: 500px) {
+		.toolbar-actions {
+			width: 100%;
 		}
-		tr {
-			display: flex;
-			flex-direction: column;
-		}
-		.actions {
-			justify-content: flex-start;
+		.toolbar-actions .button {
+			flex: 1;
+			justify-content: center;
 		}
 	}
 </style>
