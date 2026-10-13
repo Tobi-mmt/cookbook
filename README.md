@@ -30,6 +30,8 @@ Change `src/lib/server/db/schema.ts`, then run `yarn db:generate` to create a mi
 
 The public pages use Vercel ISR: they are rendered once and then served from the cache. After a recipe is saved or deleted, the admin revalidates the affected pages (`src/lib/server/revalidate.ts`), so changes are live within seconds without a new deployment. If revalidation fails, the pages expire after 24 hours at the latest.
 
+Every deployment starts with an empty cache, and the first visitor of a page would wait for it to render. Therefore `/api/warm-cache` renders all pages into the cache after every production deployment (`.github/workflows/warm-cache.yml`) and once a day as Vercel cron (`vercel.json`).
+
 ## Tracking
 
 Visitors are counted without cookies, like [Plausible](https://plausible.io/data-policy) does it (`src/lib/server/tracking.ts`). The layout sends a beacon to `/api/event` on every navigation, because the cached ISR pages never reach the server. The server stores a hash of a random daily salt, the host, the IP and the user agent, but never the IP itself. The salt is deleted the next day, then the hashes can no longer be linked to anybody, so visitors are only unique within a day. Besides the page, only the browser and OS family without versions are stored. Bots are not counted. The numbers are shown at `/admin/stats`.
@@ -43,4 +45,5 @@ Visitors are counted without cookies, like [Plausible](https://plausible.io/data
 | `ADMIN_PASSWORD_HASH`   | Created with `yarn hash-password <password>`                    |
 | `SESSION_SECRET`        | Random string that signs the admin session cookie               |
 | `ISR_BYPASS_TOKEN`      | Random string with at least 32 characters for the revalidation  |
+| `CRON_SECRET`           | Random string for `/api/warm-cache`, also a GitHub secret       |
 | `MIGRATE_ON_PREVIEW`    | Set to `1` if preview deployments use their own database branch |

@@ -9,6 +9,8 @@ export const recipePaths = (recipe: { id: string; title: string }) => [
 
 export const LIST_PATHS = ['/', '/api/recipe-index.json', '/sitemap.xml'];
 
+const CONCURRENCY = 10;
+
 /**
  * Asks Vercel to re-render the given ISR paths in the background.
  * Returns the paths that could not be revalidated.
@@ -27,15 +29,21 @@ export const revalidate = async (origin: string, paths: string[]): Promise<strin
 			: [path, `${path === '/' ? '' : path}/__data.json`]
 	);
 
-	const results = await Promise.allSettled(
-		urls.map(async (path) => {
-			const response = await fetch(new URL(path, origin), {
-				method: 'HEAD',
-				headers: { 'x-prerender-revalidate': env.ISR_BYPASS_TOKEN! }
-			});
-			if (!response.ok && response.status !== 404) throw new Error(`${response.status}`);
-		})
-	);
+	// a few at a time, warming the cache renders every page at once
+	const results: PromiseSettledResult<void>[] = [];
+	for (let index = 0; index < urls.length; index += CONCURRENCY) {
+		results.push(
+			...(await Promise.allSettled(
+				urls.slice(index, index + CONCURRENCY).map(async (path) => {
+					const response = await fetch(new URL(path, origin), {
+						method: 'HEAD',
+						headers: { 'x-prerender-revalidate': env.ISR_BYPASS_TOKEN! }
+					});
+					if (!response.ok && response.status !== 404) throw new Error(`${response.status}`);
+				})
+			))
+		);
+	}
 
 	const failed = urls.filter((_, index) => results[index].status === 'rejected');
 	if (failed.length) console.error('Revalidation failed for', failed);

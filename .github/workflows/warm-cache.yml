@@ -1,0 +1,19 @@
+name: Warm cache
+
+on: deployment_status
+
+jobs:
+  warm-cache:
+    # a production deployment starts with an empty ISR cache
+    if: github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Production'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Render all pages into the cache
+        run: |
+          curl --fail-with-body --silent --show-error --max-time 300 \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            https://kochbuch.monaundtobi.de/api/warm-cache
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
