@@ -1,6 +1,6 @@
-import { env } from '$env/dynamic/private';
+import { BLOB_READ_WRITE_TOKEN } from '$app/env/private';
 import { createStorage } from './storage';
 
 export { getDb } from './db';
 
-export const getStorage = () => createStorage(env.BLOB_READ_WRITE_TOKEN);
+export const getStorage = () => createStorage(BLOB_READ_WRITE_TOKEN);

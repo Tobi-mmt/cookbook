@@ -4,17 +4,20 @@
 	import Minus from '@lucide/svelte/icons/minus';
 	import Plus from '@lucide/svelte/icons/plus';
 	import Users from '@lucide/svelte/icons/users';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
-	import { categoryColors } from '$lib/colors';
-	import { nutritionIcons } from '$lib/nutritionIcon';
+	import { categoryColors } from '#lib/colors.js';
+	import { nutritionIcons } from '#lib/nutritionIcon.js';
 	import RecipeImage from './RecipeImage.svelte';
 
 	import RecipeStep from './RecipeStep.svelte';
 	import WakeLock from './WakeLock.svelte';
-	export let recipe: Recipe;
+	let { recipe }: { recipe: Recipe } = $props();
 
-	let portion = recipe.meta.portion;
+	// the recipe page re-creates this component via {#key} for another recipe
+	// svelte-ignore state_referenced_locally
+	let portion = $state(recipe.meta.portion);
+	const NutritionIcon = $derived(nutritionIcons[recipe.meta.nutritionType]);
 
 	const increasePortion = () => {
 		portion = portion + 1;
@@ -36,14 +39,15 @@
 		'section' in item && Boolean(item.section);
 
 	// rendered on the server as well, so that the button does not pop in after loading
-	$: bringUrl =
+	const bringUrl = $derived(
 		'https://api.getbring.com/rest/bringrecipes/deeplink?' +
-		new URLSearchParams({
-			url: $page.url.href,
-			source: 'web',
-			baseQuantity: String(recipe.meta.portion),
-			requestedQuantity: String(portion)
-		});
+			new URLSearchParams({
+				url: page.url.href,
+				source: 'web',
+				baseQuantity: String(recipe.meta.portion),
+				requestedQuantity: String(portion)
+			})
+	);
 </script>
 
 <section
@@ -86,17 +90,12 @@
 					<div class="meta-item">
 						<span class="icon"><Hourglass size="1.1em" aria-hidden="true" /></span>
 						<p>
-							<span class="visually-hidden">Dauer: </span>{recipe.meta.duration}&nbsp;min
+							<span class="visually-hidden">Dauer:</span>
+							{recipe.meta.duration} min
 						</p>
 					</div>
 					<div class="meta-item">
-						<span class="icon"
-							><svelte:component
-								this={nutritionIcons[recipe.meta.nutritionType]}
-								size="1.1em"
-								aria-hidden="true"
-							/></span
-						>
+						<span class="icon"><NutritionIcon size="1.1em" aria-hidden="true" /></span>
 						<p>{recipe.meta.nutritionType}</p>
 					</div>
 				</div>
@@ -138,7 +137,7 @@
 							<button
 								type="button"
 								class="stepper-button"
-								on:click={reducePortion}
+								onclick={reducePortion}
 								disabled={portion <= 1}
 								aria-label="Eine Portion weniger"><Minus size="1em" aria-hidden="true" /></button
 							>
@@ -146,7 +145,7 @@
 							<button
 								type="button"
 								class="stepper-button"
-								on:click={increasePortion}
+								onclick={increasePortion}
 								aria-label="Eine Portion mehr"><Plus size="1em" aria-hidden="true" /></button
 							>
 						</div>

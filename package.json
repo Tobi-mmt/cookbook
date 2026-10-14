@@ -71,5 +71,10 @@
 	"resolutions": {
 		"sharp": "^0.35.0"
 	},
-	"packageManager": "yarn@1.22.22"
+	"packageManager": "yarn@1.22.22",
+	"imports": {
+		"#lib/*": "./src/lib/*",
+		"#components/*": "./src/components/*",
+		"#types": "./src/types.d.ts"
+	}
 }

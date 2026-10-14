@@ -1,6 +1,6 @@
-import { getDb } from '$lib/server/context';
-import { listRecipeIndex } from '$lib/server/recipes';
-import { getBreakdown, getDailyStats, trackingDay } from '$lib/server/tracking';
+import { getDb } from '#lib/server/context.js';
+import { listRecipeIndex } from '#lib/server/recipes.js';
+import { getBreakdown, getDailyStats, trackingDay } from '#lib/server/tracking.js';
 
 const DEFAULT_DAYS = 30;
 const RANGES = [7, 30, 90];

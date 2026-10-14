@@ -3,9 +3,9 @@
 	import SearchIcon from '@lucide/svelte/icons/search';
 	import { afterNavigate } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { categoryColors } from '$lib/colors';
-	import { loadRecipeIndex, recipeIndex } from '$lib/recipeIndex';
-	import { slugerize } from '$lib/slugerize';
+	import { categoryColors } from '#lib/colors.js';
+	import { loadRecipeIndex, recipeIndex } from '#lib/recipeIndex.js';
+	import { slugerize } from '#lib/slugerize.js';
 
 	/** on phones the field is hidden behind a button and takes the whole top bar when open */
 	export let expanded = false;
@@ -48,7 +48,9 @@
 		setTimeout(() => inputRef?.focus(), 0);
 	};
 
-	afterNavigate(() => {
+	afterNavigate(({ shallow, type }) => {
+		if (shallow && type === 'goto') return;
+
 		searchValue = '';
 		close();
 		inputRef?.blur();
@@ -128,9 +130,8 @@
 					{#each results as { item } (item.id)}
 						<li>
 							<a
-								href={resolve('/recipe/[recipeId]/[recipeTitle]', {
-									recipeId: item.id,
-									recipeTitle: slugerize(item.title)
+								href={resolve('/recipe/[...recipeSlug]', {
+									recipeSlug: `${item.id}/${slugerize(item.title)}`
 								})}
 							>
 								<span class="category" style="--color: {categoryColors[item.meta.category]}"

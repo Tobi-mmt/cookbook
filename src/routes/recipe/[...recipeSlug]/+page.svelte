@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { Recipe } from '$types';
-	import RecipeComponent from '$components/Recipe.svelte';
+	import type { Recipe } from '#types';
+	import RecipeComponent from '#components/Recipe.svelte';
 	import { resolve } from '$app/paths';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
-	export let data: { recipe: Recipe | null };
+	let { data }: { data: { recipe: Recipe | null } } = $props();
 
-	$: imageData = (() => {
+	const imageData = $derived.by(() => {
 		const image = data.recipe?.image;
 		if (!image) return null;
 
@@ -15,11 +15,11 @@
 		const variant = variants.find(({ width }) => width >= 1200) ?? variants[variants.length - 1];
 
 		return {
-			url: new URL(variant.url, $page.url.origin).href,
+			url: new URL(variant.url, page.url.origin).href,
 			width: variant.width,
 			height: Math.round((image.height / image.width) * variant.width)
 		};
-	})();
+	});
 </script>
 
 <svelte:head>
@@ -68,6 +68,6 @@
 {:else}
 	<h1>Kein Rezept gefunden</h1>
 	<p>
-		Gehe zur <a href={resolve('/', {})}>Übersicht</a> oder benutze die Suche, um ein Rezept zu finden.
+		Gehe zur <a href={resolve('/')}>Übersicht</a> oder benutze die Suche, um ein Rezept zu finden.
 	</p>
 {/if}

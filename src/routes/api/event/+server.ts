@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { getDb } from '$lib/server/context';
-import { isBot, normalizePath, recordPageView } from '$lib/server/tracking';
+import { getDb } from '#lib/server/context.js';
+import { isBot, normalizePath, recordPageView } from '#lib/server/tracking.js';
 
 const eventSchema = z.object({ path: z.string() });
 

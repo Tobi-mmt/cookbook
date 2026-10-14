@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { RecipeInput } from '$lib/recipeInput';
-	import RecipeEditor from '$components/admin/RecipeEditor.svelte';
+	import type { RecipeInput } from '#lib/recipeInput.js';
+	import RecipeEditor from '#components/admin/RecipeEditor.svelte';
 
 	let { data, form }: { data: { recipe: RecipeInput }; form: { error?: string } | null } = $props();
 </script>

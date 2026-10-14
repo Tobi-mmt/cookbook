@@ -1,4 +1,4 @@
-import { env } from '$env/dynamic/private';
+import { ISR_BYPASS_TOKEN } from '$app/env/private';
 
 /**
  * Pages are rendered once and then served from the Vercel cache like static files.
@@ -6,8 +6,5 @@ import { env } from '$env/dynamic/private';
  * the expiration is only a safety net.
  */
 export const isrConfig = {
-	isr: {
-		expiration: 60 * 60 * 24,
-		bypassToken: env.ISR_BYPASS_TOKEN
-	}
+	isr: { expiration: 60 * 60 * 24, bypassToken: ISR_BYPASS_TOKEN }
 };

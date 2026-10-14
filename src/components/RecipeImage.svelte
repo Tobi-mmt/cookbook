@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { RecipeImage } from '$types';
+	import type { RecipeImage } from '#types';
 
 	export let image: RecipeImage;
 	export let alt: string;

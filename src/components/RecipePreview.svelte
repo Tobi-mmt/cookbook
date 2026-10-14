@@ -1,21 +1,20 @@
 <script lang="ts">
-	import type { RecipeSummary } from '$types';
+	import type { RecipeSummary } from '#types';
 	import Hourglass from '@lucide/svelte/icons/hourglass';
 
-	import { slugerize } from '$lib/slugerize';
-	import { categoryColors } from '$lib/colors';
-	import { nutritionIcons } from '$lib/nutritionIcon';
+	import { slugerize } from '#lib/slugerize.js';
+	import { categoryColors } from '#lib/colors.js';
+	import { nutritionIcons } from '#lib/nutritionIcon.js';
 	import { resolve } from '$app/paths';
-	import RecipeImage from '$components/RecipeImage.svelte';
+	import RecipeImage from '#components/RecipeImage.svelte';
 
 	export let recipe: RecipeSummary;
 	export let priority: boolean = false;
 </script>
 
 <a
-	href={resolve(`/recipe/[recipeId]/[recipeTitle]`, {
-		recipeId: recipe.id,
-		recipeTitle: slugerize(recipe.title)
+	href={resolve('/recipe/[...recipeSlug]', {
+		recipeSlug: `${recipe.id}/${slugerize(recipe.title)}`
 	})}
 >
 	<div

@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
-import { dev } from '$app/environment';
-import { readLocalFile } from '$lib/server/storage';
+import { dev } from '$app/env';
+import { readLocalFile } from '#lib/server/storage.js';
 
 const CONTENT_TYPES: Record<string, string> = {
 	avif: 'image/avif',

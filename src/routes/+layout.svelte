@@ -1,21 +1,26 @@
-<script>
-	import TopBar from '$components/TopBar.svelte';
+<script lang="ts">
+	import type { Snippet } from 'svelte';
+	import TopBar from '#components/TopBar.svelte';
 	import { afterNavigate } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
+
+	let { children }: { children: Snippet } = $props();
 
 	// cookieless page view tracking, see src/lib/server/tracking.ts
-	afterNavigate(({ to }) => {
+	afterNavigate(({ to, shallow }) => {
+		// shallow navigations only change the recipe filter, the page stays the same
+		if (shallow) return;
 		if (!to || to.url.pathname.startsWith('/admin') || navigator.webdriver) return;
 		navigator.sendBeacon('/api/event', JSON.stringify({ path: to.url.pathname }));
 	});
 </script>
 
 <div>
-	{#if !$page.url.pathname.startsWith('/admin')}
+	{#if !page.url.pathname.startsWith('/admin')}
 		<TopBar />
 	{/if}
 	<main>
-		<slot />
+		{@render children()}
 	</main>
 </div>
 

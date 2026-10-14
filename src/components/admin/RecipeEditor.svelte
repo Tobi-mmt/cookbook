@@ -1,14 +1,13 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import type { SubmitFunction } from '@sveltejs/kit';
-	import type { RecipeImage } from '$types';
-	import { enhance } from '$app/forms';
+	import type { RecipeImage } from '#types';
+	import { enhance, type SubmitFunction } from '$app/forms';
 	import {
 		CATEGORIES,
 		NUTRITION_TYPES,
 		findUnusedIngredients,
 		type RecipeInput
-	} from '$lib/recipeInput';
+	} from '#lib/recipeInput.js';
 	import IngredientList from './IngredientList.svelte';
 	import StepList from './StepList.svelte';
 	import { resizeImage } from './resizeImage';
@@ -67,12 +66,11 @@
 <form method="POST" enctype="multipart/form-data" use:enhance={submit} class="editor">
 	<section class="card">
 		<h2>Allgemein</h2>
+		<label class="field">Titel <input bind:value={recipe.title} required /></label>
+
 		<label class="field">
-			Titel
-			<input bind:value={recipe.title} required />
-		</label>
-		<label class="field">
-			Beschreibung <span class="hint">(optional)</span>
+			Beschreibung
+			<span class="hint">(optional)</span>
 			<textarea rows="3" bind:value={recipe.description}></textarea>
 		</label>
 		<label class="field">
@@ -150,7 +148,7 @@
 		{/if}
 		{#if error}<p class="error">{error}</p>{/if}
 		<div class="footer-actions">
-			<a href={resolve('/admin', {})} class="button">Abbrechen</a>
+			<a href={resolve('/admin')} class="button">Abbrechen</a>
 			<button type="submit" class="button button--primary" disabled={saving}>
 				{saving ? 'Speichert…' : 'Speichern'}
 			</button>
@@ -234,7 +232,7 @@
 			gap: 1.25em;
 		}
 		.grid {
-			grid-template-columns: 1fr 1fr;
+			grid-template-columns: 1fr;
 		}
 		.footer {
 			padding: 0.75em 0;
