@@ -46,6 +46,9 @@
 						<div class="imagePlaceholder"></div>
 					{/if}
 				</div>
+				{#if recipe.isNew}
+					<span class="badge">Neu</span>
+				{/if}
 				<div class="infos">
 					<p class="category">{recipe.meta.category}</p>
 					<h2 class="title">{recipe.title}</h2>
@@ -123,6 +126,21 @@
 		filter: blur(8px);
 		height: 100%;
 		width: 100%;
+	}
+	/* marks recipes of the last weeks, see src/lib/newRecipe.ts */
+	.badge {
+		position: absolute;
+		top: 0.75rem;
+		left: 0.75rem;
+		padding: 0.3em 0.75em;
+		font-size: 0.75rem;
+		font-weight: 700;
+		line-height: 1.2;
+		letter-spacing: 0.02em;
+		color: #fff;
+		background: var(--color-dark);
+		border-radius: var(--radius-pill);
+		box-shadow: 0 1px 4px rgb(0 0 0 / 0.2);
 	}
 	.infos {
 		position: absolute;

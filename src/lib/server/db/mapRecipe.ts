@@ -1,4 +1,5 @@
 import type { Ingredient, Recipe, Section, Step } from '../../../types';
+import { isNewRecipe } from '../../newRecipe';
 import type { RecipeInput } from '../../recipeInput';
 import type { IngredientRow, RecipeRow, StepIngredientRow, StepRow } from './schema';
 
@@ -19,7 +20,10 @@ const toIngredient = (row: IngredientRow): Ingredient => {
 };
 
 /** Maps the database rows of one recipe to the `Recipe` shape used by the frontend */
-export const mapRecipe = ({ recipe, ingredients, steps, stepIngredients }: RecipeRows): Recipe => {
+export const mapRecipe = (
+	{ recipe, ingredients, steps, stepIngredients }: RecipeRows,
+	now = new Date()
+): Recipe => {
 	const ingredientsById = new Map(ingredients.map((row) => [row.id, row]));
 
 	return {
@@ -33,6 +37,7 @@ export const mapRecipe = ({ recipe, ingredients, steps, stepIngredients }: Recip
 			nutritionType: recipe.nutritionType
 		},
 		image: recipe.image ?? null,
+		isNew: isNewRecipe(recipe.createdAt, now),
 		ingredients: [...ingredients]
 			.sort(byPosition)
 			.map((row): Ingredient | Section =>

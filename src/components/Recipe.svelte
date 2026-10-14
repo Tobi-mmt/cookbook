@@ -73,7 +73,10 @@
 				{/if}
 			</div>
 			<div class="infos">
-				<p class="category">{recipe.meta.category}</p>
+				<div class="labels">
+					<p class="category">{recipe.meta.category}</p>
+					{#if recipe.isNew}<span class="badge">Neu</span>{/if}
+				</div>
 				<h1 itemprop="name" class="title">{recipe.title}</h1>
 				<div class="meta">
 					<div class="meta-item">
@@ -240,6 +243,23 @@
 		);
 		/* keeps the text legible where the image shines through */
 		text-shadow: 0 0 6px rgb(255 255 255 / 0.8);
+	}
+	.labels {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+	}
+	/* marks recipes of the last weeks, see src/lib/newRecipe.ts */
+	.badge {
+		padding: 0.25em 0.7em;
+		font-size: 0.75rem;
+		font-weight: 700;
+		line-height: 1.2;
+		letter-spacing: 0.02em;
+		color: #fff;
+		text-shadow: none;
+		background: var(--color-dark);
+		border-radius: var(--radius-pill);
 	}
 	.category {
 		margin: 0;
