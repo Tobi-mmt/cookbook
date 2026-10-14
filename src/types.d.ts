@@ -24,6 +24,8 @@ export interface Recipe {
 	};
 	title: string;
 	image: RecipeImage | null;
+	/** created within the last weeks, see `src/lib/newRecipe.ts` */
+	isNew: boolean;
 	description?: string;
 	steps: (Step | Section)[];
 	ingredients: (Ingredient | Section)[];
@@ -42,7 +44,7 @@ export interface RecipeImage {
 }
 
 /** What a recipe tile on the home page shows */
-export type RecipeSummary = Pick<Recipe, 'id' | 'title' | 'meta' | 'image'>;
+export type RecipeSummary = Pick<Recipe, 'id' | 'title' | 'meta' | 'image' | 'isNew'>;
 
 /** Lightweight recipe data used by the search */
 export interface RecipeIndexEntry {

@@ -1,6 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import { asc, eq, getTableColumns, inArray, type Column } from 'drizzle-orm';
 import type { Recipe, RecipeImage, RecipeIndexEntry, RecipeSummary } from '../../types';
+import { isNewRecipe } from '../newRecipe';
 import type { RecipeInput } from '../recipeInput';
 import { sortRecipes } from '../sortRecipes';
 import type { Database } from './db/client';
@@ -54,6 +55,7 @@ export const listRecipeSummaries = async (db: Database): Promise<RecipeSummary[]
 			id: recipe.id,
 			title: recipe.title,
 			image: recipe.image,
+			isNew: isNewRecipe(recipe.createdAt),
 			meta: {
 				portion: recipe.portion,
 				duration: recipe.duration,
