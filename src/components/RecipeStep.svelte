@@ -1,95 +1,92 @@
 <script lang="ts">
 	import type { Step } from '$types';
+	import Check from '@lucide/svelte/icons/check';
 
 	export let step: Step;
 	export let calcQuantityFunction: (quantity: number) => number;
 	let checked = false;
 </script>
 
-<div
-	role="checkbox"
-	aria-checked={checked}
-	tabindex="0"
-	class="wrapper"
-	on:click={() => (checked = !checked)}
-	on:keydown={() => (checked = !checked)}
->
-	<span class={`decoration ${checked && 'decoration__active'}`}>
-		<span class={`decoration--text ${checked && 'decoration--text__active'}`}>
-			<svg
-				width="24"
-				height="24"
-				xmlns="http://www.w3.org/2000/svg"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke-width="1.5"
-				stroke="currentColor"
-				class="w-6 h-6"
-			>
-				<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-			</svg>
-		</span>
-	</span>
-	<span>{step.description}</span>
-	<div class="ingredients">
-		{#if step?.linkedIngredients}
-			{#each step?.linkedIngredients as linkedIngredient, ingredientIndex (ingredientIndex)}
-				<span>
+<!-- a real checkbox, so that space toggles it and screen readers announce the state -->
+<label class="step" class:step--done={checked}>
+	<input type="checkbox" class="visually-hidden" bind:checked />
+	<span class="check" aria-hidden="true"><Check size="1.1em" strokeWidth={2.5} /></span>
+	<span class="text">
+		<span>{step.description}</span>
+		{#if step.linkedIngredients?.length}
+			<span class="ingredients">
+				{#each step.linkedIngredients as linkedIngredient, ingredientIndex (ingredientIndex)}
 					{#if linkedIngredient.quantity}{calcQuantityFunction(linkedIngredient.quantity)}{/if}
 					{#if linkedIngredient.unit}{linkedIngredient.unit}{/if}
-					{#if linkedIngredient.name}{linkedIngredient.name}{/if}{#if ingredientIndex < step?.linkedIngredients.length - 1}<span
-							>,&nbsp</span
-						>{/if}
-				</span>
-			{/each}
+					{linkedIngredient.name}{#if ingredientIndex < step.linkedIngredients.length - 1},&nbsp;{/if}
+				{/each}
+			</span>
 		{/if}
-	</div>
-</div>
+	</span>
+</label>
 
 <style>
-	.wrapper {
-		padding: 1em 0;
-		margin-left: 0.75rem;
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+	.step {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.85rem;
+		padding: 0.85rem 0.5rem;
+		line-height: 1.5;
+		border-radius: var(--radius-md);
 		cursor: pointer;
-		border-radius: 5px;
 	}
-	.wrapper:focus,
-	.wrapper:hover {
-		background-color: #fafafa;
+	.step:hover {
+		background: var(--color-surface-muted);
 	}
-	.wrapper:focus .decoration,
-	.wrapper:hover .decoration {
+	.step:has(input:focus-visible) {
+		outline: 3px solid var(--color-focus);
+		outline-offset: 2px;
+	}
+	.check {
+		flex: none;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 1.85rem;
+		height: 1.85rem;
+		margin-top: -0.15rem;
+		color: var(--highlight-color);
+		background: var(--color-surface);
+		border: 1px dashed var(--highlight-color);
+		border-radius: var(--radius-pill);
+	}
+	.check :global(svg) {
+		opacity: 0.4;
+	}
+	.step:hover .check {
 		border-style: solid;
 	}
-	.decoration {
-		color: var(--highlight-color);
-		display: inline-block;
-		width: 2rem;
-		height: 2rem;
-		margin-left: -2.75rem;
-		border-radius: 999px;
-		text-align: center;
-		padding-top: 0.3rem;
-		position: absolute;
-		margin-top: -0.4rem;
-		border: 1px dashed var(--highlight-color);
-		background: white;
-	}
-	.decoration__active {
-		background-color: var(--highlight-color);
+	.step--done .check {
 		color: #fff;
+		background: var(--highlight-color);
+		border-style: solid;
 	}
-	.decoration--text {
-		color: var(--highlight-color);
-		opacity: 0.5;
-	}
-	.decoration--text__active {
-		color: #fff;
+	.step--done .check :global(svg) {
 		opacity: 1;
 	}
+	.step--done .text {
+		color: var(--color-text-subtle);
+	}
+	.text {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
 	.ingredients {
-		font-size: 0.75em;
-		opacity: 0.7;
-		margin-top: 0.25em;
+		font-size: 0.8125rem;
+		color: var(--color-text-muted);
 	}
 </style>

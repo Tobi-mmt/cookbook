@@ -1,9 +1,13 @@
 <script lang="ts">
-	import type { Recipe, Section } from '../types';
+	import type { Ingredient, Recipe, Section } from '../types';
+	import Hourglass from '@lucide/svelte/icons/hourglass';
+	import Minus from '@lucide/svelte/icons/minus';
+	import Plus from '@lucide/svelte/icons/plus';
+	import Users from '@lucide/svelte/icons/users';
+	import { page } from '$app/stores';
 
 	import { categoryColors } from '$lib/colors';
-	import { getIconName } from '$lib/iconName';
-	import Icon from './Icon.svelte';
+	import { nutritionIcons } from '$lib/nutritionIcon';
 	import RecipeImage from './RecipeImage.svelte';
 
 	import RecipeStep from './RecipeStep.svelte';
@@ -28,10 +32,18 @@
 		return Number(Math.round(Number(newValue + 'e' + 1)) + 'e-' + 1);
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const isSection = (ingredient: any): ingredient is Section => {
-		return Boolean(ingredient.section);
-	};
+	const isSection = (item: Ingredient | Section | Recipe['steps'][number]): item is Section =>
+		'section' in item && Boolean(item.section);
+
+	// rendered on the server as well, so that the button does not pop in after loading
+	$: bringUrl =
+		'https://api.getbring.com/rest/bringrecipes/deeplink?' +
+		new URLSearchParams({
+			url: $page.url.href,
+			source: 'web',
+			baseQuantity: String(recipe.meta.portion),
+			requestedQuantity: String(portion)
+		});
 </script>
 
 <section
@@ -40,7 +52,7 @@
   --highlight-color-light: ${categoryColors[recipe.meta.category]}77;
   `}
 >
-	<div itemtype="https://schema.org/Recipe">
+	<div itemscope itemtype="https://schema.org/Recipe">
 		<div class="header">
 			<div class="imageWrapper">
 				{#if recipe.image}
@@ -65,136 +77,133 @@
 				<h1 itemprop="name" class="title">{recipe.title}</h1>
 				<div class="meta">
 					<div class="meta-item">
-						<span class="icon"><Icon name="users-alt-6" /></span>
-						<p itemprop="recipeYield">{portion}</p>
+						<span class="icon"><Users size="1.1em" aria-hidden="true" /></span>
+						<p><span class="visually-hidden">Portionen: </span>{portion}</p>
 					</div>
 					<div class="meta-item">
-						<span class="icon"><Icon name="sand-clock" /></span>
-						<p itemprop="prepTime">{recipe.meta.duration}&nbsp;min</p>
+						<span class="icon"><Hourglass size="1.1em" aria-hidden="true" /></span>
+						<p>
+							<span class="visually-hidden">Dauer: </span>{recipe.meta.duration}&nbsp;min
+						</p>
 					</div>
 					<div class="meta-item">
-						<span class="icon"><Icon name={getIconName(recipe.meta.nutritionType)} /></span>
+						<span class="icon"
+							><svelte:component
+								this={nutritionIcons[recipe.meta.nutritionType]}
+								size="1.1em"
+								aria-hidden="true"
+							/></span
+						>
 						<p>{recipe.meta.nutritionType}</p>
 					</div>
 				</div>
 			</div>
 		</div>
+
+		<!-- on phones the ingredients come first, the links jump between both parts -->
+		<nav class="jump-links" aria-label="Zum Abschnitt springen">
+			<a href="#zutaten">Zutaten</a>
+			<a href="#zubereitung">Zubereitung</a>
+		</nav>
+
 		<div class="content-wrapper">
 			{#if recipe.description}
-				<p class="description">{recipe.description}</p>
+				<p class="description" itemprop="description">{recipe.description}</p>
 			{/if}
 			<div class="content">
-				<div class="step">
-					<WakeLock />
-					<ol class="step--list">
+				<div class="steps" id="zubereitung">
+					<div class="steps-header">
+						<h2 class="part-title">Zubereitung</h2>
+						<WakeLock />
+					</div>
+					<ol class="step-list">
 						{#each recipe.steps as step, stepIndex (stepIndex + portion)}
-							<li class="step--list-item">
+							<li class="step-list-item">
 								{#if isSection(step)}
-									<h2 class="step--list-item--section">{step.section}</h2>
+									<h3 class="section-title">{step.section}</h3>
 								{:else}
 									<RecipeStep
 										{step}
-										calcQuantityFunction={(quantety) =>
-											calcQuantity(quantety, portion, recipe.meta.portion)}
+										calcQuantityFunction={(quantity) =>
+											calcQuantity(quantity, portion, recipe.meta.portion)}
 									/>
 								{/if}
 							</li>
 						{/each}
 					</ol>
 				</div>
-				<div class="ingredients">
-					<table>
-						<tbody>
-							<tr class="portion-settings--wrapper">
-								<td class="portion-label">
-									<p>Portionen</p>
-								</td>
-								<td>
-									<div class="portion-settings">
-										<button
-											class="icon-button"
-											on:click={reducePortion}
-											aria-label="Eine Portion weniger"><Icon name="minus" /></button
-										>
-										<p>{portion}</p>
-										<button
-											class="icon-button"
-											on:click={increasePortion}
-											aria-label="Eine Portion mehr"><Icon name="plus" /></button
-										>
-									</div>
-								</td>
-							</tr>
-							{#each recipe.ingredients as ingredient ('section' in ingredient ? ingredient.section : `${ingredient.key || ingredient.name}-${ingredient.quantity}`)}
-								{#if isSection(ingredient)}
-									<tr>
-										<td></td>
-										<td class="ingredients-headline">{ingredient.section}</td>
-									</tr>
-								{:else}
-									<tr itemprop="recipeIngredient">
-										<td>
-											{#if ingredient.quantity}
-												{calcQuantity(ingredient.quantity, portion, recipe.meta.portion)}
-											{/if}
-											{#if ingredient.unit}{ingredient.unit}{/if}
-										</td>
-										<td>
-											{#if ingredient.name}{ingredient.name}{/if}
-										</td>
-									</tr>
-								{/if}
-							{/each}
-							<tr>
-								<td colspan="2">
-									{#if typeof window !== 'undefined'}
-										<a
-											class="bring-button"
-											href="https://api.getbring.com/rest/bringrecipes/deeplink?url={window.location
-												.href}&source=web&baseQuantity={recipe.meta
-												.portion}&requestedQuantity={portion}"
-											target="_blank"
-										>
-											<img src="/bring.svg" alt="bring! logo" width="20" height="27" />
-											<span>Auf die Einkaufsliste</span>
-										</a>
-									{/if}
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+
+				<aside class="ingredients" id="zutaten">
+					<h2 class="part-title">Zutaten</h2>
+					<div class="portions">
+						<span>Portionen</span>
+						<div class="stepper">
+							<button
+								type="button"
+								class="stepper-button"
+								on:click={reducePortion}
+								disabled={portion <= 1}
+								aria-label="Eine Portion weniger"><Minus size="1em" aria-hidden="true" /></button
+							>
+							<output itemprop="recipeYield" aria-live="polite">{portion}</output>
+							<button
+								type="button"
+								class="stepper-button"
+								on:click={increasePortion}
+								aria-label="Eine Portion mehr"><Plus size="1em" aria-hidden="true" /></button
+							>
+						</div>
+					</div>
+
+					<ul class="ingredient-list">
+						{#each recipe.ingredients as ingredient ('section' in ingredient ? ingredient.section : `${ingredient.key || ingredient.name}-${ingredient.quantity}`)}
+							{#if isSection(ingredient)}
+								<li class="ingredient-section">{ingredient.section}</li>
+							{:else}
+								<li class="ingredient" itemprop="recipeIngredient">
+									<span class="quantity">
+										{#if ingredient.quantity}
+											{calcQuantity(ingredient.quantity, portion, recipe.meta.portion)}
+										{/if}
+										{#if ingredient.unit}{ingredient.unit}{/if}
+									</span>
+									<span>{ingredient.name}</span>
+								</li>
+							{/if}
+						{/each}
+					</ul>
+
+					<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- external link -->
+					<a class="bring-button" href={bringUrl} target="_blank" rel="noreferrer">
+						<img src="/bring.svg" alt="" width="20" height="27" />
+						<span>Auf die Einkaufsliste</span>
+					</a>
+				</aside>
 			</div>
 		</div>
 	</div>
 </section>
 
 <style>
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
 	.icon {
 		margin-right: 0.4em;
 		display: flex;
 		color: var(--highlight-color);
 	}
-	.icon-button {
-		background: var(--highlight-color);
-		cursor: pointer;
-		color: #fff;
-		outline: none;
-		border: none;
-		padding: 0.35em 0.5em;
-		border-radius: 2.5px;
-		transition: all 0.2s ease-in-out;
-	}
-	.icon-button:hover,
-	.icon-button:focus {
-		opacity: 0.7;
-	}
+
+	/* header, same design as the recipe tiles (RecipePreview.svelte) */
 	.header {
-		min-height: 12cm;
 		position: relative;
-		background-size: cover;
-		background-position: left center;
 		height: 40vw;
+		min-height: 24rem;
 		max-height: 550px;
 	}
 	.imageWrapper :global(.image) {
@@ -205,54 +214,18 @@
 		color: transparent;
 	}
 	.imageWrapper {
-		position: relative;
-		object-fit: cover;
 		position: absolute;
-		left: 0;
-		right: 0;
-		height: 100%;
+		inset: 0;
 		overflow: hidden;
 	}
 	.imagePlaceholder {
 		position: absolute;
-		background-color: #eee;
+		background-color: var(--color-surface-muted);
 		background-size: cover;
 		background-position: center;
 		filter: blur(8px);
 		height: 100%;
 		width: 100%;
-		object-fit: cover;
-	}
-	/* same typography as the recipe tiles (RecipePreview.svelte), only larger */
-	.title {
-		margin: 0;
-		font-size: clamp(1.75rem, 1.2rem + 2.5vw, 3rem);
-		font-weight: 400;
-		line-height: 1.15;
-		letter-spacing: -0.015em;
-		color: #222;
-		overflow-wrap: break-word;
-		hyphens: auto;
-	}
-	.description {
-		margin-bottom: 2em;
-	}
-	.category {
-		margin: 0;
-		display: flex;
-		align-items: center;
-		gap: 0.4em;
-		font-size: 0.875rem;
-		font-weight: 400;
-		line-height: 1.2;
-		color: #888;
-	}
-	.category::before {
-		content: '';
-		width: 0.5em;
-		height: 0.5em;
-		border-radius: 50%;
-		background: var(--highlight-color);
 	}
 	.infos {
 		position: absolute;
@@ -274,6 +247,32 @@
 		/* keeps the text legible where the image shines through */
 		text-shadow: 0 0 6px rgb(255 255 255 / 0.8);
 	}
+	.category {
+		margin: 0;
+		display: flex;
+		align-items: center;
+		gap: 0.4em;
+		font-size: 0.875rem;
+		line-height: 1.2;
+		color: var(--color-text-subtle);
+	}
+	.category::before {
+		content: '';
+		width: 0.5em;
+		height: 0.5em;
+		border-radius: 50%;
+		background: var(--highlight-color);
+	}
+	.title {
+		margin: 0;
+		font-size: clamp(1.75rem, 1.2rem + 2.5vw, 3rem);
+		font-weight: 400;
+		line-height: 1.15;
+		letter-spacing: -0.015em;
+		color: var(--color-text);
+		overflow-wrap: break-word;
+		hyphens: auto;
+	}
 	.meta {
 		display: flex;
 		flex-wrap: wrap;
@@ -281,7 +280,7 @@
 		gap: 0.2rem 1.25rem;
 		font-size: 0.9375rem;
 		line-height: 1.4;
-		color: #555;
+		color: var(--color-text-muted);
 		font-variant-numeric: tabular-nums;
 	}
 	.meta-item {
@@ -291,107 +290,170 @@
 	.meta-item p {
 		margin: 0;
 	}
+
+	.jump-links {
+		display: none;
+	}
+
+	/* content */
 	.content-wrapper {
-		padding: 2em;
-		margin: auto;
 		max-width: 1250px;
+		margin: auto;
+		padding: 2rem;
+	}
+	.description {
+		max-width: 46rem;
+		margin: 0 0 2rem;
+		line-height: 1.6;
+		color: var(--color-text-muted);
 	}
 	.content {
 		display: flex;
+		align-items: flex-start;
+		gap: 3rem;
 	}
-	.step {
-		position: relative;
-		padding: 0 2em;
+	.part-title {
+		margin: 0;
+		font-size: 1.25rem;
+		font-weight: 700;
 	}
-	.step--list {
-		padding-left: 0;
+	#zutaten,
+	#zubereitung {
+		scroll-margin-top: calc(var(--top-bar-height) + 1rem);
 	}
-	.step--list-item {
+
+	.steps {
+		flex: 1;
+		min-width: 0;
+	}
+	.steps-header {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-bottom: 1rem;
+	}
+	.step-list {
+		margin: 0;
+		padding: 0;
 		list-style: none;
-		position: relative;
 	}
-	.step--list-item--section {
-		font-weight: 500;
-		margin-top: 3em;
+	.section-title {
+		margin: 2rem 0 0.25rem;
+		font-size: 0.875rem;
+		font-weight: 700;
+		color: var(--color-text-subtle);
 	}
-	.step--list-item:first-child .step--list-item--section {
+	.step-list-item:first-child .section-title {
 		margin-top: 0;
 	}
-	.ingredients-headline {
-		font-weight: bold;
-		font-style: italic;
-		padding-top: 1em;
-	}
-	table tr:first-of-type .ingredients-headline {
-		padding-top: 0;
-	}
-	table tr td:first-of-type {
-		text-align: right;
-		padding-right: 0.5em;
-		width: 100px;
-	}
+
+	/* ingredients stay visible next to the steps on wide screens */
 	.ingredients {
-		padding-left: 2em;
-		border-left: 1px solid;
-		border-color: var(--highlight-color-light);
-		margin-bottom: 2em;
-	}
-	.ingredients .portion-settings--wrapper {
-		font-size: 1em;
-		height: 3em;
-	}
-	.ingredients .portion-settings {
+		position: sticky;
+		top: calc(var(--top-bar-height) + 1rem);
+		flex: 0 0 20rem;
 		display: flex;
-		justify-content: left;
+		flex-direction: column;
+		gap: 1rem;
+		padding: 1.25rem;
+		background: var(--color-surface-muted);
+		border-radius: var(--radius-md);
+	}
+	.portions {
+		display: flex;
 		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		color: var(--color-text-muted);
 	}
-	.ingredients .portion-label p {
+	.stepper {
+		display: flex;
+		align-items: center;
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-pill);
+	}
+	.stepper output {
+		min-width: 2ch;
+		text-align: center;
+		font-weight: 700;
+		font-variant-numeric: tabular-nums;
+	}
+	.stepper-button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 2.5rem;
+		height: 2.5rem;
+		padding: 0;
+		color: var(--highlight-color);
+		background: none;
+		border: none;
+		border-radius: var(--radius-pill);
+		cursor: pointer;
+	}
+	.stepper-button:hover:not(:disabled) {
+		background: var(--color-surface-muted);
+	}
+	.stepper-button:disabled {
+		opacity: 0.35;
+		cursor: default;
+	}
+	.ingredient-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.45rem;
 		margin: 0;
+		padding: 0;
+		list-style: none;
 	}
-	.ingredients .portion-settings p {
-		margin: 0 0.75em;
+	.ingredient {
+		display: grid;
+		grid-template-columns: 5.5rem 1fr;
+		gap: 0.75rem;
+		line-height: 1.4;
 	}
-	.ingredients table {
-		margin: 0 auto;
+	.quantity {
+		font-weight: 700;
+		font-variant-numeric: tabular-nums;
+		overflow-wrap: anywhere;
 	}
-	.ingredients td {
-		vertical-align: top;
-		width: 200px;
+	.ingredient-section {
+		margin-top: 0.75rem;
+		padding-bottom: 0.25rem;
+		font-size: 0.875rem;
+		font-weight: 700;
+		color: var(--color-text-subtle);
+		border-bottom: 1px solid var(--color-border);
+	}
+	.ingredient-section:first-child {
+		margin-top: 0;
 	}
 	.bring-button {
-		font-size: 0.9em;
-		background: #27343a;
-		color: white;
-		padding: 0.25em 0.5em;
-		border: 0;
-		border-radius: 8px;
-		box-sizing: border-box;
-		cursor: pointer;
 		display: flex;
-		flex-direction: row;
-		height: 100%;
-		justify-items: center;
 		align-items: center;
-		display: flex;
-		padding: 0.5em 1em;
-		justify-content: space-between;
-		margin: 2em auto 16px;
+		justify-content: center;
+		gap: 0.75rem;
 		min-height: 44px;
+		padding: 0.5rem 1rem;
+		font-size: 0.9rem;
+		color: #fff;
 		text-decoration: none;
-		transition: all 0.2s ease-in-out;
+		background: var(--color-dark);
+		border-radius: var(--radius-md);
+		transition: opacity 0.2s ease-in-out;
 	}
 	.bring-button:hover {
-		opacity: 0.8;
+		opacity: 0.85;
 	}
+
 	@media (max-width: 700px) {
-		.content {
-			flex-direction: column-reverse;
-		}
-		.ingredients {
-			border: none;
-			padding-bottom: 1.5em;
-			padding-left: 0;
-			margin-bottom: 1em;
+		.header {
+			height: auto;
+			min-height: 0;
+			aspect-ratio: 4 / 3;
 		}
 		.infos {
 			padding: 3.5rem 1rem 1rem;
@@ -400,9 +462,34 @@
 			gap: 0.15rem 0.9rem;
 			font-size: 0.8125rem;
 		}
-
-		.step {
-			padding-right: 0;
+		.jump-links {
+			display: flex;
+			justify-content: center;
+			gap: 0.5rem;
+			padding: 0.75rem 1rem 0;
+		}
+		.jump-links a {
+			padding: 0.35em 0.9em;
+			font-size: 0.875rem;
+			color: var(--color-text-muted);
+			text-decoration: none;
+			border: 1px solid var(--color-border);
+			border-radius: var(--radius-pill);
+		}
+		.content-wrapper {
+			padding: 1.25rem 1rem 2rem;
+		}
+		.description {
+			margin-bottom: 1.25rem;
+		}
+		.content {
+			flex-direction: column-reverse;
+			align-items: stretch;
+			gap: 2rem;
+		}
+		.ingredients {
+			position: static;
+			flex-basis: auto;
 		}
 	}
 </style>
