@@ -100,18 +100,12 @@
 			</div>
 		</div>
 
-		<!-- on phones the ingredients come first, the links jump between both parts -->
-		<nav class="jump-links" aria-label="Zum Abschnitt springen">
-			<a href="#zutaten">Zutaten</a>
-			<a href="#zubereitung">Zubereitung</a>
-		</nav>
-
 		<div class="content-wrapper">
 			{#if recipe.description}
 				<p class="description" itemprop="description">{recipe.description}</p>
 			{/if}
 			<div class="content">
-				<div class="steps" id="zubereitung">
+				<div class="steps">
 					<div class="steps-header">
 						<h2 class="part-title">Zubereitung</h2>
 						<WakeLock />
@@ -133,7 +127,7 @@
 					</ol>
 				</div>
 
-				<aside class="ingredients" id="zutaten">
+				<aside class="ingredients">
 					<h2 class="part-title">Zutaten</h2>
 					<div class="portions">
 						<span>Portionen</span>
@@ -291,10 +285,6 @@
 		margin: 0;
 	}
 
-	.jump-links {
-		display: none;
-	}
-
 	/* content */
 	.content-wrapper {
 		max-width: 1250px;
@@ -316,10 +306,6 @@
 		margin: 0;
 		font-size: 1.25rem;
 		font-weight: 700;
-	}
-	#zutaten,
-	#zubereitung {
-		scroll-margin-top: calc(var(--top-bar-height) + 1rem);
 	}
 
 	.steps {
@@ -461,20 +447,6 @@
 		.meta {
 			gap: 0.15rem 0.9rem;
 			font-size: 0.8125rem;
-		}
-		.jump-links {
-			display: flex;
-			justify-content: center;
-			gap: 0.5rem;
-			padding: 0.75rem 1rem 0;
-		}
-		.jump-links a {
-			padding: 0.35em 0.9em;
-			font-size: 0.875rem;
-			color: var(--color-text-muted);
-			text-decoration: none;
-			border: 1px solid var(--color-border);
-			border-radius: var(--radius-pill);
 		}
 		.content-wrapper {
 			padding: 1.25rem 1rem 2rem;
