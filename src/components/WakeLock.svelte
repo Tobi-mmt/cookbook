@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
 	import { onDestroy } from 'svelte';
 
-	let wakeLock = null;
+	let wakeLock: WakeLockSentinel | null = null;
 	let isActive = false;
 
 	async function toggleWakeLock() {
