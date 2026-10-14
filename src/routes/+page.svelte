@@ -1,22 +1,23 @@
 <script lang="ts">
-	import type { Category, RecipeSummary } from '$types';
-	import RecipePreview from '$components/RecipePreview.svelte';
-	import { page } from '$app/stores';
-	import { replaceState } from '$app/navigation';
-	import { categoryColors } from '$lib/colors';
-	import { filterRecipes, type Diet, type RecipeFilter } from '$lib/recipeFilter';
+	import type { Category, RecipeSummary } from '#types';
+	import RecipePreview from '#components/RecipePreview.svelte';
+	import { page } from '$app/state';
+	import { goto } from '$app/navigation';
+	import { categoryColors } from '#lib/colors.js';
+	import { filterRecipes, type Diet, type RecipeFilter } from '#lib/recipeFilter.js';
 
-	export let data: { recipes: RecipeSummary[] };
+	let { data }: { data: { recipes: RecipeSummary[] } } = $props();
 
 	const categories = Object.keys(categoryColors) as Category[];
 	const diets: Diet[] = ['Vegetarisch', 'Vegan'];
 
-	$: filter = $page.state.filter ?? {};
-	$: recipes = filterRecipes(data.recipes, filter);
+	const filter = $derived(page.state.filter ?? {});
+	const recipes = $derived(filterRecipes(data.recipes, filter));
 
 	// shallow routing keeps the filter in the history entry without loading the page again
-	const setFilter = (changes: RecipeFilter) =>
-		replaceState('', { filter: { ...filter, ...changes } });
+	const showFilter = (next: RecipeFilter) =>
+		goto(page.url.href, { shallow: true, replace: true, state: { filter: next } });
+	const setFilter = (changes: RecipeFilter) => showFilter({ ...filter, ...changes });
 </script>
 
 <svelte:head>
@@ -33,7 +34,7 @@
 		property="og:description"
 		content="Unsere Liebelingsrezepte, die wir über die Jahre angesammelt haben."
 	/>
-	<meta property="og:image" content="{$page.url.origin}/og-image.png" />
+	<meta property="og:image" content="{page.url.origin}/og-image.png" />
 </svelte:head>
 
 <div class="filters" role="group" aria-label="Rezepte filtern">
@@ -41,7 +42,7 @@
 		type="button"
 		class="chip"
 		aria-pressed={!filter.category}
-		on:click={() => setFilter({ category: undefined })}>Alle</button
+		onclick={() => setFilter({ category: undefined })}>Alle</button
 	>
 	{#each categories as category (category)}
 		<button
@@ -49,9 +50,14 @@
 			class="chip"
 			style="--color: {categoryColors[category]}"
 			aria-pressed={filter.category === category}
-			on:click={() => setFilter({ category: filter.category === category ? undefined : category })}
-			><span class="dot" aria-hidden="true"></span>{category}</button
+			onclick={() =>
+				setFilter({
+					category: filter.category === category ? undefined : category
+				})}
 		>
+			<span class="dot" aria-hidden="true"></span>
+			{category}
+		</button>
 	{/each}
 	<span class="divider" aria-hidden="true"></span>
 	{#each diets as diet (diet)}
@@ -59,7 +65,7 @@
 			type="button"
 			class="chip"
 			aria-pressed={filter.diet === diet}
-			on:click={() => setFilter({ diet: filter.diet === diet ? undefined : diet })}>{diet}</button
+			onclick={() => setFilter({ diet: filter.diet === diet ? undefined : diet })}>{diet}</button
 		>
 	{/each}
 </div>
@@ -73,9 +79,7 @@
 {:else}
 	<p class="empty">
 		Für diese Auswahl gibt es noch kein Rezept.
-		<button type="button" class="reset" on:click={() => replaceState('', { filter: {} })}
-			>Filter zurücksetzen</button
-		>
+		<button type="button" class="reset" onclick={() => showFilter({})}>Filter zurücksetzen</button>
 	</p>
 {/if}
 

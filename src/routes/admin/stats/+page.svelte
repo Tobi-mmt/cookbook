@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import type { BreakdownStats } from '$lib/server/tracking';
+	import type { BreakdownStats } from '#lib/server/tracking.js';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
@@ -31,7 +31,7 @@
 		<a
 			class="button"
 			class:button--primary={range.from === data.from && range.to === data.to}
-			href="{resolve('/admin/stats', {})}?from={range.from}&to={range.to}">{range.days} Tage</a
+			href="{resolve('/admin/stats')}?from={range.from}&to={range.to}">{range.days} Tage</a
 		>
 	{/each}
 	<label>Von <input type="date" name="from" value={data.from} /></label>
@@ -86,7 +86,7 @@
 								? resolve('/recipe/[...recipeSlug]', {
 										recipeSlug: page.path.slice('/recipe/'.length)
 									})
-								: resolve('/', {})}
+								: resolve('/')}
 							target="_blank"
 							rel="noreferrer">{page.title ?? page.path}</a
 						>

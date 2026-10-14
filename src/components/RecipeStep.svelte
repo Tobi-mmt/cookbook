@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Step } from '$types';
+	import type { Step } from '#types';
 	import Check from '@lucide/svelte/icons/check';
 
 	export let step: Step;

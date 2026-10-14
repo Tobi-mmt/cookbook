@@ -1,5 +1,5 @@
-import type { RecipeInput } from '$lib/recipeInput';
-import { saveRecipeAction } from '$lib/server/adminActions';
+import type { RecipeInput } from '#lib/recipeInput.js';
+import { saveRecipeAction } from '#lib/server/adminActions.js';
 
 export function load() {
 	const recipe: RecipeInput = {

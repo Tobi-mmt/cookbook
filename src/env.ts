@@ -1,0 +1,34 @@
+import { defineEnvVars } from '@sveltejs/kit/env';
+
+/** Unset or empty variables become undefined, the code that uses them handles that case */
+const optional = (value: string | undefined) => value || undefined;
+
+export const variables = defineEnvVars({
+	POSTGRES_URL: {
+		description: 'Postgres connection string, set by the Neon integration',
+		// optional, so that builds work without a database, `getDb` throws when it is missing
+		schema: optional
+	},
+	BLOB_READ_WRITE_TOKEN: {
+		description: 'Vercel Blob token, empty locally to store images in .data/blob',
+		schema: optional
+	},
+	ADMIN_PASSWORD_HASH: {
+		description: 'Created with `yarn hash-password <password>`, the login fails without it',
+		schema: optional
+	},
+	SESSION_SECRET: {
+		description: 'Random string that signs the admin session cookie, the login fails without it',
+		schema: optional
+	},
+	ISR_BYPASS_TOKEN: {
+		description: 'Random string with at least 32 characters for the ISR revalidation',
+		// the ISR config of the routes is read during the build
+		static: true,
+		schema: optional
+	},
+	CRON_SECRET: {
+		description: 'Random string that protects /api/warm-cache',
+		schema: optional
+	}
+});

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Logo from '$components/Logo.svelte';
-	import Search from '$components/Search.svelte';
+	import Logo from '#components/Logo.svelte';
+	import Search from '#components/Search.svelte';
 	import { resolve } from '$app/paths';
 
 	let searching = false;
@@ -8,7 +8,7 @@
 
 <header class="top-bar" class:top-bar--searching={searching}>
 	<div class="top-bar-inner">
-		<a class="logo" href={resolve('/', {})}>
+		<a class="logo" href={resolve('/')}>
 			<Logo size="2.25rem" />
 			<span>Unser Kochbuch</span>
 		</a>

@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import type { Snippet } from 'svelte';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import ExternalLink from '@lucide/svelte/icons/external-link';
 	import LogOut from '@lucide/svelte/icons/log-out';
 
 	let { children }: { children: Snippet } = $props();
 
-	const isStats = $derived(/^\/admin\/stats(\/|$)/.test($page.url.pathname));
+	const isStats = $derived(/^\/admin\/stats(\/|$)/.test(page.url.pathname));
 </script>
 
 <svelte:head>
@@ -15,21 +15,22 @@
 </svelte:head>
 
 <div class="admin">
-	{#if !$page.url.pathname.startsWith('/admin/login')}
+	{#if !page.url.pathname.startsWith('/admin/login')}
 		<header class="admin-header">
-			<a href={resolve('/admin', {})} class="admin-title">Kochbuch verwalten</a>
+			<a href={resolve('/admin')} class="admin-title">Kochbuch verwalten</a>
 			<nav aria-label="Verwaltung">
-				<a href={resolve('/admin', {})} class="nav-link" aria-current={isStats ? undefined : 'page'}
+				<a href={resolve('/admin')} class="nav-link" aria-current={isStats ? undefined : 'page'}
 					>Rezepte</a
 				>
+
 				<a
-					href={resolve('/admin/stats', {})}
+					href={resolve('/admin/stats')}
 					class="nav-link"
 					aria-current={isStats ? 'page' : undefined}>Statistik</a
 				>
 			</nav>
 			<div class="header-actions">
-				<a href={resolve('/', {})} target="_blank" class="button" title="Zur Webseite">
+				<a href={resolve('/')} target="_blank" class="button" title="Zur Webseite">
 					<ExternalLink size={18} aria-hidden="true" /><span class="label">Zur Webseite</span>
 				</a>
 				<form method="POST" action="/admin/logout">

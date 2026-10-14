@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import type { SubmitFunction } from '@sveltejs/kit';
-	import { enhance } from '$app/forms';
+	import { enhance, type SubmitFunction } from '$app/forms';
 
 	let { form }: { form: { url?: string; error?: string } | null } = $props();
 
@@ -59,7 +58,7 @@
 	<p class="import-error" role="alert">{error}</p>
 {/if}
 
-<a href={resolve('/admin', {})} class="button">Abbrechen</a>
+<a href={resolve('/admin')} class="button">Abbrechen</a>
 
 <style>
 	h1 {

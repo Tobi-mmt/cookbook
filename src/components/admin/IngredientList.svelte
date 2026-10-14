@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { IngredientInput } from '$lib/recipeInput';
+	import type { IngredientInput } from '#lib/recipeInput.js';
 	import ArrowDown from '@lucide/svelte/icons/arrow-down';
 	import ArrowUp from '@lucide/svelte/icons/arrow-up';
 	import Plus from '@lucide/svelte/icons/plus';

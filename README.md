@@ -38,6 +38,8 @@ Visitors are counted without cookies, like [Plausible](https://plausible.io/data
 
 ## Environment variables
 
+They are declared in `src/env.ts` and read from `$app/env/private`. All of them are optional, the app explains what is missing where it is needed.
+
 | Name                    | Description                                                     |
 | ----------------------- | --------------------------------------------------------------- |
 | `POSTGRES_URL`          | Postgres connection string (set by the Neon integration)        |

@@ -1,4 +1,4 @@
-import { importRecipeAction } from '$lib/server/adminActions';
+import { importRecipeAction } from '#lib/server/adminActions.js';
 
 /** Fetching the page and processing the image can take longer than the default limit */
 export const config = { maxDuration: 60 };

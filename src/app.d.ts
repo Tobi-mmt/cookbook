@@ -1,4 +1,4 @@
-import type { RecipeFilter } from '$lib/recipeFilter';
+import type { RecipeFilter } from '#lib/recipeFilter.js';
 
 declare global {
 	namespace App {

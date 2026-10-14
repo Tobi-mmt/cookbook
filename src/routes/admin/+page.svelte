@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import type { RecipeIndexEntry } from '$types';
-	import { page } from '$app/stores';
+	import type { RecipeIndexEntry } from '#types';
+	import { page } from '$app/state';
 	import { enhance } from '$app/forms';
-	import { categoryColors } from '$lib/colors';
-	import { slugerize } from '$lib/slugerize';
+	import { categoryColors } from '#lib/colors.js';
+	import { slugerize } from '#lib/slugerize.js';
 	import Check from '@lucide/svelte/icons/check';
 	import Download from '@lucide/svelte/icons/download';
 	import ExternalLink from '@lucide/svelte/icons/external-link';
@@ -18,9 +18,9 @@
 
 	let confirmDelete = $state<string | null>(null);
 
-	const saved = $derived(data.recipes.find(({ id }) => id === $page.url.searchParams.get('saved')));
-	const deleted = $derived($page.url.searchParams.has('deleted'));
-	const revalidateFailed = $derived($page.url.searchParams.has('revalidateFailed'));
+	const saved = $derived(data.recipes.find(({ id }) => id === page.url.searchParams.get('saved')));
+	const deleted = $derived(page.url.searchParams.has('deleted'));
+	const revalidateFailed = $derived(page.url.searchParams.has('revalidateFailed'));
 </script>
 
 <svelte:head>
@@ -30,10 +30,10 @@
 <div class="toolbar">
 	<h1>Rezepte ({data.recipes.length})</h1>
 	<div class="toolbar-actions">
-		<a href={resolve('/admin/recipes/import', {})} class="button">
+		<a href={resolve('/admin/recipes/import')} class="button">
 			<Download size={18} aria-hidden="true" /> Importieren
 		</a>
-		<a href={resolve('/admin/recipes/new', {})} class="button button--primary">
+		<a href={resolve('/admin/recipes/new')} class="button button--primary">
 			<Plus size={18} aria-hidden="true" /> Neues Rezept
 		</a>
 	</div>
@@ -79,9 +79,8 @@
 				{:else}
 					<a
 						class="button button--icon"
-						href={resolve('/recipe/[recipeId]/[recipeTitle]', {
-							recipeId: recipe.id,
-							recipeTitle: slugerize(recipe.title)
+						href={resolve('/recipe/[...recipeSlug]', {
+							recipeSlug: `${recipe.id}/${slugerize(recipe.title)}`
 						})}
 						target="_blank"
 						rel="noreferrer"

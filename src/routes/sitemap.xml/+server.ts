@@ -1,9 +1,9 @@
 import type { RequestHandler } from '@sveltejs/kit';
-import { getDb } from '$lib/server/context';
-import { isrConfig } from '$lib/server/isr';
-import { listRecipeIndex } from '$lib/server/recipes';
-import { slugerize } from '$lib/slugerize';
-import type { RecipeIndexEntry } from '$types';
+import { getDb } from '#lib/server/context.js';
+import { isrConfig } from '#lib/server/isr.js';
+import { listRecipeIndex } from '#lib/server/recipes.js';
+import { slugerize } from '#lib/slugerize.js';
+import type { RecipeIndexEntry } from '#types';
 
 const BASE_URL = 'https://kochbuch.monaundtobi.de';
 

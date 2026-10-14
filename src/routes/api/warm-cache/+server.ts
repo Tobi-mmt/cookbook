@@ -1,8 +1,8 @@
-import { error, json } from '@sveltejs/kit';
-import { env } from '$env/dynamic/private';
-import { getDb } from '$lib/server/context';
-import { listRecipeIndex } from '$lib/server/recipes';
-import { LIST_PATHS, recipePaths, revalidate } from '$lib/server/revalidate';
+import { error } from '@sveltejs/kit';
+import { CRON_SECRET } from '$app/env/private';
+import { getDb } from '#lib/server/context.js';
+import { listRecipeIndex } from '#lib/server/recipes.js';
+import { LIST_PATHS, recipePaths, revalidate } from '#lib/server/revalidate.js';
 
 /**
  * Renders all public pages into the ISR cache, so that no visitor waits for a cold render.
@@ -11,7 +11,7 @@ import { LIST_PATHS, recipePaths, revalidate } from '$lib/server/revalidate';
  * which also keeps rarely visited recipes in the cache.
  */
 export async function GET({ request, url }) {
-	if (!env.CRON_SECRET || request.headers.get('authorization') !== `Bearer ${env.CRON_SECRET}`) {
+	if (!CRON_SECRET || request.headers.get('authorization') !== `Bearer ${CRON_SECRET}`) {
 		error(401, 'Unauthorized');
 	}
 
@@ -19,5 +19,5 @@ export async function GET({ request, url }) {
 	const paths = [...LIST_PATHS, ...recipes.flatMap(recipePaths)];
 	const failed = await revalidate(url.origin, paths);
 
-	return json({ paths: paths.length, failed }, { status: failed.length ? 500 : 200 });
+	return Response.json({ paths: paths.length, failed }, { status: failed.length ? 500 : 200 });
 }

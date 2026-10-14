@@ -1,5 +1,5 @@
-import { dev } from '$app/environment';
-import { env } from '$env/dynamic/private';
+import { dev } from '$app/env';
+import { ISR_BYPASS_TOKEN } from '$app/env/private';
 import { slugerize } from '../slugerize';
 
 /** All public paths that show the given recipe, including the client-side navigation data */
@@ -17,7 +17,7 @@ const CONCURRENCY = 10;
  */
 export const revalidate = async (origin: string, paths: string[]): Promise<string[]> => {
 	if (dev) return [];
-	if (!env.ISR_BYPASS_TOKEN) {
+	if (!ISR_BYPASS_TOKEN) {
 		console.warn('ISR_BYPASS_TOKEN is not set, pages update after the ISR expiration');
 		return paths;
 	}
@@ -37,7 +37,7 @@ export const revalidate = async (origin: string, paths: string[]): Promise<strin
 				urls.slice(index, index + CONCURRENCY).map(async (path) => {
 					const response = await fetch(new URL(path, origin), {
 						method: 'HEAD',
-						headers: { 'x-prerender-revalidate': env.ISR_BYPASS_TOKEN! }
+						headers: { 'x-prerender-revalidate': ISR_BYPASS_TOKEN! }
 					});
 					if (!response.ok && response.status !== 404) throw new Error(`${response.status}`);
 				})
