@@ -7,11 +7,13 @@
 </script>
 
 <header class="top-bar" class:top-bar--searching={searching}>
-	<a class="logo" href={resolve('/', {})}>
-		<Logo size="2.25rem" />
-		<span>Unser Kochbuch</span>
-	</a>
-	<Search bind:expanded={searching} />
+	<div class="top-bar-inner">
+		<a class="logo" href={resolve('/', {})}>
+			<Logo size="2.25rem" />
+			<span>Unser Kochbuch</span>
+		</a>
+		<Search bind:expanded={searching} />
+	</div>
 </header>
 
 <style>
@@ -19,14 +21,19 @@
 		position: sticky;
 		top: 0;
 		z-index: 10;
+		padding: 0.5rem 1.5rem;
+		background: var(--color-surface);
+		box-shadow: 0 0 15px rgb(0 0 0 / 0.2);
+	}
+	/* the bar spans the whole width, its content as wide as the recipe content */
+	.top-bar-inner {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		gap: 1.5rem;
-		min-height: var(--top-bar-height);
-		padding: 0.5rem 1.5rem;
-		background: var(--color-surface);
-		box-shadow: 0 0 15px rgb(0 0 0 / 0.2);
+		max-width: 1250px;
+		min-height: calc(var(--top-bar-height) - 1rem);
+		margin: 0 auto;
 	}
 	.logo {
 		display: flex;
@@ -39,8 +46,10 @@
 	}
 	@media (max-width: 699px) {
 		.top-bar {
-			gap: 0.75rem;
 			padding: 0.5rem 0.75rem 0.5rem 1rem;
+		}
+		.top-bar-inner {
+			gap: 0.75rem;
 		}
 		/* on phones the search takes the whole bar while it is open */
 		.top-bar--searching .logo {
