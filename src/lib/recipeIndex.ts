@@ -1,8 +1,11 @@
 import { writable } from 'svelte/store';
 import type { RecipeIndexEntry } from '../types';
 
-/** All recipes for the menu and the search, loaded once in the browser */
+/** All recipes for the search, loaded once in the browser when the search is about to be used */
 export const recipeIndex = writable<RecipeIndexEntry[]>([]);
+
+/** Opened by the top bar and the search field on the home page */
+export const searchOpen = writable(false);
 
 let loading: Promise<void> | undefined;
 

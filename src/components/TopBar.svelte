@@ -1,62 +1,75 @@
 <script lang="ts">
-	import Icon from '$components/Icon.svelte';
+	import SearchIcon from '@lucide/svelte/icons/search';
+	import Utensils from '@lucide/svelte/icons/utensils';
 	import Search from '$components/Search.svelte';
 	import { resolve } from '$app/paths';
-	import { onMount } from 'svelte';
-	import { loadRecipeIndex } from '$lib/recipeIndex';
-
-	onMount(loadRecipeIndex);
-
-	let isSearchOpen = false;
+	import { loadRecipeIndex, searchOpen } from '$lib/recipeIndex';
 </script>
 
-<div class="top-bar">
-	<a class="word-icon" href={resolve('/', {})}>
-		<span class="word">Unser </span>
-		<Icon style="font-size: 3em;" name="spoon-and-fork" />
-		<span class="word"> Kochbuch</span>
+<header class="top-bar">
+	<a class="logo" href={resolve('/', {})}>
+		<span>Unser</span>
+		<Utensils size="1.75em" strokeWidth={1.5} aria-hidden="true" />
+		<span>Kochbuch</span>
 	</a>
 
-	<div
-		tabindex="0"
-		role="button"
+	<!-- the index loads as soon as the search is likely to be used -->
+	<button
+		type="button"
+		class="search-button"
 		aria-label="Suche öffnen"
-		on:click={() => (isSearchOpen = true)}
-		on:keypress={() => (isSearchOpen = true)}
-		class="action-icon"
+		on:pointerenter={loadRecipeIndex}
+		on:focus={loadRecipeIndex}
+		on:click={() => searchOpen.set(true)}
 	>
-		<Icon name="search" />
-	</div>
-</div>
+		<SearchIcon size="1.25em" aria-hidden="true" />
+	</button>
+</header>
 
-<Search bind:searchOpen={isSearchOpen} />
+<Search />
 
 <style>
 	.top-bar {
-		align-items: center;
-		background: #fff;
-		box-shadow: 0 0 15px #0003;
-		/* the empty outer columns keep the logo centered */
-		display: grid;
-		grid-template-columns: 1fr auto 1fr;
-		padding: 0.5em 1.5em;
 		position: sticky;
 		top: 0;
 		z-index: 10;
+		/* the empty outer columns keep the logo centered */
+		display: grid;
+		grid-template-columns: 1fr auto 1fr;
+		align-items: center;
+		min-height: var(--top-bar-height);
+		padding: 0.5rem 1.5rem;
+		background: var(--color-surface);
+		box-shadow: 0 0 15px rgb(0 0 0 / 0.2);
 	}
-	.word-icon {
+	.logo {
 		grid-column: 2;
 		display: flex;
 		align-items: center;
-		color: #333;
+		gap: 0.5em;
+		color: var(--color-text);
 		text-decoration: none;
 	}
-	.word {
-		margin: 0 0.5em;
-	}
-	.action-icon {
+	.search-button {
 		justify-self: end;
-		font-size: 1.25em;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 2.75rem;
+		height: 2.75rem;
+		padding: 0;
+		color: var(--color-text);
+		background: none;
+		border: none;
+		border-radius: var(--radius-pill);
 		cursor: pointer;
+	}
+	.search-button:hover {
+		background: var(--color-surface-muted);
+	}
+	@media (max-width: 599px) {
+		.top-bar {
+			padding: 0.5rem 1rem;
+		}
 	}
 </style>
