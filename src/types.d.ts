@@ -55,7 +55,6 @@ export interface Step {
 }
 
 export type IconName =
-	| 'navigation-menu'
 	| 'minus'
 	| 'plus'
 	| 'users-social'

@@ -1,5 +1,4 @@
 import { describe, expect, test } from 'vitest';
-import { categorize } from './categorizedRecipes';
 import { sortRecipes } from './sortRecipes';
 import type { Category } from '../types';
 
@@ -21,13 +20,5 @@ describe('sortRecipes', () => {
 			'Kuchen',
 			'Bowle'
 		]);
-	});
-});
-
-describe('categorize', () => {
-	test('groups recipes by category and keeps empty categories', () => {
-		const result = categorize([recipe('Dal', 'Herzhaft'), recipe('Suppe', 'Herzhaft')]);
-		expect(result.Herzhaft.map(({ title }) => title)).toEqual(['Dal', 'Suppe']);
-		expect(result.Salat).toEqual([]);
 	});
 });

@@ -1,7 +1,5 @@
 <script lang="ts">
 	import Icon from '$components/Icon.svelte';
-	import OffCanvas from '$components/OffCanvas.svelte';
-	import Menu from '$components/Menue.svelte';
 	import Search from '$components/Search.svelte';
 	import { resolve } from '$app/paths';
 	import { onMount } from 'svelte';
@@ -9,21 +7,10 @@
 
 	onMount(loadRecipeIndex);
 
-	let menuOpen = false;
 	let isSearchOpen = false;
 </script>
 
 <div class="top-bar">
-	<div
-		tabindex="0"
-		on:click={() => (menuOpen = true)}
-		role="button"
-		aria-label="Menü öffnen"
-		on:keypress={() => (menuOpen = true)}
-		class="action-icon"
-	>
-		<Icon name="navigation-menu" />
-	</div>
 	<a class="word-icon" href={resolve('/', {})}>
 		<span class="word">Unser </span>
 		<Icon style="font-size: 3em;" name="spoon-and-fork" />
@@ -43,27 +30,22 @@
 </div>
 
 <Search bind:searchOpen={isSearchOpen} />
-<OffCanvas headline="Menü" direction="left" open={menuOpen} onClose={() => (menuOpen = false)}>
-	<Menu
-		onItemClick={() => {
-			menuOpen = false;
-		}}
-	/>
-</OffCanvas>
 
 <style>
 	.top-bar {
 		align-items: center;
 		background: #fff;
 		box-shadow: 0 0 15px #0003;
-		display: flex;
-		justify-content: space-between;
+		/* the empty outer columns keep the logo centered */
+		display: grid;
+		grid-template-columns: 1fr auto 1fr;
 		padding: 0.5em 1.5em;
 		position: sticky;
 		top: 0;
 		z-index: 10;
 	}
 	.word-icon {
+		grid-column: 2;
 		display: flex;
 		align-items: center;
 		color: #333;
@@ -73,6 +55,7 @@
 		margin: 0 0.5em;
 	}
 	.action-icon {
+		justify-self: end;
 		font-size: 1.25em;
 		cursor: pointer;
 	}
