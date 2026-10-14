@@ -42,10 +42,10 @@
 		);
 	}
 
+	/* two columns from 320px on, the tiles size their fonts themselves */
 	@media (max-width: 599px) {
 		.recipe-grid {
-			--grid-item-min-width: 200px;
-			font-size: 0.7em;
+			--grid-item-min-width: 160px;
 		}
 	}
 </style>
