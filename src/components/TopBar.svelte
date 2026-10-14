@@ -1,75 +1,50 @@
 <script lang="ts">
-	import SearchIcon from '@lucide/svelte/icons/search';
-	import Utensils from '@lucide/svelte/icons/utensils';
+	import Logo from '$components/Logo.svelte';
 	import Search from '$components/Search.svelte';
 	import { resolve } from '$app/paths';
-	import { loadRecipeIndex, searchOpen } from '$lib/recipeIndex';
+
+	let searching = false;
 </script>
 
-<header class="top-bar">
+<header class="top-bar" class:top-bar--searching={searching}>
 	<a class="logo" href={resolve('/', {})}>
-		<span>Unser</span>
-		<Utensils size="1.75em" strokeWidth={1.5} aria-hidden="true" />
-		<span>Kochbuch</span>
+		<Logo size="2.25rem" />
+		<span>Unser Kochbuch</span>
 	</a>
-
-	<!-- the index loads as soon as the search is likely to be used -->
-	<button
-		type="button"
-		class="search-button"
-		aria-label="Suche öffnen"
-		on:pointerenter={loadRecipeIndex}
-		on:focus={loadRecipeIndex}
-		on:click={() => searchOpen.set(true)}
-	>
-		<SearchIcon size="1.25em" aria-hidden="true" />
-	</button>
+	<Search bind:expanded={searching} />
 </header>
-
-<Search />
 
 <style>
 	.top-bar {
 		position: sticky;
 		top: 0;
 		z-index: 10;
-		/* the empty outer columns keep the logo centered */
-		display: grid;
-		grid-template-columns: 1fr auto 1fr;
+		display: flex;
 		align-items: center;
+		justify-content: space-between;
+		gap: 1.5rem;
 		min-height: var(--top-bar-height);
 		padding: 0.5rem 1.5rem;
 		background: var(--color-surface);
 		box-shadow: 0 0 15px rgb(0 0 0 / 0.2);
 	}
 	.logo {
-		grid-column: 2;
 		display: flex;
 		align-items: center;
-		gap: 0.5em;
+		gap: 0.6rem;
+		font-size: 1.125rem;
 		color: var(--color-text);
 		text-decoration: none;
+		white-space: nowrap;
 	}
-	.search-button {
-		justify-self: end;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 2.75rem;
-		height: 2.75rem;
-		padding: 0;
-		color: var(--color-text);
-		background: none;
-		border: none;
-		border-radius: var(--radius-pill);
-		cursor: pointer;
-	}
-	.search-button:hover {
-		background: var(--color-surface-muted);
-	}
-	@media (max-width: 599px) {
+	@media (max-width: 699px) {
 		.top-bar {
-			padding: 0.5rem 1rem;
+			gap: 0.75rem;
+			padding: 0.5rem 0.75rem 0.5rem 1rem;
+		}
+		/* on phones the search takes the whole bar while it is open */
+		.top-bar--searching .logo {
+			display: none;
 		}
 	}
 </style>
