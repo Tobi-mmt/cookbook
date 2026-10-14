@@ -41,7 +41,10 @@ export interface RecipeImage {
 	variants: Record<ImageFormat, ImageVariant[]>;
 }
 
-/** Lightweight recipe data used by the menu and the search */
+/** What a recipe tile on the home page shows */
+export type RecipeSummary = Pick<Recipe, 'id' | 'title' | 'meta' | 'image'>;
+
+/** Lightweight recipe data used by the search */
 export interface RecipeIndexEntry {
 	id: string;
 	title: string;
