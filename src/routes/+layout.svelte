@@ -20,53 +20,43 @@
 </div>
 
 <style>
-	/* roboto-100 - latin */
+	/* only woff2, every browser that runs the app supports it */
 	@font-face {
 		font-family: 'Roboto';
 		font-style: normal;
 		font-weight: 100;
-		src:
-			local(''),
-			url('/fonts/roboto/roboto-v29-latin-100.woff2') format('woff2'),
-			/* Chrome 26+, Opera 23+, Firefox 39+ */ url('/fonts/roboto/roboto-v29-latin-100.woff')
-				format('woff');
-		/* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+		src: url('/fonts/roboto/roboto-v29-latin-100.woff2') format('woff2');
 		font-display: swap;
 	}
-
-	/* roboto-regular - latin */
 	@font-face {
 		font-family: 'Roboto';
 		font-style: normal;
 		font-weight: 400;
-		src:
-			local(''),
-			url('/fonts/roboto/roboto-v29-latin-regular.woff2') format('woff2'),
-			/* Chrome 26+, Opera 23+, Firefox 39+ */ url('/fonts/roboto/roboto-v29-latin-regular.woff')
-				format('woff');
-		/* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+		src: url('/fonts/roboto/roboto-v29-latin-regular.woff2') format('woff2');
 		font-display: swap;
 	}
-
-	/* roboto-700 - latin */
 	@font-face {
 		font-family: 'Roboto';
 		font-style: normal;
 		font-weight: 700;
-		src:
-			local(''),
-			url('/fonts/roboto/roboto-v29-latin-700.woff2') format('woff2'),
-			/* Chrome 26+, Opera 23+, Firefox 39+ */ url('/fonts/roboto/roboto-v29-latin-700.woff')
-				format('woff');
-		/* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+		src: url('/fonts/roboto/roboto-v29-latin-700.woff2') format('woff2');
 		font-display: swap;
 	}
 
-	:root {
-		--category-salat: '#57B16B';
-		--category-hearty: '#DD5D58';
-		--category-dessert: '#8882A8';
-		--category-drinks: '#F0CD5B';
+	/* design tokens of the public pages */
+	:global(:root) {
+		--color-text: #222;
+		--color-text-muted: #555;
+		--color-text-subtle: #888;
+		--color-border: #ddd;
+		--color-surface: #fff;
+		--color-surface-muted: #f5f5f5;
+		--color-dark: #27343a;
+		--color-focus: #27343a;
+		--radius-sm: 4px;
+		--radius-md: 8px;
+		--radius-pill: 999px;
+		--top-bar-height: 4.5rem;
 	}
 
 	:global(html, body) {
@@ -74,7 +64,7 @@
 		padding: 0;
 		margin: 0;
 		font-family: Roboto, sans-serif;
-		color: #333;
+		color: var(--color-text);
 	}
 	:global(p) {
 		margin: 0.5em 0;
@@ -82,6 +72,10 @@
 
 	:global(*) {
 		box-sizing: border-box;
+	}
+	:global(:focus-visible) {
+		outline: 3px solid var(--color-focus);
+		outline-offset: 2px;
 	}
 	@media only screen and (max-width: 800px) {
 		:global(html, body) {

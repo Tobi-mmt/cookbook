@@ -57,8 +57,8 @@
 		align-items: center;
 		flex-wrap: wrap;
 		gap: 0.5em 2em;
-		background: #fff;
-		border-bottom: 1px solid #ddd;
+		background: var(--color-surface);
+		border-bottom: 1px solid var(--color-border);
 		padding: 1em 0 0;
 		margin-bottom: 1.5em;
 	}
@@ -80,7 +80,7 @@
 		padding-bottom: 0.5em;
 		border-bottom: 3px solid transparent;
 		margin-bottom: -1px;
-		color: #555;
+		color: var(--color-text-muted);
 		text-decoration: none;
 	}
 	.nav-link:hover {
@@ -128,8 +128,8 @@
 		font: inherit;
 		padding: 0.4em 0.6em;
 		border: 1px solid #bbb;
-		border-radius: 4px;
-		background: #fff;
+		border-radius: var(--radius-sm);
+		background: var(--color-surface);
 		min-width: 0;
 	}
 	.admin :global(input:focus),
@@ -147,8 +147,8 @@
 		gap: 0.4em;
 		min-height: 2.4em;
 		border: 1px solid #bbb;
-		border-radius: 4px;
-		background: #fff;
+		border-radius: var(--radius-sm);
+		background: var(--color-surface);
 		color: inherit;
 		cursor: pointer;
 		text-decoration: none;
@@ -159,15 +159,15 @@
 		min-width: 2.4em;
 	}
 	.admin :global(.button:hover) {
-		background: #f3f3f3;
+		background: var(--color-surface-muted);
 	}
 	.admin :global(.button--primary) {
-		background: #27343a;
-		border-color: #27343a;
+		background: var(--color-dark);
+		border-color: var(--color-dark);
 		color: #fff;
 	}
 	.admin :global(.button--primary:hover) {
-		background: #3b4c54;
+		background: var(--color-text-muted);
 	}
 	.admin :global(.button--danger) {
 		color: #b3261e;
@@ -183,13 +183,13 @@
 	.admin :global(.notice) {
 		background: #eef6ef;
 		border: 1px solid #b9dcbf;
-		border-radius: 4px;
+		border-radius: var(--radius-sm);
 		padding: 0.75em 1em;
 	}
 	.admin :global(.warning) {
 		background: #fff6e0;
 		border: 1px solid #f0d58c;
-		border-radius: 4px;
+		border-radius: var(--radius-sm);
 		padding: 0.75em 1em;
 	}
 </style>

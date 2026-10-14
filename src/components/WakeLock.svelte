@@ -78,7 +78,7 @@
 		display: inline-block;
 		width: 60px;
 		height: 34px;
-		background-color: #ccc;
+		background-color: var(--color-border);
 		transition: 0.4s;
 		border-radius: 34px;
 	}
@@ -101,6 +101,11 @@
 
 	input:checked + .slider:before {
 		transform: translateX(26px);
+	}
+
+	input:focus-visible + .slider {
+		outline: 3px solid var(--color-focus);
+		outline-offset: 2px;
 	}
 
 	.label-text-wrapper {
