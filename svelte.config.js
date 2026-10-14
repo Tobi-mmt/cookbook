@@ -17,7 +17,7 @@ const config = {
 			mode: 'auto',
 			directives: {
 				'default-src': ['self'],
-				'script-src': ['self', 'unsafe-eval', 'unsafe-inline'],
+				'script-src': ['self', 'unsafe-inline'],
 				'img-src': ['self', 'data:', 'blob:', 'https://*.public.blob.vercel-storage.com'],
 				'object-src': ['none'],
 				'base-uri': ['none'],
