@@ -1,12 +1,14 @@
 <script lang="ts">
-	import type { Category, Recipe } from '$types';
+	import type { Category, RecipeSummary } from '$types';
 	import RecipePreview from '$components/RecipePreview.svelte';
 	import { page } from '$app/stores';
 	import { replaceState } from '$app/navigation';
 	import { categoryColors } from '$lib/colors';
 	import { filterRecipes, type Diet, type RecipeFilter } from '$lib/recipeFilter';
+	import { loadRecipeIndex, searchOpen } from '$lib/recipeIndex';
+	import SearchIcon from '@lucide/svelte/icons/search';
 
-	export let data: { recipes: Recipe[] };
+	export let data: { recipes: RecipeSummary[] };
 
 	const categories = Object.keys(categoryColors) as Category[];
 	const diets: Diet[] = ['Vegetarisch', 'Vegan'];
@@ -35,6 +37,19 @@
 	/>
 	<meta property="og:image" content="{$page.url.origin}/og-image.png" />
 </svelte:head>
+
+<div class="search">
+	<button
+		type="button"
+		class="search-field"
+		on:pointerenter={loadRecipeIndex}
+		on:focus={loadRecipeIndex}
+		on:click={() => searchOpen.set(true)}
+	>
+		<SearchIcon size="1.1em" aria-hidden="true" />
+		Rezept oder Zutat suchen
+	</button>
+</div>
 
 <div class="filters" role="group" aria-label="Rezepte filtern">
 	<button
@@ -80,11 +95,35 @@
 {/if}
 
 <style>
+	.search {
+		padding: 1rem 1.5rem 0;
+	}
+	/* looks like an input and opens the search dialog */
+	.search-field {
+		display: flex;
+		align-items: center;
+		gap: 0.6em;
+		width: 100%;
+		max-width: 36rem;
+		min-height: 2.75rem;
+		padding: 0.5rem 1rem;
+		font: inherit;
+		font-size: 1rem;
+		color: var(--color-text-subtle);
+		text-align: left;
+		background: var(--color-surface-muted);
+		border: 1px solid transparent;
+		border-radius: var(--radius-pill);
+		cursor: text;
+	}
+	.search-field:hover {
+		border-color: var(--color-border);
+	}
 	.filters {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-		padding: 1rem 1.5rem;
+		padding: 0.75rem 1.5rem 1rem;
 		/* one row that scrolls sideways on narrow screens */
 		overflow-x: auto;
 		scrollbar-width: none;
@@ -102,22 +141,22 @@
 		font: inherit;
 		font-size: 0.875rem;
 		line-height: 1.2;
-		color: #555;
-		background: #fff;
-		border: 1px solid #ddd;
-		border-radius: 999px;
+		color: var(--color-text-muted);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-pill);
 		cursor: pointer;
 		transition:
 			background-color 0.15s,
 			border-color 0.15s;
 	}
 	.chip:hover {
-		border-color: #aaa;
+		border-color: var(--color-text-subtle);
 	}
 	.chip[aria-pressed='true'] {
 		color: #fff;
-		background: #27343a;
-		border-color: #27343a;
+		background: var(--color-dark);
+		border-color: var(--color-dark);
 	}
 	.dot {
 		width: 0.5em;
@@ -130,11 +169,11 @@
 		width: 1px;
 		height: 1.5rem;
 		margin: 0 0.25rem;
-		background: #ddd;
+		background: var(--color-border);
 	}
 	.empty {
 		padding: 2rem 1.5rem;
-		color: #555;
+		color: var(--color-text-muted);
 	}
 	.reset {
 		font: inherit;
@@ -159,8 +198,11 @@
 
 	/* two columns from 320px on, the tiles size their fonts themselves */
 	@media (max-width: 599px) {
+		.search {
+			padding: 0.75rem 1rem 0;
+		}
 		.filters {
-			padding: 0.75rem 1rem;
+			padding: 0.6rem 1rem 0.75rem;
 		}
 		.recipe-grid {
 			--grid-item-min-width: 160px;
