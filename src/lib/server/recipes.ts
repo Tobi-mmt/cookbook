@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import { asc, eq, getTableColumns, inArray, type Column } from 'drizzle-orm';
-import type { Recipe, RecipeImage, RecipeIndexEntry } from '../../types';
+import type { Recipe, RecipeImage, RecipeIndexEntry, RecipeSummary } from '../../types';
 import type { RecipeInput } from '../recipeInput';
 import { sortRecipes } from '../sortRecipes';
 import type { Database } from './db/client';
@@ -37,9 +37,6 @@ const loadRows = async (db: Database, recipeIds?: string[]): Promise<RecipeRows[
 	});
 };
 
-export const listRecipes = async (db: Database): Promise<Recipe[]> =>
-	sortRecipes((await loadRows(db)).map(mapRecipe));
-
 export const getRecipe = async (db: Database, id: string): Promise<Recipe | undefined> => {
 	const [rows] = await loadRows(db, [id]);
 	return rows && mapRecipe(rows);
@@ -50,7 +47,23 @@ export const getRecipeInput = async (db: Database, id: string) => {
 	return rows && { input: mapRecipeInput(rows), image: rows.recipe.image };
 };
 
-/** Data for the menu and the search, kept small because it is loaded on every page */
+/** Data for the home page tiles, without ingredients and steps */
+export const listRecipeSummaries = async (db: Database): Promise<RecipeSummary[]> =>
+	sortRecipes(
+		(await db.select().from(recipes)).map((recipe) => ({
+			id: recipe.id,
+			title: recipe.title,
+			image: recipe.image,
+			meta: {
+				portion: recipe.portion,
+				duration: recipe.duration,
+				category: recipe.category,
+				nutritionType: recipe.nutritionType
+			}
+		}))
+	);
+
+/** Data for the search, kept small because the browser loads it as a whole */
 export const listRecipeIndex = async (db: Database): Promise<RecipeIndexEntry[]> => {
 	const [recipeRows, ingredientRows] = await Promise.all([
 		db.select().from(recipes),
