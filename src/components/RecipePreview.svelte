@@ -1,14 +1,14 @@
 <script lang="ts">
-	import type { Recipe } from '$types';
+	import type { RecipeSummary } from '$types';
+	import Hourglass from '@lucide/svelte/icons/hourglass';
 
 	import { slugerize } from '$lib/slugerize';
 	import { categoryColors } from '$lib/colors';
-	import { getIconName } from '$lib/iconName';
-	import Icon from '$components/Icon.svelte';
+	import { nutritionIcons } from '$lib/nutritionIcon';
 	import { resolve } from '$app/paths';
 	import RecipeImage from '$components/RecipeImage.svelte';
 
-	export let recipe: Recipe;
+	export let recipe: RecipeSummary;
 	export let priority: boolean = false;
 </script>
 
@@ -51,11 +51,17 @@
 					<h2 class="title">{recipe.title}</h2>
 					<div class="meta">
 						<div class="meta-item">
-							<span class="icon"><Icon name="sand-clock" /></span>
+							<span class="icon"><Hourglass size="1.1em" aria-hidden="true" /></span>
 							<p>{recipe.meta.duration}&nbsp;min</p>
 						</div>
 						<div class="meta-item">
-							<span class="icon"><Icon name={getIconName(recipe.meta.nutritionType)} /></span>
+							<span class="icon"
+								><svelte:component
+									this={nutritionIcons[recipe.meta.nutritionType]}
+									size="1.1em"
+									aria-hidden="true"
+								/></span
+							>
 							<p>{recipe.meta.nutritionType}</p>
 						</div>
 					</div>
@@ -111,7 +117,7 @@
 	}
 	.imagePlaceholder {
 		position: absolute;
-		background-color: #eee;
+		background-color: var(--color-surface-muted);
 		background-size: cover;
 		background-position: center;
 		filter: blur(8px);
@@ -133,7 +139,7 @@
 			rgb(255 255 255 / 0.88) 55%,
 			rgb(255 255 255 / 0) 100%
 		);
-		color: #222;
+		color: var(--color-text);
 		/* keeps the text legible where the image shines through */
 		text-shadow: 0 0 6px rgb(255 255 255 / 0.8);
 	}
@@ -142,7 +148,7 @@
 		font-size: 0.75rem;
 		font-weight: 400;
 		line-height: 1.2;
-		color: #888;
+		color: var(--color-text-subtle);
 		display: flex;
 		align-items: center;
 		gap: 0.4em;
@@ -160,7 +166,7 @@
 		font-weight: 400;
 		line-height: 1.2;
 		letter-spacing: -0.01em;
-		color: #222;
+		color: var(--color-text);
 		/* two lines instead of cutting long titles after a few words */
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
@@ -177,7 +183,7 @@
 		font-size: 0.8125rem;
 		font-weight: 400;
 		line-height: 1.4;
-		color: #555;
+		color: var(--color-text-muted);
 		font-variant-numeric: tabular-nums;
 	}
 	.meta-item {

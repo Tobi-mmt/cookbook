@@ -56,16 +56,3 @@ export interface Step {
 	description: string;
 	linkedIngredients?: Ingredient[];
 }
-
-export type IconName =
-	| 'minus'
-	| 'plus'
-	| 'users-social'
-	| 'users-alt-6'
-	| 'sand-clock'
-	| 'leaf'
-	| 'steak'
-	| 'spoon-and-fork'
-	| 'filter'
-	| 'close'
-	| 'search';
