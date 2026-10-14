@@ -5,7 +5,7 @@ import { listRecipeIndex } from '$lib/server/recipes';
 import { slugerize } from '$lib/slugerize';
 import type { RecipeIndexEntry } from '$types';
 
-const BASE_URL = 'https://kochbuch.tobis.app';
+const BASE_URL = 'https://kochbuch.monaundtobi.de';
 
 export const config = isrConfig;
 

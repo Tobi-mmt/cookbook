@@ -1,2 +1,2 @@
 User-agent: *
-Sitemap:https://kochbuch.tobis.app/sitemap.xml
+Sitemap: https://kochbuch.monaundtobi.de/sitemap.xml
