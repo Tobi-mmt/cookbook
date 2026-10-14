@@ -75,7 +75,7 @@
 			<div class="infos">
 				<div class="labels">
 					<p class="category">{recipe.meta.category}</p>
-					{#if recipe.isNew}<span class="badge">Neu</span>{/if}
+					{#if recipe.isNew}<span class="badge">NEU</span>{/if}
 				</div>
 				<h1 itemprop="name" class="title">{recipe.title}</h1>
 				<div class="meta">
@@ -253,12 +253,12 @@
 	.badge {
 		padding: 0.25em 0.7em;
 		font-size: 0.75rem;
-		font-weight: 700;
 		line-height: 1.2;
-		letter-spacing: 0.02em;
-		color: #fff;
+		color: var(--color-text-muted);
 		text-shadow: none;
-		background: var(--color-dark);
+		/* same look as the filter chips on the home page */
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
 		border-radius: var(--radius-pill);
 	}
 	.category {

@@ -47,7 +47,7 @@
 					{/if}
 				</div>
 				{#if recipe.isNew}
-					<span class="badge">Neu</span>
+					<span class="badge">NEU</span>
 				{/if}
 				<div class="infos">
 					<p class="category">{recipe.meta.category}</p>
@@ -132,15 +132,15 @@
 		position: absolute;
 		top: 0.75rem;
 		left: 0.75rem;
-		padding: 0.3em 0.75em;
+		padding: 0.25em 0.7em;
 		font-size: 0.75rem;
-		font-weight: 700;
 		line-height: 1.2;
-		letter-spacing: 0.02em;
-		color: #fff;
-		background: var(--color-dark);
+		color: var(--color-text-muted);
+		text-shadow: none;
+		/* same look as the filter chips on the home page */
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
 		border-radius: var(--radius-pill);
-		box-shadow: 0 1px 4px rgb(0 0 0 / 0.2);
 	}
 	.infos {
 		position: absolute;
