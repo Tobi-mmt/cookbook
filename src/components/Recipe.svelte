@@ -223,43 +223,70 @@
 		width: 100%;
 		object-fit: cover;
 	}
+	/* same typography as the recipe tiles (RecipePreview.svelte), only larger */
 	.title {
-		padding: 0;
-		font-weight: 200;
-		margin: 0 0 0.25em 0;
-		line-height: 1.1em;
-		font-size: 2.5em;
-		overflow: hidden;
-		max-width: 100%;
+		margin: 0;
+		font-size: clamp(1.75rem, 1.2rem + 2.5vw, 3rem);
+		font-weight: 400;
+		line-height: 1.15;
+		letter-spacing: -0.015em;
+		color: #222;
+		overflow-wrap: break-word;
+		hyphens: auto;
 	}
 	.description {
 		margin-bottom: 2em;
 	}
 	.category {
+		margin: 0;
+		display: flex;
+		align-items: center;
+		gap: 0.4em;
+		font-size: 0.875rem;
+		font-weight: 400;
+		line-height: 1.2;
 		color: #888;
-		font-weight: 300;
+	}
+	.category::before {
+		content: '';
+		width: 0.5em;
+		height: 0.5em;
+		border-radius: 50%;
+		background: var(--highlight-color);
 	}
 	.infos {
 		position: absolute;
-		bottom: 0em;
-		background: #fffd;
-		padding: 1em 1.5em;
+		bottom: 0;
 		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.4rem;
+		/* the top padding lets the gradient fade out above the text */
+		padding: 5rem 1.5rem 1.25rem;
 		text-align: center;
+		background: linear-gradient(
+			to top,
+			rgb(255 255 255 / 0.96) 0%,
+			rgb(255 255 255 / 0.88) 55%,
+			rgb(255 255 255 / 0) 100%
+		);
+		/* keeps the text legible where the image shines through */
+		text-shadow: 0 0 6px rgb(255 255 255 / 0.8);
 	}
 	.meta {
-		opacity: 0.75;
 		display: flex;
+		flex-wrap: wrap;
 		justify-content: center;
+		gap: 0.2rem 1.25rem;
+		font-size: 0.9375rem;
+		line-height: 1.4;
+		color: #555;
+		font-variant-numeric: tabular-nums;
 	}
 	.meta-item {
-		color: #333;
 		display: flex;
 		align-items: center;
-		margin: 0 1em 0 0;
-	}
-	.meta-item:last-of-type {
-		margin: 0;
 	}
 	.meta-item p {
 		margin: 0;
@@ -367,10 +394,11 @@
 			margin-bottom: 1em;
 		}
 		.infos {
-			padding: 1rem;
+			padding: 3.5rem 1rem 1rem;
 		}
-		.title {
-			font-size: 2.25em;
+		.meta {
+			gap: 0.15rem 0.9rem;
+			font-size: 0.8125rem;
 		}
 
 		.step {
