@@ -5,8 +5,6 @@
 	import { replaceState } from '$app/navigation';
 	import { categoryColors } from '$lib/colors';
 	import { filterRecipes, type Diet, type RecipeFilter } from '$lib/recipeFilter';
-	import { loadRecipeIndex, searchOpen } from '$lib/recipeIndex';
-	import SearchIcon from '@lucide/svelte/icons/search';
 
 	export let data: { recipes: RecipeSummary[] };
 
@@ -37,19 +35,6 @@
 	/>
 	<meta property="og:image" content="{$page.url.origin}/og-image.png" />
 </svelte:head>
-
-<div class="search">
-	<button
-		type="button"
-		class="search-field"
-		on:pointerenter={loadRecipeIndex}
-		on:focus={loadRecipeIndex}
-		on:click={() => searchOpen.set(true)}
-	>
-		<SearchIcon size="1.1em" aria-hidden="true" />
-		Rezept oder Zutat suchen
-	</button>
-</div>
 
 <div class="filters" role="group" aria-label="Rezepte filtern">
 	<button
@@ -95,36 +80,13 @@
 {/if}
 
 <style>
-	.search {
-		padding: 1rem 1.5rem 0;
-	}
-	/* looks like an input and opens the search dialog */
-	.search-field {
-		display: flex;
-		align-items: center;
-		gap: 0.6em;
-		width: 100%;
-		max-width: 36rem;
-		min-height: 2.75rem;
-		padding: 0.5rem 1rem;
-		font: inherit;
-		font-size: 1rem;
-		color: var(--color-text-subtle);
-		text-align: left;
-		background: var(--color-surface-muted);
-		border: 1px solid transparent;
-		border-radius: var(--radius-pill);
-		cursor: text;
-	}
-	.search-field:hover {
-		border-color: var(--color-border);
-	}
 	.filters {
 		display: flex;
 		align-items: center;
+		justify-content: safe center;
 		gap: 0.5rem;
-		padding: 0.75rem 1.5rem 1rem;
-		/* one row that scrolls sideways on narrow screens */
+		padding: 1.25rem 1.5rem 1rem;
+		/* centered while it fits, otherwise one row that scrolls sideways on narrow screens */
 		overflow-x: auto;
 		scrollbar-width: none;
 	}
@@ -198,11 +160,8 @@
 
 	/* two columns from 320px on, the tiles size their fonts themselves */
 	@media (max-width: 599px) {
-		.search {
-			padding: 0.75rem 1rem 0;
-		}
 		.filters {
-			padding: 0.6rem 1rem 0.75rem;
+			padding: 0.9rem 1rem 0.75rem;
 		}
 		.recipe-grid {
 			--grid-item-min-width: 160px;
