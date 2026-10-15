@@ -26,3 +26,14 @@ export const presentCategories = (recipes: { meta: { category: Category } }[]) =
 	[...new Map(recipes.map(({ meta }) => [meta.category.id, meta.category])).values()].sort(
 		(a, b) => a.position - b.position
 	);
+
+/** The filter is kept in the address, so that a filtered view can be shared */
+export const readFilter = (url: {
+	searchParams: { get(name: string): string | null };
+}): RecipeFilter => {
+	const diet = url.searchParams.get('ernaehrung');
+	return {
+		category: url.searchParams.get('kategorie') ?? undefined,
+		diet: diet === 'Vegan' || diet === 'Vegetarisch' ? diet : undefined
+	};
+};
