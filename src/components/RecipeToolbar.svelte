@@ -12,6 +12,8 @@
 	import { resolve } from '$app/paths';
 	import { me } from '#lib/me.svelte.js';
 	import { slugerize } from '#lib/slugerize.js';
+	import CookbookPicker, { type CookbookTarget } from '#components/CookbookPicker.svelte';
+	import ShareCookbookPanel from '#components/ShareCookbookPanel.svelte';
 
 	let { recipe }: { recipe: Recipe } = $props();
 
@@ -75,21 +77,25 @@
 		}
 	};
 
-	const post = (action: 'kopieren' | 'verschieben', cookbookId: string) =>
+	type TargetCookbook = { id: string; name: string; path: string };
+	/** after moving into or copying to a new cookbook, it can be shared right away */
+	let shareTarget = $state<{ message: string; cookbook: TargetCookbook } | null>(null);
+
+	const post = (action: 'kopieren' | 'verschieben', target: CookbookTarget) =>
 		fetch(`/api/rezept/${recipe.id}/${action}`, {
 			method: 'POST',
 			headers: { 'content-type': 'application/json' },
-			body: JSON.stringify({ cookbookId })
+			body: JSON.stringify(target)
 		});
 
-	const copyTo = async (cookbook: { id: string; name: string }) => {
+	const copyTo = async (target: CookbookTarget) => {
 		busy = true;
-		const response = await post('kopieren', cookbook.id);
+		const response = await post('kopieren', target);
 		busy = false;
-		choosing = null;
 		const body = await response.json().catch(() => null);
 		if (response.status === 409 && body?.url) {
 			// copied meanwhile, e.g. in another tab
+			choosing = null;
 			await goto(body.url);
 			return;
 		}
@@ -97,24 +103,53 @@
 			notice = body?.message ?? 'Das Rezept konnte nicht übernommen werden.';
 			return;
 		}
-		await goto(`${body.url}?kopiert=${encodeURIComponent(cookbook.name)}`);
+		choosing = null;
+		if (body.isNew) await me.refresh();
+		const shareParam = body.isNew ? `&teilen=${body.cookbook.id}` : '';
+		await goto(`${body.url}?kopiert=${encodeURIComponent(body.cookbook.name)}${shareParam}`);
 	};
 
-	const moveTo = async (cookbook: { id: string; name: string }) => {
+	const moveTo = async (target: CookbookTarget) => {
 		busy = true;
-		const response = await post('verschieben', cookbook.id);
+		const response = await post('verschieben', target);
 		busy = false;
+		const body = await response.json().catch(() => null);
+		if (!response.ok) {
+			notice = body?.message ?? 'Das Rezept konnte nicht verschoben werden.';
+			return;
+		}
 		choosing = null;
-		notice = response.ok
-			? `Verschoben nach „${cookbook.name}“.`
-			: 'Das Rezept konnte nicht verschoben werden.';
-		if (response.ok) await goto(page.url.pathname, { invalidateAll: true, replace: true });
+		if (body.isNew) {
+			await me.refresh();
+			shareTarget = {
+				message: `„${recipe.title}“ ist jetzt im neuen Kochbuch „${body.cookbook.name}“.`,
+				cookbook: body.cookbook
+			};
+		} else {
+			notice = `Verschoben nach „${body.cookbook.name}“.`;
+		}
+		await goto(page.url.pathname, { invalidateAll: true, replace: true, reset: false });
 	};
 
 	const startCopy = () => {
-		if (copyTargets.length === 1) copyTo(copyTargets[0]);
+		if (copyTargets.length === 1 && !copies.length) copyTo({ cookbookId: copyTargets[0].id });
 		else choosing = 'copy';
 	};
+
+	// the copy page shows the share panel for the new cookbook of the copy
+	$effect(() => {
+		const sharedId = page.url.searchParams.get('teilen');
+		const cookbook = me.current?.cookbooks.find(({ id }) => id === sharedId);
+		if (!cookbook || shareTarget) return;
+		shareTarget = {
+			message: `Kopie im neuen Kochbuch „${cookbook.name}“ angelegt.`,
+			cookbook: {
+				id: cookbook.id,
+				name: cookbook.name,
+				path: `/@${cookbook.ownerUsername}/${cookbook.slug}`
+			}
+		};
+	});
 </script>
 
 <div class="toolbar">
@@ -151,11 +186,9 @@
 				<a class="btn" href={copies[0].url} title="Deine Kopie öffnen">
 					<BookCheck size="1em" aria-hidden="true" /> In „{copies[0].cookbookName}“
 				</a>
-				{#if copyTargets.length}
-					<button type="button" class="btn btn--quiet" disabled={busy} onclick={startCopy}>
-						In weiteres Kochbuch
-					</button>
-				{/if}
+				<button type="button" class="btn btn--quiet" disabled={busy} onclick={startCopy}>
+					In weiteres Kochbuch
+				</button>
 			{:else}
 				<button type="button" class="btn" disabled={busy} onclick={startCopy}>
 					<BookPlus size="1em" aria-hidden="true" /> In mein Kochbuch
@@ -175,7 +208,7 @@
 					titel: slugerize(recipe.title)
 				})}><History size="1em" aria-hidden="true" /> Verlauf</a
 			>
-			{#if moveTargets.length}
+			{#if user}
 				<button type="button" class="btn" disabled={busy} onclick={() => (choosing = 'move')}>
 					<FolderInput size="1em" aria-hidden="true" /> Verschieben nach …
 				</button>
@@ -183,22 +216,20 @@
 		{/if}
 	</div>
 	{#if choosing}
-		<div class="choose" role="group" aria-label="Kochbuch wählen">
-			<span class="hint">{choosing === 'copy' ? 'In welches Kochbuch?' : 'Wohin verschieben?'}</span
-			>
-			{#each choosing === 'copy' ? copyTargets : moveTargets as cookbook (cookbook.id)}
-				<button
-					type="button"
-					class="btn"
-					disabled={busy}
-					onclick={() => (choosing === 'copy' ? copyTo(cookbook) : moveTo(cookbook))}
-					>{cookbook.name}</button
-				>
-			{/each}
-			<button type="button" class="btn btn--quiet" onclick={() => (choosing = null)}
-				>Abbrechen</button
-			>
-		</div>
+		<CookbookPicker
+			question={choosing === 'copy' ? 'In welches Kochbuch?' : 'Wohin verschieben?'}
+			cookbooks={choosing === 'copy' ? copyTargets : moveTargets}
+			{busy}
+			onpick={(target) => (choosing === 'copy' ? copyTo(target) : moveTo(target))}
+			oncancel={() => (choosing = null)}
+		/>
+	{/if}
+	{#if shareTarget}
+		<ShareCookbookPanel
+			message={shareTarget.message}
+			cookbook={shareTarget.cookbook}
+			onclose={() => (shareTarget = null)}
+		/>
 	{/if}
 </div>
 
@@ -254,13 +285,5 @@
 		width: 100%;
 		font-size: 0.875rem;
 		color: var(--color-text-muted);
-	}
-	.choose {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		justify-content: flex-end;
-		gap: 0.5rem;
-		width: 100%;
 	}
 </style>

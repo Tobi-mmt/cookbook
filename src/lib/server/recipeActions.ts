@@ -44,7 +44,10 @@ const DAY = 24 * 60 * 60;
 const NEW_ACCOUNT_LIMITS = { recipes: 10, images: 20 };
 
 /** Limits per person and day, ten times lower for new accounts against spam */
-export const withinDailyLimit = (user: Editor, kind: 'recipes' | 'images') =>
+export const withinDailyLimit = (
+	user: Pick<Editor, 'id' | 'createdAt'>,
+	kind: 'recipes' | 'images'
+) =>
 	hitRateLimit(
 		getDb(),
 		`${kind}:${user.id}`,
