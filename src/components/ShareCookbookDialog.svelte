@@ -1,15 +1,16 @@
 <script lang="ts">
 	import Copy from '@lucide/svelte/icons/copy';
 	import UserPlus from '@lucide/svelte/icons/user-plus';
+	import Dialog from '#components/Dialog.svelte';
 
 	let {
-		message,
-		cookbook,
-		onclose
+		open = $bindable(false),
+		title,
+		cookbook
 	}: {
-		message: string;
+		open?: boolean;
+		title: string;
 		cookbook: { id: string; name: string; path: string };
-		onclose: () => void;
 	} = $props();
 
 	let link = $state<string | null>(null);
@@ -45,9 +46,8 @@
 	};
 </script>
 
-<div class="panel" role="status">
-	<p class="title">{message}</p>
-	<p class="hint">Mit jemandem teilen? Wer eingeladen ist, kann alle Rezepte darin bearbeiten.</p>
+<Dialog bind:open {title}>
+	<p>Mit jemandem teilen? Wer eingeladen ist, kann alle Rezepte in „{cookbook.name}“ bearbeiten.</p>
 
 	{#if link}
 		<div class="link">
@@ -59,15 +59,13 @@
 		</div>
 		<p class="hint">Der Link gilt 7 Tage und lässt sich in den Einstellungen widerrufen.</p>
 	{:else}
-		<div class="row">
-			<button type="button" class="btn btn--primary" disabled={busy} onclick={() => invite()}>
-				<UserPlus size="1em" aria-hidden="true" /> Einladungslink erstellen
-			</button>
-		</div>
+		<button type="button" class="btn btn--primary" disabled={busy} onclick={() => invite()}>
+			<UserPlus size="1em" aria-hidden="true" /> Einladungslink erstellen
+		</button>
 	{/if}
 
 	<form
-		class="row"
+		class="email"
 		onsubmit={(event) => {
 			event.preventDefault();
 			invite(true);
@@ -86,36 +84,32 @@
 	{#if sentTo}<p class="hint">Die Einladung ist an {sentTo} unterwegs.</p>{/if}
 	{#if error}<p class="message message--error" role="alert">{error}</p>{/if}
 
-	<div class="row">
-		<a class="btn" href={cookbook.path}>Zum Kochbuch „{cookbook.name}“</a>
-		<button type="button" class="btn btn--quiet" onclick={onclose}>Schließen</button>
-	</div>
-</div>
+	{#snippet actions()}
+		<a class="btn" href={cookbook.path}>Zum Kochbuch</a>
+		<button type="button" class="btn btn--primary" onclick={() => (open = false)}>Fertig</button>
+	{/snippet}
+</Dialog>
 
 <style>
-	.panel {
+	.link {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
-		width: 100%;
-		padding: 1rem 1.25rem;
+		align-items: flex-start;
+		gap: 0.5rem;
+		padding: 0.75rem;
 		background: var(--color-surface-muted);
 		border-radius: var(--radius-md);
 	}
-	.title {
-		margin: 0;
-	}
-	.link {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 0.75rem;
-	}
 	.link code {
 		overflow-wrap: anywhere;
+		font-size: 0.875rem;
 	}
-	form .input {
+	.email {
+		display: flex;
+		gap: 0.5rem;
+	}
+	.email .input {
 		flex: 1;
-		min-width: 12rem;
+		min-width: 0;
 	}
 </style>

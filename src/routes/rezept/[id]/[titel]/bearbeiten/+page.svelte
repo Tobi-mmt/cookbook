@@ -3,6 +3,7 @@
 	import { enhance } from '$app/forms';
 	import RecipeEditor from '#components/editor/RecipeEditor.svelte';
 	import HiddenNotice from '#components/HiddenNotice.svelte';
+	import Dialog from '#components/Dialog.svelte';
 	import { recipePath } from '#lib/paths.js';
 	import type { RecipeInput } from '#lib/recipeInput.js';
 	import { SITE_NAME } from '#lib/site.js';
@@ -60,22 +61,24 @@
 	{/key}
 
 	<section class="danger">
-		{#if confirmDelete}
-			<form method="POST" action="?/delete" class="stack" use:enhance>
-				<p>Wirklich löschen? Kopien, die andere bereits übernommen haben, bleiben bestehen.</p>
-				<div class="row">
-					<button type="submit" class="btn btn--danger">Rezept löschen</button>
-					<button type="button" class="btn btn--quiet" onclick={() => (confirmDelete = false)}
-						>Abbrechen</button
-					>
-				</div>
-			</form>
-		{:else}
-			<button type="button" class="btn btn--danger" onclick={() => (confirmDelete = true)}
-				>Rezept löschen</button
-			>
-		{/if}
+		<button type="button" class="btn btn--danger" onclick={() => (confirmDelete = true)}
+			>Rezept löschen</button
+		>
 	</section>
+
+	<Dialog bind:open={confirmDelete} title="„{data.recipe.title}“ löschen?">
+		<p>
+			Das Rezept kommt für 30 Tage in den Papierkorb des Kochbuchs. Kopien, die andere bereits
+			übernommen haben, bleiben bestehen.
+		</p>
+		<form id="delete-recipe" method="POST" action="?/delete" use:enhance></form>
+		{#snippet actions()}
+			<button type="button" class="btn btn--quiet" onclick={() => (confirmDelete = false)}
+				>Abbrechen</button
+			>
+			<button type="submit" class="btn btn--danger" form="delete-recipe">Löschen</button>
+		{/snippet}
+	</Dialog>
 </div>
 
 <style>
@@ -83,8 +86,5 @@
 		margin-top: 3rem;
 		padding-top: 1.5rem;
 		border-top: 1px solid var(--color-border);
-	}
-	.danger p {
-		margin: 0;
 	}
 </style>

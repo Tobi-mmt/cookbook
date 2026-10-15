@@ -4,6 +4,7 @@
 	import { resolve } from '$app/paths';
 	import { onMount } from 'svelte';
 	import KeyRound from '@lucide/svelte/icons/key-round';
+	import Dialog from '#components/Dialog.svelte';
 	import { cookbookPath } from '#lib/paths.js';
 	import { daysUntil, inDays } from '#lib/daysUntil.js';
 	import type { EditableCookbook } from '#lib/server/cookbooks.js';
@@ -215,25 +216,35 @@
 
 	{#if !data.account.deletionAt}
 		<h2>Konto löschen</h2>
-		{#if confirmDeletion}
-			<form method="POST" action="?/requestDeletion" class="stack" use:enhance>
-				<p>
-					Dein Konto und alle Kochbücher, die nur du bearbeitest, werden nach {data.deletionDays}
-					Tagen gelöscht. Rezepte in gemeinsamen Kochbüchern bleiben dort. Kopien, die andere übernommen
-					haben, bleiben ebenfalls bestehen, dein Name wird dort entfernt.
-				</p>
-				<div class="row">
-					<button type="submit" class="btn btn--danger">Konto löschen</button>
-					<button type="button" class="btn btn--quiet" onclick={() => (confirmDeletion = false)}
-						>Abbrechen</button
-					>
-				</div>
-			</form>
-		{:else}
-			<button type="button" class="btn btn--danger" onclick={() => (confirmDeletion = true)}
-				>Konto löschen</button
-			>
-		{/if}
+		<button type="button" class="btn btn--danger" onclick={() => (confirmDeletion = true)}
+			>Konto löschen</button
+		>
+		<Dialog bind:open={confirmDeletion} title="Konto löschen?">
+			<p>
+				Dein Konto und alle Kochbücher, die nur du bearbeitest, werden nach {data.deletionDays} Tagen
+				gelöscht. Bis dahin kannst du es dir anders überlegen.
+			</p>
+			<p class="hint">
+				Rezepte in gemeinsamen Kochbüchern bleiben dort. Kopien, die andere übernommen haben,
+				bleiben ebenfalls bestehen, dein Name wird dort entfernt.
+			</p>
+			<form
+				id="request-deletion"
+				method="POST"
+				action="?/requestDeletion"
+				use:enhance={() =>
+					async ({ update }) => {
+						confirmDeletion = false;
+						await update();
+					}}
+			></form>
+			{#snippet actions()}
+				<button type="button" class="btn btn--quiet" onclick={() => (confirmDeletion = false)}
+					>Abbrechen</button
+				>
+				<button type="submit" class="btn btn--danger" form="request-deletion">Konto löschen</button>
+			{/snippet}
+		</Dialog>
 	{/if}
 </div>
 
