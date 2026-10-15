@@ -3,7 +3,7 @@ import { affectedPaths } from '#lib/server/affectedPaths.js';
 import { requireEditor } from '#lib/server/auth/guards.js';
 import { getDb, getStorage } from '#lib/server/context.js';
 import { getRecipe } from '#lib/server/recipes.js';
-import { copyRecipe } from '#lib/server/recipeTransfer.js';
+import { copyRecipe, findCopies } from '#lib/server/recipeTransfer.js';
 import { revalidate } from '#lib/server/revalidate.js';
 import { withinDailyLimit } from '#lib/server/recipeActions.js';
 import { storageStatus } from '#lib/server/storageUsage.js';
@@ -17,6 +17,13 @@ export async function POST(event) {
 	const source = await getRecipe(db, event.params.id);
 	if (!source?.visible) error(404, 'Rezept nicht gefunden');
 
+	const [existing] = await findCopies(db, source.recipe.id, [cookbookId]);
+	if (existing) {
+		return Response.json(
+			{ url: `/rezept/${existing.id}/${slugerize(existing.title)}`, existing: true },
+			{ status: 409 }
+		);
+	}
 	if (source.recipe.image && (await storageStatus(db, user.id)).full) {
 		error(507, 'Dein Speicher für Bilder ist voll.');
 	}

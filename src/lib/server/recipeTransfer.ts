@@ -1,6 +1,6 @@
-import { eq } from 'drizzle-orm';
+import { and, eq, inArray, isNull } from 'drizzle-orm';
 import type { Database } from './db/client';
-import { recipes } from './db/schema';
+import { cookbooks, recipes } from './db/schema';
 import { copyImage, imageFolder } from './images';
 import { createRecipeId, getRecipeInput, saveRecipe } from './recipes';
 import type { Storage } from './storage';
@@ -44,3 +44,24 @@ export const copyRecipe = async (
 /** The address of a recipe stays the same, it only appears in another cookbook */
 export const moveRecipe = (db: Database, id: string, cookbookId: string) =>
 	db.update(recipes).set({ cookbookId }).where(eq(recipes.id, id));
+
+/** Copies of a recipe in the given cookbooks, so that nobody copies the same recipe twice */
+export const findCopies = (db: Database, sourceId: string, cookbookIds: string[]) =>
+	cookbookIds.length
+		? db
+				.select({
+					id: recipes.id,
+					title: recipes.title,
+					cookbookId: recipes.cookbookId,
+					cookbookName: cookbooks.name
+				})
+				.from(recipes)
+				.innerJoin(cookbooks, eq(cookbooks.id, recipes.cookbookId))
+				.where(
+					and(
+						eq(recipes.copiedFromId, sourceId),
+						inArray(recipes.cookbookId, cookbookIds),
+						isNull(recipes.deletedAt)
+					)
+				)
+		: Promise.resolve([]);
