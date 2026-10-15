@@ -21,6 +21,11 @@ export const variables = defineEnvVars({
 		description: 'Random string that signs the admin session cookie, the login fails without it',
 		schema: optional
 	},
+	BETTER_AUTH_SECRET: {
+		description:
+			'Random string with at least 32 characters, signs sessions, captchas and IP hashes',
+		schema: optional
+	},
 	ISR_BYPASS_TOKEN: {
 		description: 'Random string with at least 32 characters for the ISR revalidation',
 		// the ISR config of the routes is read during the build
