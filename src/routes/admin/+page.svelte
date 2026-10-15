@@ -45,7 +45,7 @@
 	<tbody>
 		{#each data.latestPeople as person (person.id)}
 			<tr>
-				<td>{person.name}</td>
+				<td><a href={resolve('/admin/personen/[id]', { id: person.id })}>{person.name}</a></td>
 				<td>{person.username ? `@${person.username}` : '–'}</td>
 				<td>{person.createdAt.toLocaleDateString('de-DE')}</td>
 			</tr>

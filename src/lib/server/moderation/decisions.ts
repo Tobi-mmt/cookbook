@@ -37,7 +37,7 @@ export const DECISIONS = {
 } as const;
 export type Decision = keyof typeof DECISIONS;
 
-type Context = { db: Database; storage: Storage; origin: string; adminId: string };
+export type Context = { db: Database; storage: Storage; origin: string; adminId: string };
 
 const cookbookOf = async (db: Database, type: ReportTarget, id: string) =>
 	type === 'cookbook'
@@ -74,7 +74,7 @@ export const findImageCopies = async (db: Database, recipeId: string) => {
 };
 
 /** Removes the image from the recipes and from all their versions and deletes its files */
-const removeImage = async (context: Context, recipeIds: string[]) => {
+export const removeImage = async (context: Context, recipeIds: string[]) => {
 	const { db, storage } = context;
 	const rows = await db.select().from(recipes).where(inArray(recipes.id, recipeIds));
 	for (const row of rows) {
@@ -109,7 +109,7 @@ const removeImage = async (context: Context, recipeIds: string[]) => {
 	await refresh(context, [...new Set(rows.map(({ cookbookId }) => cookbookId))], recipeIds);
 };
 
-const setHidden = async (
+export const setHidden = async (
 	context: Context,
 	type: ReportTarget,
 	id: string,
@@ -204,7 +204,7 @@ export const unbanUser = async (context: Context, userId: string) => {
 };
 
 /** A neutral name that keeps the person reachable until they choose a new one */
-const resetUsername = async ({ db }: Context, userId: string) => {
+export const resetUsername = async ({ db }: Context, userId: string) => {
 	const username = `person-${userId
 		.replace(/[^a-z0-9]/gi, '')
 		.slice(0, 8)
