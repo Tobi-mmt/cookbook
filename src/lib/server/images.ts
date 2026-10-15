@@ -5,6 +5,12 @@ import type { Storage } from './storage';
 
 export const IMAGE_WIDTHS = [480, 960, 1600, 2400];
 
+/**
+ * Every current browser shows AVIF, so only AVIF comes in all widths. Older browsers and social
+ * networks, which often cannot show AVIF, get a single WebP in the width social networks recommend.
+ */
+export const WEBP_WIDTH = 1200;
+
 const FORMAT_OPTIONS: Record<ImageFormat, (image: Sharp) => Sharp> = {
 	avif: (image) => image.avif({ quality: 55 }),
 	webp: (image) => image.webp({ quality: 78 })
@@ -16,7 +22,7 @@ export const createPlaceholder = async (input: Buffer) => {
 	return `data:image/webp;base64,${buffer.toString('base64')}`;
 };
 
-/** Resizes the uploaded image to all responsive widths and formats and stores them */
+/** Resizes the uploaded image to all responsive widths in AVIF and one WebP and stores them */
 export const processAndStoreImage = async (
 	input: Buffer,
 	recipeId: string,
@@ -28,11 +34,14 @@ export const processAndStoreImage = async (
 		.toBuffer({ resolveWithObject: true });
 	const hash = createHash('sha256').update(input).digest('hex').slice(0, 10);
 
-	const widths = [...new Set(IMAGE_WIDTHS.map((width) => Math.min(width, info.width)))];
+	const widthsByFormat: Record<ImageFormat, number[]> = {
+		avif: [...new Set(IMAGE_WIDTHS.map((width) => Math.min(width, info.width)))],
+		webp: [Math.min(WEBP_WIDTH, info.width)]
+	};
 	const variants: Record<ImageFormat, ImageVariant[]> = { avif: [], webp: [] };
 
 	for (const format of Object.keys(FORMAT_OPTIONS) as ImageFormat[]) {
-		for (const width of widths) {
+		for (const width of widthsByFormat[format]) {
 			const body = await FORMAT_OPTIONS[format](sharp(normalized).resize(width)).toBuffer();
 			const url = await storage.putFile(
 				`recipes/${recipeId}/${hash}-${width}.${format}`,

@@ -10,7 +10,7 @@
 		const image = data.recipe?.image;
 		if (!image) return null;
 
-		// social networks recommend ~1200px, the 1600px variant is the closest one
+		// social networks recommend ~1200px and often cannot show AVIF, see `WEBP_WIDTH`
 		const variants = image.variants.webp;
 		const variant = variants.find(({ width }) => width >= 1200) ?? variants[variants.length - 1];
 
