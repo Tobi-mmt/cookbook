@@ -3,6 +3,8 @@
 	import TopBar from '#components/TopBar.svelte';
 	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/state';
+	// imported, so that the file name has a hash and the browser caches it for a year
+	import robotoRegular from '#lib/assets/fonts/roboto/roboto-v29-latin-regular.woff2';
 
 	let { children }: { children: Snippet } = $props();
 
@@ -14,6 +16,11 @@
 		navigator.sendBeacon('/api/event', JSON.stringify({ path: to.url.pathname }));
 	});
 </script>
+
+<svelte:head>
+	<!-- the regular weight is used everywhere, loading it early avoids a visible font swap -->
+	<link rel="preload" href={robotoRegular} as="font" type="font/woff2" crossorigin="anonymous" />
+</svelte:head>
 
 <div>
 	{#if !page.url.pathname.startsWith('/admin')}
@@ -30,21 +37,21 @@
 		font-family: 'Roboto';
 		font-style: normal;
 		font-weight: 100;
-		src: url('/fonts/roboto/roboto-v29-latin-100.woff2') format('woff2');
+		src: url('../lib/assets/fonts/roboto/roboto-v29-latin-100.woff2') format('woff2');
 		font-display: swap;
 	}
 	@font-face {
 		font-family: 'Roboto';
 		font-style: normal;
 		font-weight: 400;
-		src: url('/fonts/roboto/roboto-v29-latin-regular.woff2') format('woff2');
+		src: url('../lib/assets/fonts/roboto/roboto-v29-latin-regular.woff2') format('woff2');
 		font-display: swap;
 	}
 	@font-face {
 		font-family: 'Roboto';
 		font-style: normal;
 		font-weight: 700;
-		src: url('/fonts/roboto/roboto-v29-latin-700.woff2') format('woff2');
+		src: url('../lib/assets/fonts/roboto/roboto-v29-latin-700.woff2') format('woff2');
 		font-display: swap;
 	}
 
