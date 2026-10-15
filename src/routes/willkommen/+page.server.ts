@@ -2,7 +2,9 @@ import { fail, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { safeRedirectTarget } from '#lib/redirectTarget.js';
 import { getDb } from '#lib/server/context.js';
-import { ensureCookbook } from '#lib/server/cookbooks.js';
+import { ensureCookbook, listEditableCookbooks } from '#lib/server/cookbooks.js';
+import { affectedPaths } from '#lib/server/affectedPaths.js';
+import { revalidate } from '#lib/server/revalidate.js';
 import { users } from '#lib/server/db/schema.js';
 import { changeUsername, isUsernameAvailable } from '#lib/server/users.js';
 import { suggestUsername, validateUsername } from '#lib/username.js';
@@ -22,7 +24,7 @@ export async function load({ locals, url }) {
 }
 
 export const actions = {
-	default: async ({ request, locals }) => {
+	default: async ({ request, locals, url }) => {
 		const session = await locals.getSession();
 		if (!session) return fail(401, { error: 'Bitte melde dich erneut an.' });
 
@@ -56,6 +58,9 @@ export const actions = {
 			.set({ name, acceptedTermsAt: session.user.acceptedTermsAt ?? new Date() })
 			.where(eq(users.id, session.user.id));
 		await ensureCookbook(db, session.user.id);
+		// somebody may have opened the address before it existed, the 404 would stay cached
+		const cookbookIds = (await listEditableCookbooks(db, session.user.id)).map(({ id }) => id);
+		await revalidate(url.origin, [`/@${username}`, ...(await affectedPaths(db, { cookbookIds }))]);
 		return { saved: true };
 	}
 };

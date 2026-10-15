@@ -276,7 +276,11 @@ export const decideCase = async (
 			}
 			break;
 		case 'reset_username':
-			if (type === 'user') await resetUsername(context, id);
+			if (type === 'user') {
+				const previous = await db.query.users.findFirst({ where: eq(users.id, id) });
+				const username = await resetUsername(context, id);
+				await revalidate(origin, [`/@${previous?.username}`, `/@${username}`]);
+			}
 			break;
 		case 'ban':
 			if (type === 'user') await banUser(context, id, reason);
