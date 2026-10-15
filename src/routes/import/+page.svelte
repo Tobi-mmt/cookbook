@@ -50,9 +50,12 @@
 
 	{#if showEditor && imported}
 		<p class="message">
-			Bitte prüfe das Rezept. Gespeichert wird es erst mit „Speichern“. Bilder anderer Seiten werden
-			wegen des Urheberrechts nicht übernommen: Lade ein eigenes Foto hoch, such dir ein freies Bild
-			(z. B. auf Unsplash, Pixabay oder Wikimedia Commons) oder lass dir eins mit KI erzeugen.
+			Bitte prüfe das Rezept. Gespeichert wird es erst mit „Speichern“.
+			{#if imported.imageSkipped}
+				Das Bild der Originalseite wurde nicht übernommen, weil es urheberrechtlich geschützt ist.
+				Lade ein eigenes Foto hoch, such dir ein freies Bild (z. B. auf Unsplash, Pixabay oder
+				Wikimedia Commons) oder lass dir eins mit KI erzeugen und lade es danach hoch.
+			{/if}
 		</p>
 		<RecipeEditor
 			recipe={imported.input}
@@ -63,6 +66,7 @@
 			action={resolve('/neu')}
 			cancelHref={resolve('/import')}
 			draftKey="import:{imported.url}"
+			importedImage={imported.image && { ...imported.image, sourceUrl: imported.url }}
 			imported
 		/>
 	{:else}

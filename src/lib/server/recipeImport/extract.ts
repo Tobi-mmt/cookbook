@@ -6,6 +6,9 @@ export interface ScrapedRecipe {
 	name?: string;
 	description?: string;
 	image?: string;
+	/** license and author of the image, if the page states them */
+	imageLicense?: string;
+	imageAuthor?: string;
 	yield?: string;
 	totalTime?: string;
 	prepTime?: string;
@@ -116,10 +119,18 @@ const fromJsonLd = (root: HTMLElement): ScrapedRecipe | undefined => {
 	const recipe = nodes.find((node) => typesOf(node).includes('Recipe'));
 	if (!recipe) return undefined;
 
+	const imageNode = toArray(recipe.image)
+		.map(resolve)
+		.find((value): value is JsonNode => isObject(value));
+	const url = (value: unknown) => (typeof value === 'string' ? value : text(value));
+
 	return {
 		name: text(recipe.name) ?? text(recipe.headline),
 		description: text(recipe.abstract) ?? text(recipe.description),
 		image: image(recipe.image) ?? image(recipe.thumbnailUrl),
+		imageLicense:
+			url(imageNode?.license) ?? url(imageNode?.acquireLicensePage) ?? url(recipe.license),
+		imageAuthor: text(imageNode?.creator) ?? text(imageNode?.author) ?? text(imageNode?.creditText),
 		yield: texts(recipe.recipeYield).join(' ') || undefined,
 		totalTime: text(recipe.totalTime),
 		prepTime: text(recipe.prepTime),
@@ -228,7 +239,11 @@ const fromMicroformats = (root: HTMLElement): ScrapedRecipe | undefined => {
 
 export const extractRecipe = (html: string): ScrapedRecipe | undefined => {
 	const root = parse(html);
-	return [fromJsonLd, fromMicrodata, fromMicroformats]
+	const recipe = [fromJsonLd, fromMicrodata, fromMicroformats]
 		.map((extract) => extract(root))
-		.find((recipe) => recipe && !isEmpty(recipe));
+		.find((found) => found && !isEmpty(found));
+	if (recipe && !recipe.imageLicense) {
+		recipe.imageLicense = root.querySelector('[rel~="license"]')?.getAttribute('href');
+	}
+	return recipe;
 };

@@ -5,6 +5,8 @@ import { getDb, getStorage } from '#lib/server/context.js';
 import { getRecipe } from '#lib/server/recipes.js';
 import { copyRecipe } from '#lib/server/recipeTransfer.js';
 import { revalidate } from '#lib/server/revalidate.js';
+import { withinDailyLimit } from '#lib/server/recipeActions.js';
+import { storageStatus } from '#lib/server/storageUsage.js';
 import { slugerize } from '#lib/slugerize.js';
 
 /** "In mein Kochbuch" */
@@ -15,6 +17,12 @@ export async function POST(event) {
 	const source = await getRecipe(db, event.params.id);
 	if (!source?.visible) error(404, 'Rezept nicht gefunden');
 
+	if (source.recipe.image && (await storageStatus(db, user.id)).full) {
+		error(507, 'Dein Speicher für Bilder ist voll.');
+	}
+	if (!(await withinDailyLimit(user, 'recipes'))) {
+		error(429, 'Du hast heute schon sehr viele Rezepte angelegt.');
+	}
 	const copy = await copyRecipe(db, getStorage(), {
 		sourceId: source.recipe.id,
 		cookbookId,

@@ -55,7 +55,8 @@
 		busy = false;
 		choosing = null;
 		if (!response.ok) {
-			notice = 'Das Rezept konnte nicht übernommen werden.';
+			const message = (await response.json().catch(() => null))?.message;
+			notice = message ?? 'Das Rezept konnte nicht übernommen werden.';
 			return;
 		}
 		const { url } = await response.json();
