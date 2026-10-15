@@ -50,7 +50,12 @@ export async function load({ url }) {
 			return {
 				...stats,
 				path,
-				title: path === '/' ? 'Startseite' : titles.get(path.split('/')[2])
+				title:
+					path === '/'
+						? 'Startseite'
+						: /^\/(recipe|rezept)\//.test(path)
+							? titles.get(path.split('/')[2])
+							: undefined
 			};
 		}),
 		browsers,

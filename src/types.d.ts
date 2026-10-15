@@ -20,6 +20,19 @@ export type Section = {
 
 export type NutritionType = 'Vegan' | 'Vegetarisch' | 'Fisch' | 'Fleisch';
 
+/** A person as shown on recipes, null once the account was deleted */
+export interface PersonRef {
+	username: string;
+	name: string;
+}
+
+export interface CookbookRef {
+	id: string;
+	name: string;
+	slug: string;
+	ownerUsername: string;
+}
+
 export interface Recipe {
 	id: string;
 	meta: {
@@ -33,8 +46,16 @@ export interface Recipe {
 	/** created within the last weeks, see `src/lib/newRecipe.ts` */
 	isNew: boolean;
 	description?: string;
+	sourceUrl?: string;
 	steps: (Step | Section)[];
 	ingredients: (Ingredient | Section)[];
+	cookbook: CookbookRef;
+	author: PersonRef | null;
+	updatedAt: Date;
+	/** the copy chain, newest first: this recipe was copied from the first entry */
+	attribution: { recipeId: string; title: string; author: PersonRef | null; exists: boolean }[];
+	/** an unchanged copy points search engines to its original */
+	isUnchangedCopy: boolean;
 }
 
 export type ImageFormat = 'avif' | 'webp';
@@ -50,7 +71,9 @@ export interface RecipeImage {
 }
 
 /** What a recipe tile on the home page shows */
-export type RecipeSummary = Pick<Recipe, 'id' | 'title' | 'meta' | 'image' | 'isNew'>;
+export type RecipeSummary = Pick<Recipe, 'id' | 'title' | 'meta' | 'image' | 'isNew' | 'author'> & {
+	cookbookId: string;
+};
 
 /** Lightweight recipe data used by the search */
 export interface RecipeIndexEntry {

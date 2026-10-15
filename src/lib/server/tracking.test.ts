@@ -50,15 +50,16 @@ describe('isBot', () => {
 describe('normalizePath', () => {
 	test('accepts public pages without query and hash', () => {
 		expect(normalizePath('/')).toBe('/');
-		expect(normalizePath('/recipe/abc/pfannkuchen?x=1#top')).toBe('/recipe/abc/pfannkuchen');
+		expect(normalizePath('/rezept/abc/pfannkuchen?x=1#top')).toBe('/rezept/abc/pfannkuchen');
+		expect(normalizePath('/@tobi/unser-kochbuch')).toBe('/@tobi/unser-kochbuch');
 	});
 
 	test('rejects other paths', () => {
 		expect(normalizePath('/admin')).toBeNull();
 		expect(normalizePath('/api/event')).toBeNull();
 		expect(normalizePath('https://example.com/')).toBeNull();
-		expect(normalizePath('//example.com/recipe/x')).toBeNull();
-		expect(normalizePath(`/recipe/${'x'.repeat(300)}`)).toBeNull();
+		expect(normalizePath('//example.com/rezept/x')).toBeNull();
+		expect(normalizePath(`/rezept/${'x'.repeat(300)}`)).toBeNull();
 	});
 });
 

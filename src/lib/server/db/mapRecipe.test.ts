@@ -10,6 +10,17 @@ const rows: RecipeRows = {
 		nutritionType: 'Fleisch'
 	}),
 	category: testCategories.hauptgericht,
+	context: {
+		cookbook: {
+			id: 'cookbook',
+			name: 'Unser Kochbuch',
+			slug: 'unser-kochbuch',
+			ownerUsername: 'tobi'
+		},
+		author: { username: 'tobi', name: 'Tobias' },
+		attribution: [],
+		hiddenCookbook: false
+	},
 	ingredients: [
 		{
 			id: 3,

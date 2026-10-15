@@ -4,18 +4,15 @@
 
 	import { slugerize } from '#lib/slugerize.js';
 	import { nutritionIcons } from '#lib/nutritionIcon.js';
-	import { resolve } from '$app/paths';
+	import { recipePath } from '#lib/paths.js';
 	import RecipeImage from '#components/RecipeImage.svelte';
 
 	export let recipe: RecipeSummary;
 	export let priority: boolean = false;
+	export let byline: string | null = null;
 </script>
 
-<a
-	href={resolve('/recipe/[...recipeSlug]', {
-		recipeSlug: `${recipe.id}/${slugerize(recipe.title)}`
-	})}
->
+<a href={recipePath(recipe)}>
 	<div
 		id={slugerize(recipe.title)}
 		class="recipe-preview"
@@ -50,6 +47,7 @@
 				<div class="infos">
 					<p class="category">{recipe.meta.category.name}</p>
 					<h2 class="title">{recipe.title}</h2>
+					{#if byline}<p class="byline">{byline}</p>{/if}
 					<div class="meta">
 						<div class="meta-item">
 							<span class="icon"><Hourglass size="1.1em" aria-hidden="true" /></span>
@@ -191,6 +189,12 @@
 		overflow: hidden;
 		overflow-wrap: break-word;
 		hyphens: auto;
+	}
+	.byline {
+		margin: 0;
+		font-size: 0.75rem;
+		line-height: 1.3;
+		color: var(--color-text-subtle);
 	}
 	.meta {
 		display: flex;

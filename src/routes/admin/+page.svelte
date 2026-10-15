@@ -3,7 +3,7 @@
 	import type { RecipeIndexEntry } from '#types';
 	import { page } from '$app/state';
 	import { enhance } from '$app/forms';
-	import { slugerize } from '#lib/slugerize.js';
+	import { recipePath } from '#lib/paths.js';
 	import Check from '@lucide/svelte/icons/check';
 	import Download from '@lucide/svelte/icons/download';
 	import ExternalLink from '@lucide/svelte/icons/external-link';
@@ -78,9 +78,7 @@
 				{:else}
 					<a
 						class="button button--icon"
-						href={resolve('/recipe/[...recipeSlug]', {
-							recipeSlug: `${recipe.id}/${slugerize(recipe.title)}`
-						})}
+						href={recipePath(recipe)}
 						target="_blank"
 						rel="noreferrer"
 						aria-label="„{recipe.title}“ ansehen"

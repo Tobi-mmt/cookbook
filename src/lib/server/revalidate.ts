@@ -4,7 +4,7 @@ import { slugerize } from '../slugerize';
 
 /** All public paths that show the given recipe, including the client-side navigation data */
 export const recipePaths = (recipe: { id: string; title: string }) => [
-	`/recipe/${recipe.id}/${slugerize(recipe.title)}`
+	`/rezept/${recipe.id}/${slugerize(recipe.title)}`
 ];
 
 export const LIST_PATHS = ['/', '/api/recipe-index.json', '/sitemap.xml'];

@@ -59,7 +59,7 @@ export const normalizePath = (path: string) => {
 	if (!path.startsWith('/') || path.startsWith('//')) return null;
 	const { pathname } = new URL(path, 'http://localhost');
 	if (pathname.length > MAX_PATH_LENGTH) return null;
-	if (pathname !== '/' && !pathname.startsWith('/recipe/')) return null;
+	if (pathname !== '/' && !/^\/(@|rezept\/)/.test(pathname)) return null;
 	return pathname;
 };
 
