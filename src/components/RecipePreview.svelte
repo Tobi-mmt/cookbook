@@ -98,9 +98,9 @@
 	}
 	.header {
 		position: relative;
-		height: 40vw;
-		min-height: 20rem;
-		max-height: 550px;
+		height: 28vw;
+		min-height: 16rem;
+		max-height: 420px;
 	}
 	.imageWrapper :global(.image) {
 		position: absolute;
