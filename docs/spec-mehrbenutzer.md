@@ -134,7 +134,7 @@ Das heutige Design ist verbindlich. Alle neuen Seiten und Funktionen übernehmen
   - Unveränderte Kopien („In mein Kochbuch“) erscheinen in keiner der beiden Listen, nur ihre Originale. Sonst stünde dasselbe Rezept mehrfach da.
   - Solange es noch wenig Daten gibt, z. B. direkt nach dem Start, füllt „Beliebt“ mit den neuesten Rezepten auf.
 - Für Gäste ein Einstieg: „Eigenes Kochbuch anlegen“.
-- Angemeldete sehen oben eine Abkürzung „Mein Kochbuch“. Sie werden **nicht** automatisch weitergeleitet, denn die Startseite ist der Ort zum Stöbern.
+- **Entschieden:** Wer angemeldet ist und mindestens ein Rezept hat, sieht unter der Suche einen Umschalter „Meine Rezepte“ / „Entdecken“ und landet zuerst bei „Meine Rezepte“, den Rezepten aller eigenen Kochbücher. Am Ende führt „Weiter entdecken“ zu „Beliebt“ und „Neu“. Gäste und Personen ohne Rezepte sehen keinen Umschalter, nur „Entdecken“.
 
 ### Profil `/@benutzername`
 
