@@ -5,6 +5,8 @@
 	import { page } from '$app/state';
 	import { me } from '#lib/me.svelte.js';
 	import { validateUsername } from '#lib/username.js';
+	import { createPasskey, deviceName } from '#lib/passkeys.js';
+	import { SITE_NAME } from '#lib/site.js';
 
 	let {
 		data,
@@ -38,11 +40,7 @@
 
 	const addPasskey = async () => {
 		passkeyError = null;
-		const { authClient } = await import('#lib/authClient.js');
-		const { error } = await authClient.passkey.addPasskey({
-			name: navigator.platform || 'Passkey'
-		});
-		if (error) {
+		if (!(await createPasskey(deviceName()))) {
 			passkeyError =
 				'Der Passkey wurde nicht angelegt. Du kannst das später unter „Konto“ nachholen.';
 			return;
@@ -52,7 +50,7 @@
 </script>
 
 <svelte:head>
-	<title>Willkommen - Kochbuch</title>
+	<title>Willkommen - {SITE_NAME}</title>
 	<meta name="robots" content="noindex" />
 </svelte:head>
 

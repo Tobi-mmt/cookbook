@@ -9,6 +9,7 @@
 	import { daysUntil, inDays } from '#lib/daysUntil.js';
 	import type { EditableCookbook } from '#lib/server/cookbooks.js';
 	import { SITE_NAME } from '#lib/site.js';
+	import { createPasskey, deviceName, renamePasskey } from '#lib/passkeys.js';
 
 	let {
 		data,
@@ -43,13 +44,18 @@
 	};
 	onMount(loadPasskeys);
 
-	const addPasskey = async () => {
+	/** one dialog for naming a new passkey and for renaming one */
+	let naming = $state<{ id: string | null; name: string } | null>(null);
+
+	const savePasskeyName = async () => {
+		if (!naming) return;
 		passkeyError = null;
-		const { authClient } = await import('#lib/authClient.js');
-		const { error } = await authClient.passkey.addPasskey({
-			name: navigator.platform || 'Passkey'
-		});
-		if (error) passkeyError = 'Der Passkey wurde nicht angelegt.';
+		const { id, name } = naming;
+		naming = null;
+		const saved = id ? await renamePasskey(id, name) : await createPasskey(name);
+		if (!saved) {
+			passkeyError = id ? 'Der Name wurde nicht gespeichert.' : 'Der Passkey wurde nicht angelegt.';
+		}
 		await loadPasskeys();
 	};
 
@@ -132,11 +138,19 @@
 				{#each passkeys as passkey (passkey.id)}
 					<li>
 						<span>{passkey.name ?? 'Passkey'}</span>
-						<button
-							type="button"
-							class="btn btn--quiet btn--danger"
-							onclick={() => removePasskey(passkey.id)}>Entfernen</button
-						>
+						<span class="row">
+							<button
+								type="button"
+								class="btn btn--quiet"
+								onclick={() => (naming = { id: passkey.id, name: passkey.name ?? '' })}
+								>Umbenennen</button
+							>
+							<button
+								type="button"
+								class="btn btn--quiet btn--danger"
+								onclick={() => removePasskey(passkey.id)}>Entfernen</button
+							>
+						</span>
 					</li>
 				{/each}
 			</ul>
@@ -145,7 +159,7 @@
 		{/if}
 		{#if passkeyError}<p class="message message--error">{passkeyError}</p>{/if}
 		<div class="row">
-			<button type="button" class="btn" onclick={addPasskey}>
+			<button type="button" class="btn" onclick={() => (naming = { id: null, name: deviceName() })}>
 				<KeyRound size="1em" aria-hidden="true" /> Passkey hinzufügen
 			</button>
 			<form method="POST" action="?/signOutOthers" use:enhance>
@@ -153,6 +167,42 @@
 			</form>
 		</div>
 	</div>
+
+	<Dialog
+		open={naming !== null}
+		title={naming?.id ? 'Passkey umbenennen' : 'Passkey hinzufügen'}
+		onclose={() => (naming = null)}
+	>
+		{#if naming}
+			<form
+				id="passkey-name"
+				onsubmit={(event) => {
+					event.preventDefault();
+					savePasskeyName();
+				}}
+			>
+				<label class="field">
+					Name, damit du ihn wiedererkennst
+					<!-- svelte-ignore a11y_autofocus -->
+					<input
+						class="input"
+						bind:value={naming.name}
+						maxlength="60"
+						placeholder="z. B. iPhone oder 1Password"
+						required
+						autofocus
+					/>
+				</label>
+			</form>
+		{/if}
+		{#snippet actions()}
+			<button type="button" class="btn btn--quiet" onclick={() => (naming = null)}>Abbrechen</button
+			>
+			<button type="submit" class="btn btn--primary" form="passkey-name"
+				>{naming?.id ? 'Speichern' : 'Weiter'}</button
+			>
+		{/snippet}
+	</Dialog>
 
 	<h2>Kochbücher</h2>
 	<ul class="list">
