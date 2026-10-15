@@ -49,6 +49,8 @@
 	});
 
 	let shareLink = $state<string | null>(null);
+	let copied = $state(false);
+	let copiedTimeout: ReturnType<typeof setTimeout> | undefined;
 
 	/** The share sheet of the phone, otherwise the clipboard, otherwise the link to copy by hand */
 	const share = async () => {
@@ -64,7 +66,9 @@
 		}
 		try {
 			await navigator.clipboard.writeText(url);
-			notice = 'Link kopiert.';
+			copied = true;
+			clearTimeout(copiedTimeout);
+			copiedTimeout = setTimeout(() => (copied = false), 2500);
 		} catch {
 			// the clipboard needs https or localhost
 			shareLink = url;
@@ -133,9 +137,14 @@
 		</label>
 	{/if}
 	<div class="row actions">
-		<button type="button" class="btn" onclick={share}>
-			<Share2 size="1em" aria-hidden="true" /> Teilen
-		</button>
+		<span class="share">
+			<button type="button" class="btn" onclick={share}>
+				<Share2 size="1em" aria-hidden="true" /> Teilen
+			</button>
+			<span class="bubble" class:bubble--visible={copied} role="status" aria-live="polite"
+				>{copied ? 'Link kopiert' : ''}</span
+			>
+		</span>
 		{#if user && !canEdit}
 			{#if copies.length}
 				<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- from the server -->
@@ -212,6 +221,31 @@
 	}
 	.actions {
 		margin-left: auto;
+	}
+	.share {
+		position: relative;
+	}
+	/* the feedback appears right above the button and fades out again */
+	.bubble {
+		position: absolute;
+		bottom: calc(100% + 0.4rem);
+		left: 50%;
+		padding: 0.3rem 0.7rem;
+		font-size: 0.8125rem;
+		white-space: nowrap;
+		color: #fff;
+		background: var(--color-dark);
+		border-radius: var(--radius-pill);
+		opacity: 0;
+		pointer-events: none;
+		transform: translate(-50%, 0.25rem);
+		transition:
+			opacity 0.15s,
+			transform 0.15s;
+	}
+	.bubble--visible {
+		opacity: 1;
+		transform: translate(-50%, 0);
 	}
 	.share-link {
 		display: flex;
