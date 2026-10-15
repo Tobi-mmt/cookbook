@@ -53,6 +53,7 @@
 <RecipeBrowser
 	recipes={data.recipes}
 	cookbooks={chips}
+	searchPlaceholder="In den Rezepten von {profile.name} suchen"
 	byline={(recipe) =>
 		recipe.author && recipe.author.username !== profile.username
 			? `von ${recipe.author.name}`

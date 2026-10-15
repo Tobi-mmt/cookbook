@@ -4,14 +4,22 @@
 	import { readFilter, type Diet } from '#lib/recipeFilter.js';
 	import { setFilterParam } from '#lib/filterNavigation.js';
 
-	let { categories, children }: { categories: Category[]; children?: import('svelte').Snippet } =
-		$props();
+	let {
+		categories,
+		compact = false,
+		children
+	}: {
+		categories: Category[];
+		/** smaller chips where they only accompany a search */
+		compact?: boolean;
+		children?: import('svelte').Snippet;
+	} = $props();
 
 	const diets: Diet[] = ['Vegetarisch', 'Vegan'];
 	const filter = $derived(readFilter(page.shallow?.url ?? page.url));
 </script>
 
-<div class="chips" role="group" aria-label="Rezepte filtern">
+<div class="chips" class:chips--compact={compact} role="group" aria-label="Rezepte filtern">
 	{@render children?.()}
 	<button
 		type="button"
@@ -75,6 +83,14 @@
 		transition:
 			background-color 0.15s,
 			border-color 0.15s;
+	}
+	.chips--compact {
+		padding-top: 0.6rem;
+	}
+	.chips--compact .chip {
+		min-height: 2rem;
+		padding: 0.3em 0.85em;
+		font-size: 0.8125rem;
 	}
 	.chip:hover {
 		border-color: var(--color-text-subtle);
