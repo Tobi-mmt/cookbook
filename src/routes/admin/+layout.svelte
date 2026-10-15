@@ -14,6 +14,7 @@
 		{ href: resolve('/admin/kochbuecher'), label: 'Kochbücher' },
 		{ href: resolve('/admin/rezepte'), label: 'Rezepte' },
 		{ href: resolve('/admin/kategorien'), label: 'Kategorien' },
+		{ href: resolve('/admin/audit-log'), label: 'Audit-Log' },
 		{ href: resolve('/admin/stats'), label: 'Statistik' }
 	];
 	const isCurrent = (section: (typeof sections)[number]) => {
