@@ -28,7 +28,7 @@ export async function load({ params }) {
 		: [];
 
 	return {
-		profile: { username, name: user.name },
+		profile: { id: user.id, username, name: user.name },
 		cookbooks: cookbooks.map((cookbook) => ({
 			...cookbook,
 			hint: sharedWith(cookbook.members, username)

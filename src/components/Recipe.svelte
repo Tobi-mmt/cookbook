@@ -13,7 +13,16 @@
 
 	import RecipeStep from './RecipeStep.svelte';
 	import WakeLock from './WakeLock.svelte';
-	let { recipe, toolbar }: { recipe: Recipe; toolbar?: import('svelte').Snippet } = $props();
+	let {
+		recipe,
+		toolbar,
+		footer
+	}: {
+		recipe: Recipe;
+		toolbar?: import('svelte').Snippet;
+		/** e.g. the link to report the recipe */
+		footer?: import('svelte').Snippet;
+	} = $props();
 
 	// the recipe page re-creates this component via {#key} for another recipe
 	// svelte-ignore state_referenced_locally
@@ -233,6 +242,7 @@
 						>CC BY-SA 4.0</a
 					>
 				</p>
+				{@render footer?.()}
 				{#if recipe.sourceUrl}
 					<p>
 						<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- external link -->

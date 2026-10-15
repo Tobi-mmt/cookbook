@@ -1,5 +1,6 @@
 import { and, eq, gte, inArray, lt, sql } from 'drizzle-orm';
 import { deleteRequestedAccounts } from './accounts';
+import { closeCasesOfDeletedTargets, sendDailyReportSummary } from './moderation/reports';
 import { affectedPaths } from './affectedPaths';
 import type { Database } from './db/client';
 import { cookbookEditors, mailLog, users } from './db/schema';
@@ -93,6 +94,8 @@ export const runDailyJob = async (
 	await step('accounts', () => deleteRequestedAccounts(db, storage, now));
 	await step('mails', () => resendPendingMails(db));
 	await step('mailVolume', () => warnAboutMailVolume(db, now));
+	await step('closedCases', () => closeCasesOfDeletedTargets(db));
+	await step('reportSummary', () => sendDailyReportSummary(db, origin, now));
 	await step('rateLimits', async () => (await deleteExpiredRateLimits(db, now)).rowCount);
 	await step('revalidate', async () =>
 		revalidate(origin, [...LIST_PATHS, ...(await newlyIndexablePaths(db, now))])

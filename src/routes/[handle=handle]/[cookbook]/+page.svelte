@@ -2,6 +2,7 @@
 	import type { RecipeSummary } from '#types';
 	import AddRecipeButton from '#components/AddRecipeButton.svelte';
 	import RecipeBrowser from '#components/RecipeBrowser.svelte';
+	import ReportDialog from '#components/ReportDialog.svelte';
 	import { me } from '#lib/me.svelte.js';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
@@ -65,6 +66,8 @@
 	{/snippet}
 </RecipeBrowser>
 
+<p class="report"><ReportDialog targets={[{ type: 'cookbook', id: cookbook.id }]} /></p>
+
 {#if me.canEdit(cookbook.id)}
 	<AddRecipeButton cookbookId={cookbook.id} />
 {/if}
@@ -79,6 +82,10 @@
 		font-size: 1.75rem;
 		font-weight: 400;
 		letter-spacing: -0.01em;
+	}
+	.report {
+		margin: 2rem 0;
+		text-align: center;
 	}
 	.settings {
 		display: inline-block;

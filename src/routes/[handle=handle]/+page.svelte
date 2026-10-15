@@ -5,6 +5,7 @@
 	import QrCodeButton from '#components/QrCodeButton.svelte';
 	import AddRecipeButton from '#components/AddRecipeButton.svelte';
 	import RecipeBrowser from '#components/RecipeBrowser.svelte';
+	import ReportDialog from '#components/ReportDialog.svelte';
 	import { me } from '#lib/me.svelte.js';
 	import { cookbookPath, profilePath } from '#lib/paths.js';
 	import type { CookbookWithMembers } from '#lib/server/profiles.js';
@@ -14,7 +15,7 @@
 		data
 	}: {
 		data: {
-			profile: { username: string; name: string };
+			profile: { id: string; username: string; name: string };
 			cookbooks: (CookbookWithMembers & { hint?: string })[];
 			recipes: RecipeSummary[];
 			noindex: boolean;
@@ -60,6 +61,8 @@
 	{/snippet}
 </RecipeBrowser>
 
+<p class="report"><ReportDialog targets={[{ type: 'user', id: profile.id }]} /></p>
+
 {#if ownCookbook}
 	<AddRecipeButton cookbookId={ownCookbook.id} />
 {/if}
@@ -82,6 +85,10 @@
 	.handle {
 		margin: 0 0 0.5rem;
 		color: var(--color-text-subtle);
+	}
+	.report {
+		margin: 2rem 0;
+		text-align: center;
 	}
 	.empty {
 		padding: 2rem 1.5rem;
