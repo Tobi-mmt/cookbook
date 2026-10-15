@@ -1,21 +1,14 @@
 import { describe, expect, test } from 'vitest';
 import { testCategories } from '../../testing/categories';
+import { testRecipeRow } from '../../testing/recipeRow';
 import { mapRecipe, mapRecipeInput, type RecipeRows } from './mapRecipe';
 
 const rows: RecipeRows = {
-	recipe: {
-		id: 'abc',
+	recipe: testRecipeRow({
 		title: 'Saure Brühe',
-		description: null,
 		portion: 3,
-		duration: 30,
-		categoryId: 5,
-		nutritionType: 'Fleisch',
-		image: null,
-		sourceUrl: null,
-		createdAt: new Date(),
-		updatedAt: new Date()
-	},
+		nutritionType: 'Fleisch'
+	}),
 	category: testCategories.hauptgericht,
 	ingredients: [
 		{
