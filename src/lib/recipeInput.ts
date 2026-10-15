@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
-export const CATEGORIES = ['Salat', 'Herzhaft', 'Süßspeise', 'Getränke'] as const;
-export const NUTRITION_TYPES = ['Vegan', 'Vegetarisch', 'Fleisch'] as const;
+export const NUTRITION_TYPES = ['Vegan', 'Vegetarisch', 'Fisch', 'Fleisch'] as const;
 
 const trimmed = z.string().trim();
 
@@ -41,7 +40,7 @@ export const recipeInputSchema = z
 		),
 		portion: z.number().int().positive(),
 		duration: z.number().int().positive(),
-		category: z.enum(CATEGORIES),
+		categoryId: z.number().int().positive(),
 		nutritionType: z.enum(NUTRITION_TYPES),
 		ingredients: z.array(ingredientInputSchema),
 		steps: z.array(stepInputSchema).min(1, 'Mindestens ein Schritt')

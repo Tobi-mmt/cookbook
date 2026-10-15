@@ -1,13 +1,8 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import type { RecipeImage } from '#types';
+	import type { Category, RecipeImage } from '#types';
 	import { enhance, type SubmitFunction } from '$app/forms';
-	import {
-		CATEGORIES,
-		NUTRITION_TYPES,
-		findUnusedIngredients,
-		type RecipeInput
-	} from '#lib/recipeInput.js';
+	import { NUTRITION_TYPES, findUnusedIngredients, type RecipeInput } from '#lib/recipeInput.js';
 	import IngredientList from './IngredientList.svelte';
 	import StepList from './StepList.svelte';
 	import { resizeImage } from './resizeImage';
@@ -15,8 +10,14 @@
 	let {
 		recipe: initialRecipe,
 		image,
+		categories,
 		error
-	}: { recipe: RecipeInput; image: RecipeImage | null; error?: string } = $props();
+	}: {
+		recipe: RecipeInput;
+		image: RecipeImage | null;
+		categories: Category[];
+		error?: string;
+	} = $props();
 
 	// the editor works on a copy, the page re-creates it via {#key} for another recipe
 	// svelte-ignore state_referenced_locally
@@ -88,9 +89,9 @@
 			</label>
 			<label class="field">
 				Kategorie
-				<select bind:value={recipe.category}>
-					{#each CATEGORIES as category (category)}
-						<option value={category}>{category}</option>
+				<select bind:value={recipe.categoryId}>
+					{#each categories as category (category.id)}
+						<option value={category.id}>{category.name}</option>
 					{/each}
 				</select>
 			</label>

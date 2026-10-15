@@ -6,7 +6,6 @@
 	import Users from '@lucide/svelte/icons/users';
 	import { page } from '$app/state';
 
-	import { categoryColors } from '#lib/colors.js';
 	import { nutritionIcons } from '#lib/nutritionIcon.js';
 	import RecipeImage from './RecipeImage.svelte';
 
@@ -52,8 +51,8 @@
 
 <section
 	style={`
-  --highlight-color: ${categoryColors[recipe.meta.category]};
-  --highlight-color-light: ${categoryColors[recipe.meta.category]}77;
+  --highlight-color: ${recipe.meta.category.color};
+  --highlight-color-light: ${recipe.meta.category.color}77;
   `}
 >
 	<div itemscope itemtype="https://schema.org/Recipe">
@@ -78,7 +77,7 @@
 			</div>
 			<div class="infos">
 				<div class="labels">
-					<p class="category">{recipe.meta.category}</p>
+					<p class="category">{recipe.meta.category.name}</p>
 					{#if recipe.isNew}<span class="badge">NEU</span>{/if}
 				</div>
 				<h1 itemprop="name" class="title">{recipe.title}</h1>

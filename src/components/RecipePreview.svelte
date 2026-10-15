@@ -3,7 +3,6 @@
 	import Hourglass from '@lucide/svelte/icons/hourglass';
 
 	import { slugerize } from '#lib/slugerize.js';
-	import { categoryColors } from '#lib/colors.js';
 	import { nutritionIcons } from '#lib/nutritionIcon.js';
 	import { resolve } from '$app/paths';
 	import RecipeImage from '#components/RecipeImage.svelte';
@@ -21,8 +20,8 @@
 		id={slugerize(recipe.title)}
 		class="recipe-preview"
 		style={`
-  --highlight-color: ${categoryColors[recipe.meta.category]};
-  --highlight-color-light: ${categoryColors[recipe.meta.category]}77;
+  --highlight-color: ${recipe.meta.category.color};
+  --highlight-color-light: ${recipe.meta.category.color}77;
   `}
 	>
 		<div>
@@ -49,7 +48,7 @@
 					<span class="badge">NEU</span>
 				{/if}
 				<div class="infos">
-					<p class="category">{recipe.meta.category}</p>
+					<p class="category">{recipe.meta.category.name}</p>
 					<h2 class="title">{recipe.title}</h2>
 					<div class="meta">
 						<div class="meta-item">

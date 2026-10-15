@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { RecipeImage } from '#types';
+	import type { Category, RecipeImage } from '#types';
 	import { page } from '$app/state';
 	import type { RecipeInput } from '#lib/recipeInput.js';
 	import RecipeEditor from '#components/admin/RecipeEditor.svelte';
@@ -8,7 +8,7 @@
 		data,
 		form
 	}: {
-		data: { id: string; recipe: RecipeInput; image: RecipeImage | null };
+		data: { id: string; recipe: RecipeInput; image: RecipeImage | null; categories: Category[] };
 		form: { error?: string } | null;
 	} = $props();
 </script>
@@ -22,7 +22,12 @@
 	<p class="notice">Importiert – bitte prüfen und speichern, um es zu veröffentlichen.</p>
 {/if}
 {#key data.id}
-	<RecipeEditor recipe={data.recipe} image={data.image} error={form?.error} />
+	<RecipeEditor
+		recipe={data.recipe}
+		image={data.image}
+		categories={data.categories}
+		error={form?.error}
+	/>
 {/key}
 
 <style>

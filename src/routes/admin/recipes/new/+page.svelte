@@ -1,8 +1,13 @@
 <script lang="ts">
+	import type { Category } from '#types';
 	import type { RecipeInput } from '#lib/recipeInput.js';
 	import RecipeEditor from '#components/admin/RecipeEditor.svelte';
 
-	let { data, form }: { data: { recipe: RecipeInput }; form: { error?: string } | null } = $props();
+	let {
+		data,
+		form
+	}: { data: { recipe: RecipeInput; categories: Category[] }; form: { error?: string } | null } =
+		$props();
 </script>
 
 <svelte:head>
@@ -10,7 +15,7 @@
 </svelte:head>
 
 <h1>Neues Rezept</h1>
-<RecipeEditor recipe={data.recipe} image={null} error={form?.error} />
+<RecipeEditor recipe={data.recipe} image={null} categories={data.categories} error={form?.error} />
 
 <style>
 	h1 {

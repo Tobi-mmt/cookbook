@@ -1,10 +1,11 @@
 import type { Ingredient, Recipe, Section, Step } from '../../../types';
 import { isNewRecipe } from '../../newRecipe';
 import type { RecipeInput } from '../../recipeInput';
-import type { IngredientRow, RecipeRow, StepIngredientRow, StepRow } from './schema';
+import type { CategoryRow, IngredientRow, RecipeRow, StepIngredientRow, StepRow } from './schema';
 
 export interface RecipeRows {
 	recipe: RecipeRow;
+	category: CategoryRow;
 	ingredients: IngredientRow[];
 	steps: StepRow[];
 	stepIngredients: StepIngredientRow[];
@@ -21,7 +22,7 @@ const toIngredient = (row: IngredientRow): Ingredient => {
 
 /** Maps the database rows of one recipe to the `Recipe` shape used by the frontend */
 export const mapRecipe = (
-	{ recipe, ingredients, steps, stepIngredients }: RecipeRows,
+	{ recipe, category, ingredients, steps, stepIngredients }: RecipeRows,
 	now = new Date()
 ): Recipe => {
 	const ingredientsById = new Map(ingredients.map((row) => [row.id, row]));
@@ -33,7 +34,7 @@ export const mapRecipe = (
 		meta: {
 			portion: recipe.portion,
 			duration: recipe.duration,
-			category: recipe.category,
+			category,
 			nutritionType: recipe.nutritionType
 		},
 		image: recipe.image ?? null,
@@ -72,7 +73,7 @@ export const mapRecipeInput = ({
 	sourceUrl: recipe.sourceUrl,
 	portion: recipe.portion,
 	duration: recipe.duration,
-	category: recipe.category,
+	categoryId: recipe.categoryId,
 	nutritionType: recipe.nutritionType,
 	ingredients: [...ingredients].sort(byPosition).map((row) => ({
 		clientId: String(row.id),

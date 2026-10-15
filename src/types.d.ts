@@ -1,4 +1,10 @@
-export type Category = 'Salat' | 'Herzhaft' | 'Süßspeise' | 'Getränke';
+export interface Category {
+	id: number;
+	slug: string;
+	name: string;
+	color: string;
+	position: number;
+}
 
 export type Ingredient = {
 	quantity?: number;
@@ -12,7 +18,7 @@ export type Section = {
 	key?: string;
 };
 
-export type NutritionType = 'Vegan' | 'Vegetarisch' | 'Fleisch';
+export type NutritionType = 'Vegan' | 'Vegetarisch' | 'Fisch' | 'Fleisch';
 
 export interface Recipe {
 	id: string;

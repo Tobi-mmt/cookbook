@@ -1,14 +1,18 @@
 <script lang="ts">
-	import type { Category, RecipeSummary } from '#types';
+	import type { RecipeSummary } from '#types';
 	import RecipePreview from '#components/RecipePreview.svelte';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
-	import { categoryColors } from '#lib/colors.js';
-	import { filterRecipes, type Diet, type RecipeFilter } from '#lib/recipeFilter.js';
+	import {
+		filterRecipes,
+		presentCategories,
+		type Diet,
+		type RecipeFilter
+	} from '#lib/recipeFilter.js';
 
 	let { data }: { data: { recipes: RecipeSummary[] } } = $props();
 
-	const categories = Object.keys(categoryColors) as Category[];
+	const categories = $derived(presentCategories(data.recipes));
 	const diets: Diet[] = ['Vegetarisch', 'Vegan'];
 
 	const filter = $derived(page.state.filter ?? {});
@@ -44,19 +48,19 @@
 		aria-pressed={!filter.category}
 		onclick={() => setFilter({ category: undefined })}>Alle</button
 	>
-	{#each categories as category (category)}
+	{#each categories as category (category.id)}
 		<button
 			type="button"
 			class="chip"
-			style="--color: {categoryColors[category]}"
-			aria-pressed={filter.category === category}
+			style="--color: {category.color}"
+			aria-pressed={filter.category === category.slug}
 			onclick={() =>
 				setFilter({
-					category: filter.category === category ? undefined : category
+					category: filter.category === category.slug ? undefined : category.slug
 				})}
 		>
 			<span class="dot" aria-hidden="true"></span>
-			{category}
+			{category.name}
 		</button>
 	{/each}
 	<span class="divider" aria-hidden="true"></span>

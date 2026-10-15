@@ -1,17 +1,20 @@
 import { describe, expect, test } from 'vitest';
 import { sortRecipes } from './sortRecipes';
 import type { Category } from '../types';
+import { testCategories } from './testing/categories';
+
+const { backen, getraenke, hauptgericht, salat } = testCategories;
 
 const recipe = (title: string, category: Category) => ({ title, meta: { category } });
 
 describe('sortRecipes', () => {
-	test('sorts by category order and then by title', () => {
+	test('sorts by category position and then by title', () => {
 		const sorted = sortRecipes([
-			recipe('Kuchen', 'Süßspeise'),
-			recipe('Suppe', 'Herzhaft'),
-			recipe('Bowle', 'Getränke'),
-			recipe('Dal', 'Herzhaft'),
-			recipe('Kartoffelsalat', 'Salat')
+			recipe('Kuchen', backen),
+			recipe('Suppe', hauptgericht),
+			recipe('Bowle', getraenke),
+			recipe('Dal', hauptgericht),
+			recipe('Kartoffelsalat', salat)
 		]);
 		expect(sorted.map(({ title }) => title)).toEqual([
 			'Kartoffelsalat',

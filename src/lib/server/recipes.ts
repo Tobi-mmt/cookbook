@@ -4,6 +4,7 @@ import type { Recipe, RecipeImage, RecipeIndexEntry, RecipeSummary } from '../..
 import { isNewRecipe } from '../newRecipe';
 import type { RecipeInput } from '../recipeInput';
 import { sortRecipes } from '../sortRecipes';
+import { categoriesById } from './categories';
 import type { Database } from './db/client';
 import { mapRecipe, mapRecipeInput, type RecipeRows } from './db/mapRecipe';
 import { ingredients, recipes, stepIngredients, steps } from './db/schema';
@@ -15,7 +16,8 @@ export const createRecipeId = () => randomBytes(8).toString('hex').slice(0, 15);
 const loadRows = async (db: Database, recipeIds?: string[]): Promise<RecipeRows[]> => {
 	const ofRecipes = (column: Column) => (recipeIds ? inArray(column, recipeIds) : undefined);
 
-	const [recipeRows, ingredientRows, stepRows, linkRows] = await Promise.all([
+	const [categoryMap, recipeRows, ingredientRows, stepRows, linkRows] = await Promise.all([
+		categoriesById(db),
 		db.select().from(recipes).where(ofRecipes(recipes.id)),
 		db.select().from(ingredients).where(ofRecipes(ingredients.recipeId)),
 		db.select().from(steps).where(ofRecipes(steps.recipeId)),
@@ -31,6 +33,7 @@ const loadRows = async (db: Database, recipeIds?: string[]): Promise<RecipeRows[
 		const stepIds = new Set(recipeSteps.map((row) => row.id));
 		return {
 			recipe,
+			category: categoryMap.get(recipe.categoryId)!,
 			ingredients: ingredientRows.filter((row) => row.recipeId === recipe.id),
 			steps: recipeSteps,
 			stepIngredients: linkRows.filter((row) => stepIds.has(row.stepId))
@@ -49,9 +52,13 @@ export const getRecipeInput = async (db: Database, id: string) => {
 };
 
 /** Data for the home page tiles, without ingredients and steps */
-export const listRecipeSummaries = async (db: Database): Promise<RecipeSummary[]> =>
-	sortRecipes(
-		(await db.select().from(recipes)).map((recipe) => ({
+export const listRecipeSummaries = async (db: Database): Promise<RecipeSummary[]> => {
+	const [categoryMap, recipeRows] = await Promise.all([
+		categoriesById(db),
+		db.select().from(recipes)
+	]);
+	return sortRecipes(
+		recipeRows.map((recipe) => ({
 			id: recipe.id,
 			title: recipe.title,
 			image: recipe.image,
@@ -59,15 +66,17 @@ export const listRecipeSummaries = async (db: Database): Promise<RecipeSummary[]
 			meta: {
 				portion: recipe.portion,
 				duration: recipe.duration,
-				category: recipe.category,
+				category: categoryMap.get(recipe.categoryId)!,
 				nutritionType: recipe.nutritionType
 			}
 		}))
 	);
+};
 
 /** Data for the search, kept small because the browser loads it as a whole */
 export const listRecipeIndex = async (db: Database): Promise<RecipeIndexEntry[]> => {
-	const [recipeRows, ingredientRows] = await Promise.all([
+	const [categoryMap, recipeRows, ingredientRows] = await Promise.all([
+		categoriesById(db),
 		db.select().from(recipes),
 		db
 			.select({ recipeId: ingredients.recipeId, name: ingredients.name })
@@ -82,7 +91,7 @@ export const listRecipeIndex = async (db: Database): Promise<RecipeIndexEntry[]>
 			meta: {
 				portion: recipe.portion,
 				duration: recipe.duration,
-				category: recipe.category,
+				category: categoryMap.get(recipe.categoryId)!,
 				nutritionType: recipe.nutritionType
 			},
 			ingredients: ingredientRows
@@ -117,7 +126,7 @@ export const saveRecipe = async (
 			sourceUrl: input.sourceUrl || null,
 			portion: input.portion,
 			duration: input.duration,
-			category: input.category,
+			categoryId: input.categoryId,
 			nutritionType: input.nutritionType,
 			updatedAt: new Date(),
 			...(image !== undefined ? { image } : {})
