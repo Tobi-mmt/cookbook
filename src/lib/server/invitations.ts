@@ -3,6 +3,7 @@ import { and, desc, eq, gt, isNull } from 'drizzle-orm';
 import type { Database } from './db/client';
 import { cookbookEditors, cookbooks, invitations, users } from './db/schema';
 import { createId } from './ids';
+import { renderMail, sendMail } from './mail';
 
 const VALID_DAYS = 7;
 
@@ -73,3 +74,42 @@ export const revokeInvitation = (db: Database, cookbookId: string, id: string) =
 
 export const acceptInvitation = (db: Database, cookbookId: string, userId: string) =>
 	db.insert(cookbookEditors).values({ cookbookId, userId, role: 'editor' }).onConflictDoNothing();
+
+/** Creates a link to join a cookbook and, with an address, sends it by mail */
+export const inviteToCookbook = async (
+	db: Database,
+	{
+		origin,
+		cookbook,
+		inviter,
+		email
+	}: {
+		origin: string;
+		cookbook: { id: string; name: string };
+		inviter: { id: string; name: string };
+		email?: string;
+	}
+) => {
+	const token = await createInvitation(db, {
+		cookbookId: cookbook.id,
+		createdBy: inviter.id,
+		email
+	});
+	const link = `${origin}/einladung/${token}`;
+	if (email) {
+		await sendMail(
+			db,
+			email,
+			renderMail({
+				subject: `${inviter.name} lädt dich in ein Kochbuch ein`,
+				paragraphs: [
+					'Hallo,',
+					`${inviter.name} lädt dich ein, das Kochbuch „${cookbook.name}“ gemeinsam zu bearbeiten. Der Link ist 7 Tage gültig.`
+				],
+				button: { label: 'Einladung ansehen', url: link }
+			}),
+			{ kind: 'invitation' }
+		);
+	}
+	return link;
+};

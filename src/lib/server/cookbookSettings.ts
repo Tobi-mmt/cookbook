@@ -13,8 +13,7 @@ import {
 	transferCookbook
 } from './cookbooks';
 import { cookbooks, recipes, users } from './db/schema';
-import { createInvitation, listOpenInvitations, revokeInvitation } from './invitations';
-import { renderMail, sendMail } from './mail';
+import { inviteToCookbook, listOpenInvitations, revokeInvitation } from './invitations';
 import { revalidate } from './revalidate';
 import { listTrash, moveAllRecipesToTrash, restoreRecipe } from './trash';
 import { addDays, cookbookStats } from './recipeViews';
@@ -105,28 +104,12 @@ export const cookbookSettingsActions = {
 			return fail(400, { error: 'Bitte gib eine gültige E-Mail-Adresse ein.' });
 		}
 
-		const db = getDb();
-		const token = await createInvitation(db, {
-			cookbookId: cookbook.id,
-			createdBy: editor.id,
+		const link = await inviteToCookbook(getDb(), {
+			origin: event.url.origin,
+			cookbook,
+			inviter: editor,
 			email
 		});
-		const link = `${event.url.origin}/einladung/${token}`;
-		if (email) {
-			await sendMail(
-				db,
-				email,
-				renderMail({
-					subject: `${editor.name} lädt dich in ein Kochbuch ein`,
-					paragraphs: [
-						'Hallo,',
-						`${editor.name} lädt dich ein, das Kochbuch „${cookbook.name}“ gemeinsam zu bearbeiten. Der Link ist 7 Tage gültig.`
-					],
-					button: { label: 'Einladung ansehen', url: link }
-				}),
-				{ kind: 'invitation' }
-			);
-		}
 		return { link, sentTo: email || null };
 	},
 

@@ -1,6 +1,5 @@
 import { error } from '@sveltejs/kit';
 import { affectedPaths } from '#lib/server/affectedPaths.js';
-import { requireEditor } from '#lib/server/auth/guards.js';
 import { getDb, getStorage } from '#lib/server/context.js';
 import { getRecipe } from '#lib/server/recipes.js';
 import { copyRecipe, findCopies } from '#lib/server/recipeTransfer.js';
@@ -8,15 +7,17 @@ import { revalidate } from '#lib/server/revalidate.js';
 import { withinDailyLimit } from '#lib/server/recipeActions.js';
 import { storageStatus } from '#lib/server/storageUsage.js';
 import { slugerize } from '#lib/slugerize.js';
+import { resolveTargetCookbook } from '#lib/server/targetCookbook.js';
 
 /** "In mein Kochbuch" */
 export async function POST(event) {
-	const { cookbookId } = await event.request.json();
-	const user = await requireEditor(event, String(cookbookId));
+	const body = await event.request.json();
 	const db = getDb();
 	const source = await getRecipe(db, event.params.id);
 	if (!source?.visible) error(404, 'Rezept nicht gefunden');
 
+	const { user, cookbook, isNew } = await resolveTargetCookbook(event, body);
+	const cookbookId = cookbook.id;
 	const [existing] = await findCopies(db, source.recipe.id, [cookbookId]);
 	if (existing) {
 		return Response.json(
@@ -39,5 +40,5 @@ export async function POST(event) {
 		event.url.origin,
 		await affectedPaths(db, { cookbookIds: [cookbookId], recipes: [copy] })
 	);
-	return Response.json({ url: `/rezept/${copy.id}/${slugerize(copy.title)}` });
+	return Response.json({ url: `/rezept/${copy.id}/${slugerize(copy.title)}`, cookbook, isNew });
 }
