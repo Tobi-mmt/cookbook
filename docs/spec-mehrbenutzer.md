@@ -65,7 +65,7 @@ Leitlinie: so wenige Begriffe, Einstellungen und Rechte wie möglich. Wer nichts
 | Pfad                                        | Inhalt                                                      | Login      |
 | ------------------------------------------- | ----------------------------------------------------------- | ---------- |
 | `/`                                         | Startseite: Suche über alle Rezepte, neue Rezepte, Einstieg | –          |
-| `/@{benutzername}`                          | Profil: alle Rezepte der Person, nach Kochbuch filterbar    | –          |
+| `/@{benutzername}`                          | Profil: Kochbücher und alle Rezepte der Person              | –          |
 | `/@{benutzername}/{kochbuch}`               | Kochbuch: Kacheln, Filter, Suche im Kochbuch                | –          |
 | `/@{benutzername}/{kochbuch}/einstellungen` | Name, Bearbeiter, Einladungen, Statistik, Löschen           | Bearbeiter |
 | `/rezept/{id}/{titel}`                      | Rezept                                                      | –          |
@@ -89,7 +89,7 @@ Die Idee „Benutzernamen merken und in die URL tippen“ ist genau richtig. Ich
 - `/@tobi/unser-kochbuch` ist lesbar und erklärt, wem es gehört.
 - Kochbuch-Namen müssen nur pro Person eindeutig sein. Zwei Personen können beide ein „Weihnachten“ haben.
 - Wird der Besitz übergeben, ändert sich die URL. Die alte URL leitet über eine Historie weiter.
-- Das Profil einer Person zeigt auch die Rezepte der Kochbücher, in denen sie nur Bearbeiter ist. Diese Kochbücher erscheinen dort als Filter-Chip mit dem Hinweis „gemeinsam mit Mona“.
+- Das Profil einer Person zeigt auch die Rezepte der Kochbücher, in denen sie nur Bearbeiter ist. Diese Kochbücher stehen dort mit dem Hinweis „gemeinsam mit Mona“.
 
 ### Warum Rezepte eine eigene, feste Adresse haben
 
@@ -138,12 +138,13 @@ Das heutige Design ist verbindlich. Alle neuen Seiten und Funktionen übernehmen
 
 ### Profil `/@benutzername`
 
-**Entschieden:** Das Profil zeigt **alle Rezepte der Person auf einer Seite**, die Kochbücher sind nur ein Filter. Es gibt keine eigene Übersicht mit Kochbuch-Karten. So findet man an einem fremden Gerät jedes eigene Rezept mit einem Klick und einer Suche, ohne zu wissen, in welchem Kochbuch es liegt. Die meisten Personen haben nur ein bis drei Kochbücher, eine reine Kochbuch-Übersicht wäre ein unnötiger Zwischenschritt.
+**Entschieden:** Das Profil zeigt **alle Rezepte der Person auf einer Seite** mit einer großen Suche im Mittelpunkt. Die Kochbücher sind keine Filter, sondern eigene Orte: Sie stehen als Links über der Suche, ein Klick führt direkt ins Kochbuch.
 
-- Kopf mit Name, Benutzername und QR-Code-Button. **Entschieden:** Es gibt keine Profilbilder. Stattdessen erscheint überall, also im Profil, in der Top-Bar und bei „von Mona“, ein farbiger Kreis mit Initialen. So entfällt die Moderation von Profilfotos, und es gibt keine Fotos von Personen.
-- **Alle Rezepte** der Person als Kacheln mit Suche, aufgebaut und sortiert wie die heutige Startseite. Gemeint sind alle Rezepte aus den Kochbüchern, in denen die Person Bearbeiter ist, also auch gemeinsame. Rezepte anderer Bearbeiter tragen „von Mona“. Doppelte gibt es nicht, weil jedes Rezept in genau einem Kochbuch liegt.
-- **Kochbuch-Chips** über den Kacheln: „Alle“ (Standard) und je ein Chip pro Kochbuch, gemeinsame mit dem Hinweis „gemeinsam mit Mona“. Die Reihe erscheint nur bei mehr als einem Kochbuch und ist auf dem Handy seitlich scrollbar, wie die Filter-Chips heute. Darunter folgen die Kategorie-Chips. Beide Filter lassen sich kombinieren und stehen in der URL, z. B. `/@tobi?kochbuch=grillen`, damit man eine gefilterte Ansicht teilen kann.
-- Ist ein Kochbuch-Chip aktiv, erscheint ein dezenter Link **„Kochbuch öffnen“** mit Name und Mitgliedern. Er führt zu `/@tobi/{kochbuch}`, der Adresse zum Teilen und für die Einstellungen.
+- Kopf mit Name, darunter leise `@benutzername`, die Zahl der Rezepte und ein kleines QR-Code-Icon. **Entschieden:** Es gibt keine Profilbilder und auf dem Profil auch keinen Initialen-Kreis, die Initialen erscheinen nur im Menü der Top-Bar.
+- **Kochbücher** als Reihe von Links mit Name, Zahl der Rezepte und „gemeinsam mit Mona“, auch bei nur einem Kochbuch. Auf dem Handy ist die Reihe seitlich scrollbar.
+- **Suche** über alle Rezepte der Person, nach Titel und Zutat, mit der Zahl der Treffer.
+- **Alle Rezepte** der Person als Kacheln, aufgebaut und sortiert wie die heutige Startseite, darüber kleiner die Kategorie- und Ernährungs-Chips. Gemeint sind alle Rezepte aus den Kochbüchern, in denen die Person Bearbeiter ist, also auch gemeinsame. Rezepte anderer Bearbeiter tragen „von Mona“.
+- Alle Kochbücher sind außerdem über das Menü der Top-Bar erreichbar, dort lassen sich auch neue anlegen.
 
 ### Kochbuch `/@benutzername/kochbuch`
 

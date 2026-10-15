@@ -6,6 +6,7 @@
 	import RecipeBrowser from '#components/RecipeBrowser.svelte';
 	import ReportDialog from '#components/ReportDialog.svelte';
 	import { me } from '#lib/me.svelte.js';
+	import BookOpen from '@lucide/svelte/icons/book-open';
 	import { cookbookPath, profilePath } from '#lib/paths.js';
 	import type { CookbookWithMembers } from '#lib/server/profiles.js';
 	import { SITE_NAME } from '#lib/site.js';
@@ -22,9 +23,8 @@
 	} = $props();
 
 	const { profile } = $derived(data);
-	const chips = $derived(
-		data.cookbooks.map((cookbook) => ({ ...cookbook, href: cookbookPath(cookbook) }))
-	);
+	const recipeCount = (cookbookId: string) =>
+		data.recipes.filter((recipe) => recipe.cookbookId === cookbookId).length;
 	const ownCookbook = $derived(
 		me.current?.user?.username === profile.username
 			? me.current.cookbooks.find(({ role }) => role === 'owner')
@@ -50,9 +50,28 @@
 	</p>
 </header>
 
+<!-- the cookbooks are places of their own, a click leads there -->
+{#if data.cookbooks.length}
+	<nav class="cookbooks" aria-label="Kochbücher von {profile.name}">
+		{#each data.cookbooks as cookbook (cookbook.id)}
+			<a class="cookbook" href={cookbookPath(cookbook)}>
+				<BookOpen size="1.1em" aria-hidden="true" />
+				<span>
+					<span class="cookbook-name">{cookbook.name}</span>
+					<span class="cookbook-meta">
+						{recipeCount(cookbook.id)}
+						{recipeCount(cookbook.id) === 1 ? 'Rezept' : 'Rezepte'}{cookbook.hint
+							? ` · ${cookbook.hint}`
+							: ''}
+					</span>
+				</span>
+			</a>
+		{/each}
+	</nav>
+{/if}
+
 <RecipeBrowser
 	recipes={data.recipes}
-	cookbooks={chips}
 	searchPlaceholder="In den Rezepten von {profile.name} suchen"
 	byline={(recipe) =>
 		recipe.author && recipe.author.username !== profile.username
@@ -91,6 +110,53 @@
 		gap: 0.25rem;
 		margin: 0;
 		color: var(--color-text-subtle);
+	}
+	.cookbooks {
+		display: flex;
+		justify-content: safe center;
+		gap: 0.75rem;
+		padding: 1.25rem 1.5rem 0;
+		/* one row that scrolls sideways when there are many */
+		overflow-x: auto;
+		scrollbar-width: none;
+	}
+	.cookbooks::-webkit-scrollbar {
+		display: none;
+	}
+	.cookbook {
+		flex: none;
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		padding: 0.55rem 1rem 0.55rem 0.85rem;
+		color: var(--color-text);
+		text-decoration: none;
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+		transition: border-color 0.15s;
+	}
+	.cookbook:hover {
+		border-color: var(--color-text-subtle);
+	}
+	.cookbook :global(svg) {
+		flex: none;
+		color: var(--color-text-subtle);
+	}
+	.cookbook-name {
+		display: block;
+		font-size: 0.9375rem;
+	}
+	.cookbook-meta {
+		display: block;
+		font-size: 0.75rem;
+		color: var(--color-text-subtle);
+	}
+	@media (max-width: 599px) {
+		.cookbooks {
+			justify-content: flex-start;
+			padding: 1rem 1rem 0;
+		}
 	}
 	.report {
 		margin: 2rem 0;
