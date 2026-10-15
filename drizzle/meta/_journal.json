@@ -92,6 +92,13 @@
 			"when": 1792067819018,
 			"tag": "0012_deletion_log",
 			"breakpoints": true
+		},
+		{
+			"idx": 13,
+			"version": "7",
+			"when": 1792068023725,
+			"tag": "0013_recipe_daily_views",
+			"breakpoints": true
 		}
 	]
 }
