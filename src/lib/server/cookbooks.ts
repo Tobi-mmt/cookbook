@@ -88,3 +88,94 @@ export const findMovedCookbook = async (db: Database, ownerId: string, oldSlug: 
 		.where(and(eq(cookbookSlugHistory.ownerId, ownerId), eq(cookbookSlugHistory.oldSlug, oldSlug)));
 	return row;
 };
+
+export const listMembers = (db: Database, cookbookId: string) =>
+	db
+		.select({
+			userId: users.id,
+			username: users.username,
+			name: users.name,
+			role: cookbookEditors.role,
+			joinedAt: cookbookEditors.joinedAt
+		})
+		.from(cookbookEditors)
+		.innerJoin(users, eq(users.id, cookbookEditors.userId))
+		.where(eq(cookbookEditors.cookbookId, cookbookId))
+		.orderBy(asc(cookbookEditors.joinedAt));
+
+/** A new name changes the slug, the old one keeps redirecting */
+export const renameCookbook = (db: Database, cookbookId: string, name: string) =>
+	db.transaction(async (tx) => {
+		const cookbook = await tx.query.cookbooks.findFirst({ where: eq(cookbooks.id, cookbookId) });
+		if (!cookbook) throw new Error('Cookbook not found');
+		const slug =
+			toSlug(name, 60) === cookbook.slug
+				? cookbook.slug
+				: await freeSlug(tx, cookbook.ownerId, name);
+		if (slug !== cookbook.slug) {
+			await tx
+				.insert(cookbookSlugHistory)
+				.values({ ownerId: cookbook.ownerId, oldSlug: cookbook.slug, cookbookId })
+				.onConflictDoUpdate({
+					target: [cookbookSlugHistory.ownerId, cookbookSlugHistory.oldSlug],
+					set: { cookbookId }
+				});
+		}
+		await tx.update(cookbooks).set({ name, slug }).where(eq(cookbooks.id, cookbookId));
+		return { old: cookbook, slug };
+	});
+
+/** The new owner gets the cookbook under their name, the old address redirects */
+export const transferCookbook = (db: Database, cookbookId: string, newOwnerId: string) =>
+	db.transaction(async (tx) => {
+		const cookbook = await tx.query.cookbooks.findFirst({ where: eq(cookbooks.id, cookbookId) });
+		if (!cookbook) throw new Error('Cookbook not found');
+		const slug = await freeSlug(tx, newOwnerId, cookbook.slug);
+		await tx
+			.insert(cookbookSlugHistory)
+			.values({ ownerId: cookbook.ownerId, oldSlug: cookbook.slug, cookbookId })
+			.onConflictDoUpdate({
+				target: [cookbookSlugHistory.ownerId, cookbookSlugHistory.oldSlug],
+				set: { cookbookId }
+			});
+		await tx
+			.update(cookbooks)
+			.set({ ownerId: newOwnerId, slug })
+			.where(eq(cookbooks.id, cookbookId));
+		await tx
+			.update(cookbookEditors)
+			.set({ role: 'editor' })
+			.where(
+				and(
+					eq(cookbookEditors.cookbookId, cookbookId),
+					eq(cookbookEditors.userId, cookbook.ownerId)
+				)
+			);
+		await tx
+			.update(cookbookEditors)
+			.set({ role: 'owner' })
+			.where(
+				and(eq(cookbookEditors.cookbookId, cookbookId), eq(cookbookEditors.userId, newOwnerId))
+			);
+		return { old: cookbook, slug };
+	});
+
+export const removeEditor = (db: Database, cookbookId: string, userId: string) =>
+	db
+		.delete(cookbookEditors)
+		.where(
+			and(
+				eq(cookbookEditors.cookbookId, cookbookId),
+				eq(cookbookEditors.userId, userId),
+				eq(cookbookEditors.role, 'editor')
+			)
+		);
+
+/** How many cookbooks somebody owns, the last one cannot be deleted */
+export const countOwnedCookbooks = async (db: Database, userId: string) =>
+	(
+		await db
+			.select({ id: cookbooks.id })
+			.from(cookbooks)
+			.where(and(eq(cookbooks.ownerId, userId), isNull(cookbooks.deletedAt)))
+	).length;

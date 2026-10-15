@@ -4,6 +4,7 @@
 	import RecipeBrowser from '#components/RecipeBrowser.svelte';
 	import { me } from '#lib/me.svelte.js';
 	import { resolve } from '$app/paths';
+	import { page } from '$app/state';
 	import { profilePath } from '#lib/paths.js';
 	import type { CookbookWithMembers } from '#lib/server/profiles.js';
 	import { SITE_NAME } from '#lib/site.js';
@@ -31,6 +32,9 @@
 
 <header class="cookbook">
 	<h1>{cookbook.name}</h1>
+	{#if me.canEdit(cookbook.id)}
+		<a class="settings" href="{page.url.pathname}/einstellungen">Einstellungen</a>
+	{/if}
 	<p class="members">
 		{#each cookbook.members as member, index (member.username)}
 			{#if index > 0}{index === cookbook.members.length - 1 ? ' und ' : ', '}{/if}
@@ -75,6 +79,12 @@
 		font-size: 1.75rem;
 		font-weight: 400;
 		letter-spacing: -0.01em;
+	}
+	.settings {
+		display: inline-block;
+		margin-top: 0.25rem;
+		font-size: 0.875rem;
+		color: var(--color-text-muted);
 	}
 	.members {
 		margin: 0.5rem 0 0;
