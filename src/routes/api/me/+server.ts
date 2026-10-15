@@ -1,3 +1,6 @@
+import { getDb } from '#lib/server/context.js';
+import { listEditableCookbooks } from '#lib/server/cookbooks.js';
+
 /** What the cached pages personalize in the browser, never cached itself */
 export async function GET({ locals }) {
 	const session = await locals.getSession();
@@ -5,7 +8,11 @@ export async function GET({ locals }) {
 		? { username: session.user.username, name: session.user.name, role: session.user.role }
 		: null;
 	return Response.json(
-		{ user, needsOnboarding: Boolean(session && !user) },
+		{
+			user,
+			cookbooks: user ? await listEditableCookbooks(getDb(), session!.user.id) : [],
+			needsOnboarding: Boolean(session && !user)
+		},
 		{ headers: { 'cache-control': 'private, no-store' } }
 	);
 }

@@ -1,3 +1,4 @@
+import { sql } from 'drizzle-orm';
 import {
 	boolean,
 	date,
@@ -8,6 +9,7 @@ import {
 	pgEnum,
 	pgTable,
 	primaryKey,
+	uniqueIndex,
 	serial,
 	text,
 	timestamp
@@ -143,6 +145,73 @@ export const categories = pgTable('categories', {
 	position: integer('position').notNull()
 });
 
+export const cookbooks = pgTable(
+	'cookbooks',
+	{
+		id: text('id').primaryKey(),
+		ownerId: text('owner_id')
+			.notNull()
+			.references(() => users.id),
+		slug: text('slug').notNull(),
+		name: text('name').notNull(),
+		coverRecipeId: text('cover_recipe_id'),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+		hiddenAt: timestamp('hidden_at', { withTimezone: true }),
+		hiddenReason: text('hidden_reason'),
+		deletedAt: timestamp('deleted_at', { withTimezone: true })
+	},
+	(table) => [uniqueIndex('cookbooks_owner_slug_idx').on(table.ownerId, table.slug)]
+);
+
+/** Former slugs after a rename or a new owner, they redirect to the cookbook */
+export const cookbookSlugHistory = pgTable(
+	'cookbook_slug_history',
+	{
+		ownerId: text('owner_id').notNull(),
+		oldSlug: text('old_slug').notNull(),
+		cookbookId: text('cookbook_id')
+			.notNull()
+			.references(() => cookbooks.id, { onDelete: 'cascade' })
+	},
+	(table) => [primaryKey({ columns: [table.ownerId, table.oldSlug] })]
+);
+
+export const cookbookRoleEnum = pgEnum('cookbook_role', ['owner', 'editor']);
+
+export const cookbookEditors = pgTable(
+	'cookbook_editors',
+	{
+		cookbookId: text('cookbook_id')
+			.notNull()
+			.references(() => cookbooks.id, { onDelete: 'cascade' }),
+		userId: text('user_id')
+			.notNull()
+			.references(() => users.id, { onDelete: 'cascade' }),
+		role: cookbookRoleEnum('role').notNull(),
+		joinedAt: timestamp('joined_at', { withTimezone: true }).notNull().defaultNow()
+	},
+	(table) => [
+		primaryKey({ columns: [table.cookbookId, table.userId] }),
+		index('cookbook_editors_user_id_idx').on(table.userId)
+	]
+);
+
+export const invitations = pgTable('invitations', {
+	id: text('id').primaryKey(),
+	cookbookId: text('cookbook_id')
+		.notNull()
+		.references(() => cookbooks.id, { onDelete: 'cascade' }),
+	tokenHash: text('token_hash').notNull().unique(),
+	email: text('email'),
+	createdBy: text('created_by').references(() => users.id, { onDelete: 'set null' }),
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+	revokedAt: timestamp('revoked_at', { withTimezone: true })
+});
+
+/** One entry per step of a copy chain, the names are resolved when rendering */
+export type Attribution = { recipeId: string; title: string; userId: string | null }[];
+
 export const recipes = pgTable('recipes', {
 	id: text('id').primaryKey(),
 	title: text('title').notNull(),
@@ -155,8 +224,23 @@ export const recipes = pgTable('recipes', {
 	nutritionType: nutritionTypeEnum('nutrition_type').notNull(),
 	image: jsonb('image').$type<RecipeImage>(),
 	sourceUrl: text('source_url'),
+	cookbookId: text('cookbook_id')
+		.notNull()
+		.references(() => cookbooks.id, { onDelete: 'cascade' }),
+	createdBy: text('created_by').references(() => users.id, { onDelete: 'set null' }),
+	updatedBy: text('updated_by').references(() => users.id, { onDelete: 'set null' }),
+	version: integer('version').notNull().default(1),
+	copiedFromId: text('copied_from_id'),
+	attribution: jsonb('attribution')
+		.$type<Attribution>()
+		.notNull()
+		.default(sql`'[]'::jsonb`),
 	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
+	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+	deletedAt: timestamp('deleted_at', { withTimezone: true }),
+	deletedBy: text('deleted_by').references(() => users.id, { onDelete: 'set null' }),
+	hiddenAt: timestamp('hidden_at', { withTimezone: true }),
+	hiddenReason: text('hidden_reason')
 });
 
 export const ingredients = pgTable('ingredients', {
@@ -252,6 +336,7 @@ export const mailSuppressions = pgTable('mail_suppressions', {
 	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
 });
 
+export type CookbookRow = typeof cookbooks.$inferSelect;
 export type CategoryRow = typeof categories.$inferSelect;
 export type RecipeRow = typeof recipes.$inferSelect;
 export type IngredientRow = typeof ingredients.$inferSelect;

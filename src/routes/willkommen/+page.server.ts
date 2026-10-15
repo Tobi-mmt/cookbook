@@ -2,6 +2,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { safeRedirectTarget } from '#lib/redirectTarget.js';
 import { getDb } from '#lib/server/context.js';
+import { ensureCookbook } from '#lib/server/cookbooks.js';
 import { users } from '#lib/server/db/schema.js';
 import { changeUsername, isUsernameAvailable } from '#lib/server/users.js';
 import { suggestUsername, validateUsername } from '#lib/username.js';
@@ -54,6 +55,7 @@ export const actions = {
 			.update(users)
 			.set({ name, acceptedTermsAt: session.user.acceptedTermsAt ?? new Date() })
 			.where(eq(users.id, session.user.id));
+		await ensureCookbook(db, session.user.id);
 		return { saved: true };
 	}
 };

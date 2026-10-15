@@ -2,7 +2,10 @@ import { fail, redirect, type RequestEvent } from '@sveltejs/kit';
 import { z } from 'zod';
 import type { RecipeImage } from '../../types';
 import { recipeInputSchema } from '../recipeInput';
+import { asc } from 'drizzle-orm';
 import { listCategories } from './categories';
+import type { Database } from './db/client';
+import { cookbooks } from './db/schema';
 import { getDb, getStorage } from './context';
 import { imageUrls, processAndStoreImage } from './images';
 import { createRecipeId, deleteRecipe, getRecipeMeta, saveRecipe } from './recipes';
@@ -13,6 +16,17 @@ import { LIST_PATHS, recipePaths, revalidate } from './revalidate';
 
 /** Vercel functions accept at most 4.5 MB, the editor scales images down before the upload */
 const MAX_IMAGE_SIZE = 4 * 1024 * 1024;
+
+/** The old admin area has no accounts yet, its recipes go to the first cookbook */
+const defaultCookbookId = async (db: Database) => {
+	const [cookbook] = await db
+		.select({ id: cookbooks.id })
+		.from(cookbooks)
+		.orderBy(asc(cookbooks.createdAt))
+		.limit(1);
+	if (!cookbook) throw new Error('There is no cookbook yet');
+	return cookbook.id;
+};
 
 const done = (id: string, failedPaths: string[], action: 'saved' | 'deleted') => {
 	const params = new URLSearchParams({ [action]: id });
@@ -56,7 +70,11 @@ export const saveRecipeAction = async ({ request, url }: RequestEvent, existingI
 		}
 	}
 
-	await saveRecipe(db, id, input, image);
+	await saveRecipe(db, id, input, {
+		image,
+		cookbookId: await defaultCookbookId(db),
+		userId: null
+	});
 	if (image && previous?.image) {
 		await storage.deleteFiles(imageUrls(previous.image)).catch(console.error);
 	}
@@ -117,6 +135,11 @@ export const importRecipeAction = async ({ request }: RequestEvent) => {
 		}
 	}
 
-	await saveRecipe(getDb(), id, parsed.data, image);
+	const db = getDb();
+	await saveRecipe(db, id, parsed.data, {
+		image,
+		cookbookId: await defaultCookbookId(db),
+		userId: null
+	});
 	redirect(303, `/admin/recipes/${id}?imported=1`);
 };

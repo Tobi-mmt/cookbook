@@ -1,4 +1,3 @@
-import { randomBytes } from 'node:crypto';
 import { asc, eq, getTableColumns, inArray, type Column } from 'drizzle-orm';
 import type { Recipe, RecipeImage, RecipeIndexEntry, RecipeSummary } from '../../types';
 import { isNewRecipe } from '../newRecipe';
@@ -9,8 +8,7 @@ import type { Database } from './db/client';
 import { mapRecipe, mapRecipeInput, type RecipeRows } from './db/mapRecipe';
 import { ingredients, recipes, stepIngredients, steps } from './db/schema';
 
-/** 15 hex chars, same format as the former `yarn get-random-id` */
-export const createRecipeId = () => randomBytes(8).toString('hex').slice(0, 15);
+export { createId as createRecipeId } from './ids';
 
 /** All queries run in parallel, so that a cold page render waits for only one database round trip */
 const loadRows = async (db: Database, recipeIds?: string[]): Promise<RecipeRows[]> => {
@@ -111,13 +109,17 @@ export const getRecipeMeta = async (db: Database, id: string) => {
 
 /**
  * Creates or replaces a recipe including all ingredients, steps and their links.
- * `image: undefined` keeps the current image.
+ * `image: undefined` keeps the current image, `cookbookId` is only used for new recipes.
  */
 export const saveRecipe = async (
 	db: Database,
 	id: string,
 	input: RecipeInput,
-	image?: RecipeImage | null
+	{
+		image,
+		cookbookId,
+		userId
+	}: { image?: RecipeImage | null; cookbookId: string; userId: string | null }
 ) => {
 	await db.transaction(async (tx) => {
 		const values = {
@@ -129,11 +131,12 @@ export const saveRecipe = async (
 			categoryId: input.categoryId,
 			nutritionType: input.nutritionType,
 			updatedAt: new Date(),
+			updatedBy: userId,
 			...(image !== undefined ? { image } : {})
 		};
 		await tx
 			.insert(recipes)
-			.values({ id, ...values })
+			.values({ id, cookbookId, createdBy: userId, ...values })
 			.onConflictDoUpdate({ target: recipes.id, set: values });
 
 		// children are replaced as a whole, links are removed by the cascade
