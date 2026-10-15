@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import type { BreakdownStats } from '#lib/server/tracking.js';
+	import { SITE_NAME } from '#lib/site.js';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
@@ -21,7 +22,7 @@
 </script>
 
 <svelte:head>
-	<title>Statistik - Unser Kochbuch</title>
+	<title>Statistik - {SITE_NAME}</title>
 </svelte:head>
 
 <h1>Statistik</h1>

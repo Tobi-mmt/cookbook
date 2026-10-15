@@ -3,6 +3,7 @@
 	import Search from '#components/Search.svelte';
 	import UserMenu from '#components/UserMenu.svelte';
 	import { resolve } from '$app/paths';
+	import { SITE_NAME } from '#lib/site.js';
 
 	let searching = false;
 </script>
@@ -11,7 +12,7 @@
 	<div class="top-bar-inner">
 		<a class="logo" href={resolve('/')}>
 			<Logo size="2.25rem" />
-			<span>Unser Kochbuch</span>
+			<span>{SITE_NAME}</span>
 		</a>
 		<div class="actions">
 			<Search bind:expanded={searching} />
