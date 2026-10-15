@@ -23,7 +23,7 @@
 <div class="search">
 	{#if action}
 		<form method="GET" {action} role="search">
-			<label class="field">
+			<label class="search-field">
 				<SearchIcon size="1.25em" aria-hidden="true" />
 				<input
 					type="search"
@@ -37,7 +37,7 @@
 			</label>
 		</form>
 	{:else}
-		<label class="field">
+		<label class="search-field">
 			<SearchIcon size="1.25em" aria-hidden="true" />
 			<input type="search" bind:value {placeholder} aria-label={placeholder} {onfocus} />
 		</label>
@@ -51,7 +51,7 @@
 		margin: 0 auto;
 		padding: 1.5rem 1.5rem 0.25rem;
 	}
-	.field {
+	.search-field {
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
@@ -62,7 +62,7 @@
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius-pill);
 	}
-	.field:focus-within {
+	.search-field:focus-within {
 		border-color: var(--color-text-subtle);
 	}
 	input {
