@@ -9,7 +9,8 @@ import { listCategories } from './categories';
 import { getDb, getStorage } from './context';
 import { recipes, recipeVersions, users } from './db/schema';
 import { processAndStoreImage } from './images';
-import { createRecipeId, deleteRecipe, saveRecipe } from './recipes';
+import { createRecipeId, saveRecipe } from './recipes';
+import { moveRecipeToTrash } from './trash';
 import { extractRecipe } from './recipeImport/extract';
 import { fetchPage, ImportError } from './recipeImport/fetchResource';
 import { toRecipeInput } from './recipeImport/toRecipeInput';
@@ -143,20 +144,14 @@ export const saveRecipeAction = async (event: RequestEvent, existingId?: string)
 	redirect(303, `${recipeUrl({ id, title: input.title })}?gespeichert`);
 };
 
+/** Moves the recipe to the trash of its cookbook, from where it can be restored for 30 days */
 export const deleteRecipeAction = async (event: RequestEvent, id: string) => {
 	const db = getDb();
 	const previous = await db.query.recipes.findFirst({ where: eq(recipes.id, id) });
 	if (!previous) error(404, 'Rezept nicht gefunden');
-	await requireEditor(event, previous.cookbookId);
+	const editor = await requireEditor(event, previous.cookbookId);
 
-	const versionImages = (
-		await db.query.recipeVersions.findMany({ where: eq(recipeVersions.recipeId, id) })
-	).flatMap(({ snapshot }) => (snapshot.image ? [snapshot.image] : []));
-	await deleteRecipe(db, id);
-	await deleteUnusedImages(db, getStorage(), [
-		...(previous.image ? [previous.image] : []),
-		...versionImages
-	]);
+	await moveRecipeToTrash(db, id, editor.id);
 	await revalidate(
 		event.url.origin,
 		await affectedPaths(db, { cookbookIds: [previous.cookbookId], recipes: [previous] })

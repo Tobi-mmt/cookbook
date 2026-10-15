@@ -12,10 +12,11 @@ import {
 	renameCookbook,
 	transferCookbook
 } from './cookbooks';
-import { cookbooks, users } from './db/schema';
+import { cookbooks, recipes, users } from './db/schema';
 import { createInvitation, listOpenInvitations, revokeInvitation } from './invitations';
 import { renderMail, sendMail } from './mail';
 import { revalidate } from './revalidate';
+import { listTrash, moveAllRecipesToTrash, restoreRecipe } from './trash';
 
 /** The cookbook of the settings page, also when it is hidden by the moderation */
 export const findEditableCookbook = async (event: RequestEvent) => {
@@ -40,10 +41,11 @@ export const loadCookbookSettings = async (event: RequestEvent) => {
 	const cookbook = await findEditableCookbook(event);
 	const editor = await requireEditor(event, cookbook.id);
 	const db = getDb();
-	const [members, invitations, ownedCount] = await Promise.all([
+	const [members, invitations, ownedCount, trash] = await Promise.all([
 		listMembers(db, cookbook.id),
 		listOpenInvitations(db, cookbook.id),
-		countOwnedCookbooks(db, cookbook.ownerId)
+		countOwnedCookbooks(db, cookbook.ownerId),
+		listTrash(db, cookbook.id)
 	]);
 	return {
 		cookbook: {
@@ -55,7 +57,8 @@ export const loadCookbookSettings = async (event: RequestEvent) => {
 		members,
 		invitations,
 		me: { id: editor.id, isOwner: editor.cookbookRole === 'owner' },
-		isLastCookbook: ownedCount <= 1
+		isLastCookbook: ownedCount <= 1,
+		trash
 	};
 };
 
@@ -165,6 +168,30 @@ export const cookbookSettingsActions = {
 		const oldOwner = members.find((member) => member.userId === old.ownerId);
 		await refresh(event, cookbook.id, oldOwner ? [`/@${oldOwner.username}/${old.slug}`] : []);
 		redirect(303, `/@${target.username}/${slug}/einstellungen`);
+	},
+
+	restore: async (event: RequestEvent) => {
+		const cookbook = await findEditableCookbook(event);
+		await requireEditor(event, cookbook.id);
+		const id = String((await event.request.formData()).get('id'));
+		const db = getDb();
+		const recipe = await db.query.recipes.findFirst({ where: eq(recipes.id, id) });
+		if (!recipe || recipe.cookbookId !== cookbook.id)
+			return fail(404, { error: 'Rezept nicht gefunden.' });
+		await restoreRecipe(db, id);
+		await revalidate(
+			event.url.origin,
+			await affectedPaths(db, { cookbookIds: [cookbook.id], recipes: [recipe] })
+		);
+		return { restored: recipe.title };
+	},
+
+	deleteRecipes: async (event: RequestEvent) => {
+		const cookbook = await findEditableCookbook(event);
+		const owner = await requireOwner(event, cookbook.id);
+		await moveAllRecipesToTrash(getDb(), cookbook.id, owner.id);
+		await refresh(event, cookbook.id);
+		return { emptied: true };
 	},
 
 	delete: async (event: RequestEvent) => {

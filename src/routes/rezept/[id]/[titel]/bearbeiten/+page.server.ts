@@ -5,6 +5,7 @@ import { getDb } from '#lib/server/context.js';
 import { deleteRecipeAction, saveRecipeAction } from '#lib/server/recipeActions.js';
 import { getRecipeInput } from '#lib/server/recipes.js';
 import { redirect } from '@sveltejs/kit';
+import { cookbookUrl } from '#lib/server/cookbooks.js';
 
 export async function load(event) {
 	const db = getDb();
@@ -25,7 +26,7 @@ export async function load(event) {
 export const actions = {
 	save: (event) => saveRecipeAction(event, event.params.id),
 	delete: async (event) => {
-		await deleteRecipeAction(event, event.params.id);
-		redirect(303, '/');
+		const recipe = await deleteRecipeAction(event, event.params.id);
+		redirect(303, `${await cookbookUrl(getDb(), recipe.cookbookId)}?geloescht`);
 	}
 };

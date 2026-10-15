@@ -179,3 +179,12 @@ export const countOwnedCookbooks = async (db: Database, userId: string) =>
 			.from(cookbooks)
 			.where(and(eq(cookbooks.ownerId, userId), isNull(cookbooks.deletedAt)))
 	).length;
+
+export const cookbookUrl = async (db: Database, cookbookId: string) => {
+	const [row] = await db
+		.select({ slug: cookbooks.slug, owner: users.username })
+		.from(cookbooks)
+		.innerJoin(users, eq(users.id, cookbooks.ownerId))
+		.where(eq(cookbooks.id, cookbookId));
+	return row ? `/@${row.owner}/${row.slug}` : '/';
+};

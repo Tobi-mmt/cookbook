@@ -345,7 +345,3 @@ export const saveRecipe = async (
 		return { version, prunedImages: await pruneVersions(tx, id) };
 	});
 };
-
-export const deleteRecipe = async (db: Database, id: string) => {
-	await db.delete(recipes).where(eq(recipes.id, id));
-};

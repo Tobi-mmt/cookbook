@@ -23,8 +23,15 @@
 			invitations: { id: string; email: string | null; createdAt: Date; expiresAt: Date }[];
 			me: { id: string; isOwner: boolean };
 			isLastCookbook: boolean;
+			trash: { id: string; title: string; deletedAt: Date | null; deletedBy: string | null }[];
 		};
-		form: { error?: string; link?: string; sentTo?: string | null } | null;
+		form: {
+			error?: string;
+			link?: string;
+			sentTo?: string | null;
+			restored?: string;
+			emptied?: boolean;
+		} | null;
 	} = $props();
 
 	const owner = $derived(data.members.find(({ role }) => role === 'owner'));
@@ -150,6 +157,32 @@
 		</p>
 	{/if}
 
+	<h2>Papierkorb</h2>
+	{#if form?.restored}<p class="message" role="status">„{form.restored}“ ist wieder da.</p>{/if}
+	{#if data.trash.length}
+		<ul class="members">
+			{#each data.trash as recipe (recipe.id)}
+				<li>
+					<span>
+						{recipe.title}
+						<span class="role"
+							>gelöscht{recipe.deletedBy ? ` von ${recipe.deletedBy}` : ''}{recipe.deletedAt
+								? ` am ${formatDate(recipe.deletedAt)}`
+								: ''}</span
+						>
+					</span>
+					<form method="POST" action="?/restore" use:enhance>
+						<input type="hidden" name="id" value={recipe.id} />
+						<button type="submit" class="btn btn--quiet">Wiederherstellen</button>
+					</form>
+				</li>
+			{/each}
+		</ul>
+		<p class="hint">Gelöschte Rezepte werden nach 30 Tagen endgültig entfernt.</p>
+	{:else}
+		<p class="hint">Der Papierkorb ist leer.</p>
+	{/if}
+
 	<h2>Verlassen oder löschen</h2>
 	{#if !data.me.isOwner}
 		<form method="POST" action="?/leave" use:enhance>
@@ -157,7 +190,24 @@
 		</form>
 		<p class="hint">Deine Rezepte bleiben im Kochbuch, weil sie dem Kochbuch gehören.</p>
 	{:else if data.isLastCookbook}
-		<p class="hint">Dein letztes Kochbuch kannst du nicht löschen.</p>
+		{#if confirmDelete}
+			<form method="POST" action="?/deleteRecipes" class="stack" use:enhance>
+				<p>
+					Dein letztes Kochbuch bleibt bestehen, alle Rezepte darin kommen für 30 Tage in den
+					Papierkorb. Kopien, die andere übernommen haben, bleiben bestehen.
+				</p>
+				<div class="row">
+					<button type="submit" class="btn btn--danger">Alle Rezepte löschen</button>
+					<button type="button" class="btn btn--quiet" onclick={() => (confirmDelete = false)}
+						>Abbrechen</button
+					>
+				</div>
+			</form>
+		{:else}
+			<button type="button" class="btn btn--danger" onclick={() => (confirmDelete = true)}
+				>Alle Rezepte löschen</button
+			>
+		{/if}
 	{:else if confirmDelete}
 		<form method="POST" action="?/delete" class="stack" use:enhance>
 			<p>
