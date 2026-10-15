@@ -57,6 +57,13 @@
       "when": 1792065547498,
       "tag": "0007_mail",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1792065673970,
+      "tag": "0008_rate_limits",
+      "breakpoints": true
     }
   ]
 }

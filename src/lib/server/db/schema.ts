@@ -107,6 +107,13 @@ export const pageViews = pgTable(
 	(table) => [index('page_views_day_path_idx').on(table.day, table.path)]
 );
 
+/** Fixed-window counters for rate limits and for captcha solutions that were already used */
+export const rateLimits = pgTable('rate_limits', {
+	key: text('key').primaryKey(),
+	count: integer('count').notNull(),
+	resetAt: timestamp('reset_at', { withTimezone: true }).notNull()
+});
+
 /** Every sent mail, failed moderation mails keep their payload until the daily job resends them */
 export const mailLog = pgTable(
 	'mail_log',
