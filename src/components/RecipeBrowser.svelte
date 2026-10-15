@@ -10,7 +10,7 @@
 </script>
 
 <script lang="ts">
-	import type { RecipeSummary } from '#types';
+	import type { RecipeIndexEntry, RecipeSummary } from '#types';
 	import SearchIcon from '@lucide/svelte/icons/search';
 	import { page } from '$app/state';
 	import FilterChips from '#components/FilterChips.svelte';
@@ -38,13 +38,47 @@
 	const cookbook = $derived(cookbooks.find(({ slug }) => slug === cookbookSlug));
 
 	let query = $state('');
+	let matches = $state<Set<string> | null>(null);
+	let search: ((term: string) => Set<string>) | undefined;
+
+	/** loads the titles and ingredients of the shown cookbooks once somebody searches */
+	const loadIndex = async () => {
+		if (search) return;
+		const ids = [...new Set(recipes.map(({ cookbookId }) => cookbookId))];
+		const [{ default: Fuse }, ...indexes] = await Promise.all([
+			import('fuse.js'),
+			...ids.map((id) =>
+				fetch(`/api/kochbuch/${id}/index.json`).then(
+					(response) => response.json() as Promise<RecipeIndexEntry[]>
+				)
+			)
+		]);
+		const fuse = new Fuse(indexes.flat(), {
+			minMatchCharLength: 2,
+			threshold: 0.4,
+			keys: [
+				{ name: 'title', weight: 0.8 },
+				{ name: 'ingredients.name', weight: 0.2 }
+			]
+		});
+		search = (term) => new Set(fuse.search(term).map(({ item }) => item.id));
+	};
+
+	$effect(() => {
+		const term = query.trim();
+		if (term.length < 2) {
+			matches = null;
+			return;
+		}
+		loadIndex().then(() => (matches = search?.(term) ?? null));
+	});
 
 	const inCookbook = $derived(
 		cookbook ? recipes.filter(({ cookbookId }) => cookbookId === cookbook.id) : recipes
 	);
 	const visible = $derived(
-		filterRecipes(inCookbook, filter).filter(({ title }) =>
-			title.toLowerCase().includes(query.trim().toLowerCase())
+		filterRecipes(inCookbook, filter).filter(({ id, title }) =>
+			matches ? matches.has(id) : title.toLowerCase().includes(query.trim().toLowerCase())
 		)
 	);
 </script>
@@ -82,7 +116,13 @@
 <FilterChips categories={presentCategories(inCookbook)}>
 	<label class="search">
 		<SearchIcon size="1em" aria-hidden="true" />
-		<input type="search" placeholder="In diesen Rezepten suchen" bind:value={query} />
+		<input
+			type="search"
+			placeholder="Rezept oder Zutat suchen"
+			aria-label="In diesen Rezepten suchen"
+			bind:value={query}
+			onfocus={loadIndex}
+		/>
 	</label>
 </FilterChips>
 

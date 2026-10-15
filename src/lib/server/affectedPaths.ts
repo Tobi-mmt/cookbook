@@ -35,6 +35,7 @@ export const affectedPaths = async (
 			...LIST_PATHS,
 			...recipes.flatMap(recipePaths),
 			...books.map(({ owner, slug }) => `/@${owner}/${slug}`),
+			...ids.map((id) => `/api/kochbuch/${id}/index.json`),
 			...editors.map(({ username }) => `/@${username}`)
 		])
 	];
