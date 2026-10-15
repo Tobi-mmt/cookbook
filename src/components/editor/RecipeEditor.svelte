@@ -1,6 +1,9 @@
 <script lang="ts">
 	import type { Category, RecipeImage } from '#types';
 	import { enhance, type SubmitFunction } from '$app/forms';
+	import { onMount } from 'svelte';
+	import { resolve } from '$app/paths';
+	import type { Conflict } from '#lib/server/recipeActions.js';
 	import Globe from '@lucide/svelte/icons/globe';
 	import { NUTRITION_TYPES, findUnusedIngredients, type RecipeInput } from '#lib/recipeInput.js';
 	import IngredientList from './IngredientList.svelte';
@@ -16,7 +19,10 @@
 		action,
 		cancelHref,
 		imported = false,
-		error
+		version,
+		draftKey,
+		historyHref,
+		result
 	}: {
 		recipe: RecipeInput;
 		image: RecipeImage | null;
@@ -27,7 +33,12 @@
 		action?: string;
 		cancelHref: string;
 		imported?: boolean;
-		error?: string;
+		/** the version the editor started from, to notice changes of others */
+		version?: number;
+		/** where the unsaved state is kept in the browser */
+		draftKey: string;
+		historyHref?: string;
+		result?: { error?: string; conflict?: Conflict; deleted?: { by: string | null } } | null;
 	} = $props();
 
 	// the editor works on a copy, the page re-creates it via {#key} for another recipe
@@ -39,6 +50,61 @@
 	let previewUrl = $state<string | null>(null);
 	let imageError = $state<string | null>(null);
 	let saving = $state(false);
+	let force = $state(false);
+	let sessionExpired = $state(false);
+	let rightsLost = $state(false);
+	let draft = $state<{ recipe: RecipeInput; savedAt: number } | null>(null);
+
+	const DRAFT_PREFIX = 'kochbuch:draft:';
+
+	const readDraft = () => {
+		try {
+			const stored = localStorage.getItem(DRAFT_PREFIX + draftKey);
+			return stored ? (JSON.parse(stored) as { recipe: RecipeInput; savedAt: number }) : null;
+		} catch {
+			return null;
+		}
+	};
+	const clearDraft = () => {
+		try {
+			localStorage.removeItem(DRAFT_PREFIX + draftKey);
+		} catch {
+			// private mode, nothing was stored
+		}
+		draft = null;
+	};
+
+	onMount(() => {
+		const stored = readDraft();
+		if (stored && JSON.stringify(stored.recipe) !== JSON.stringify(initialRecipe)) draft = stored;
+	});
+
+	// keeps the unsaved state, e.g. for conflicts, crashes or an expired session
+	let saveTimeout: ReturnType<typeof setTimeout> | undefined;
+	$effect(() => {
+		const snapshot = JSON.stringify(recipe);
+		clearTimeout(saveTimeout);
+		saveTimeout = setTimeout(() => {
+			if (snapshot === JSON.stringify(initialRecipe)) return;
+			try {
+				localStorage.setItem(
+					DRAFT_PREFIX + draftKey,
+					JSON.stringify({ recipe: JSON.parse(snapshot), savedAt: Date.now() })
+				);
+			} catch {
+				// private mode or full storage, the editor still works
+			}
+		}, 500);
+	});
+
+	const timeAgo = (date: Date | number) => {
+		const minutes = Math.round((Date.now() - new Date(date).getTime()) / 60000);
+		if (minutes < 1) return 'gerade eben';
+		if (minutes < 60) return `vor ${minutes} Minute${minutes === 1 ? '' : 'n'}`;
+		return new Intl.DateTimeFormat('de-DE', { dateStyle: 'short', timeStyle: 'short' }).format(
+			new Date(date)
+		);
+	};
 
 	const currentPreview = $derived(
 		previewUrl ?? image?.variants.webp.find(({ width }) => width >= 900)?.url ?? null
@@ -67,12 +133,25 @@
 
 	const submit: SubmitFunction = ({ formData }) => {
 		saving = true;
+		sessionExpired = false;
 		formData.set('recipe', JSON.stringify(recipe));
 		formData.delete('image');
 		if (imageFile) formData.set('image', imageFile, 'image.jpg');
-		return async ({ update }) => {
-			await update({ reset: false });
+		if (version) formData.set('baseVersion', String(version));
+		if (force) formData.set('force', '1');
+		return async ({ result: response, update }) => {
 			saving = false;
+			if (response.type === 'redirect' && response.location.startsWith('/anmelden')) {
+				// keeps the editor open, the draft is saved and the save can be repeated
+				sessionExpired = true;
+				return;
+			}
+			if (response.type === 'error' && response.status === 403) {
+				rightsLost = true;
+				return;
+			}
+			if (response.type === 'redirect') clearDraft();
+			await update({ reset: false });
 		};
 	};
 </script>
@@ -89,6 +168,23 @@
 		</label>
 	{:else if cookbooks}
 		<input type="hidden" name="cookbookId" value={selectedCookbook} />
+	{/if}
+
+	{#if draft}
+		<div class="message">
+			<p>Es gibt einen ungespeicherten Entwurf von {timeAgo(draft.savedAt)}.</p>
+			<div class="row">
+				<button
+					type="button"
+					class="btn"
+					onclick={() => {
+						recipe = structuredClone(draft!.recipe);
+						draft = null;
+					}}>Wiederherstellen</button
+				>
+				<button type="button" class="btn btn--quiet" onclick={clearDraft}>Verwerfen</button>
+			</div>
+		</div>
 	{/if}
 
 	<section class="section">
@@ -173,7 +269,52 @@
 					.join(', ')}
 			</p>
 		{/if}
-		{#if error}<p class="message message--error" role="alert">{error}</p>{/if}
+		{#if result?.error}<p class="message message--error" role="alert">{result.error}</p>{/if}
+		{#if sessionExpired}
+			<p class="message message--error" role="alert">
+				Deine Anmeldung ist abgelaufen. Dein Stand ist gesichert.
+				<a href={resolve('/anmelden')} target="_blank">Melde dich in einem neuen Fenster an</a> und speichere
+				danach noch einmal.
+			</p>
+		{/if}
+		{#if rightsLost}
+			<p class="message message--error" role="alert">
+				Du darfst dieses Kochbuch nicht mehr bearbeiten. Dein Stand ist gesichert,
+				<a href="{resolve('/neu')}?entwurf={encodeURIComponent(draftKey)}"
+					>übernimm ihn als eigenes Rezept</a
+				>.
+			</p>
+		{/if}
+		{#if result?.deleted}
+			<p class="message message--error" role="alert">
+				Das Rezept wurde {result.deleted.by ? `von ${result.deleted.by}` : ''} gelöscht. Im Papierkorb
+				des Kochbuchs kannst du es wiederherstellen, dein Stand bleibt hier gesichert.
+			</p>
+		{/if}
+		{#if result?.conflict && !force}
+			<div class="message message--error" role="alert">
+				<p>
+					{result.conflict.by ?? 'Jemand'} hat dieses Rezept {timeAgo(result.conflict.at)} geändert.
+				</p>
+				<div class="row">
+					{#if historyHref}
+						<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- built with resolve() -->
+						<a class="btn" href={historyHref} target="_blank">Änderungen ansehen</a>
+					{/if}
+					<button type="submit" class="btn" onclick={() => (force = true)}
+						>Meine Version speichern</button
+					>
+					<button
+						type="button"
+						class="btn btn--quiet"
+						onclick={() => {
+							clearDraft();
+							location.reload();
+						}}>Verwerfen</button
+					>
+				</div>
+			</div>
+		{/if}
 		<div class="footer-actions">
 			<span class="public"><Globe size="1em" aria-hidden="true" /> Öffentlich sichtbar</span>
 			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- built with resolve() -->
@@ -257,6 +398,12 @@
 		padding: 1rem 0;
 		background: var(--color-surface);
 		border-top: 1px solid var(--color-border);
+	}
+	.message p {
+		margin: 0 0 0.5rem;
+	}
+	.message a {
+		color: inherit;
 	}
 	.footer-actions {
 		display: flex;
