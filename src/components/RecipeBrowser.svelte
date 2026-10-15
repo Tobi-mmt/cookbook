@@ -1,35 +1,19 @@
-<script lang="ts" module>
-	export type CookbookChip = {
-		id: string;
-		slug: string;
-		name: string;
-		href: string;
-		/** e.g. "gemeinsam mit Mona" */
-		hint?: string;
-	};
-</script>
-
 <script lang="ts">
 	import type { RecipeIndexEntry, RecipeSummary } from '#types';
 	import SearchIcon from '@lucide/svelte/icons/search';
-	import Settings from '@lucide/svelte/icons/settings';
-	import { me } from '#lib/me.svelte.js';
 	import { page } from '$app/state';
 	import FilterChips from '#components/FilterChips.svelte';
 	import RecipePreview from '#components/RecipePreview.svelte';
-	import { resetFilters, setFilterParam } from '#lib/filterNavigation.js';
+	import { resetFilters } from '#lib/filterNavigation.js';
 	import { filterRecipes, presentCategories, readFilter } from '#lib/recipeFilter.js';
 
 	let {
 		recipes,
-		cookbooks = [],
 		byline = () => null,
 		searchPlaceholder = 'Rezept oder Zutat suchen',
 		empty
 	}: {
 		recipes: RecipeSummary[];
-		/** chips to filter by cookbook, only shown with more than one */
-		cookbooks?: CookbookChip[];
 		/** e.g. "von Mona" on the tiles of shared cookbooks */
 		byline?: (recipe: RecipeSummary) => string | null;
 		searchPlaceholder?: string;
@@ -38,8 +22,6 @@
 
 	const url = $derived(page.shallow?.url ?? page.url);
 	const filter = $derived(readFilter(url));
-	const cookbookSlug = $derived(url.searchParams.get('kochbuch'));
-	const cookbook = $derived(cookbooks.find(({ slug }) => slug === cookbookSlug));
 
 	let query = $state('');
 	let matches = $state<Set<string> | null>(null);
@@ -77,11 +59,8 @@
 		loadIndex().then(() => (matches = search?.(term) ?? null));
 	});
 
-	const inCookbook = $derived(
-		cookbook ? recipes.filter(({ cookbookId }) => cookbookId === cookbook.id) : recipes
-	);
 	const visible = $derived(
-		filterRecipes(inCookbook, filter).filter(({ id, title }) =>
+		filterRecipes(recipes, filter).filter(({ id, title }) =>
 			matches ? matches.has(id) : title.toLowerCase().includes(query.trim().toLowerCase())
 		)
 	);
@@ -106,52 +85,7 @@
 	{/if}
 </div>
 
-{#if cookbooks.length > 1}
-	<div class="cookbooks" role="group" aria-label="Nach Kochbuch filtern">
-		<button
-			type="button"
-			class="chip"
-			aria-pressed={!cookbook}
-			onclick={() => setFilterParam('kochbuch', null)}>Alle</button
-		>
-		{#each cookbooks as item (item.id)}
-			<button
-				type="button"
-				class="chip"
-				aria-pressed={cookbook?.id === item.id}
-				onclick={() => setFilterParam('kochbuch', cookbookSlug === item.slug ? null : item.slug)}
-			>
-				{item.name}
-				{#if item.hint}<span class="chip-hint">{item.hint}</span>{/if}
-			</button>
-		{/each}
-	</div>
-{/if}
-
-{#if cookbook}
-	<!-- the chosen cookbook is a place of its own: open it or, as an editor, set it up -->
-	<div class="cookbook-bar">
-		<p>
-			<strong>{cookbook.name}</strong>
-			{#if cookbook.hint}<span>{cookbook.hint}</span>{/if}
-		</p>
-		<div class="row">
-			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- built with resolve() -->
-			<a class="btn" href={cookbook.href}>Kochbuch öffnen</a>
-			{#if me.canEdit(cookbook.id)}
-				<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- built with resolve() -->
-				<a
-					class="btn btn--icon"
-					href="{cookbook.href}/einstellungen"
-					aria-label="Einstellungen von {cookbook.name}"
-					title="Einstellungen"><Settings size="1.1em" aria-hidden="true" /></a
-				>
-			{/if}
-		</div>
-	</div>
-{/if}
-
-<FilterChips categories={presentCategories(inCookbook)} compact />
+<FilterChips categories={presentCategories(recipes)} compact />
 
 {#if visible.length}
 	<div class="recipe-grid">
@@ -176,46 +110,6 @@
 {/if}
 
 <style>
-	.cookbooks {
-		display: flex;
-		align-items: center;
-		justify-content: safe center;
-		gap: 0.5rem;
-		padding: 0.75rem 1.5rem 0;
-		overflow-x: auto;
-		scrollbar-width: none;
-	}
-	.cookbooks::-webkit-scrollbar {
-		display: none;
-	}
-	.chip {
-		flex: none;
-		display: inline-flex;
-		align-items: center;
-		gap: 0.4em;
-		min-height: 2rem;
-		padding: 0.3em 0.85em;
-		font: inherit;
-		font-size: 0.8125rem;
-		line-height: 1.2;
-		color: var(--color-text-muted);
-		background: var(--color-surface);
-		border: 1px solid var(--color-border);
-		border-radius: var(--radius-pill);
-		cursor: pointer;
-	}
-	.chip:hover {
-		border-color: var(--color-text-subtle);
-	}
-	.chip[aria-pressed='true'] {
-		color: #fff;
-		background: var(--color-dark);
-		border-color: var(--color-dark);
-	}
-	.chip-hint {
-		font-size: 0.75rem;
-		opacity: 0.75;
-	}
 	.search-wrap {
 		max-width: 36rem;
 		margin: 0 auto;
@@ -252,28 +146,6 @@
 		font-size: 0.875rem;
 		color: var(--color-text-subtle);
 	}
-	.cookbook-bar {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		justify-content: center;
-		gap: 0.5rem 1rem;
-		margin: 0.75rem 1.5rem 0;
-		padding: 0.6rem 1rem;
-		border: 1px solid var(--color-border);
-		border-radius: var(--radius-md);
-	}
-	.cookbook-bar p {
-		margin: 0;
-	}
-	.cookbook-bar strong {
-		font-weight: 400;
-	}
-	.cookbook-bar span {
-		margin-left: 0.4rem;
-		font-size: 0.875rem;
-		color: var(--color-text-subtle);
-	}
 	.empty {
 		padding: 2rem 1.5rem;
 		color: var(--color-text-muted);
@@ -301,10 +173,6 @@
 
 	/* two columns from 320px on, the tiles size their fonts themselves */
 	@media (max-width: 599px) {
-		.cookbooks {
-			justify-content: flex-start;
-			padding: 0.6rem 1rem 0;
-		}
 		.search-wrap {
 			padding: 1rem 1rem 0.25rem;
 		}
