@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import NavigationLoader from '#components/NavigationLoader.svelte';
 	import TopBar from '#components/TopBar.svelte';
 	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/state';
@@ -24,6 +25,8 @@
 
 <div>
 	{#if !page.url.pathname.startsWith('/admin')}
+		<!-- the pages come from the cache and are preloaded, it only shows on slow connections -->
+		<NavigationLoader delay={250} color="var(--color-dark)" />
 		<TopBar />
 	{/if}
 	<main>
