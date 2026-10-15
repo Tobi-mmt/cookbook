@@ -8,8 +8,6 @@
 	let { children }: { children: Snippet } = $props();
 
 	const isStats = $derived(/^\/admin\/stats(\/|$)/.test(page.url.pathname));
-	// TEMPORARY: see src/lib/server/pruneWebp.ts
-	const isMaintenance = $derived(page.url.pathname.startsWith('/admin/maintenance'));
 </script>
 
 <svelte:head>
@@ -21,21 +19,14 @@
 		<header class="admin-header">
 			<a href={resolve('/admin')} class="admin-title">Kochbuch verwalten</a>
 			<nav aria-label="Verwaltung">
-				<a
-					href={resolve('/admin')}
-					class="nav-link"
-					aria-current={isStats || isMaintenance ? undefined : 'page'}>Rezepte</a
+				<a href={resolve('/admin')} class="nav-link" aria-current={isStats ? undefined : 'page'}
+					>Rezepte</a
 				>
 
 				<a
 					href={resolve('/admin/stats')}
 					class="nav-link"
 					aria-current={isStats ? 'page' : undefined}>Statistik</a
-				>
-				<a
-					href={resolve('/admin/maintenance')}
-					class="nav-link"
-					aria-current={isMaintenance ? 'page' : undefined}>Bilder bereinigen</a
 				>
 			</nav>
 			<div class="header-actions">
