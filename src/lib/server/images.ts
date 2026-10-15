@@ -22,10 +22,14 @@ export const createPlaceholder = async (input: Buffer) => {
 	return `data:image/webp;base64,${buffer.toString('base64')}`;
 };
 
+/** Images live with their recipe and cookbook, a copied recipe gets copies of its images */
+export const imageFolder = (cookbookId: string, recipeId: string) =>
+	`cookbooks/${cookbookId}/recipes/${recipeId}`;
+
 /** Resizes the uploaded image to all responsive widths in AVIF and one WebP and stores them */
 export const processAndStoreImage = async (
 	input: Buffer,
-	recipeId: string,
+	folder: string,
 	storage: Storage
 ): Promise<RecipeImage> => {
 	// .rotate() applies the EXIF orientation of phone photos
@@ -44,7 +48,7 @@ export const processAndStoreImage = async (
 		for (const width of widthsByFormat[format]) {
 			const body = await FORMAT_OPTIONS[format](sharp(normalized).resize(width)).toBuffer();
 			const url = await storage.putFile(
-				`recipes/${recipeId}/${hash}-${width}.${format}`,
+				`${folder}/${hash}-${width}.${format}`,
 				body,
 				`image/${format}`
 			);
@@ -62,3 +66,22 @@ export const processAndStoreImage = async (
 
 export const imageUrls = (image: RecipeImage | null | undefined) =>
 	image ? Object.values(image.variants).flatMap((variants) => variants.map(({ url }) => url)) : [];
+
+export const copyImage = async (
+	image: RecipeImage,
+	folder: string,
+	storage: Storage
+): Promise<RecipeImage> => {
+	const copyVariants = (variants: RecipeImage['variants'][keyof RecipeImage['variants']]) =>
+		Promise.all(
+			variants.map(async ({ width, url }) => ({
+				width,
+				url: await storage.copyFile(url, `${folder}/${url.split('/').pop()}`)
+			}))
+		);
+	const [avif, webp] = await Promise.all([
+		copyVariants(image.variants.avif),
+		copyVariants(image.variants.webp)
+	]);
+	return { ...image, variants: { avif, webp } };
+};

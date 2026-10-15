@@ -40,7 +40,8 @@ describe.skipIf(!hasTestDatabase)('recipe versions', () => {
 		const deleted: string[] = [];
 		const storage = {
 			putFile: async () => '',
-			deleteFiles: async (urls: string[]) => void deleted.push(...urls)
+			deleteFiles: async (urls: string[]) => void deleted.push(...urls),
+			copyFile: async () => ''
 		};
 		await deleteUnusedImages(handle.db, storage, [image('first'), image('image-3')]);
 		expect(deleted).toEqual(['/blob/first.avif']);

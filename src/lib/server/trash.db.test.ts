@@ -8,7 +8,11 @@ import { moveRecipeToTrash, purgeTrash, restoreRecipe } from './trash';
 
 describe.skipIf(!hasTestDatabase)('trash', () => {
 	const handle = useTestDatabase();
-	const storage = { putFile: async () => '', deleteFiles: async () => {} };
+	const storage = {
+		putFile: async () => '',
+		deleteFiles: async () => {},
+		copyFile: async () => ''
+	};
 
 	test('restores within 30 days and purges afterwards', async () => {
 		const { db } = handle;

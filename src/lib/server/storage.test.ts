@@ -22,6 +22,14 @@ describe('local storage', () => {
 		await expect(readFile(path.join(dir, 'recipes/a/1.webp'))).rejects.toThrow();
 	});
 
+	test('copies files', async () => {
+		const storage = createLocalStorage(dir);
+		const url = await storage.putFile('a/1.webp', Buffer.from('image'), 'image/webp');
+		const copy = await storage.copyFile(url, 'b/1.webp');
+		expect(copy).toBe(`${LOCAL_BLOB_URL_PREFIX}b/1.webp`);
+		expect(await readFile(path.join(dir, 'b/1.webp'), 'utf8')).toBe('image');
+	});
+
 	test('rejects paths outside the storage directory', async () => {
 		const storage = createLocalStorage(dir);
 		await expect(storage.putFile('../escape.txt', Buffer.from(''), 'text/plain')).rejects.toThrow();
