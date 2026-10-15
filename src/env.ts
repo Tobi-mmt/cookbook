@@ -27,6 +27,26 @@ export const variables = defineEnvVars({
 		static: true,
 		schema: optional
 	},
+	SCW_SECRET_KEY: {
+		description: 'Scaleway API key for Transactional Email, mails are only logged without it',
+		schema: optional
+	},
+	SCW_PROJECT_ID: {
+		description: 'Scaleway project of Transactional Email',
+		schema: optional
+	},
+	MAIL_FROM: {
+		description: 'Sender, e.g. `Kochbuch <hallo@mail.example.de>`',
+		schema: optional
+	},
+	MAIL_REPLY_TO: {
+		description: 'Reply-To address, e.g. `support@example.de`',
+		schema: optional
+	},
+	MAIL_WEBHOOK_SECRET: {
+		description: 'Random string in the URL of the Scaleway webhook for bounces and complaints',
+		schema: optional
+	},
 	CRON_SECRET: {
 		description: 'Random string that protects /api/warm-cache',
 		schema: optional
