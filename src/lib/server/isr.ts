@@ -2,9 +2,9 @@ import { ISR_BYPASS_TOKEN } from '$app/env/private';
 
 /**
  * Pages are rendered once and then served from the Vercel cache like static files.
- * The admin revalidates the affected paths after every change (see `revalidate.ts`),
- * the expiration is only a safety net.
+ * They never expire: the admin revalidates the affected paths after every change
+ * (see `revalidate.ts`), and the weekly cache warm-up re-renders all of them as a safety net.
  */
 export const isrConfig = {
-	isr: { expiration: 60 * 60 * 24, bypassToken: ISR_BYPASS_TOKEN }
+	isr: { expiration: false as const, bypassToken: ISR_BYPASS_TOKEN }
 };

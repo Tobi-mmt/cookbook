@@ -18,7 +18,7 @@ const CONCURRENCY = 10;
 export const revalidate = async (origin: string, paths: string[]): Promise<string[]> => {
 	if (dev) return [];
 	if (!ISR_BYPASS_TOKEN) {
-		console.warn('ISR_BYPASS_TOKEN is not set, pages update after the ISR expiration');
+		console.warn('ISR_BYPASS_TOKEN is not set, pages update with the next cache warm-up');
 		return paths;
 	}
 
