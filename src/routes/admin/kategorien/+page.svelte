@@ -21,32 +21,56 @@
 {#if form?.error}<p class="message message--error" role="alert">{form.error}</p>{/if}
 
 <table class="table">
-	<thead><tr><th>Name</th><th>Farbe</th><th>Position</th><th>Rezepte</th><th></th></tr></thead>
+	<thead>
+		<tr><th>Name</th><th>Farbe</th><th>Position</th><th>Rezepte</th><th></th></tr>
+	</thead>
 	<tbody>
 		{#each data.categories as category (category.id)}
+			{@const formId = `category-${category.id}`}
 			<tr>
-				<td colspan="3">
-					<form method="POST" action="?/update" class="row" use:enhance>
-						<input type="hidden" name="id" value={category.id} />
-						<input class="input name" name="name" value={category.name} required />
-						<input class="input color" type="color" name="color" value={category.color} />
-						<input class="input position" type="number" name="position" value={category.position} />
-						<button type="submit" class="btn">Speichern</button>
-					</form>
+				<!-- the inputs of a row belong to the form in its last cell -->
+				<td
+					><input class="input name" name="name" value={category.name} form={formId} required /></td
+				>
+				<td>
+					<input
+						class="input color"
+						type="color"
+						name="color"
+						value={category.color}
+						form={formId}
+						aria-label="Farbe von {category.name}"
+					/>
+				</td>
+				<td>
+					<input
+						class="input position"
+						type="number"
+						name="position"
+						value={category.position}
+						form={formId}
+						aria-label="Position von {category.name}"
+					/>
 				</td>
 				<td>{category.recipes}</td>
 				<td>
-					<form method="POST" action="?/delete" class="row" use:enhance>
-						<input type="hidden" name="id" value={category.id} />
-						{#if category.recipes}
-							<select class="input" name="replacement" aria-label="Ersatzkategorie">
-								{#each data.categories.filter(({ id }) => id !== category.id) as other (other.id)}
-									<option value={other.id}>{other.name}</option>
-								{/each}
-							</select>
-						{/if}
-						<button type="submit" class="btn btn--quiet btn--danger">Löschen</button>
-					</form>
+					<div class="row">
+						<form id={formId} method="POST" action="?/update" use:enhance>
+							<input type="hidden" name="id" value={category.id} />
+							<button type="submit" class="btn">Speichern</button>
+						</form>
+						<form method="POST" action="?/delete" class="row" use:enhance>
+							<input type="hidden" name="id" value={category.id} />
+							{#if category.recipes}
+								<select class="input" name="replacement" aria-label="Ersatzkategorie">
+									{#each data.categories.filter(({ id }) => id !== category.id) as other (other.id)}
+										<option value={other.id}>{other.name}</option>
+									{/each}
+								</select>
+							{/if}
+							<button type="submit" class="btn btn--quiet btn--danger">Löschen</button>
+						</form>
+					</div>
 				</td>
 			</tr>
 		{/each}
@@ -75,7 +99,11 @@
 	}
 	.name {
 		flex: 1;
+		width: 100%;
 		min-width: 10rem;
+	}
+	td {
+		vertical-align: middle;
 	}
 	.color {
 		width: 3.5rem;
