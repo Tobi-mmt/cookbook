@@ -72,7 +72,7 @@
 			</tr>
 			{#if confirmDelete === category.id}
 				<tr class="confirm">
-					<td colspan="5">
+					<td class="confirm-cell" colspan="5">
 						<form
 							method="POST"
 							action="?/delete"
@@ -139,7 +139,9 @@
 	td {
 		vertical-align: middle;
 	}
-	.confirm td {
+	/* more specific than the cell padding of the admin tables */
+	.confirm td.confirm-cell {
+		padding: 1rem 1.25rem;
 		background: var(--color-surface-muted);
 	}
 	.confirm p {
