@@ -4,16 +4,16 @@
 	import BookOpen from '@lucide/svelte/icons/book-open';
 	import NotebookPen from '@lucide/svelte/icons/notebook-pen';
 	import Users from '@lucide/svelte/icons/users';
-	import RecipeImage from '#components/RecipeImage.svelte';
+	import RecipePreview from '#components/RecipePreview.svelte';
 
 	let { recipes, discoverHref }: { recipes: RecipeSummary[]; discoverHref: string } = $props();
 
-	// the photos of the page are its best advertisement and its only color
-	const photos = $derived(recipes.filter((recipe) => recipe.image).slice(0, 3));
+	// the recipes of the page are its best advertisement and its only color
+	const tiles = $derived(recipes.filter((recipe) => recipe.image).slice(0, 3));
 </script>
 
 <!-- only for guests, html.signed-in hides it before the first paint (see app.html) -->
-<section class="hero" class:hero--text-only={!photos.length} aria-labelledby="hero-title">
+<section class="hero" class:hero--text-only={!tiles.length} aria-labelledby="hero-title">
 	<div class="content">
 		<p class="eyebrow">Für alle, die gern kochen</p>
 		<h1 id="hero-title">Deine Lieblingsrezepte. Endlich an einem Ort.</h1>
@@ -33,23 +33,17 @@
 		</div>
 	</div>
 
-	{#if photos.length}
-		<div class="photos" aria-hidden="true">
-			{#each photos as recipe, index (recipe.id)}
-				{#if recipe.image}
-					<div class="photo" style="background-image: url({recipe.image.placeholder})">
-						<RecipeImage
-							class="hero-image"
-							image={recipe.image}
-							alt=""
-							sizes={index === 0
-								? '(min-width: 900px) 30vw, 34vw'
-								: '(min-width: 900px) 20vw, 34vw'}
-							loading={index === 0 ? 'eager' : 'lazy'}
-							fetchpriority={index === 0 ? 'high' : 'auto'}
-						/>
-					</div>
-				{/if}
+	{#if tiles.length}
+		<div class="tiles">
+			{#each tiles as recipe, index (recipe.id)}
+				<div class="tile">
+					<RecipePreview
+						{recipe}
+						fill
+						priority={index === 0}
+						sizes={index === 0 ? '(min-width: 600px) 30vw, 100vw' : '20vw'}
+					/>
+				</div>
 			{/each}
 		</div>
 	{/if}
@@ -127,8 +121,8 @@
 		gap: 0.5rem;
 		margin-top: 1.5rem;
 	}
-	/* one large photo, two small ones beside it */
-	.photos {
+	/* one large tile, two half as high beside it */
+	.tiles {
 		display: grid;
 		grid-template-columns: 3fr 2fr;
 		grid-template-rows: 1fr 1fr;
@@ -136,29 +130,17 @@
 		height: 100%;
 		max-height: 34rem;
 	}
-	.photo {
-		position: relative;
+	.tile {
+		min-height: 0;
 		overflow: hidden;
-		background-size: cover;
-		background-position: center;
-		background-color: var(--color-surface-muted);
 		border-radius: var(--radius-md);
 	}
-	.photo:first-child {
+	.tile:first-child,
+	.tile:nth-child(2):last-child {
 		grid-row: span 2;
 	}
-	.photos:has(.photo:only-child) {
+	.tiles:has(.tile:only-child) {
 		grid-template-columns: 1fr;
-	}
-	.photo:nth-child(2):last-child {
-		grid-row: span 2;
-	}
-	.photo :global(.hero-image) {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
 	}
 	@media (max-width: 899px) {
 		.hero {
@@ -166,24 +148,15 @@
 			grid-template-rows: auto minmax(0, 1fr);
 			align-items: stretch;
 			gap: 1.5rem;
-			min-height: 34rem;
+			min-height: 36rem;
 			padding: 1.5rem;
 		}
 		.content {
 			justify-self: start;
 			max-width: 40rem;
 		}
-		.photos {
-			grid-template-columns: repeat(3, minmax(0, 1fr));
-			grid-template-rows: minmax(0, 1fr);
+		.tiles {
 			max-height: none;
-		}
-		.photo:first-child,
-		.photo:nth-child(2):last-child {
-			grid-row: auto;
-		}
-		.photos:has(.photo:nth-child(2):last-child) {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
 		}
 	}
 	@media (max-width: 599px) {
@@ -194,6 +167,14 @@
 			font-size: 1rem;
 		}
 		.points {
+			display: none;
+		}
+		/* on phones one tile, the small ones would be too narrow for their text */
+		.tiles {
+			grid-template-columns: 1fr;
+			grid-template-rows: 1fr;
+		}
+		.tile:not(:first-child) {
 			display: none;
 		}
 	}

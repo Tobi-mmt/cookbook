@@ -10,9 +10,13 @@
 	export let recipe: RecipeSummary;
 	export let priority: boolean = false;
 	export let byline: string | null = null;
+	/** fills the height of its container instead of having its own */
+	export let fill: boolean = false;
+	export let sizes: string =
+		'(min-width: 1320px) 369px, (min-width: 900px) 29.25vw, (min-width: 740px) calc(54.29vw - 90px), (min-width: 700px) calc(660vw - 4450px), (min-width: 540px) 32.86vw, (min-width: 360px) 50vw, 100vw';
 </script>
 
-<a href={recipePath(recipe)}>
+<a href={recipePath(recipe)} class:fill>
 	<div
 		id={slugerize(recipe.title)}
 		class="recipe-preview"
@@ -34,7 +38,7 @@
 							fetchpriority={priority ? 'high' : 'auto'}
 							loading={priority ? 'eager' : 'lazy'}
 							image={recipe.image}
-							sizes="(min-width: 1320px) 369px, (min-width: 900px) 29.25vw, (min-width: 740px) calc(54.29vw - 90px), (min-width: 700px) calc(660vw - 4450px), (min-width: 540px) 32.86vw, (min-width: 360px) 50vw, 100vw"
+							{sizes}
 							alt={recipe.title}
 						/>
 					{:else}
@@ -101,6 +105,15 @@
 		height: 28vw;
 		min-height: 16rem;
 		max-height: 420px;
+	}
+	.fill,
+	.fill .recipe-preview,
+	.fill .recipe-preview > div,
+	.fill .header {
+		height: 100%;
+		min-height: 0;
+		max-height: none;
+		aspect-ratio: auto;
 	}
 	.imageWrapper :global(.image) {
 		position: absolute;
