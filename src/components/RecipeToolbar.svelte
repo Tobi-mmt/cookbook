@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Recipe } from '#types';
+	import BookCheck from '@lucide/svelte/icons/book-check';
 	import BookPlus from '@lucide/svelte/icons/book-plus';
 	import FolderInput from '@lucide/svelte/icons/folder-input';
 	import History from '@lucide/svelte/icons/history';
@@ -26,6 +27,21 @@
 	const cookbooks = $derived(me.current?.cookbooks ?? []);
 	const canEdit = $derived(me.canEdit(recipe.cookbook.id) || user?.role === 'admin');
 	const moveTargets = $derived(cookbooks.filter(({ id }) => id !== recipe.cookbook.id));
+
+	type Copy = { url: string; cookbookId: string; cookbookName: string };
+	let copies = $state<Copy[]>([]);
+	/** cookbooks that do not have this recipe yet */
+	const copyTargets = $derived(
+		cookbooks.filter(({ id }) => !copies.some((copy) => copy.cookbookId === id))
+	);
+
+	$effect(() => {
+		if (!user || canEdit) return;
+		fetch(`/api/rezept/${recipe.id}/kopien`)
+			.then((response) => response.json())
+			.then((list: Copy[]) => (copies = list))
+			.catch(console.error);
+	});
 
 	onMount(() => {
 		if (page.url.searchParams.has('gespeichert')) notice = 'Gespeichert.';
@@ -54,13 +70,17 @@
 		const response = await post('kopieren', cookbook.id);
 		busy = false;
 		choosing = null;
-		if (!response.ok) {
-			const message = (await response.json().catch(() => null))?.message;
-			notice = message ?? 'Das Rezept konnte nicht übernommen werden.';
+		const body = await response.json().catch(() => null);
+		if (response.status === 409 && body?.url) {
+			// copied meanwhile, e.g. in another tab
+			await goto(body.url);
 			return;
 		}
-		const { url } = await response.json();
-		await goto(`${url}?kopiert=${encodeURIComponent(cookbook.name)}`);
+		if (!response.ok) {
+			notice = body?.message ?? 'Das Rezept konnte nicht übernommen werden.';
+			return;
+		}
+		await goto(`${body.url}?kopiert=${encodeURIComponent(cookbook.name)}`);
 	};
 
 	const moveTo = async (cookbook: { id: string; name: string }) => {
@@ -75,7 +95,7 @@
 	};
 
 	const startCopy = () => {
-		if (cookbooks.length === 1) copyTo(cookbooks[0]);
+		if (copyTargets.length === 1) copyTo(copyTargets[0]);
 		else choosing = 'copy';
 	};
 </script>
@@ -92,11 +112,23 @@
 		<button type="button" class="btn" onclick={share}>
 			<Share2 size="1em" aria-hidden="true" /> Teilen
 		</button>
-		{#if user}
-			<button type="button" class="btn" disabled={busy} onclick={startCopy}>
-				<BookPlus size="1em" aria-hidden="true" /> In mein Kochbuch
-			</button>
-		{:else if me.current}
+		{#if user && !canEdit}
+			{#if copies.length}
+				<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- from the server -->
+				<a class="btn" href={copies[0].url} title="Deine Kopie öffnen">
+					<BookCheck size="1em" aria-hidden="true" /> In „{copies[0].cookbookName}“
+				</a>
+				{#if copyTargets.length}
+					<button type="button" class="btn btn--quiet" disabled={busy} onclick={startCopy}>
+						In weiteres Kochbuch
+					</button>
+				{/if}
+			{:else}
+				<button type="button" class="btn" disabled={busy} onclick={startCopy}>
+					<BookPlus size="1em" aria-hidden="true" /> In mein Kochbuch
+				</button>
+			{/if}
+		{:else if !user && me.current}
 			<a class="btn" href="{resolve('/anmelden')}?weiter={encodeURIComponent(page.url.pathname)}">
 				<BookPlus size="1em" aria-hidden="true" /> In mein Kochbuch
 			</a>
@@ -121,7 +153,7 @@
 		<div class="choose" role="group" aria-label="Kochbuch wählen">
 			<span class="hint">{choosing === 'copy' ? 'In welches Kochbuch?' : 'Wohin verschieben?'}</span
 			>
-			{#each choosing === 'copy' ? cookbooks : moveTargets as cookbook (cookbook.id)}
+			{#each choosing === 'copy' ? copyTargets : moveTargets as cookbook (cookbook.id)}
 				<button
 					type="button"
 					class="btn"

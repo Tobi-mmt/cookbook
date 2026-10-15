@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import { describe, expect, test } from 'vitest';
 import { recipes } from './db/schema';
 import { getRecipe, saveRecipe } from './recipes';
-import { copyRecipe } from './recipeTransfer';
+import { copyRecipe, findCopies } from './recipeTransfer';
 import { hasTestDatabase, useTestDatabase } from './testing/db';
 import { createTestCookbook, createTestUser, testInput } from './testing/fixtures';
 
@@ -60,5 +60,29 @@ describe.skipIf(!hasTestDatabase)('copyRecipe', () => {
 		expect((await getRecipe(db, second.id))!.recipe.isUnchangedCopy).toBe(false);
 		const row = await db.query.recipes.findFirst({ where: eq(recipes.id, second.id) });
 		expect(row?.copiedFromId).toBe(first.id);
+	});
+});
+
+describe.skipIf(!hasTestDatabase)('findCopies', () => {
+	const handle = useTestDatabase();
+
+	test('finds the copies of a recipe in the given cookbooks only', async () => {
+		const { db } = handle;
+		const storage = {
+			putFile: async () => '',
+			deleteFiles: async () => {},
+			copyFile: async (_url: string, path: string) => `/blob/${path}`
+		};
+		const [mona, tobi] = [await createTestUser(db), await createTestUser(db)];
+		const monas = await createTestCookbook(db, mona.id);
+		const tobis = await createTestCookbook(db, tobi.id);
+		const other = await createTestCookbook(db, tobi.id, 'Anderes');
+		await saveRecipe(db, 'soup', testInput('Suppe'), { cookbookId: monas.id, userId: mona.id });
+		await copyRecipe(db, storage, { sourceId: 'soup', cookbookId: tobis.id, userId: tobi.id });
+
+		expect(
+			(await findCopies(db, 'soup', [tobis.id, other.id])).map(({ cookbookId }) => cookbookId)
+		).toEqual([tobis.id]);
+		expect(await findCopies(db, 'soup', [other.id])).toEqual([]);
 	});
 });
