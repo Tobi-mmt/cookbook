@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Fuse from 'fuse.js';
+	import type Fuse from 'fuse.js';
 	import SearchIcon from '@lucide/svelte/icons/search';
 	import { afterNavigate } from '$app/navigation';
 	import { resolve } from '$app/paths';
@@ -25,14 +25,17 @@
 		]
 	};
 
-	$: fuse = new Fuse($recipeIndex, fuseOptions);
+	// loaded together with the index, so that pages without a search do not load it
+	let FuseClass: typeof Fuse | undefined;
+	$: fuse = FuseClass && new FuseClass($recipeIndex, fuseOptions);
 	// also updates when the index arrives after the first letters were typed
 	$: query = searchValue.trim();
-	$: results = query.length > 1 ? fuse.search(query, { limit: 8 }) : [];
+	$: results = fuse && query.length > 1 ? fuse.search(query, { limit: 8 }) : [];
 	$: showPanel = active && query.length > 1;
 
 	const activate = () => {
 		loadRecipeIndex();
+		import('fuse.js').then((module) => (FuseClass = module.default));
 		active = true;
 	};
 
@@ -121,7 +124,7 @@
 
 	{#if showPanel}
 		<div class="panel" id="search-results">
-			{#if !$recipeIndex.length}
+			{#if !$recipeIndex.length || !fuse}
 				<p class="hint">Rezepte werden geladen…</p>
 			{:else if !results.length}
 				<p class="hint">Keine Rezepte zu „{query}“</p>
