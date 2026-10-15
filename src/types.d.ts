@@ -68,6 +68,14 @@ export interface RecipeImage {
 	/** tiny base64 data URL used as blurred placeholder */
 	placeholder: string;
 	variants: Record<ImageFormat, ImageVariant[]>;
+	/** size of all variants, counted against the storage limit of `uploadedBy` */
+	bytes?: number;
+	uploadedBy?: string;
+	/** only for images under a free license taken over from another site */
+	license?: import('./lib/imageLicense').LicenseId;
+	author?: string;
+	sourceUrl?: string;
+	aiGenerated?: boolean;
 }
 
 /** What a recipe tile on the home page shows */

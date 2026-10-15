@@ -22,6 +22,7 @@
 		version,
 		draftKey,
 		historyHref,
+		importedImage,
 		result
 	}: {
 		recipe: RecipeInput;
@@ -38,6 +39,8 @@
 		/** where the unsaved state is kept in the browser */
 		draftKey: string;
 		historyHref?: string;
+		/** a freely licensed image of an imported page, taken over when saving */
+		importedImage?: { url: string; license: string; author?: string; sourceUrl: string } | null;
 		result?: { error?: string; conflict?: Conflict; deleted?: { by: string | null } } | null;
 	} = $props();
 
@@ -49,6 +52,8 @@
 	let imageFile = $state<Blob | null>(null);
 	let previewUrl = $state<string | null>(null);
 	let imageError = $state<string | null>(null);
+	// svelte-ignore state_referenced_locally
+	let useImportedImage = $state(Boolean(importedImage));
 	let saving = $state(false);
 	let force = $state(false);
 	let sessionExpired = $state(false);
@@ -230,8 +235,28 @@
 		<div class="image">
 			{#if currentPreview}
 				<img src={currentPreview} alt="Vorschau" />
+			{:else if importedImage && useImportedImage}
+				<div class="message">
+					<p>
+						Das Bild der Originalseite steht unter einer freien Lizenz und wird beim Speichern
+						übernommen: {importedImage.author
+							? `Foto: ${importedImage.author}, `
+							: ''}{importedImage.license}.
+					</p>
+					<input type="hidden" name="importImageUrl" value={importedImage.url} />
+					<input type="hidden" name="importImageLicense" value={importedImage.license} />
+					<input type="hidden" name="importImageAuthor" value={importedImage.author ?? ''} />
+					<input type="hidden" name="importSourceUrl" value={importedImage.sourceUrl} />
+					<button type="button" class="btn btn--quiet" onclick={() => (useImportedImage = false)}
+						>Nicht übernehmen</button
+					>
+				</div>
 			{:else}
 				<div class="image-empty">Noch kein Bild</div>
+				<p class="hint">
+					Lade ein eigenes Foto hoch, such dir ein freies Bild (z. B. auf Unsplash, Pixabay oder
+					Wikimedia Commons) oder lass dir eins mit KI erzeugen und lade es danach hoch.
+				</p>
 			{/if}
 			<label class="field">
 				{currentPreview ? 'Bild ersetzen' : 'Bild hochladen'}
@@ -242,6 +267,16 @@
 					onchange={onImageChange}
 				/>
 			</label>
+			{#if imageFile}
+				<label class="checkbox">
+					<input type="checkbox" name="imageRights" required />
+					Ich darf dieses Bild verwenden.
+				</label>
+				<label class="checkbox">
+					<input type="checkbox" name="imageAi" />
+					Das Bild ist KI-generiert.
+				</label>
+			{/if}
 			{#if imageError}<p class="message message--error">{imageError}</p>{/if}
 		</div>
 	</section>

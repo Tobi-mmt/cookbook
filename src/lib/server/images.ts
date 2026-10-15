@@ -43,10 +43,12 @@ export const processAndStoreImage = async (
 		webp: [Math.min(WEBP_WIDTH, info.width)]
 	};
 	const variants: Record<ImageFormat, ImageVariant[]> = { avif: [], webp: [] };
+	let bytes = 0;
 
 	for (const format of Object.keys(FORMAT_OPTIONS) as ImageFormat[]) {
 		for (const width of widthsByFormat[format]) {
 			const body = await FORMAT_OPTIONS[format](sharp(normalized).resize(width)).toBuffer();
+			bytes += body.length;
 			const url = await storage.putFile(
 				`${folder}/${hash}-${width}.${format}`,
 				body,
@@ -60,7 +62,8 @@ export const processAndStoreImage = async (
 		width: info.width,
 		height: info.height,
 		placeholder: await createPlaceholder(normalized),
-		variants
+		variants,
+		bytes
 	};
 };
 

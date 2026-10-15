@@ -4,7 +4,11 @@ import { z } from 'zod';
 import { recipeInputSchema, type RecipeInput } from '../recipeInput';
 import { slugerize } from '../slugerize';
 import { affectedPaths } from './affectedPaths';
-import { requireEditor } from './auth/guards';
+import { parseLicense } from '../imageLicense';
+import { requireEditor, type Editor } from './auth/guards';
+import { isNewAccount } from './profiles';
+import { hitRateLimit } from './rateLimit';
+import { storageStatus } from './storageUsage';
 import { listCategories } from './categories';
 import { getDb, getStorage } from './context';
 import { recipes, recipeVersions, users } from './db/schema';
@@ -12,7 +16,7 @@ import { imageFolder, processAndStoreImage } from './images';
 import { createRecipeId, saveRecipe } from './recipes';
 import { moveRecipeToTrash } from './trash';
 import { extractRecipe } from './recipeImport/extract';
-import { fetchPage, ImportError } from './recipeImport/fetchResource';
+import { fetchImage, fetchPage, ImportError } from './recipeImport/fetchResource';
 import { toRecipeInput } from './recipeImport/toRecipeInput';
 import { revalidate } from './revalidate';
 import { deleteUnusedImages, getVersion } from './versions';
@@ -36,14 +40,61 @@ const parseInput = (form: FormData) => {
 		: { error: parsed.error.issues.map((issue) => issue.message).join(', ') };
 };
 
-const readImage = async (form: FormData, folder: string) => {
+const DAY = 24 * 60 * 60;
+const NEW_ACCOUNT_LIMITS = { recipes: 10, images: 20 };
+
+/** Limits per person and day, ten times lower for new accounts against spam */
+export const withinDailyLimit = (user: Editor, kind: 'recipes' | 'images') =>
+	hitRateLimit(
+		getDb(),
+		`${kind}:${user.id}`,
+		NEW_ACCOUNT_LIMITS[kind] * (isNewAccount(user.createdAt) ? 1 : 10),
+		DAY
+	);
+
+/** An uploaded photo or a freely licensed image of an imported page */
+const readImage = async (form: FormData, folder: string, user: Editor) => {
 	const file = form.get('image');
-	if (!(file instanceof File) || file.size === 0) return {};
-	if (!file.type.startsWith('image/')) return { error: 'Die Datei ist kein Bild.' };
-	if (file.size > MAX_IMAGE_SIZE) return { error: 'Das Bild ist zu groß (max. 4 MB).' };
-	try {
+	const importUrl = String(form.get('importImageUrl') ?? '');
+	const hasFile = file instanceof File && file.size > 0;
+	const license = parseLicense(String(form.get('importImageLicense') ?? ''));
+	if (!hasFile && !(importUrl && license)) return {};
+
+	if (hasFile && form.get('imageRights') !== 'on') {
+		return { error: 'Bitte bestätige, dass du dieses Bild verwenden darfst.' };
+	}
+	if (hasFile && !file.type.startsWith('image/')) return { error: 'Die Datei ist kein Bild.' };
+	if (hasFile && file.size > MAX_IMAGE_SIZE) {
+		return { error: 'Das Bild ist zu groß (max. 4 MB).' };
+	}
+	if ((await storageStatus(getDb(), user.id)).full) {
+		return { error: 'Dein Speicher für Bilder ist voll. Lösche alte Bilder oder Rezepte.' };
+	}
+	if (!(await withinDailyLimit(user, 'images'))) {
 		return {
-			image: await processAndStoreImage(Buffer.from(await file.arrayBuffer()), folder, getStorage())
+			error: 'Du hast heute schon sehr viele Bilder hochgeladen. Versuche es morgen wieder.'
+		};
+	}
+
+	try {
+		const body = hasFile ? Buffer.from(await file.arrayBuffer()) : await fetchImage(importUrl);
+		const image = await processAndStoreImage(body, folder, getStorage());
+		return {
+			image: {
+				...image,
+				uploadedBy: user.id,
+				...(hasFile
+					? { ...(form.get('imageAi') === 'on' ? { aiGenerated: true } : {}) }
+					: {
+							license: license!,
+							...(form.get('importImageAuthor')
+								? { author: String(form.get('importImageAuthor')) }
+								: {}),
+							...(form.get('importSourceUrl')
+								? { sourceUrl: String(form.get('importSourceUrl')) }
+								: {})
+						})
+			}
 		};
 	} catch (cause) {
 		console.error(cause);
@@ -124,8 +175,14 @@ export const saveRecipeAction = async (event: RequestEvent, existingId?: string)
 	const { input, error: inputError } = parseInput(form);
 	if (!input) return fail(400, { error: inputError });
 
+	if (!previous && !(await withinDailyLimit(editor, 'recipes'))) {
+		return fail(429, {
+			error: 'Du hast heute schon sehr viele Rezepte angelegt. Versuche es morgen wieder.'
+		});
+	}
+
 	const id = existingId ?? createRecipeId();
-	const { image, error: imageError } = await readImage(form, imageFolder(cookbookId, id));
+	const { image, error: imageError } = await readImage(form, imageFolder(cookbookId, id), editor);
 	if (imageError) return fail(400, { error: imageError });
 
 	await storeAndRevalidate(event, { id, input, image, cookbookId, userId: editor.id, previous });
@@ -160,6 +217,10 @@ const importUrlSchema = z.url({ protocol: /^https?$/ });
 export type ImportResult = {
 	url: string;
 	input: RecipeInput;
+	/** a freely licensed image that is taken over when saving */
+	image: { url: string; license: string; author?: string } | null;
+	/** the page has an image that may not be taken over */
+	imageSkipped: boolean;
 	/** set when the cookbook already has a recipe from this address */
 	duplicate?: { id: string; title: string };
 };
@@ -168,7 +229,10 @@ export type ImportResult = {
 export const importRecipeAction = async (event: RequestEvent) => {
 	const form = await event.request.formData();
 	const cookbookId = String(form.get('cookbookId') ?? '');
-	await requireEditor(event, cookbookId);
+	const editor = await requireEditor(event, cookbookId);
+	if (!(await hitRateLimit(getDb(), `import:${editor.id}`, 30, 60 * 60))) {
+		return fail(429, { error: 'Zu viele Importe in kurzer Zeit. Versuche es später noch einmal.' });
+	}
 
 	const parsedUrl = importUrlSchema.safeParse(String(form.get('url') ?? '').trim());
 	if (!parsedUrl.success) return fail(400, { error: 'Bitte eine gültige URL eingeben.' });
@@ -199,7 +263,20 @@ export const importRecipeAction = async (event: RequestEvent) => {
 		),
 		columns: { id: true, title: true }
 	});
-	return { imported: { url, input: parsed.data, duplicate } satisfies ImportResult };
+	const license = parseLicense(scraped.imageLicense);
+	const image =
+		scraped.image && license
+			? { url: new URL(scraped.image, url).href, license, author: scraped.imageAuthor }
+			: null;
+	return {
+		imported: {
+			url,
+			input: parsed.data,
+			duplicate,
+			image,
+			imageSkipped: Boolean(scraped.image && !license)
+		} satisfies ImportResult
+	};
 };
 
 /** Makes an old version current again by saving it as a new version */

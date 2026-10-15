@@ -130,4 +130,35 @@ describe('extractRecipe', () => {
 	test('returns undefined without recipe data', () => {
 		expect(extractRecipe('<html><body><h1>Hallo</h1></body></html>')).toBeUndefined();
 	});
+
+	test('reads the license and author of the image', () => {
+		const recipe = extractRecipe(
+			jsonLd({
+				'@type': 'Recipe',
+				name: 'Suppe',
+				recipeIngredient: ['Wasser'],
+				image: {
+					'@type': 'ImageObject',
+					url: 'https://example.com/suppe.jpg',
+					license: 'https://creativecommons.org/licenses/by/4.0/',
+					creator: { '@type': 'Person', name: 'Max Muster' }
+				}
+			})
+		);
+		expect(recipe).toMatchObject({
+			image: 'https://example.com/suppe.jpg',
+			imageLicense: 'https://creativecommons.org/licenses/by/4.0/',
+			imageAuthor: 'Max Muster'
+		});
+	});
+
+	test('falls back to a license link of the page', () => {
+		const html = jsonLd({ '@type': 'Recipe', name: 'Suppe', recipeIngredient: ['Wasser'] }).replace(
+			'</head>',
+			'<link rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/"></head>'
+		);
+		expect(extractRecipe(html)?.imageLicense).toBe(
+			'https://creativecommons.org/licenses/by-sa/4.0/'
+		);
+	});
 });

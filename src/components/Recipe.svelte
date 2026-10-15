@@ -8,6 +8,7 @@
 
 	import { nutritionIcons } from '#lib/nutritionIcon.js';
 	import { cookbookPath, profilePath, recipePath } from '#lib/paths.js';
+	import { imageCaption, licenseUrl } from '#lib/imageLicense.js';
 	import RecipeImage from './RecipeImage.svelte';
 
 	import RecipeStep from './RecipeStep.svelte';
@@ -45,6 +46,7 @@
 			...(date.getFullYear() !== new Date().getFullYear() ? { year: 'numeric' } : {})
 		}).format(date);
 	const original = $derived(recipe.attribution[0]);
+	const caption = $derived(recipe.image && imageCaption(recipe.image));
 	const sourceHost = $derived(recipe.sourceUrl && new URL(recipe.sourceUrl).hostname);
 
 	// rendered on the server as well, so that the button does not pop in after loading
@@ -111,6 +113,12 @@
 			</div>
 		</div>
 
+		{#if caption}
+			<p class="image-caption">
+				{caption}{#if recipe.image?.license}
+					· <a href={licenseUrl(recipe.image.license)} rel="license">Lizenz</a>{/if}
+			</p>
+		{/if}
 		<div class="content-wrapper">
 			{@render toolbar?.()}
 			{#if recipe.description}
@@ -510,6 +518,17 @@
 		opacity: 0.85;
 	}
 
+	.image-caption {
+		max-width: 1250px;
+		margin: 0.4rem auto 0;
+		padding: 0 2rem;
+		text-align: right;
+		font-size: 0.75rem;
+		color: var(--color-text-subtle);
+	}
+	.image-caption a {
+		color: inherit;
+	}
 	.recipe-footer {
 		display: flex;
 		flex-direction: column;
