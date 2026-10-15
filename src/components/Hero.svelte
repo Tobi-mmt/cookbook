@@ -29,7 +29,7 @@
 		<div class="actions">
 			<a class="btn btn--primary" href={resolve('/anmelden')}>Eigenes Kochbuch anlegen</a>
 			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-			<a class="btn" href={discoverHref}>Rezepte entdecken</a>
+			<a class="btn discover" href={discoverHref}>Rezepte entdecken</a>
 		</div>
 	</div>
 
@@ -172,7 +172,8 @@
 		.points {
 			display: none;
 		}
-		.tiles {
+		.tiles,
+		.discover {
 			display: none;
 		}
 	}
