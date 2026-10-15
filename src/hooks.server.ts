@@ -1,12 +1,11 @@
-import { redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import type { Handle } from '@sveltejs/kit/hooks';
-import { SESSION_SECRET } from '$app/env/private';
-import { SESSION_COOKIE, verifySession } from '#lib/server/auth.js';
+import { eq } from 'drizzle-orm';
+import { dev } from '$app/env';
 import { loadSession } from '#lib/server/auth/session.js';
 import { getDb } from '#lib/server/context.js';
 import { users } from '#lib/server/db/schema.js';
 import { findRenamedUsername } from '#lib/server/users.js';
-import { eq } from 'drizzle-orm';
 
 /** `/tobi` leads to `/@tobi` as long as there is no page with that name */
 const profileRedirect = async (pathname: string) => {
@@ -26,9 +25,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 	let session: ReturnType<typeof loadSession> | undefined;
 	event.locals.getSession = () => (session ??= loadSession(event));
 
-	if (pathname.startsWith('/admin') && !pathname.startsWith('/admin/login')) {
-		if (!verifySession(event.cookies.get(SESSION_COOKIE), SESSION_SECRET)) {
-			redirect(303, `/admin/login?redirectTo=${encodeURIComponent(pathname)}`);
+	// the admin area needs the admin role and a sign-in with a passkey, also for its actions
+	if (pathname.startsWith('/admin')) {
+		const current = await event.locals.getSession();
+		if (!current) redirect(303, `/anmelden?weiter=${encodeURIComponent(pathname)}`);
+		if (current.user.role !== 'admin') error(403, 'Nur für Admins');
+		if (!dev && current.authMethod !== 'passkey' && pathname !== '/admin/passkey') {
+			redirect(303, '/admin/passkey');
 		}
 	}
 

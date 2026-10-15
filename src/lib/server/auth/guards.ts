@@ -35,3 +35,10 @@ export const requireOwner = async (event: RequestEvent, cookbookId: string) => {
 	if (editor.cookbookRole !== 'owner') error(403, 'Das darf nur der Besitzer des Kochbuchs.');
 	return editor;
 };
+
+/** Admin actions check again, `src/hooks.server.ts` already guards all of /admin */
+export const requireAdmin = async (event: RequestEvent) => {
+	const user = await requireUser(event);
+	if (user.role !== 'admin') error(403, 'Nur für Admins');
+	return user;
+};
