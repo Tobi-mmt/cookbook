@@ -34,7 +34,7 @@ SOURCE_POSTGRES_URL=<POSTGRES_URL from that file> yarn seed:from-prod
 
 ## Database changes
 
-Change `src/lib/server/db/schema.ts`, then run `yarn db:generate` to create a migration in `drizzle/`. Production runs the migrations during the Vercel build. Preview deployments only run them with `MIGRATE_ON_PREVIEW=1`, because they must not change a database that production still uses.
+Change `src/lib/server/db/schema.ts`, then run `yarn db:generate` to create a migration in `drizzle/`. Production and preview deployments run the migrations during the Vercel build. Previews must therefore always use their own database branch, never the production database.
 
 ## Addresses
 
@@ -85,18 +85,17 @@ Images: download `images/…tar.gz.age`, decrypt it the same way and upload the 
 
 They are declared in `src/env.ts` and read from `$app/env/private`. All of them are optional locally, the app explains what is missing where it is needed.
 
-| Name                    | Description                                                     |
-| ----------------------- | --------------------------------------------------------------- |
-| `POSTGRES_URL`          | Postgres connection string (set by the Neon integration)        |
-| `BLOB_READ_WRITE_TOKEN` | Vercel Blob token (set by the Blob integration), empty locally  |
-| `BETTER_AUTH_SECRET`    | Random string, signs sessions, captchas and mail links          |
-| `SCW_SECRET_KEY`        | Scaleway API key for Transactional Email, empty locally         |
-| `SCW_PROJECT_ID`        | Scaleway project of Transactional Email                         |
-| `MAIL_FROM`             | Sender, e.g. `Kochbuchbande <hallo@mail.kochbuchbande.de>`      |
-| `MAIL_REPLY_TO`         | Reply-To address, e.g. `support@kochbuchbande.de`               |
-| `MAIL_WEBHOOK_SECRET`   | Secret in the URL of the Scaleway webhook for bounces           |
-| `ISR_BYPASS_TOKEN`      | Random string with at least 32 characters for the revalidation  |
-| `CRON_SECRET`           | Random string for the crons, also a GitHub secret               |
-| `MIGRATE_ON_PREVIEW`    | Set to `1` if preview deployments use their own database branch |
+| Name                    | Description                                                    |
+| ----------------------- | -------------------------------------------------------------- |
+| `POSTGRES_URL`          | Postgres connection string (set by the Neon integration)       |
+| `BLOB_READ_WRITE_TOKEN` | Vercel Blob token (set by the Blob integration), empty locally |
+| `BETTER_AUTH_SECRET`    | Random string, signs sessions, captchas and mail links         |
+| `SCW_SECRET_KEY`        | Scaleway API key for Transactional Email, empty locally        |
+| `SCW_PROJECT_ID`        | Scaleway project of Transactional Email                        |
+| `MAIL_FROM`             | Sender, e.g. `Kochbuchbande <hallo@mail.kochbuchbande.de>`     |
+| `MAIL_REPLY_TO`         | Reply-To address, e.g. `support@kochbuchbande.de`              |
+| `MAIL_WEBHOOK_SECRET`   | Secret in the URL of the Scaleway webhook for bounces          |
+| `ISR_BYPASS_TOKEN`      | Random string with at least 32 characters for the revalidation |
+| `CRON_SECRET`           | Random string for the crons, also a GitHub secret              |
 
 The backup workflow uses the GitHub secrets `BACKUP_DATABASE_URL`, `SCW_BACKUP_ACCESS_KEY`, `SCW_BACKUP_SECRET_KEY` and `BLOB_READ_WRITE_TOKEN` and the variables `BACKUP_BUCKET`, `AGE_PUBLIC_KEY` and optionally `PG_MAJOR`.
