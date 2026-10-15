@@ -3,7 +3,7 @@
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
 	import FilterChips from '#components/FilterChips.svelte';
-	import HeroSearch from '#components/HeroSearch.svelte';
+	import SearchField from '#components/SearchField.svelte';
 	import RecipeBrowser from '#components/RecipeBrowser.svelte';
 	import RecipePreview from '#components/RecipePreview.svelte';
 	import { me } from '#lib/me.svelte.js';
@@ -38,7 +38,7 @@
 
 	const categories = $derived(presentCategories([...data.popular, ...data.fresh]));
 	const sections = $derived([
-		{ title: 'Beliebt', recipes: filterRecipes(data.popular, filter) },
+		{ title: null, recipes: filterRecipes(data.popular, filter) },
 		{ title: 'Neu', recipes: filterRecipes(data.fresh, filter) }
 	]);
 
@@ -92,7 +92,7 @@
 		<button type="button" class="btn" onclick={() => showTab('entdecken')}>Weiter entdecken</button>
 	</p>
 {:else}
-	<HeroSearch />
+	<SearchField action={resolve('/suche')} placeholder="Alle Rezepte durchsuchen" />
 
 	{#if me.current && !user}
 		<p class="entry">
@@ -100,17 +100,17 @@
 		</p>
 	{/if}
 
-	<FilterChips {categories} />
+	<FilterChips {categories} compact />
 
 	{#each sections as section (section.title)}
 		{#if section.recipes.length}
 			<section>
-				<h2>{section.title}</h2>
+				{#if section.title}<h2>{section.title}</h2>{/if}
 				<div class="recipe-grid">
 					{#each section.recipes as recipe, index (recipe.id)}
 						<RecipePreview
 							{recipe}
-							priority={section.title === 'Beliebt' && index <= 5}
+							priority={!section.title && index <= 5}
 							byline={recipe.author ? `von @${recipe.author.username}` : null}
 						/>
 					{/each}

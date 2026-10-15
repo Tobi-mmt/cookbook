@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type { RecipeSummary } from '#types';
 	import RecipePreview from '#components/RecipePreview.svelte';
-	import HeroSearch from '#components/HeroSearch.svelte';
+	import { resolve } from '$app/paths';
+	import SearchField from '#components/SearchField.svelte';
 	import { SITE_NAME } from '#lib/site.js';
 
 	let { data }: { data: { query: string; recipes: RecipeSummary[] } } = $props();
@@ -12,7 +13,7 @@
 	<meta name="robots" content="noindex" />
 </svelte:head>
 
-<HeroSearch value={data.query} />
+<SearchField action={resolve('/suche')} value={data.query} placeholder="Alle Rezepte durchsuchen" />
 
 {#if data.recipes.length}
 	<div class="recipe-grid">

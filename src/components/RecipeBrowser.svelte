@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { RecipeIndexEntry, RecipeSummary } from '#types';
-	import SearchIcon from '@lucide/svelte/icons/search';
 	import { page } from '$app/state';
 	import FilterChips from '#components/FilterChips.svelte';
+	import SearchField from '#components/SearchField.svelte';
 	import RecipePreview from '#components/RecipePreview.svelte';
 	import { resetFilters } from '#lib/filterNavigation.js';
 	import { filterRecipes, presentCategories, readFilter } from '#lib/recipeFilter.js';
@@ -67,23 +67,13 @@
 </script>
 
 <!-- the search comes first, the filters below are only there to narrow it down -->
-<div class="search-wrap">
-	<label class="search">
-		<SearchIcon size="1.25em" aria-hidden="true" />
-		<input
-			type="search"
-			placeholder={searchPlaceholder}
-			aria-label={searchPlaceholder}
-			bind:value={query}
-			onfocus={loadIndex}
-		/>
-	</label>
+<SearchField bind:value={query} placeholder={searchPlaceholder} onfocus={loadIndex}>
 	{#if query.trim().length > 1}
 		<p class="result-count" role="status">
 			{visible.length === 1 ? '1 Rezept' : `${visible.length} Rezepte`} zu „{query.trim()}“
 		</p>
 	{/if}
-</div>
+</SearchField>
 
 <FilterChips categories={presentCategories(recipes)} compact />
 
@@ -110,36 +100,6 @@
 {/if}
 
 <style>
-	.search-wrap {
-		max-width: 36rem;
-		margin: 0 auto;
-		padding: 1.5rem 1.5rem 0.25rem;
-	}
-	.search {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-		height: 3rem;
-		padding: 0 1.25rem;
-		color: var(--color-text-subtle);
-		background: var(--color-surface);
-		border: 1px solid var(--color-border);
-		border-radius: var(--radius-pill);
-	}
-	.search:focus-within {
-		border-color: var(--color-text-subtle);
-	}
-	.search input {
-		flex: 1;
-		min-width: 0;
-		font: inherit;
-		/* at least 16px, otherwise iOS zooms into the page */
-		font-size: 1.0625rem;
-		color: var(--color-text);
-		background: none;
-		border: none;
-		outline: none;
-	}
 	.result-count {
 		margin: 0.5rem 0 0;
 		text-align: center;
@@ -173,9 +133,6 @@
 
 	/* two columns from 320px on, the tiles size their fonts themselves */
 	@media (max-width: 599px) {
-		.search-wrap {
-			padding: 1rem 1rem 0.25rem;
-		}
 		.recipe-grid {
 			--grid-item-min-width: 160px;
 		}
