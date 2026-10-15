@@ -6,7 +6,7 @@
 </script>
 
 <form class="hero" method="GET" action={resolve('/suche')} role="search">
-	<label class="field">
+	<label class="search-field">
 		<SearchIcon size="1.25em" aria-hidden="true" />
 		<input
 			type="search"
@@ -26,7 +26,7 @@
 		margin: 0 auto;
 		padding: 2.5rem 1.5rem 0.5rem;
 	}
-	.field {
+	.search-field {
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
@@ -37,7 +37,7 @@
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius-pill);
 	}
-	.field:focus-within {
+	.search-field:focus-within {
 		border-color: var(--color-text-subtle);
 	}
 	input {
