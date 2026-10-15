@@ -1,6 +1,7 @@
 import { error, redirect, type RequestEvent } from '@sveltejs/kit';
 import { getDb } from '../context';
 import { getEditorRole } from '../cookbooks';
+import { audit } from '../moderation/audit';
 
 const signInUrl = (event: RequestEvent, path: string) =>
 	`${path}?weiter=${encodeURIComponent(event.url.pathname + event.url.search)}`;
@@ -26,7 +27,19 @@ export const requireEditor = async (event: RequestEvent, cookbookId: string): Pr
 	const user = await requireUser(event);
 	const role = await getEditorRole(getDb(), cookbookId, user.id);
 	if (role) return { ...user, cookbookRole: role, asAdmin: false };
-	if (user.role === 'admin') return { ...user, cookbookRole: 'owner', asAdmin: true };
+	if (user.role === 'admin') {
+		// changes of admins to cookbooks they do not edit themselves are logged
+		if (event.request.method !== 'GET') {
+			await audit(getDb(), {
+				adminId: user.id,
+				action: 'admin:edit',
+				targetType: 'cookbook',
+				targetId: cookbookId,
+				after: { path: event.url.pathname + event.url.search }
+			});
+		}
+		return { ...user, cookbookRole: 'owner', asAdmin: true };
+	}
 	error(403, 'Du darfst dieses Kochbuch nicht bearbeiten.');
 };
 
