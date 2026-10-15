@@ -12,10 +12,13 @@ import {
 import { transferCookbook } from './cookbooks';
 import { releaseDate } from './users';
 import type { Storage } from './storage';
-import { purgeTrash, TRASH_DAYS } from './trash';
+import { purgeTrash } from './trash';
+
+/** Days between the request to delete an account and its deletion */
+export const ACCOUNT_DELETION_DAYS = 7;
 
 export const deletionDate = (requestedAt: Date) =>
-	new Date(requestedAt.getTime() + TRASH_DAYS * 24 * 60 * 60 * 1000);
+	new Date(requestedAt.getTime() + ACCOUNT_DELETION_DAYS * 24 * 60 * 60 * 1000);
 
 export const isLastAdmin = async (db: Database, userId: string) => {
 	const admins = await db
@@ -74,9 +77,9 @@ export const deleteAccount = async (db: Database, storage: Storage, userId: stri
 	});
 };
 
-/** Accounts whose 30 days are over, deleted by the daily job */
+/** Accounts whose seven days are over, deleted by the daily job */
 export const deleteRequestedAccounts = async (db: Database, storage: Storage, now = new Date()) => {
-	const cutoff = new Date(now.getTime() - TRASH_DAYS * 24 * 60 * 60 * 1000);
+	const cutoff = new Date(now.getTime() - ACCOUNT_DELETION_DAYS * 24 * 60 * 60 * 1000);
 	const due = await db
 		.select({ id: users.id })
 		.from(users)

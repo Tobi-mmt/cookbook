@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import NavigationLoader from '#components/NavigationLoader.svelte';
+	import DeletionBanner from '#components/DeletionBanner.svelte';
 	import Footer from '#components/Footer.svelte';
 	import TopBar from '#components/TopBar.svelte';
 	import { afterNavigate } from '$app/navigation';
@@ -35,6 +36,7 @@
 		<NavigationLoader delay={250} color="var(--color-dark)" />
 	{/if}
 	<TopBar />
+	<DeletionBanner />
 	<main>
 		{@render children()}
 	</main>

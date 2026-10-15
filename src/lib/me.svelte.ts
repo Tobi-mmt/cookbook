@@ -1,7 +1,7 @@
 import type { EditableCookbook } from '#lib/server/cookbooks.js';
 
 export type Me = {
-	user: { username: string; name: string; role: string } | null;
+	user: { username: string; name: string; role: string; deletionAt: string | null } | null;
 	cookbooks: EditableCookbook[];
 	needsOnboarding: boolean;
 };

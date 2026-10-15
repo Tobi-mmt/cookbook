@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
 import { describe, expect, test } from 'vitest';
-import { deleteAccount } from './accounts';
+import { deleteAccount, deleteRequestedAccounts } from './accounts';
 import { createEmailChangeToken, readEmailChangeToken } from './emailChange';
 import { acceptInvitation } from './invitations';
 import { cookbooks, recipes, users } from './db/schema';
@@ -35,6 +35,33 @@ describe.skipIf(!hasTestDatabase)('deleteAccount', () => {
 		const recipe = await db.query.recipes.findFirst({ where: eq(recipes.id, 'shared') });
 		expect(recipe?.createdBy).toBeNull();
 		expect(await isUsernameAvailable(db, 'leaving')).toBe(false);
+	});
+});
+
+describe.skipIf(!hasTestDatabase)('deleteRequestedAccounts', () => {
+	const handle = useTestDatabase();
+	const storage = {
+		putFile: async () => '',
+		deleteFiles: async () => {},
+		copyFile: async () => ''
+	};
+
+	test('deletes accounts seven days after the request', async () => {
+		const { db } = handle;
+		const [due, waiting] = [await createTestUser(db), await createTestUser(db)];
+		const day = 24 * 60 * 60 * 1000;
+		await db
+			.update(users)
+			.set({ deletionRequestedAt: new Date(Date.now() - 8 * day) })
+			.where(eq(users.id, due.id));
+		await db
+			.update(users)
+			.set({ deletionRequestedAt: new Date(Date.now() - 6 * day) })
+			.where(eq(users.id, waiting.id));
+
+		expect(await deleteRequestedAccounts(db, storage)).toBe(1);
+		expect(await db.query.users.findFirst({ where: eq(users.id, due.id) })).toBeUndefined();
+		expect(await db.query.users.findFirst({ where: eq(users.id, waiting.id) })).toBeDefined();
 	});
 });
 

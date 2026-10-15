@@ -5,6 +5,7 @@
 	import { onMount } from 'svelte';
 	import KeyRound from '@lucide/svelte/icons/key-round';
 	import { cookbookPath } from '#lib/paths.js';
+	import { daysUntil, inDays } from '#lib/daysUntil.js';
 	import type { EditableCookbook } from '#lib/server/cookbooks.js';
 	import { SITE_NAME } from '#lib/site.js';
 
@@ -15,6 +16,7 @@
 		data: {
 			account: { name: string; username: string; email: string; deletionAt: Date | null };
 			cookbooks: EditableCookbook[];
+			deletionDays: number;
 			deletedCookbooks: { id: string; name: string; deletedAt: Date | null }[];
 			storage: { used: number; limit: number; full: boolean };
 			bounced: boolean;
@@ -66,9 +68,18 @@
 	<h1>Konto</h1>
 
 	{#if data.account.deletionAt}
-		<form method="POST" action="?/cancelDeletion" class="message message--error stack" use:enhance>
-			<p>Dein Konto wird am {formatDate(data.account.deletionAt)} gelöscht.</p>
-			<div class="row"><button type="submit" class="btn">Löschen abbrechen</button></div>
+		<form method="POST" action="?/cancelDeletion" class="deletion stack" use:enhance>
+			<p class="deletion-title">
+				Dein Konto wird {inDays(daysUntil(data.account.deletionAt))} gelöscht.
+			</p>
+			<p>
+				Am {formatDate(data.account.deletionAt)} löschen wir dein Konto und alle Kochbücher, die nur du
+				bearbeitest. Bis dahin kannst du es dir anders überlegen.
+			</p>
+			<div class="row">
+				<button type="submit" class="btn btn--primary">Löschen abbrechen</button>
+				<a class="btn" href={resolve('/konto/export')} data-sveltekit-reload>Daten herunterladen</a>
+			</div>
 		</form>
 	{/if}
 	{#if data.bounced}
@@ -207,9 +218,9 @@
 		{#if confirmDeletion}
 			<form method="POST" action="?/requestDeletion" class="stack" use:enhance>
 				<p>
-					Dein Konto und alle Kochbücher, die nur du bearbeitest, werden nach 30 Tagen gelöscht.
-					Rezepte in gemeinsamen Kochbüchern bleiben dort. Kopien, die andere übernommen haben,
-					bleiben ebenfalls bestehen, dein Name wird dort entfernt.
+					Dein Konto und alle Kochbücher, die nur du bearbeitest, werden nach {data.deletionDays}
+					Tagen gelöscht. Rezepte in gemeinsamen Kochbüchern bleiben dort. Kopien, die andere übernommen
+					haben, bleiben ebenfalls bestehen, dein Name wird dort entfernt.
 				</p>
 				<div class="row">
 					<button type="submit" class="btn btn--danger">Konto löschen</button>
@@ -227,6 +238,19 @@
 </div>
 
 <style>
+	.deletion {
+		margin-bottom: 2rem;
+		padding: 1.25rem;
+		border: 2px solid #b3261e;
+		border-radius: var(--radius-md);
+	}
+	.deletion p {
+		margin: 0;
+	}
+	.deletion-title {
+		font-size: 1.25rem;
+		color: #b3261e;
+	}
 	.list {
 		margin: 0;
 		padding: 0;
@@ -262,8 +286,5 @@
 		display: block;
 		height: 100%;
 		background: var(--color-dark);
-	}
-	.message p {
-		margin: 0;
 	}
 </style>
