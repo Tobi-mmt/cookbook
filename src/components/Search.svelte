@@ -1,39 +1,55 @@
 <script lang="ts">
-	import type Fuse from 'fuse.js';
 	import SearchIcon from '@lucide/svelte/icons/search';
 	import { afterNavigate } from '$app/navigation';
-	import { loadRecipeIndex, recipeIndex } from '#lib/recipeIndex.js';
 	import { recipePath } from '#lib/paths.js';
+	import type { SearchResult } from '#lib/server/search.js';
 
 	/** on phones the field is hidden behind a button and takes the whole top bar when open */
 	export let expanded = false;
 
 	let searchValue = '';
 	let active = false;
+	let loading = false;
+	let results: SearchResult[] = [];
 	let root: HTMLDivElement | undefined;
 	let inputRef: HTMLInputElement | undefined;
 	let listRef: HTMLUListElement | undefined;
 
-	const fuseOptions = {
-		minMatchCharLength: 2,
-		threshold: 0.5,
-		keys: [
-			{ name: 'title', weight: 0.8 },
-			{ name: 'ingredients.name', weight: 0.2 }
-		]
+	let timeout: ReturnType<typeof setTimeout> | undefined;
+	let controller: AbortController | undefined;
+
+	/** searches on the server after a short pause in typing, an older request is cancelled */
+	const search = (query: string) => {
+		clearTimeout(timeout);
+		controller?.abort();
+		if (query.length < 2) {
+			results = [];
+			loading = false;
+			return;
+		}
+		loading = true;
+		timeout = setTimeout(async () => {
+			controller = new AbortController();
+			try {
+				const response = await fetch(`/api/suche?q=${encodeURIComponent(query)}`, {
+					signal: controller.signal
+				});
+				results = await response.json();
+				loading = false;
+			} catch (error) {
+				if ((error as Error).name !== 'AbortError') {
+					console.error(error);
+					loading = false;
+				}
+			}
+		}, 200);
 	};
 
-	// loaded together with the index, so that pages without a search do not load it
-	let FuseClass: typeof Fuse | undefined;
-	$: fuse = FuseClass && new FuseClass($recipeIndex, fuseOptions);
-	// also updates when the index arrives after the first letters were typed
 	$: query = searchValue.trim();
-	$: results = fuse && query.length > 1 ? fuse.search(query, { limit: 8 }) : [];
+	$: search(query);
 	$: showPanel = active && query.length > 1;
 
 	const activate = () => {
-		loadRecipeIndex();
-		import('fuse.js').then((module) => (FuseClass = module.default));
 		active = true;
 	};
 
@@ -89,13 +105,7 @@
 	on:focusout={handleFocusOut}
 	on:keydown={handleKeydown}
 >
-	<button
-		type="button"
-		class="icon-button open-button"
-		aria-label="Suche öffnen"
-		on:pointerenter={loadRecipeIndex}
-		on:click={expand}
-	>
+	<button type="button" class="icon-button open-button" aria-label="Suche öffnen" on:click={expand}>
 		<SearchIcon size="1.25em" aria-hidden="true" />
 	</button>
 
@@ -112,7 +122,6 @@
 			autocomplete="off"
 			bind:this={inputRef}
 			bind:value={searchValue}
-			on:pointerenter={loadRecipeIndex}
 			on:focus={activate}
 			on:input={() => (active = true)}
 		/>
@@ -122,19 +131,20 @@
 
 	{#if showPanel}
 		<div class="panel" id="search-results">
-			{#if !$recipeIndex.length || !fuse}
-				<p class="hint">Rezepte werden geladen…</p>
+			{#if loading && !results.length}
+				<p class="hint">Suche…</p>
 			{:else if !results.length}
 				<p class="hint">Keine Rezepte zu „{query}“</p>
 			{:else}
 				<ul class="results" bind:this={listRef}>
-					{#each results as { item } (item.id)}
+					{#each results as item (item.id)}
 						<li>
 							<a href={recipePath(item)}>
-								<span class="category" style="--color: {item.meta.category.color}"
-									>{item.meta.category.name}</span
+								<span class="category" style="--color: {item.category.color}"
+									>{item.category.name}</span
 								>
 								<span class="title">{item.title}</span>
+								{#if item.author}<span class="author">@{item.author}</span>{/if}
 							</a>
 						</li>
 					{/each}
@@ -255,6 +265,10 @@
 	.results a:hover,
 	.results a:focus-visible {
 		background: var(--color-surface-muted);
+	}
+	.author {
+		font-size: 0.8125rem;
+		color: var(--color-text-subtle);
 	}
 	.category {
 		display: flex;
