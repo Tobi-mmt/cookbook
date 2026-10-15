@@ -16,6 +16,7 @@
 			recipe: RecipeInput;
 			categories: Category[];
 			cookbookId: string;
+			cancelHref: string;
 			cookbooks: { id: string; name: string }[];
 		};
 		form: { imported?: ImportResult; url?: string; error?: string } | null;
@@ -111,9 +112,13 @@
 				</div>
 			{/if}
 			{#if form?.error}<p class="message message--error" role="alert">{form.error}</p>{/if}
-			<button type="submit" class="btn btn--primary" disabled={importing}>
-				{importing ? 'Wird gelesen…' : 'Importieren'}
-			</button>
+			<div class="row actions">
+				<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- from the server -->
+				<a class="btn btn--quiet" href={data.cancelHref}>Abbrechen</a>
+				<button type="submit" class="btn btn--primary" disabled={importing}>
+					{importing ? 'Wird gelesen…' : 'Importieren'}
+				</button>
+			</div>
 			{#if importing}
 				<p class="hint" role="status">Das Rezept wird geladen. Das kann einen Moment dauern.</p>
 			{/if}
@@ -122,6 +127,9 @@
 </div>
 
 <style>
+	.actions {
+		justify-content: flex-end;
+	}
 	.message p {
 		margin: 0 0 0.75rem;
 	}

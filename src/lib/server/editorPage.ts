@@ -13,8 +13,8 @@ export const loadNewRecipePage = async (event: RequestEvent) => {
 		listEditableCookbooks(db, user.id),
 		listCategories(db)
 	]);
-	const requested = event.url.searchParams.get('kochbuch');
-	const cookbookId = cookbooks.find(({ id }) => id === requested)?.id ?? cookbooks[0]?.id;
+	const requested = cookbooks.find(({ id }) => id === event.url.searchParams.get('kochbuch'));
+	const cookbookId = requested?.id ?? cookbooks[0]?.id;
 
 	const recipe: RecipeInput = {
 		title: '',
@@ -31,6 +31,8 @@ export const loadNewRecipePage = async (event: RequestEvent) => {
 		recipe,
 		categories,
 		cookbookId,
+		/** back to the cookbook the person came from, otherwise to their profile */
+		cancelHref: requested ? `/@${requested.ownerUsername}/${requested.slug}` : `/@${user.username}`,
 		cookbooks: cookbooks.map(({ id, name, ownerUsername, role }) => ({
 			id,
 			name: role === 'owner' ? name : `${name} (@${ownerUsername})`
