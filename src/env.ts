@@ -33,11 +33,11 @@ export const variables = defineEnvVars({
 		schema: optional
 	},
 	MAIL_FROM: {
-		description: 'Sender, e.g. `Kochbuch <hallo@mail.example.de>`',
+		description: 'Sender, e.g. `Kochbuchbande <hallo@mail.kochbuchbande.de>`',
 		schema: optional
 	},
 	MAIL_REPLY_TO: {
-		description: 'Reply-To address, e.g. `support@example.de`',
+		description: 'Reply-To address, e.g. `support@kochbuchbande.de`',
 		schema: optional
 	},
 	MAIL_WEBHOOK_SECRET: {

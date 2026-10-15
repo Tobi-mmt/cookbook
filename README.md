@@ -92,8 +92,8 @@ They are declared in `src/env.ts` and read from `$app/env/private`. All of them 
 | `BETTER_AUTH_SECRET`    | Random string, signs sessions, captchas and mail links          |
 | `SCW_SECRET_KEY`        | Scaleway API key for Transactional Email, empty locally         |
 | `SCW_PROJECT_ID`        | Scaleway project of Transactional Email                         |
-| `MAIL_FROM`             | Sender, e.g. `Kochbuch <hallo@mail.example.de>`                 |
-| `MAIL_REPLY_TO`         | Reply-To address, e.g. `support@example.de`                     |
+| `MAIL_FROM`             | Sender, e.g. `Kochbuchbande <hallo@mail.kochbuchbande.de>`      |
+| `MAIL_REPLY_TO`         | Reply-To address, e.g. `support@kochbuchbande.de`               |
 | `MAIL_WEBHOOK_SECRET`   | Secret in the URL of the Scaleway webhook for bounces           |
 | `ISR_BYPASS_TOKEN`      | Random string with at least 32 characters for the revalidation  |
 | `CRON_SECRET`           | Random string for the crons, also a GitHub secret               |

@@ -2,6 +2,7 @@ import { eq } from 'drizzle-orm';
 import { MAIL_FROM, MAIL_REPLY_TO, SCW_PROJECT_ID, SCW_SECRET_KEY } from '$app/env/private';
 import type { Database } from './db/client';
 import { mailLog, mailSuppressions } from './db/schema';
+import { SITE_NAME } from '../site';
 
 export type MailContent = { subject: string; text: string; html: string };
 
@@ -53,7 +54,7 @@ const deliver = async (to: string, mail: MailContent) => {
 		method: 'POST',
 		headers: { 'content-type': 'application/json', 'x-auth-token': SCW_SECRET_KEY! },
 		body: JSON.stringify({
-			from: parseAddress(MAIL_FROM ?? 'Kochbuch <hallo@example.com>'),
+			from: parseAddress(MAIL_FROM ?? `${SITE_NAME} <hallo@example.com>`),
 			to: [{ email: to }],
 			subject: mail.subject,
 			text: mail.text,

@@ -7,12 +7,13 @@ import { getDb } from '../context';
 import * as schema from '../db/schema';
 import { renderMail, sendMail } from '../mail';
 import { appSecret } from '../secret';
+import { SITE_NAME } from '../../site';
 
 const DAY = 60 * 60 * 24;
 
 const createAuth = (origin: string) =>
 	betterAuth({
-		appName: 'Kochbuch',
+		appName: SITE_NAME,
 		baseURL: origin,
 		secret: appSecret(),
 		database: drizzleAdapter(getDb(), { provider: 'pg', schema, usePlural: true }),
@@ -66,7 +67,7 @@ const createAuth = (origin: string) =>
 					);
 				}
 			}),
-			passkey({ rpID: new URL(origin).hostname, rpName: 'Kochbuch', origin }),
+			passkey({ rpID: new URL(origin).hostname, rpName: SITE_NAME, origin }),
 			admin({ defaultRole: 'user', adminRoles: ['admin'] })
 		]
 	});

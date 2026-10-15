@@ -4,22 +4,22 @@ Was vor dem Start fehlt und nur du erledigen kannst. Der Code ist fertig, siehe 
 
 ## 1. Domain und Name
 
-- [ ] Namen und Domain festlegen, Domain in Vercel hinzufügen.
-- [ ] Namen in `src/lib/site.ts` (`SITE_NAME`) eintragen.
-- [ ] GitHub-Variable `SITE_URL` auf `https://{domain}` setzen (Warm-up nach Deployments).
+- [x] Name und Domain: Kochbuchbande, `kochbuchbande.de`.
+- [ ] `kochbuchbande.de` (und `www.kochbuchbande.de` als Weiterleitung) in Vercel hinzufügen.
+- [ ] GitHub-Variable `SITE_URL` auf `https://kochbuchbande.de` setzen (Warm-up nach Deployments).
 - [ ] Weiterleitung der alten Domain in `vercel.json` ergänzen, erst wenn die neue Domain läuft:
   ```json
   "redirects": [
   	{
   		"source": "/",
   		"has": [{ "type": "host", "value": "kochbuch.monaundtobi.de" }],
-  		"destination": "https://{domain}/@tobi/unser-kochbuch",
+  		"destination": "https://kochbuchbande.de/@tobi/unser-kochbuch",
   		"permanent": true
   	},
   	{
   		"source": "/:path*",
   		"has": [{ "type": "host", "value": "kochbuch.monaundtobi.de" }],
-  		"destination": "https://{domain}/:path*",
+  		"destination": "https://kochbuchbande.de/:path*",
   		"permanent": true
   	}
   ]
@@ -28,12 +28,12 @@ Was vor dem Start fehlt und nur du erledigen kannst. Der Code ist fertig, siehe 
 
 ## 2. E-Mail (Scaleway Transactional Email)
 
-- [ ] In Scaleway (Region `fr-par`) die Domain `mail.{domain}` anlegen.
-- [ ] Die DNS-Einträge für SPF und DKIM von Scaleway setzen, dazu DMARC: `_dmarc.mail.{domain}` mit `v=DMARC1; p=none; rua=mailto:support@{domain}`. Nach einigen Wochen ohne Probleme auf `p=quarantine`.
+- [ ] In Scaleway (Region `fr-par`) die Domain `mail.kochbuchbande.de` anlegen.
+- [ ] Die DNS-Einträge für SPF und DKIM von Scaleway setzen, dazu DMARC: `_dmarc.mail.kochbuchbande.de` mit `v=DMARC1; p=none; rua=mailto:support@kochbuchbande.de`. Nach einigen Wochen ohne Probleme auf `p=quarantine`.
 - [ ] API-Key nur mit Rechten für Transactional Email anlegen.
-- [ ] In Vercel setzen: `SCW_SECRET_KEY`, `SCW_PROJECT_ID`, `MAIL_FROM=Kochbuch <hallo@mail.{domain}>`, `MAIL_REPLY_TO=support@{domain}`.
-- [ ] Postfach `support@{domain}` einrichten.
-- [ ] Webhook für Bounces und Spam-Beschwerden über Scaleway Topics and Events auf `https://{domain}/api/mail/webhook?secret={MAIL_WEBHOOK_SECRET}`, `MAIL_WEBHOOK_SECRET` in Vercel setzen. Mit einer Test-Mail prüfen, ob die Adresse in `mail_suppressions` landet. Das Format der Events war beim Bauen nicht prüfbar.
+- [ ] In Vercel setzen: `SCW_SECRET_KEY`, `SCW_PROJECT_ID`, `MAIL_FROM=Kochbuchbande <hallo@mail.kochbuchbande.de>`, `MAIL_REPLY_TO=support@kochbuchbande.de`.
+- [ ] Postfach `support@kochbuchbande.de` einrichten.
+- [ ] Webhook für Bounces und Spam-Beschwerden über Scaleway Topics and Events auf `https://kochbuchbande.de/api/mail/webhook?secret={MAIL_WEBHOOK_SECRET}`, `MAIL_WEBHOOK_SECRET` in Vercel setzen. Mit einer Test-Mail prüfen, ob die Adresse in `mail_suppressions` landet. Das Format der Events war beim Bauen nicht prüfbar.
 
 ## 3. Vercel
 

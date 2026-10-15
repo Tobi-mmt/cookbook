@@ -56,7 +56,7 @@ Leitlinie: so wenige Begriffe, Einstellungen und Rechte wie möglich. Wer nichts
 
 ### Domain
 
-- Eine neutrale Produkt-Domain. **Offen:** Der Name steht noch nicht fest. Bis dahin steht in dieser Spec `{domain}` als Platzhalter.
+- **Entschieden:** Die Plattform heißt **Kochbuchbande** und läuft unter **`kochbuchbande.de`**.
 - `kochbuch.monaundtobi.de` leitet dauerhaft (301) auf das Kochbuch von Mona und Tobias weiter.
 - Keine Subdomains pro Person: Wildcard-DNS, Cookies über Subdomains und Caching pro Host wären viel Aufwand ohne Nutzen.
 
@@ -165,7 +165,7 @@ Das heutige Design ist verbindlich. Alle neuen Seiten und Funktionen übernehmen
 ### Registrierung
 
 1. E-Mail eingeben. Es kommt ein Magic-Link. Danach bietet die App an, einen Passkey für schnelles Anmelden anzulegen.
-2. Benutzername wählen, mit Vorschlag aus dem Namen. Live wird angezeigt, ob er frei ist, und die künftige Adresse `{domain}/@tobi`.
+2. Benutzername wählen, mit Vorschlag aus dem Namen. Live wird angezeigt, ob er frei ist, und die künftige Adresse `kochbuchbande.de/@tobi`.
 3. Es entsteht automatisch das Kochbuch „Mein Kochbuch“ unter `/@tobi/mein-kochbuch`. Der Name ist später änderbar.
 4. Der Leerzustand des Kochbuchs zeigt drei Aktionen: **Rezept anlegen**, **Aus Link importieren**, **Rezepte entdecken** (führt zur Startseite).
 5. Bestätigung „Ich bin mindestens 16 Jahre alt“. **Entschieden:** Konten gibt es ab 16, weil man in Deutschland ab diesem Alter selbst in die Datenverarbeitung einwilligen kann.
@@ -347,7 +347,7 @@ Weil alles öffentlich ist, bleibt das Caching so einfach wie heute:
 - **Anbieter:** [Scaleway Transactional Email](https://www.scaleway.com/en/transactional-email-tem/). Französischer Anbieter mit Rechenzentrum in Paris (Region `fr-par`), also EU-Recht und DSGVO.
 - **Kosten:** 300 E-Mails pro Monat kostenlos, danach 0,25 € pro 1.000 E-Mails, ohne Grundgebühr und ohne Werbung in den Mails.
 - **Absender über die eigene Domain:**
-  - **Entschieden:** Der Versand läuft über die Subdomain **`mail.{domain}`**, damit der Ruf der Hauptdomain getrennt bleibt. Absender ist `Kochbuch <hallo@mail.{domain}>`, Antworten gehen an `Reply-To: support@{domain}`.
+  - **Entschieden:** Der Versand läuft über die Subdomain **`mail.kochbuchbande.de`**, damit der Ruf der Hauptdomain getrennt bleibt. Absender ist `Kochbuchbande <hallo@mail.kochbuchbande.de>`, Antworten gehen an `Reply-To: support@kochbuchbande.de`.
   - Im DNS kommen die von Scaleway vorgegebenen SPF- und DKIM-Einträge sowie ein DMARC-Eintrag dazu. DMARC startet mit `p=none` und Berichten und wird nach einigen Wochen ohne Probleme auf `p=quarantine` verschärft.
 - **Anbindung:** über die REST-API von Scaleway aus einer kleinen Funktion `sendMail({ to, subject, text, html })` in `src/lib/server/mail.ts`. Better Auth (Magic-Link) und die Moderation nutzen nur diese Funktion.
 - **Umgebungsvariablen in `src/env.ts`:**
