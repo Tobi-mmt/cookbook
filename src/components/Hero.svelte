@@ -41,7 +41,7 @@
 						{recipe}
 						fill
 						priority={index === 0}
-						sizes={index === 0 ? '(min-width: 600px) 30vw, 100vw' : '20vw'}
+						sizes={index === 0 ? '30vw' : '20vw'}
 					/>
 				</div>
 			{/each}
@@ -160,8 +160,11 @@
 		}
 	}
 	@media (max-width: 599px) {
+		/* on phones only the text, the recipes of the page follow right below */
 		.hero {
-			padding: 1.25rem 1rem 1rem;
+			height: auto;
+			min-height: 0;
+			padding: 1.25rem 1rem 0.5rem;
 		}
 		.lead {
 			font-size: 1rem;
@@ -169,12 +172,7 @@
 		.points {
 			display: none;
 		}
-		/* on phones one tile, the small ones would be too narrow for their text */
 		.tiles {
-			grid-template-columns: 1fr;
-			grid-template-rows: 1fr;
-		}
-		.tile:not(:first-child) {
 			display: none;
 		}
 	}
