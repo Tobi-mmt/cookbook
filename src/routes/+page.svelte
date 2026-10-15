@@ -4,6 +4,7 @@
 	import { resolve } from '$app/paths';
 	import FilterChips from '#components/FilterChips.svelte';
 	import HeroSearch from '#components/HeroSearch.svelte';
+	import RecipeBrowser from '#components/RecipeBrowser.svelte';
 	import RecipePreview from '#components/RecipePreview.svelte';
 	import { me } from '#lib/me.svelte.js';
 	import { setFilterParam } from '#lib/filterNavigation.js';
@@ -35,17 +36,11 @@
 		hasTabs && url.searchParams.get('ansicht') !== 'entdecken' ? 'meine' : 'entdecken'
 	);
 
-	const categories = $derived(
-		presentCategories(tab === 'meine' ? ownRecipes : [...data.popular, ...data.fresh])
-	);
-	const sections = $derived(
-		tab === 'meine'
-			? [{ title: null, recipes: filterRecipes(ownRecipes, filter) }]
-			: [
-					{ title: 'Beliebt', recipes: filterRecipes(data.popular, filter) },
-					{ title: 'Neu', recipes: filterRecipes(data.fresh, filter) }
-				]
-	);
+	const categories = $derived(presentCategories([...data.popular, ...data.fresh]));
+	const sections = $derived([
+		{ title: 'Beliebt', recipes: filterRecipes(data.popular, filter) },
+		{ title: 'Neu', recipes: filterRecipes(data.fresh, filter) }
+	]);
 
 	let tabs = $state<HTMLElement>();
 	const showTab = async (next: 'meine' | 'entdecken') => {
@@ -66,8 +61,6 @@
 	<meta property="og:image" content="{page.url.origin}/og-image.png" />
 </svelte:head>
 
-<HeroSearch />
-
 {#if hasTabs}
 	<div class="tabs" role="tablist" aria-label="Rezepte" bind:this={tabs}>
 		<button
@@ -83,39 +76,52 @@
 			onclick={() => showTab('entdecken')}>Entdecken</button
 		>
 	</div>
-{:else if me.current && !user}
-	<p class="entry">
-		<a class="btn btn--primary" href={resolve('/anmelden')}>Eigenes Kochbuch anlegen</a>
-	</p>
-{/if}
-
-<FilterChips {categories} />
-
-{#each sections as section (section.title)}
-	{#if section.recipes.length}
-		<section>
-			{#if section.title}<h2>{section.title}</h2>{/if}
-			<div class="recipe-grid">
-				{#each section.recipes as recipe, index (recipe.id)}
-					<RecipePreview
-						{recipe}
-						priority={section.title !== 'Neu' && index <= 5}
-						byline={tab === 'entdecken' && recipe.author ? `von @${recipe.author.username}` : null}
-					/>
-				{/each}
-			</div>
-		</section>
-	{/if}
-{/each}
-
-{#if !sections.some(({ recipes }) => recipes.length)}
-	<p class="empty">Für diese Auswahl gibt es noch kein Rezept.</p>
 {/if}
 
 {#if tab === 'meine'}
+	<!-- the search covers only the chosen part: here the own recipes -->
+	<RecipeBrowser
+		recipes={ownRecipes}
+		searchPlaceholder="In meinen Rezepten suchen"
+		byline={(recipe) =>
+			recipe.author && recipe.author.username !== user?.username
+				? `von ${recipe.author.name}`
+				: null}
+	/>
 	<p class="more">
 		<button type="button" class="btn" onclick={() => showTab('entdecken')}>Weiter entdecken</button>
 	</p>
+{:else}
+	<HeroSearch />
+
+	{#if me.current && !user}
+		<p class="entry">
+			<a class="btn btn--primary" href={resolve('/anmelden')}>Eigenes Kochbuch anlegen</a>
+		</p>
+	{/if}
+
+	<FilterChips {categories} />
+
+	{#each sections as section (section.title)}
+		{#if section.recipes.length}
+			<section>
+				<h2>{section.title}</h2>
+				<div class="recipe-grid">
+					{#each section.recipes as recipe, index (recipe.id)}
+						<RecipePreview
+							{recipe}
+							priority={section.title === 'Beliebt' && index <= 5}
+							byline={recipe.author ? `von @${recipe.author.username}` : null}
+						/>
+					{/each}
+				</div>
+			</section>
+		{/if}
+	{/each}
+
+	{#if !sections.some(({ recipes }) => recipes.length)}
+		<p class="empty">Für diese Auswahl gibt es noch kein Rezept.</p>
+	{/if}
 {/if}
 
 <style>
@@ -130,7 +136,7 @@
 		justify-content: center;
 		gap: 0.25rem;
 		width: fit-content;
-		margin: 1.25rem auto 0;
+		margin: 1.5rem auto 0;
 		padding: 0.25rem;
 		background: var(--color-surface-muted);
 		border-radius: var(--radius-pill);
