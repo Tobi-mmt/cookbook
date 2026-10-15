@@ -378,6 +378,90 @@ export const recipeDailyViews = pgTable(
 	]
 );
 
+export const REPORT_REASONS = [
+	'inappropriate',
+	'copyright',
+	'spam',
+	'dangerous',
+	'personal_data',
+	'harassment',
+	'other'
+] as const;
+export type ReportReason = (typeof REPORT_REASONS)[number];
+export const reportTargetEnum = pgEnum('report_target', ['image', 'recipe', 'cookbook', 'user']);
+export const caseStatusEnum = pgEnum('case_status', ['open', 'in_review', 'done', 'rejected']);
+
+/** All reports about the same object form one case */
+export const reportCases = pgTable(
+	'report_cases',
+	{
+		id: serial('id').primaryKey(),
+		targetType: reportTargetEnum('target_type').notNull(),
+		targetId: text('target_id').notNull(),
+		status: caseStatusEnum('status').notNull().default('open'),
+		priority: integer('priority').notNull().default(0),
+		/** the reported object at the time of the first report */
+		snapshot: jsonb('snapshot'),
+		/** set for the case of an appeal against the decision of another case */
+		appealOf: integer('appeal_of'),
+		assignedTo: text('assigned_to').references(() => users.id, { onDelete: 'set null' }),
+		decision: text('decision'),
+		decisionReason: text('decision_reason'),
+		decidedBy: text('decided_by').references(() => users.id, { onDelete: 'set null' }),
+		decidedAt: timestamp('decided_at', { withTimezone: true }),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
+	},
+	(table) => [index('report_cases_target_idx').on(table.targetType, table.targetId)]
+);
+
+export const reports = pgTable('reports', {
+	id: serial('id').primaryKey(),
+	caseId: integer('case_id')
+		.notNull()
+		.references(() => reportCases.id, { onDelete: 'cascade' }),
+	targetType: reportTargetEnum('target_type').notNull(),
+	targetId: text('target_id').notNull(),
+	reason: text('reason', { enum: REPORT_REASONS }).notNull(),
+	comment: text('comment'),
+	originalUrl: text('original_url'),
+	isRightsHolder: boolean('is_rights_holder'),
+	reporterUserId: text('reporter_user_id').references(() => users.id, { onDelete: 'set null' }),
+	reporterEmail: text('reporter_email'),
+	reporterIpHash: text('reporter_ip_hash'),
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
+});
+
+export const appeals = pgTable('appeals', {
+	id: serial('id').primaryKey(),
+	caseId: integer('case_id')
+		.notNull()
+		.references(() => reportCases.id, { onDelete: 'cascade' }),
+	userId: text('user_id').references(() => users.id, { onDelete: 'set null' }),
+	reason: text('reason').notNull(),
+	status: text('status', { enum: ['open', 'upheld', 'reverted'] })
+		.notNull()
+		.default('open'),
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
+});
+
+/** Every action in the admin area with the state before and after */
+export const adminAuditLog = pgTable(
+	'admin_audit_log',
+	{
+		id: serial('id').primaryKey(),
+		adminId: text('admin_id').references(() => users.id, { onDelete: 'set null' }),
+		action: text('action').notNull(),
+		targetType: text('target_type').notNull(),
+		targetId: text('target_id').notNull(),
+		before: jsonb('before'),
+		after: jsonb('after'),
+		/** e.g. that the only admin decided about own content */
+		note: text('note'),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
+	},
+	(table) => [index('admin_audit_log_created_at_idx').on(table.createdAt)]
+);
+
 export type CookbookRow = typeof cookbooks.$inferSelect;
 export type CategoryRow = typeof categories.$inferSelect;
 export type RecipeRow = typeof recipes.$inferSelect;

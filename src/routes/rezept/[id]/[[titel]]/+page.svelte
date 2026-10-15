@@ -2,6 +2,7 @@
 	import type { Recipe } from '#types';
 	import RecipeComponent from '#components/Recipe.svelte';
 	import RecipeToolbar from '#components/RecipeToolbar.svelte';
+	import ReportDialog from '#components/ReportDialog.svelte';
 	import { page } from '$app/state';
 	import { recipePath } from '#lib/paths.js';
 	import { SITE_NAME } from '#lib/site.js';
@@ -59,5 +60,15 @@
 {#key recipe}
 	<RecipeComponent {recipe}>
 		{#snippet toolbar()}<RecipeToolbar {recipe} />{/snippet}
+		{#snippet footer()}
+			<p>
+				<ReportDialog
+					targets={[
+						{ type: 'recipe', id: recipe.id },
+						...(recipe.image ? [{ type: 'image' as const, id: recipe.id }] : [])
+					]}
+				/>
+			</p>
+		{/snippet}
 	</RecipeComponent>
 {/key}
