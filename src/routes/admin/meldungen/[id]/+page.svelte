@@ -109,6 +109,7 @@
 					>@{data.current.username}</a
 				>{/if}
 			{data.current.banned ? '(gesperrt)' : ''}
+			· <a href={resolve('/admin/personen/[id]', { id: item.targetId })}>In der Verwaltung</a>
 		</p>
 	{/if}
 	<details>

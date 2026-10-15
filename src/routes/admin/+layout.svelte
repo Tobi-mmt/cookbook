@@ -10,6 +10,7 @@
 	const sections = [
 		{ href: resolve('/admin'), label: 'Übersicht', exact: true },
 		{ href: resolve('/admin/meldungen'), label: 'Meldungen' },
+		{ href: resolve('/admin/personen'), label: 'Personen' },
 		{ href: resolve('/admin/stats'), label: 'Statistik' }
 	];
 	const isCurrent = (section: (typeof sections)[number]) => {
