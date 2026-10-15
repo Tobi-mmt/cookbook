@@ -57,6 +57,7 @@
 
 <RecipeBrowser
 	recipes={data.recipes}
+	searchPlaceholder="In „{cookbook.name}“ suchen"
 	byline={(recipe) => (shared && recipe.author ? `von ${recipe.author.name}` : null)}
 >
 	{#snippet empty()}

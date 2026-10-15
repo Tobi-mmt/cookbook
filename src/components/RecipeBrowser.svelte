@@ -24,6 +24,7 @@
 		recipes,
 		cookbooks = [],
 		byline = () => null,
+		searchPlaceholder = 'Rezept oder Zutat suchen',
 		empty
 	}: {
 		recipes: RecipeSummary[];
@@ -31,6 +32,7 @@
 		cookbooks?: CookbookChip[];
 		/** e.g. "von Mona" on the tiles of shared cookbooks */
 		byline?: (recipe: RecipeSummary) => string | null;
+		searchPlaceholder?: string;
 		empty?: import('svelte').Snippet;
 	} = $props();
 
@@ -85,6 +87,25 @@
 	);
 </script>
 
+<!-- the search comes first, the filters below are only there to narrow it down -->
+<div class="search-wrap">
+	<label class="search">
+		<SearchIcon size="1.25em" aria-hidden="true" />
+		<input
+			type="search"
+			placeholder={searchPlaceholder}
+			aria-label={searchPlaceholder}
+			bind:value={query}
+			onfocus={loadIndex}
+		/>
+	</label>
+	{#if query.trim().length > 1}
+		<p class="result-count" role="status">
+			{visible.length === 1 ? '1 Rezept' : `${visible.length} Rezepte`} zu „{query.trim()}“
+		</p>
+	{/if}
+</div>
+
 {#if cookbooks.length > 1}
 	<div class="cookbooks" role="group" aria-label="Nach Kochbuch filtern">
 		<button
@@ -130,18 +151,7 @@
 	</div>
 {/if}
 
-<FilterChips categories={presentCategories(inCookbook)}>
-	<label class="search">
-		<SearchIcon size="1em" aria-hidden="true" />
-		<input
-			type="search"
-			placeholder="Rezept oder Zutat suchen"
-			aria-label="In diesen Rezepten suchen"
-			bind:value={query}
-			onfocus={loadIndex}
-		/>
-	</label>
-</FilterChips>
+<FilterChips categories={presentCategories(inCookbook)} compact />
 
 {#if visible.length}
 	<div class="recipe-grid">
@@ -171,7 +181,7 @@
 		align-items: center;
 		justify-content: safe center;
 		gap: 0.5rem;
-		padding: 1rem 1.5rem 0;
+		padding: 0.75rem 1.5rem 0;
 		overflow-x: auto;
 		scrollbar-width: none;
 	}
@@ -183,10 +193,10 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 0.4em;
-		min-height: 2.25rem;
-		padding: 0.35em 0.9em;
+		min-height: 2rem;
+		padding: 0.3em 0.85em;
 		font: inherit;
-		font-size: 0.875rem;
+		font-size: 0.8125rem;
 		line-height: 1.2;
 		color: var(--color-text-muted);
 		background: var(--color-surface);
@@ -206,26 +216,41 @@
 		font-size: 0.75rem;
 		opacity: 0.75;
 	}
+	.search-wrap {
+		max-width: 36rem;
+		margin: 0 auto;
+		padding: 1.5rem 1.5rem 0.25rem;
+	}
 	.search {
-		flex: none;
 		display: flex;
 		align-items: center;
-		gap: 0.4rem;
-		height: 2.25rem;
-		padding: 0 0.9rem;
+		gap: 0.75rem;
+		height: 3rem;
+		padding: 0 1.25rem;
 		color: var(--color-text-subtle);
-		background: var(--color-surface-muted);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
 		border-radius: var(--radius-pill);
 	}
+	.search:focus-within {
+		border-color: var(--color-text-subtle);
+	}
 	.search input {
-		width: 11rem;
+		flex: 1;
+		min-width: 0;
 		font: inherit;
 		/* at least 16px, otherwise iOS zooms into the page */
-		font-size: 1rem;
+		font-size: 1.0625rem;
 		color: var(--color-text);
 		background: none;
 		border: none;
 		outline: none;
+	}
+	.result-count {
+		margin: 0.5rem 0 0;
+		text-align: center;
+		font-size: 0.875rem;
+		color: var(--color-text-subtle);
 	}
 	.cookbook-bar {
 		display: flex;
@@ -278,7 +303,10 @@
 	@media (max-width: 599px) {
 		.cookbooks {
 			justify-content: flex-start;
-			padding: 0.75rem 1rem 0;
+			padding: 0.6rem 1rem 0;
+		}
+		.search-wrap {
+			padding: 1rem 1rem 0.25rem;
 		}
 		.recipe-grid {
 			--grid-item-min-width: 160px;
