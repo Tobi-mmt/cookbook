@@ -13,6 +13,8 @@ import { trackingDay } from './tracking';
 import { purgeTrash } from './trash';
 
 const MAIL_WARNING_THRESHOLD = 1000;
+/** Neon Free includes 1 GB */
+const DATABASE_LIMIT_BYTES = 1024 * 1024 * 1024;
 
 /** Pages of accounts that just turned 14 days old and may be indexed now */
 const newlyIndexablePaths = async (db: Database, now: Date) => {
@@ -37,6 +39,34 @@ const newlyIndexablePaths = async (db: Database, now: Date) => {
 			)
 		);
 	return affectedPaths(db, { cookbookIds: memberships.map(({ cookbookId }) => cookbookId) });
+};
+
+const mailAdmins = async (db: Database, subject: string, text: string) => {
+	const admins = await db.select({ email: users.email }).from(users).where(eq(users.role, 'admin'));
+	for (const { email } of admins) {
+		await sendMail(db, email, renderMail({ subject, paragraphs: [text] }), {
+			kind: 'admin-warning',
+			retry: true
+		});
+	}
+};
+
+/** At 80 % of the free storage the admins should consider the paid plan */
+const warnAboutDatabaseSize = async (db: Database, now: Date) => {
+	const result = await db.execute<{ bytes: string }>(
+		sql`select pg_database_size(current_database()) as bytes`
+	);
+	const bytes = Number(result.rows[0]?.bytes ?? 0);
+	if (bytes < DATABASE_LIMIT_BYTES * 0.8) return bytes;
+	const month = now.toISOString().slice(0, 7);
+	if (await hitRateLimit(db, `database-warning:${month}`, 1, 40 * 24 * 60 * 60)) {
+		await mailAdmins(
+			db,
+			'Die Datenbank ist bald voll',
+			`Die Datenbank belegt ${Math.round(bytes / 1024 / 1024)} MB von 1 GB im kostenlosen Plan von Neon. Bitte prüfe den Bezahlplan.`
+		);
+	}
+	return bytes;
 };
 
 const warnAboutMailVolume = async (db: Database, now: Date) => {
@@ -94,6 +124,7 @@ export const runDailyJob = async (
 	await step('accounts', () => deleteRequestedAccounts(db, storage, now));
 	await step('mails', () => resendPendingMails(db));
 	await step('mailVolume', () => warnAboutMailVolume(db, now));
+	await step('databaseSize', () => warnAboutDatabaseSize(db, now));
 	await step('closedCases', () => closeCasesOfDeletedTargets(db));
 	await step('reportSummary', () => sendDailyReportSummary(db, origin, now));
 	await step('rateLimits', async () => (await deleteExpiredRateLimits(db, now)).rowCount);
