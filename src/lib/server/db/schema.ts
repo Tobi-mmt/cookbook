@@ -122,6 +122,12 @@ export const passkeys = pgTable(
 	]
 );
 
+/** Deleted accounts, deleted again after restoring a backup, see README */
+export const deletionLog = pgTable('deletion_log', {
+	userId: text('user_id').primaryKey(),
+	deletedAt: timestamp('deleted_at', { withTimezone: true }).notNull().defaultNow()
+});
+
 /** Former usernames redirect to the current one and are blocked for others until `releasedAt` */
 export const usernameHistory = pgTable('username_history', {
 	oldUsername: text('old_username').primaryKey(),
