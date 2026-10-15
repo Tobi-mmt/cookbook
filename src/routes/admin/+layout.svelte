@@ -3,14 +3,19 @@
 	import type { Snippet } from 'svelte';
 	import { page } from '$app/state';
 	import NavigationLoader from '#components/NavigationLoader.svelte';
-	import ExternalLink from '@lucide/svelte/icons/external-link';
-	import LogOut from '@lucide/svelte/icons/log-out';
 
 	let { children }: { children: Snippet } = $props();
-
-	const isStats = $derived(/^\/admin\/stats(\/|$)/.test(page.url.pathname));
-
 	let loading = $state(false);
+
+	const sections = [
+		{ href: resolve('/admin'), label: 'Übersicht', exact: true },
+		{ href: resolve('/admin/stats'), label: 'Statistik' }
+	];
+	const isCurrent = (section: (typeof sections)[number]) => {
+		const path = page.url.pathname;
+		const href = new URL(section.href, page.url.href).pathname;
+		return section.exact ? path === href : path.startsWith(href);
+	};
 </script>
 
 <svelte:head>
@@ -18,39 +23,57 @@
 </svelte:head>
 
 <div class="admin">
-	{#if !page.url.pathname.startsWith('/admin/login')}
-		<header class="admin-header">
-			<a href={resolve('/admin')} class="admin-title">Kochbuch verwalten</a>
-			<nav aria-label="Verwaltung">
-				<a href={resolve('/admin')} class="nav-link" aria-current={isStats ? undefined : 'page'}
-					>Rezepte</a
+	<header>
+		<p class="title">Verwaltung</p>
+		<nav aria-label="Verwaltung">
+			{#each sections as section (section.href)}
+				<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- built with resolve() -->
+				<a href={section.href} aria-current={isCurrent(section) ? 'page' : undefined}
+					>{section.label}</a
 				>
-
-				<a
-					href={resolve('/admin/stats')}
-					class="nav-link"
-					aria-current={isStats ? 'page' : undefined}>Statistik</a
-				>
-			</nav>
-			<div class="header-actions">
-				<a href={resolve('/')} target="_blank" class="button" title="Zur Webseite">
-					<ExternalLink size={18} aria-hidden="true" /><span class="label">Zur Webseite</span>
-				</a>
-				<form method="POST" action="/admin/logout">
-					<button type="submit" class="button" title="Abmelden">
-						<LogOut size={18} aria-hidden="true" /><span class="label">Abmelden</span>
-					</button>
-				</form>
-			</div>
-		</header>
-	{/if}
-	<NavigationLoader delay={150} color="#8882a8" bind:loading />
+			{/each}
+		</nav>
+	</header>
+	<NavigationLoader delay={150} color="var(--color-dark)" bind:loading />
 	<div class="content" class:content--loading={loading} aria-busy={loading}>
 		{@render children()}
 	</div>
 </div>
 
 <style>
+	.admin {
+		max-width: 1100px;
+		margin: 0 auto;
+		padding: 0 1.5rem 4rem;
+	}
+	header {
+		padding-top: 1.5rem;
+		margin-bottom: 1.5rem;
+		border-bottom: 1px solid var(--color-border);
+	}
+	.title {
+		margin: 0 0 0.75rem;
+		font-size: 1.5rem;
+		font-weight: 400;
+	}
+	nav {
+		display: flex;
+		gap: 1.5rem;
+		overflow-x: auto;
+		scrollbar-width: none;
+	}
+	nav a {
+		flex: none;
+		padding-bottom: 0.6rem;
+		margin-bottom: -1px;
+		color: var(--color-text-muted);
+		text-decoration: none;
+		border-bottom: 2px solid transparent;
+	}
+	nav a[aria-current='page'] {
+		color: var(--color-text);
+		border-bottom-color: var(--color-dark);
+	}
 	.content {
 		transition: opacity 0.2s;
 	}
@@ -59,152 +82,48 @@
 		opacity: 0.5;
 		pointer-events: none;
 	}
-	.admin {
-		max-width: 1100px;
-		margin: 0 auto;
-		padding: 0 1.5em 4em;
+	.admin :global(h1) {
+		margin: 0 0 1rem;
+		font-size: 1.5rem;
+		font-weight: 400;
 	}
-	.admin-header {
-		position: sticky;
-		top: 0;
-		z-index: 10;
-		display: flex;
-		align-items: center;
-		flex-wrap: wrap;
-		gap: 0.5em 2em;
-		background: var(--color-surface);
+	.admin :global(.table) {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 0.9375rem;
+	}
+	.admin :global(.table th),
+	.admin :global(.table td) {
+		padding: 0.5rem 0.4rem;
+		text-align: left;
+		vertical-align: top;
 		border-bottom: 1px solid var(--color-border);
-		padding: 1em 0 0;
-		margin-bottom: 1.5em;
 	}
-	.admin-title {
-		font-size: 1.4em;
-		font-weight: 200;
-		color: inherit;
-		text-decoration: none;
-		padding-bottom: 0.5em;
+	.admin :global(.table th) {
+		font-weight: 400;
+		color: var(--color-text-subtle);
 	}
-	nav {
-		display: flex;
-		align-self: stretch;
-		gap: 1.5em;
+	.admin :global(.table a) {
+		color: var(--color-text);
 	}
-	.nav-link {
-		display: flex;
-		align-items: center;
-		padding-bottom: 0.5em;
-		border-bottom: 3px solid transparent;
-		margin-bottom: -1px;
-		color: var(--color-text-muted);
-		text-decoration: none;
+	.admin :global(.cards) {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+		gap: 1rem;
 	}
-	.nav-link:hover {
-		color: inherit;
+	.admin :global(.card) {
+		padding: 1rem;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
 	}
-	.nav-link[aria-current='page'] {
-		color: inherit;
-		font-weight: 700;
-		border-bottom-color: #8882a8;
-	}
-	.header-actions {
-		display: flex;
-		align-items: center;
-		gap: 0.5em;
-		margin-left: auto;
-		padding-bottom: 0.5em;
+	.admin :global(.card strong) {
+		display: block;
+		font-size: 1.75rem;
+		font-weight: 400;
 	}
 	@media (max-width: 700px) {
 		.admin {
-			padding: 0 1em 4em;
+			padding: 0 1rem 3rem;
 		}
-		.admin-header {
-			gap: 0.5em 1em;
-		}
-		.admin-title {
-			font-size: 1.2em;
-		}
-		nav {
-			order: 3;
-			width: 100%;
-		}
-		/* icons only, the title attribute and the screen reader text keep the meaning */
-		.header-actions .label {
-			position: absolute;
-			width: 1px;
-			height: 1px;
-			overflow: hidden;
-			clip-path: inset(50%);
-			white-space: nowrap;
-		}
-	}
-	.admin :global(input),
-	.admin :global(textarea),
-	.admin :global(select) {
-		font: inherit;
-		padding: 0.4em 0.6em;
-		border: 1px solid #bbb;
-		border-radius: var(--radius-sm);
-		background: var(--color-surface);
-		min-width: 0;
-	}
-	.admin :global(input:focus),
-	.admin :global(textarea:focus),
-	.admin :global(select:focus) {
-		outline: 2px solid #8882a8;
-		outline-offset: -1px;
-	}
-	.admin :global(.button) {
-		font: inherit;
-		font-size: 0.9em;
-		padding: 0.4em 0.9em;
-		align-items: center;
-		justify-content: center;
-		gap: 0.4em;
-		min-height: 2.4em;
-		border: 1px solid #bbb;
-		border-radius: var(--radius-sm);
-		background: var(--color-surface);
-		color: inherit;
-		cursor: pointer;
-		text-decoration: none;
-		display: inline-flex;
-	}
-	.admin :global(.button--icon) {
-		padding: 0.4em;
-		min-width: 2.4em;
-	}
-	.admin :global(.button:hover) {
-		background: var(--color-surface-muted);
-	}
-	.admin :global(.button--primary) {
-		background: var(--color-dark);
-		border-color: var(--color-dark);
-		color: #fff;
-	}
-	.admin :global(.button--primary:hover) {
-		background: var(--color-text-muted);
-	}
-	.admin :global(.button--danger) {
-		color: #b3261e;
-		border-color: #e3a7a3;
-	}
-	.admin :global(.button:disabled) {
-		opacity: 0.5;
-		cursor: default;
-	}
-	.admin :global(.error) {
-		color: #b3261e;
-	}
-	.admin :global(.notice) {
-		background: #eef6ef;
-		border: 1px solid #b9dcbf;
-		border-radius: var(--radius-sm);
-		padding: 0.75em 1em;
-	}
-	.admin :global(.warning) {
-		background: #fff6e0;
-		border: 1px solid #f0d58c;
-		border-radius: var(--radius-sm);
-		padding: 0.75em 1em;
 	}
 </style>

@@ -32,8 +32,8 @@
 	{#if !page.url.pathname.startsWith('/admin')}
 		<!-- the pages come from the cache and are preloaded, it only shows on slow connections -->
 		<NavigationLoader delay={250} color="var(--color-dark)" />
-		<TopBar />
 	{/if}
+	<TopBar />
 	<main>
 		{@render children()}
 	</main>

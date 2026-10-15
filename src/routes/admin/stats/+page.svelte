@@ -29,14 +29,14 @@
 <form class="range" method="GET">
 	{#each data.ranges as range (range.days)}
 		<a
-			class="button"
+			class="btn"
 			class:button--primary={range.from === data.from && range.to === data.to}
 			href="{resolve('/admin/stats')}?from={range.from}&to={range.to}">{range.days} Tage</a
 		>
 	{/each}
-	<label>Von <input type="date" name="from" value={data.from} /></label>
-	<label>Bis <input type="date" name="to" value={data.to} /></label>
-	<button type="submit" class="button">Anzeigen</button>
+	<label>Von <input class="input" type="date" name="from" value={data.from} /></label>
+	<label>Bis <input class="input" type="date" name="to" value={data.to} /></label>
+	<button type="submit" class="btn">Anzeigen</button>
 </form>
 
 <div class="totals">

@@ -13,14 +13,6 @@ export const variables = defineEnvVars({
 		description: 'Vercel Blob token, empty locally to store images in .data/blob',
 		schema: optional
 	},
-	ADMIN_PASSWORD_HASH: {
-		description: 'Created with `yarn hash-password <password>`, the login fails without it',
-		schema: optional
-	},
-	SESSION_SECRET: {
-		description: 'Random string that signs the admin session cookie, the login fails without it',
-		schema: optional
-	},
 	BETTER_AUTH_SECRET: {
 		description:
 			'Random string with at least 32 characters, signs sessions, captchas and IP hashes',
