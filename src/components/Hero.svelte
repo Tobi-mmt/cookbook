@@ -57,10 +57,10 @@
 		align-items: center;
 		gap: 3rem;
 		/* the next part of the page stays in sight below */
-		height: 75vh;
-		height: 75svh;
-		min-height: 30rem;
-		max-height: 52rem;
+		height: 60vh;
+		height: 60svh;
+		min-height: 26rem;
+		max-height: 40rem;
 		padding: 2rem 3rem;
 	}
 	:global(html.signed-in) .hero {
@@ -128,7 +128,7 @@
 		grid-template-rows: 1fr 1fr;
 		gap: 0.5rem;
 		height: 100%;
-		max-height: 34rem;
+		max-height: 30rem;
 	}
 	.tile {
 		min-height: 0;
