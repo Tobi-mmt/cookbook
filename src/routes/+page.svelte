@@ -3,6 +3,7 @@
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
 	import FilterChips from '#components/FilterChips.svelte';
+	import Hero from '#components/Hero.svelte';
 	import SearchField from '#components/SearchField.svelte';
 	import RecipeBrowser from '#components/RecipeBrowser.svelte';
 	import RecipePreview from '#components/RecipePreview.svelte';
@@ -65,9 +66,13 @@
 	<meta property="og:image" content="{page.url.origin}/og-image.png" />
 </svelte:head>
 
-<!-- one fixed place above the search for the switch, the way in for guests or the first
-	recipe, so that nothing moves once the person is known -->
-<div class="slot">
+{#if !user}
+	<Hero recipes={data.popular} discoverHref="#rezepte" />
+{/if}
+
+<!-- one fixed place above the search for the switch or the first recipe, so that nothing moves
+	once the person is known; guests have the hero instead -->
+<div class="slot" class:slot--guest={!user && !hasTabs} id="rezepte">
 	{#if hasTabs}
 		<div class="tabs" role="tablist" aria-label="Rezepte" bind:this={tabs}>
 			<button
@@ -83,8 +88,6 @@
 				onclick={() => showTab('entdecken')}>Entdecken</button
 			>
 		</div>
-	{:else if me.current && !user}
-		<a class="btn btn--primary" href={resolve('/anmelden')}>Eigenes Kochbuch anlegen</a>
 	{:else if user && ownRecipesLoaded}
 		<a class="btn" href={resolve('/neu')}>Erstes Rezept anlegen</a>
 	{/if}
@@ -137,6 +140,11 @@
 		align-items: center;
 		min-height: 2.75rem;
 		margin: 1.5rem 1.5rem 0;
+		scroll-margin-top: var(--top-bar-height);
+	}
+	:global(html:not(.signed-in)) .slot--guest {
+		min-height: 0;
+		margin-top: 0.5rem;
 	}
 	.tabs {
 		display: flex;

@@ -14,6 +14,12 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
 
+		<script nonce="%sveltekit.nonce%">
+			try {
+				if (localStorage.getItem('signed-in')) document.documentElement.classList.add('signed-in');
+			} catch {}
+		</script>
+
 		%sveltekit.head%
 	</head>
 
