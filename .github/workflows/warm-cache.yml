@@ -10,10 +10,11 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Render all pages into the cache
+      - name: Render the most visited pages into the cache
         run: |
           curl --fail-with-body --silent --show-error --max-time 300 \
             -H "Authorization: Bearer $CRON_SECRET" \
-            https://kochbuch.monaundtobi.de/api/warm-cache
+            "${SITE_URL:-https://kochbuch.monaundtobi.de}/api/warm-cache"
         env:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          SITE_URL: ${{ vars.SITE_URL }}
