@@ -3,12 +3,16 @@
 	import NavigationLoader from '#components/NavigationLoader.svelte';
 	import TopBar from '#components/TopBar.svelte';
 	import { afterNavigate } from '$app/navigation';
+	import { onMount } from 'svelte';
+	import { me } from '#lib/me.svelte.js';
 	import { page } from '$app/state';
 	import '#lib/styles/ui.css';
 	// imported, so that the file name has a hash and the browser caches it for a year
 	import robotoRegular from '#lib/assets/fonts/roboto/roboto-v29-latin-regular.woff2';
 
 	let { children }: { children: Snippet } = $props();
+
+	onMount(() => me.load());
 
 	// cookieless page view tracking, see src/lib/server/tracking.ts
 	afterNavigate(({ to, shallow }) => {

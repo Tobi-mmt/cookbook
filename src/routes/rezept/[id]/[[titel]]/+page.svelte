@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Recipe } from '#types';
 	import RecipeComponent from '#components/Recipe.svelte';
+	import RecipeToolbar from '#components/RecipeToolbar.svelte';
 	import { page } from '$app/state';
 	import { recipePath } from '#lib/paths.js';
 	import { SITE_NAME } from '#lib/site.js';
@@ -56,5 +57,7 @@
 </svelte:head>
 
 {#key recipe}
-	<RecipeComponent {recipe} />
+	<RecipeComponent {recipe}>
+		{#snippet toolbar()}<RecipeToolbar {recipe} />{/snippet}
+	</RecipeComponent>
 {/key}

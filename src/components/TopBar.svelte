@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Logo from '#components/Logo.svelte';
 	import Search from '#components/Search.svelte';
+	import UserMenu from '#components/UserMenu.svelte';
 	import { resolve } from '$app/paths';
 
 	let searching = false;
@@ -12,7 +13,10 @@
 			<Logo size="2.25rem" />
 			<span>Unser Kochbuch</span>
 		</a>
-		<Search bind:expanded={searching} />
+		<div class="actions">
+			<Search bind:expanded={searching} />
+			<UserMenu />
+		</div>
 	</div>
 </header>
 
@@ -43,6 +47,12 @@
 		color: var(--color-text);
 		text-decoration: none;
 		white-space: nowrap;
+	}
+	.actions {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		min-width: 0;
 	}
 	@media (max-width: 699px) {
 		.top-bar {

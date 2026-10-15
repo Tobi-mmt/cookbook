@@ -3,7 +3,9 @@
 	import { page } from '$app/state';
 	import Avatar from '#components/Avatar.svelte';
 	import QrCodeButton from '#components/QrCodeButton.svelte';
+	import AddRecipeButton from '#components/AddRecipeButton.svelte';
 	import RecipeBrowser from '#components/RecipeBrowser.svelte';
+	import { me } from '#lib/me.svelte.js';
 	import { cookbookPath, profilePath } from '#lib/paths.js';
 	import type { CookbookWithMembers } from '#lib/server/profiles.js';
 	import { SITE_NAME } from '#lib/site.js';
@@ -22,6 +24,11 @@
 	const { profile } = $derived(data);
 	const chips = $derived(
 		data.cookbooks.map((cookbook) => ({ ...cookbook, href: cookbookPath(cookbook) }))
+	);
+	const ownCookbook = $derived(
+		me.current?.user?.username === profile.username
+			? me.current.cookbooks.find(({ role }) => role === 'owner')
+			: undefined
 	);
 	const profileUrl = $derived(new URL(profilePath(profile.username), page.url.origin).href);
 </script>
@@ -52,6 +59,10 @@
 		<p class="empty">{profile.name} hat noch keine Rezepte.</p>
 	{/snippet}
 </RecipeBrowser>
+
+{#if ownCookbook}
+	<AddRecipeButton cookbookId={ownCookbook.id} />
+{/if}
 
 <style>
 	.profile {

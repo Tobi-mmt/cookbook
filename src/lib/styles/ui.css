@@ -161,3 +161,8 @@ textarea.input {
 		padding: 1.5rem 1rem 3rem;
 	}
 }
+
+.btn--icon {
+	min-width: 2.5rem;
+	padding: 0.45em;
+}

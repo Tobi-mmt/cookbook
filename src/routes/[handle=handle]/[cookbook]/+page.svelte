@@ -1,6 +1,9 @@
 <script lang="ts">
 	import type { RecipeSummary } from '#types';
+	import AddRecipeButton from '#components/AddRecipeButton.svelte';
 	import RecipeBrowser from '#components/RecipeBrowser.svelte';
+	import { me } from '#lib/me.svelte.js';
+	import { resolve } from '$app/paths';
 	import { profilePath } from '#lib/paths.js';
 	import type { CookbookWithMembers } from '#lib/server/profiles.js';
 	import { SITE_NAME } from '#lib/site.js';
@@ -41,9 +44,26 @@
 	byline={(recipe) => (shared && recipe.author ? `von ${recipe.author.name}` : null)}
 >
 	{#snippet empty()}
-		<p class="empty">Noch keine Rezepte.</p>
+		{#if me.canEdit(cookbook.id)}
+			<div class="empty">
+				<p>Dein Kochbuch ist noch leer.</p>
+				<div class="row">
+					<a class="btn btn--primary" href="{resolve('/neu')}?kochbuch={cookbook.id}"
+						>Rezept anlegen</a
+					>
+					<a class="btn" href="{resolve('/import')}?kochbuch={cookbook.id}">Aus Link importieren</a>
+					<a class="btn" href={resolve('/')}>Rezepte entdecken</a>
+				</div>
+			</div>
+		{:else}
+			<p class="empty">Noch keine Rezepte.</p>
+		{/if}
 	{/snippet}
 </RecipeBrowser>
+
+{#if me.canEdit(cookbook.id)}
+	<AddRecipeButton cookbookId={cookbook.id} />
+{/if}
 
 <style>
 	.cookbook {
@@ -67,5 +87,8 @@
 		padding: 2rem 1.5rem;
 		text-align: center;
 		color: var(--color-text-muted);
+	}
+	.empty .row {
+		justify-content: center;
 	}
 </style>

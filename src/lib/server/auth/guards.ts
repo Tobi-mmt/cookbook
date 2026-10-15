@@ -1,4 +1,6 @@
-import { redirect, type RequestEvent } from '@sveltejs/kit';
+import { error, redirect, type RequestEvent } from '@sveltejs/kit';
+import { getDb } from '../context';
+import { getEditorRole } from '../cookbooks';
 
 const signInUrl = (event: RequestEvent, path: string) =>
 	`${path}?weiter=${encodeURIComponent(event.url.pathname + event.url.search)}`;
@@ -11,4 +13,25 @@ export const requireUser = async (event: RequestEvent) => {
 		redirect(303, signInUrl(event, '/willkommen'));
 	}
 	return { ...session.user, username: session.user.username };
+};
+
+export type Editor = Awaited<ReturnType<typeof requireUser>> & {
+	cookbookRole: 'owner' | 'editor';
+	/** an admin who edits a cookbook without being one of its editors */
+	asAdmin: boolean;
+};
+
+/** The one check for every change to a cookbook and its recipes, admins may always */
+export const requireEditor = async (event: RequestEvent, cookbookId: string): Promise<Editor> => {
+	const user = await requireUser(event);
+	const role = await getEditorRole(getDb(), cookbookId, user.id);
+	if (role) return { ...user, cookbookRole: role, asAdmin: false };
+	if (user.role === 'admin') return { ...user, cookbookRole: 'owner', asAdmin: true };
+	error(403, 'Du darfst dieses Kochbuch nicht bearbeiten.');
+};
+
+export const requireOwner = async (event: RequestEvent, cookbookId: string) => {
+	const editor = await requireEditor(event, cookbookId);
+	if (editor.cookbookRole !== 'owner') error(403, 'Das darf nur der Besitzer des Kochbuchs.');
+	return editor;
 };
