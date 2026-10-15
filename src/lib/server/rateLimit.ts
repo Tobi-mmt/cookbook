@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm';
+import { lt, sql } from 'drizzle-orm';
 import type { Database } from './db/client';
 import { rateLimits } from './db/schema';
 
@@ -11,14 +11,15 @@ export const hitRateLimit = async (
 	now = new Date()
 ) => {
 	const resetAt = new Date(now.getTime() + windowSeconds * 1000);
+	const nowIso = now.toISOString();
 	const [row] = await db
 		.insert(rateLimits)
 		.values({ key, count: 1, resetAt })
 		.onConflictDoUpdate({
 			target: rateLimits.key,
 			set: {
-				count: sql`case when ${rateLimits.resetAt} <= ${now} then 1 else ${rateLimits.count} + 1 end`,
-				resetAt: sql`case when ${rateLimits.resetAt} <= ${now} then ${resetAt} else ${rateLimits.resetAt} end`
+				count: sql`case when ${rateLimits.resetAt} <= ${nowIso} then 1 else ${rateLimits.count} + 1 end`,
+				resetAt: sql`case when ${rateLimits.resetAt} <= ${nowIso} then ${resetAt.toISOString()}::timestamptz else ${rateLimits.resetAt} end`
 			}
 		})
 		.returning({ count: rateLimits.count });
@@ -26,4 +27,4 @@ export const hitRateLimit = async (
 };
 
 export const deleteExpiredRateLimits = (db: Database, now = new Date()) =>
-	db.delete(rateLimits).where(sql`${rateLimits.resetAt} < ${now}`);
+	db.delete(rateLimits).where(lt(rateLimits.resetAt, now));
