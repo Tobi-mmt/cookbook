@@ -2,12 +2,15 @@
 	import { resolve } from '$app/paths';
 	import type { Snippet } from 'svelte';
 	import { page } from '$app/state';
+	import NavigationLoader from '#components/NavigationLoader.svelte';
 	import ExternalLink from '@lucide/svelte/icons/external-link';
 	import LogOut from '@lucide/svelte/icons/log-out';
 
 	let { children }: { children: Snippet } = $props();
 
 	const isStats = $derived(/^\/admin\/stats(\/|$)/.test(page.url.pathname));
+
+	let loading = $state(false);
 </script>
 
 <svelte:head>
@@ -41,10 +44,21 @@
 			</div>
 		</header>
 	{/if}
-	{@render children()}
+	<NavigationLoader delay={150} color="#8882a8" bind:loading />
+	<div class="content" class:content--loading={loading} aria-busy={loading}>
+		{@render children()}
+	</div>
 </div>
 
 <style>
+	.content {
+		transition: opacity 0.2s;
+	}
+	/* the old page stays visible but dimmed until the new one is there */
+	.content--loading {
+		opacity: 0.5;
+		pointer-events: none;
+	}
 	.admin {
 		max-width: 1100px;
 		margin: 0 auto;
