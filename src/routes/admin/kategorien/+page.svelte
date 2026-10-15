@@ -10,6 +10,8 @@
 		data: { categories: (Category & { recipes: number })[] };
 		form: { saved?: string; error?: string } | null;
 	} = $props();
+
+	let confirmDelete = $state<number | null>(null);
 </script>
 
 <svelte:head>
@@ -59,20 +61,52 @@
 							<input type="hidden" name="id" value={category.id} />
 							<button type="submit" class="btn">Speichern</button>
 						</form>
-						<form method="POST" action="?/delete" class="row" use:enhance>
-							<input type="hidden" name="id" value={category.id} />
-							{#if category.recipes}
-								<select class="input" name="replacement" aria-label="Ersatzkategorie">
-									{#each data.categories.filter(({ id }) => id !== category.id) as other (other.id)}
-										<option value={other.id}>{other.name}</option>
-									{/each}
-								</select>
-							{/if}
-							<button type="submit" class="btn btn--quiet btn--danger">Löschen</button>
-						</form>
+						<button
+							type="button"
+							class="btn btn--quiet btn--danger"
+							aria-expanded={confirmDelete === category.id}
+							onclick={() => (confirmDelete = category.id)}>Löschen</button
+						>
 					</div>
 				</td>
 			</tr>
+			{#if confirmDelete === category.id}
+				<tr class="confirm">
+					<td colspan="5">
+						<form
+							method="POST"
+							action="?/delete"
+							class="stack"
+							use:enhance={() =>
+								async ({ update }) => {
+									confirmDelete = null;
+									await update();
+								}}
+						>
+							<input type="hidden" name="id" value={category.id} />
+							<p>„{category.name}“ wirklich löschen?</p>
+							{#if category.recipes}
+								<label class="field">
+									{category.recipes === 1
+										? '1 Rezept verwendet diese Kategorie. Es wird verschoben nach:'
+										: `${category.recipes} Rezepte verwenden diese Kategorie. Sie werden verschoben nach:`}
+									<select class="input replacement" name="replacement" required>
+										{#each data.categories.filter(({ id }) => id !== category.id) as other (other.id)}
+											<option value={other.id}>{other.name}</option>
+										{/each}
+									</select>
+								</label>
+							{/if}
+							<div class="row">
+								<button type="submit" class="btn btn--danger">Löschen</button>
+								<button type="button" class="btn btn--quiet" onclick={() => (confirmDelete = null)}
+									>Abbrechen</button
+								>
+							</div>
+						</form>
+					</td>
+				</tr>
+			{/if}
 		{/each}
 	</tbody>
 </table>
@@ -104,6 +138,15 @@
 	}
 	td {
 		vertical-align: middle;
+	}
+	.confirm td {
+		background: var(--color-surface-muted);
+	}
+	.confirm p {
+		margin: 0;
+	}
+	.replacement {
+		max-width: 20rem;
 	}
 	.color {
 		width: 3.5rem;
