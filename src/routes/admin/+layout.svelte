@@ -12,6 +12,7 @@
 		{ href: resolve('/admin/meldungen'), label: 'Meldungen' },
 		{ href: resolve('/admin/personen'), label: 'Personen' },
 		{ href: resolve('/admin/kochbuecher'), label: 'Kochbücher' },
+		{ href: resolve('/admin/rezepte'), label: 'Rezepte' },
 		{ href: resolve('/admin/stats'), label: 'Statistik' }
 	];
 	const isCurrent = (section: (typeof sections)[number]) => {
