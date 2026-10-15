@@ -109,7 +109,7 @@
 		<SearchIcon size="1.25em" aria-hidden="true" />
 	</button>
 
-	<label class="field">
+	<label class="search-field">
 		<SearchIcon size="1.1em" aria-hidden="true" />
 		<input
 			type="search"
@@ -161,7 +161,7 @@
 		align-items: center;
 		gap: 0.5rem;
 	}
-	.field {
+	.search-field {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
@@ -175,12 +175,12 @@
 		cursor: text;
 		transition: border-color 0.15s;
 	}
-	.field:hover,
-	.field:focus-within {
+	.search-field:hover,
+	.search-field:focus-within {
 		border-color: var(--color-border);
 		background: var(--color-surface);
 	}
-	.field:has(input:focus-visible) {
+	.search-field:has(input:focus-visible) {
 		outline: 3px solid var(--color-focus);
 		outline-offset: 2px;
 	}
@@ -289,7 +289,7 @@
 		.open-button {
 			display: flex;
 		}
-		.field {
+		.search-field {
 			display: none;
 		}
 		.search--expanded {
@@ -298,7 +298,7 @@
 		.search--expanded .open-button {
 			display: none;
 		}
-		.search--expanded .field {
+		.search--expanded .search-field {
 			display: flex;
 			flex: 1;
 			width: auto;
