@@ -31,7 +31,7 @@ for (const { id, title } of await listRecipeIndex(source.db)) {
 	const recipe = (await getRecipeInput(source.db, id))!;
 
 	let image = null;
-	const largest = recipe.image?.variants.webp.at(-1);
+	const largest = recipe.image?.variants.avif.at(-1);
 	if (largest) {
 		const response = await fetch(largest.url);
 		if (!response.ok) throw new Error(`Downloading ${largest.url} failed: ${response.status}`);
