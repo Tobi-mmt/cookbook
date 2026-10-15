@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SearchIcon from '@lucide/svelte/icons/search';
+	import X from '@lucide/svelte/icons/x';
 	import { afterNavigate } from '$app/navigation';
 	import { recipePath } from '#lib/paths.js';
 	import type { SearchResult } from '#lib/server/search.js';
@@ -127,7 +128,13 @@
 		/>
 	</label>
 
-	<button type="button" class="cancel-button" on:click={close}>Abbrechen</button>
+	<button
+		type="button"
+		class="cancel-button"
+		aria-label="Suche schließen"
+		title="Suche schließen"
+		on:click={close}><X size="1.35em" aria-hidden="true" /></button
+	>
 
 	{#if showPanel}
 		<div class="panel" id="search-results">
@@ -221,13 +228,20 @@
 	}
 	.cancel-button {
 		flex: none;
-		padding: 0.5rem 0.25rem;
-		font: inherit;
-		font-size: 0.9375rem;
+		align-items: center;
+		justify-content: center;
+		width: 2.5rem;
+		height: 2.5rem;
+		padding: 0;
 		color: var(--color-text-muted);
 		background: none;
 		border: none;
+		border-radius: var(--radius-pill);
 		cursor: pointer;
+	}
+	.cancel-button:hover {
+		color: var(--color-text);
+		background: var(--color-surface-muted);
 	}
 
 	.panel {
@@ -304,7 +318,7 @@
 			width: auto;
 		}
 		.search--expanded .cancel-button {
-			display: block;
+			display: flex;
 		}
 		/* the results cover the page below the top bar */
 		.panel {
