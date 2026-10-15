@@ -36,6 +36,7 @@
 </svelte:head>
 
 <div class="page">
+	<p class="back"><a href={recipePath(data.recipe)}>← {data.recipe.title}</a></p>
 	<h1>Verlauf</h1>
 	<p class="hint">
 		Die letzten 20 Versionen von <a href={recipePath(data.recipe)}>{data.recipe.title}</a>.
@@ -57,20 +58,23 @@
 		{/each}
 	</ol>
 
-	{#if data.selected && data.selected !== data.currentVersion}
-		<form method="POST" action="?/restore" use:enhance class="stack">
-			<input type="hidden" name="version" value={data.selected} />
-			<input type="hidden" name="baseVersion" value={data.currentVersion} />
-			{#if form?.conflict}
-				<p class="message message--error" role="alert">
-					{form.conflict.by ?? 'Jemand'} hat das Rezept inzwischen geändert. Lade die Seite neu und prüfe
-					den Verlauf noch einmal.
-				</p>
-			{/if}
-			<button type="submit" class="btn btn--primary">Diese Version wiederherstellen</button>
-		</form>
+	{#if form?.conflict}
+		<p class="message message--error" role="alert">
+			{form.conflict.by ?? 'Jemand'} hat das Rezept inzwischen geändert. Lade die Seite neu und prüfe
+			den Verlauf noch einmal.
+		</p>
 	{/if}
 </div>
+
+<!-- stays in view while scrolling through the preview -->
+<form method="POST" action="?/restore" class="actions" use:enhance>
+	<a class="btn" href={recipePath(data.recipe)}>Zurück zum Rezept</a>
+	{#if data.selected && data.selected !== data.currentVersion}
+		<input type="hidden" name="version" value={data.selected} />
+		<input type="hidden" name="baseVersion" value={data.currentVersion} />
+		<button type="submit" class="btn btn--primary">Diese Version wiederherstellen</button>
+	{/if}
+</form>
 
 {#if data.preview}
 	<div class="preview">
@@ -80,6 +84,26 @@
 {/if}
 
 <style>
+	.back {
+		margin: 0 0 1rem;
+		font-size: 0.875rem;
+	}
+	.back a {
+		color: var(--color-text-muted);
+		text-decoration: none;
+	}
+	.actions {
+		position: sticky;
+		bottom: 0;
+		z-index: 5;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		gap: 0.5rem;
+		padding: 0.75rem 1.5rem;
+		background: var(--color-surface);
+		border-top: 1px solid var(--color-border);
+	}
 	.versions {
 		margin: 1.5rem 0;
 		padding: 0;
