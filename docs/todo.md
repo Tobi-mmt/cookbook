@@ -5,8 +5,8 @@ Was vor dem Start fehlt und nur du erledigen kannst. Der Code ist fertig, siehe 
 ## 1. Domain und Name
 
 - [x] Name und Domain: Kochbuchbande, `kochbuchbande.de`.
-- [ ] `kochbuchbande.de` (und `www.kochbuchbande.de` als Weiterleitung) in Vercel hinzufügen.
-- [ ] GitHub-Variable `SITE_URL` auf `https://kochbuchbande.de` setzen (Warm-up nach Deployments).
+- [x] `kochbuchbande.de` (und `www.kochbuchbande.de` als Weiterleitung) in Vercel hinzufügen.
+- [x] GitHub-Variable `SITE_URL` auf `https://kochbuchbande.de` setzen (Warm-up nach Deployments).
 - [ ] Weiterleitung der alten Domain in `vercel.json` ergänzen, erst wenn die neue Domain läuft:
   ```json
   "redirects": [
@@ -28,16 +28,29 @@ Was vor dem Start fehlt und nur du erledigen kannst. Der Code ist fertig, siehe 
 
 ## 2. E-Mail (Scaleway Transactional Email)
 
-- [ ] In Scaleway (Region `fr-par`) die Domain `mail.kochbuchbande.de` anlegen.
+- [x] In Scaleway (Region `fr-par`) die Domain `mail.kochbuchbande.de` anlegen.
 - [ ] Die DNS-Einträge für SPF und DKIM von Scaleway setzen, dazu DMARC: `_dmarc.mail.kochbuchbande.de` mit `v=DMARC1; p=none; rua=mailto:support@kochbuchbande.de`. Nach einigen Wochen ohne Probleme auf `p=quarantine`.
-- [ ] API-Key nur mit Rechten für Transactional Email anlegen.
-- [ ] In Vercel setzen: `SCW_SECRET_KEY`, `SCW_PROJECT_ID`, `MAIL_FROM=Kochbuchbande <hallo@mail.kochbuchbande.de>`, `MAIL_REPLY_TO=support@kochbuchbande.de`.
+- [x] API-Key nur mit Rechten für Transactional Email anlegen.
+- [x] In Vercel setzen: `SCW_SECRET_KEY`, `SCW_PROJECT_ID`, `MAIL_FROM=Kochbuchbande <hallo@mail.kochbuchbande.de>`, `MAIL_REPLY_TO=support@kochbuchbande.de`.
 - [ ] Postfach `support@kochbuchbande.de` einrichten.
-- [ ] Webhook für Bounces und Spam-Beschwerden über Scaleway Topics and Events auf `https://kochbuchbande.de/api/mail/webhook?secret={MAIL_WEBHOOK_SECRET}`, `MAIL_WEBHOOK_SECRET` in Vercel setzen. Mit einer Test-Mail prüfen, ob die Adresse in `mail_suppressions` landet. Das Format der Events war beim Bauen nicht prüfbar.
+
+### Später: Webhook für Bounces und Spam (nicht nötig zum Start)
+
+Ohne Webhook erfährt die App nicht, wenn Mails nicht ankommen. Bei wenigen Mails ist das unkritisch. Nachholen, sobald mehr los ist, Scaleway vor Bounces warnt oder Mails im Spam landen.
+
+Vorsicht: SvelteKits CSRF-Schutz blockt in Produktion POSTs mit `Content-Type: text/plain` ohne `Origin`, so wie SNS sie schickt. Darum erst das echte Format ansehen, dann den Code anpassen lassen.
+
+- [ ] `openssl rand -hex 32` als `MAIL_WEBHOOK_SECRET` in Vercel setzen.
+- [ ] In Topics and Events (selbes Projekt, `fr-par`) ein Topic anlegen, z. B. `tem-events`.
+- [ ] HTTPS-Subscription auf eine URL von webhook.site anlegen und mit der `SubscribeURL` aus der ersten Nachricht bestätigen.
+- [ ] In TEM bei `mail.kochbuchbande.de` einen Webhook auf das Topic anlegen: `email_dropped`, `email_mailbox_not_found`, `email_spam`, `email_blocklisted`.
+- [ ] Anmelde-Link an eine nicht existierende Adresse schicken. Header und Body der Nachricht auf webhook.site sichern und `/api/mail/webhook` daran anpassen lassen.
+- [ ] Subscription auf `https://kochbuchbande.de/api/mail/webhook?secret={MAIL_WEBHOOK_SECRET}` anlegen (die App bestätigt selbst), die webhook.site-Subscription löschen.
+- [ ] Erneut testen: `select * from mail_suppressions order by created_at desc;` zeigt die Adresse.
 
 ## 3. Vercel
 
-- [ ] `BETTER_AUTH_SECRET` setzen (`openssl rand -base64 32`).
+- [x] `BETTER_AUTH_SECRET` setzen (`openssl rand -base64 32`).
 - [ ] Prüfen, dass `ISR_BYPASS_TOKEN` und `CRON_SECRET` gesetzt sind. Die alten Variablen `ADMIN_PASSWORD_HASH` und `SESSION_SECRET` löschen.
 
 ## 4. Konten nach dem ersten Deployment
