@@ -17,6 +17,8 @@ import { createInvitation, listOpenInvitations, revokeInvitation } from './invit
 import { renderMail, sendMail } from './mail';
 import { revalidate } from './revalidate';
 import { listTrash, moveAllRecipesToTrash, restoreRecipe } from './trash';
+import { addDays, cookbookStats } from './recipeViews';
+import { trackingDay } from './tracking';
 
 /** The cookbook of the settings page, also when it is hidden by the moderation */
 export const findEditableCookbook = async (event: RequestEvent) => {
@@ -41,11 +43,13 @@ export const loadCookbookSettings = async (event: RequestEvent) => {
 	const cookbook = await findEditableCookbook(event);
 	const editor = await requireEditor(event, cookbook.id);
 	const db = getDb();
-	const [members, invitations, ownedCount, trash] = await Promise.all([
+	const from = addDays(trackingDay(), -29);
+	const [members, invitations, ownedCount, trash, stats] = await Promise.all([
 		listMembers(db, cookbook.id),
 		listOpenInvitations(db, cookbook.id),
 		countOwnedCookbooks(db, cookbook.ownerId),
-		listTrash(db, cookbook.id)
+		listTrash(db, cookbook.id),
+		cookbookStats(db, cookbook.id, from)
 	]);
 	return {
 		cookbook: {
@@ -58,7 +62,14 @@ export const loadCookbookSettings = async (event: RequestEvent) => {
 		invitations,
 		me: { id: editor.id, isOwner: editor.cookbookRole === 'owner' },
 		isLastCookbook: ownedCount <= 1,
-		trash
+		trash,
+		stats: {
+			...stats,
+			days: Array.from({ length: 30 }, (_, index) => {
+				const day = addDays(from, index);
+				return { day, visitors: stats.perDay.find((row) => row.day === day)?.visitors ?? 0 };
+			})
+		}
 	};
 };
 

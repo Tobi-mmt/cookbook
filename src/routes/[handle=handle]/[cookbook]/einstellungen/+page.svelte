@@ -24,6 +24,10 @@
 			me: { id: string; isOwner: boolean };
 			isLastCookbook: boolean;
 			trash: { id: string; title: string; deletedAt: Date | null; deletedBy: string | null }[];
+			stats: {
+				perRecipe: { recipeId: string; title: string; visitors: number; views: number }[];
+				days: { day: string; visitors: number }[];
+			};
 		};
 		form: {
 			error?: string;
@@ -157,6 +161,33 @@
 		</p>
 	{/if}
 
+	<h2>Statistik</h2>
+	{#if data.stats.perRecipe.length}
+		{@const max = Math.max(1, ...data.stats.days.map(({ visitors }) => visitors))}
+		<div class="chart" role="img" aria-label="Besucher pro Tag der letzten 30 Tage">
+			{#each data.stats.days as day (day.day)}
+				<span style="height: {(day.visitors / max) * 100}%" title="{day.day}: {day.visitors}"
+				></span>
+			{/each}
+		</div>
+		<table class="stats">
+			<thead>
+				<tr><th>Rezept</th><th>Besucher</th><th>Aufrufe</th></tr>
+			</thead>
+			<tbody>
+				{#each data.stats.perRecipe as row (row.recipeId)}
+					<tr><td>{row.title}</td><td>{row.visitors}</td><td>{row.views}</td></tr>
+				{/each}
+			</tbody>
+		</table>
+		<p class="hint">
+			Die letzten 30 Tage, ohne Cookies gezählt: Wer an mehreren Tagen kommt, zählt mehrfach. Bis
+			gestern, die Zahlen werden nachts aktualisiert.
+		</p>
+	{:else}
+		<p class="hint">In den letzten 30 Tagen wurden noch keine Aufrufe gezählt.</p>
+	{/if}
+
 	<h2>Papierkorb</h2>
 	{#if form?.restored}<p class="message" role="status">„{form.restored}“ ist wieder da.</p>{/if}
 	{#if data.trash.length}
@@ -280,6 +311,38 @@
 	}
 	.link code {
 		overflow-wrap: anywhere;
+	}
+	.chart {
+		display: flex;
+		align-items: flex-end;
+		gap: 2px;
+		height: 4rem;
+		margin-bottom: 1rem;
+	}
+	.chart span {
+		flex: 1;
+		min-height: 1px;
+		background: var(--color-text-subtle);
+		border-radius: 1px;
+	}
+	.stats {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 0.9375rem;
+	}
+	.stats th,
+	.stats td {
+		padding: 0.4rem 0.25rem;
+		text-align: right;
+		border-bottom: 1px solid var(--color-border);
+	}
+	.stats th:first-child,
+	.stats td:first-child {
+		text-align: left;
+	}
+	.stats th {
+		font-weight: 400;
+		color: var(--color-text-subtle);
 	}
 	.address {
 		margin-top: 3rem;

@@ -361,6 +361,23 @@ export const mailSuppressions = pgTable('mail_suppressions', {
 	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
 });
 
+/** Unique visitors (summed up per day) and views per recipe, aggregated nightly from `page_views` */
+export const recipeDailyViews = pgTable(
+	'recipe_daily_views',
+	{
+		recipeId: text('recipe_id')
+			.notNull()
+			.references(() => recipes.id, { onDelete: 'cascade' }),
+		day: date('day').notNull(),
+		visitors: integer('visitors').notNull(),
+		views: integer('views').notNull()
+	},
+	(table) => [
+		primaryKey({ columns: [table.recipeId, table.day] }),
+		index('recipe_daily_views_day_idx').on(table.day)
+	]
+);
+
 export type CookbookRow = typeof cookbooks.$inferSelect;
 export type CategoryRow = typeof categories.$inferSelect;
 export type RecipeRow = typeof recipes.$inferSelect;
