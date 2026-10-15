@@ -107,6 +107,31 @@ export const pageViews = pgTable(
 	(table) => [index('page_views_day_path_idx').on(table.day, table.path)]
 );
 
+/** Every sent mail, failed moderation mails keep their payload until the daily job resends them */
+export const mailLog = pgTable(
+	'mail_log',
+	{
+		id: serial('id').primaryKey(),
+		recipient: text('recipient').notNull(),
+		kind: text('kind').notNull(),
+		status: text('status', {
+			enum: ['sent', 'logged', 'pending', 'failed', 'suppressed']
+		}).notNull(),
+		payload: jsonb('payload').$type<{ subject: string; text: string; html: string }>(),
+		attempts: integer('attempts').notNull().default(0),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+		sentAt: timestamp('sent_at', { withTimezone: true })
+	},
+	(table) => [index('mail_log_created_at_idx').on(table.createdAt)]
+);
+
+/** Addresses that bounced or complained, nothing is sent to them anymore */
+export const mailSuppressions = pgTable('mail_suppressions', {
+	email: text('email').primaryKey(),
+	reason: text('reason').notNull(),
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
+});
+
 export type CategoryRow = typeof categories.$inferSelect;
 export type RecipeRow = typeof recipes.$inferSelect;
 export type IngredientRow = typeof ingredients.$inferSelect;
