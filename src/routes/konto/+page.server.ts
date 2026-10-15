@@ -1,12 +1,8 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { and, eq, gt, isNotNull } from 'drizzle-orm';
 import { z } from 'zod';
-import {
-	createEmailChangeToken,
-	deletionDate,
-	isLastAdmin,
-	signOutEverywhere
-} from '#lib/server/accounts.js';
+import { deletionDate, isLastAdmin, signOutEverywhere } from '#lib/server/accounts.js';
+import { createEmailChangeToken } from '#lib/server/emailChange.js';
 import { affectedPaths } from '#lib/server/affectedPaths.js';
 import { requireOwner, requireUser } from '#lib/server/auth/guards.js';
 import { getDb } from '#lib/server/context.js';

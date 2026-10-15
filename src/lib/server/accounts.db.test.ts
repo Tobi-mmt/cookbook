@@ -1,6 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { describe, expect, test } from 'vitest';
-import { deleteAccount, createEmailChangeToken, readEmailChangeToken } from './accounts';
+import { deleteAccount } from './accounts';
+import { createEmailChangeToken, readEmailChangeToken } from './emailChange';
 import { acceptInvitation } from './invitations';
 import { cookbooks, recipes, users } from './db/schema';
 import { saveRecipe } from './recipes';

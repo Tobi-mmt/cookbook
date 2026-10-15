@@ -18,7 +18,9 @@
 		"prepare": "husky && svelte-kit sync",
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "tsx --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/dbMigrate.ts",
-		"seed:from-prod": "tsx --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/seedFromProd.ts"
+		"seed:from-prod": "tsx --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/seedFromProd.ts",
+		"db:reapply-deletions": "tsx scripts/reapplyDeletions.ts",
+		"backup:images": "tsx scripts/backupImages.ts"
 	},
 	"devDependencies": {
 		"@eslint/js": "10.0.1",

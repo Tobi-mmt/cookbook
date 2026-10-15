@@ -1,6 +1,6 @@
 import { error, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
-import { readEmailChangeToken } from '#lib/server/accounts.js';
+import { readEmailChangeToken } from '#lib/server/emailChange.js';
 import { getDb } from '#lib/server/context.js';
 import { users } from '#lib/server/db/schema.js';
 import { renderMail, sendMail } from '#lib/server/mail.js';

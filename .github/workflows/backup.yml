@@ -1,0 +1,125 @@
+name: Backup
+
+on:
+  schedule:
+    # every night at 03:00 in German summer time (02:00 in winter)
+    - cron: '0 1 * * *'
+    # the images on Sundays
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+    inputs:
+      images:
+        description: 'Also back up the images'
+        type: boolean
+        default: false
+
+env:
+  PG_MAJOR: ${{ vars.PG_MAJOR || '17' }}
+  BUCKET: ${{ vars.BACKUP_BUCKET }}
+  S3_ENDPOINT: https://s3.fr-par.scw.cloud
+  AWS_ACCESS_KEY_ID: ${{ secrets.SCW_BACKUP_ACCESS_KEY }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.SCW_BACKUP_SECRET_KEY }}
+  AWS_DEFAULT_REGION: fr-par
+
+jobs:
+  database:
+    if: github.event.schedule != '0 2 * * 0'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    services:
+      restore:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 5s --health-retries 10
+
+    steps:
+      - name: Install age
+        run: sudo apt-get update && sudo apt-get install -y age
+
+      - name: Dump the database
+        run: |
+          docker run --rm --network host postgres:$PG_MAJOR \
+            pg_dump --format=custom --no-owner "$BACKUP_DATABASE_URL" > database.dump
+          ls -l database.dump
+        env:
+          BACKUP_DATABASE_URL: ${{ secrets.BACKUP_DATABASE_URL }}
+
+      - name: Restore the size of the last backup
+        uses: actions/cache/restore@v6
+        with:
+          path: last-size
+          key: backup-size-${{ github.run_id }}
+          restore-keys: backup-size-
+
+      # an emptied database would otherwise replace the good backups over time
+      - name: Compare with the last backup
+        run: |
+          size=$(stat -c %s database.dump)
+          if [ -f last-size/bytes ]; then
+            last=$(cat last-size/bytes)
+            if [ "$size" -lt $((last / 2)) ]; then
+              echo "The dump has $size bytes, less than half of the last one ($last bytes)"
+              exit 1
+            fi
+          fi
+          mkdir -p last-size && echo "$size" > last-size/bytes
+
+      - name: Test the restore
+        run: |
+          docker run --rm -i --network host -e PGPASSWORD=postgres postgres:$PG_MAJOR \
+            pg_restore --no-owner --no-privileges --dbname=postgres --host=localhost --username=postgres < database.dump
+          recipes=$(docker run --rm --network host -e PGPASSWORD=postgres postgres:$PG_MAJOR \
+            psql --host=localhost --username=postgres --tuples-only --command='select count(*) from recipes')
+          echo "Restored $recipes recipes"
+          [ "$recipes" -gt 0 ]
+
+      - name: Encrypt and upload
+        run: |
+          age --recipient "$AGE_PUBLIC_KEY" --output database.dump.age database.dump
+          day=$(date -u +%F)
+          aws s3 cp database.dump.age "s3://$BUCKET/database/daily/$day.dump.age" --endpoint-url "$S3_ENDPOINT"
+          if [ "$(date -u +%d)" = "01" ]; then
+            aws s3 cp database.dump.age "s3://$BUCKET/database/monthly/$day.dump.age" --endpoint-url "$S3_ENDPOINT"
+          fi
+        env:
+          AGE_PUBLIC_KEY: ${{ vars.AGE_PUBLIC_KEY }}
+
+      - name: Remember the size
+        uses: actions/cache/save@v6
+        with:
+          path: last-size
+          key: backup-size-${{ github.run_id }}
+
+  images:
+    if: github.event.schedule == '0 2 * * 0' || inputs.images
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set Node.js from .nvmrc
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Install age and the dependencies
+        run: sudo apt-get update && sudo apt-get install -y age && yarn install --frozen-lockfile
+
+      - name: Download the images
+        run: yarn backup:images images
+        env:
+          BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}
+
+      - name: Encrypt and upload
+        run: |
+          tar -czf images.tar.gz images
+          age --recipient "$AGE_PUBLIC_KEY" --output images.tar.gz.age images.tar.gz
+          aws s3 cp images.tar.gz.age "s3://$BUCKET/images/$(date -u +%F).tar.gz.age" --endpoint-url "$S3_ENDPOINT"
+        env:
+          AGE_PUBLIC_KEY: ${{ vars.AGE_PUBLIC_KEY }}
