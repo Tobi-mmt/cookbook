@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { RecipeSummary } from '#types';
 	import AddRecipeButton from '#components/AddRecipeButton.svelte';
+	import Settings from '@lucide/svelte/icons/settings';
 	import RecipeBrowser from '#components/RecipeBrowser.svelte';
 	import ReportDialog from '#components/ReportDialog.svelte';
 	import { me } from '#lib/me.svelte.js';
@@ -32,10 +33,17 @@
 </svelte:head>
 
 <header class="cookbook">
-	<h1>{cookbook.name}</h1>
-	{#if me.canEdit(cookbook.id)}
-		<a class="settings" href="{page.url.pathname}/einstellungen">Einstellungen</a>
-	{/if}
+	<div class="title">
+		<h1>{cookbook.name}</h1>
+		{#if me.canEdit(cookbook.id)}
+			<a
+				class="settings"
+				href="{page.url.pathname}/einstellungen"
+				aria-label="Einstellungen des Kochbuchs"
+				title="Einstellungen"><Settings size="1.25rem" aria-hidden="true" /></a
+			>
+		{/if}
+	</div>
 	<p class="members">
 		{#each cookbook.members as member, index (member.username)}
 			{#if index > 0}{index === cookbook.members.length - 1 ? ' und ' : ', '}{/if}
@@ -87,11 +95,21 @@
 		margin: 2rem 0;
 		text-align: center;
 	}
+	.title {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+	}
 	.settings {
-		display: inline-block;
-		margin-top: 0.25rem;
-		font-size: 0.875rem;
-		color: var(--color-text-muted);
+		display: flex;
+		padding: 0.4rem;
+		color: var(--color-text-subtle);
+		border-radius: var(--radius-pill);
+	}
+	.settings:hover {
+		color: var(--color-text);
+		background: var(--color-surface-muted);
 	}
 	.members {
 		margin: 0.5rem 0 0;

@@ -44,8 +44,10 @@
 <header class="profile">
 	<Avatar name={profile.name} size="4rem" />
 	<h1>{profile.name}</h1>
-	<p class="handle">@{profile.username}</p>
-	<QrCodeButton url={profileUrl} label="QR-Code für das Profil von {profile.name}" />
+	<p class="handle">
+		@{profile.username}
+		<QrCodeButton compact url={profileUrl} label="QR-Code für das Profil von {profile.name}" />
+	</p>
 </header>
 
 <RecipeBrowser
@@ -83,7 +85,10 @@
 		letter-spacing: -0.01em;
 	}
 	.handle {
-		margin: 0 0 0.5rem;
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		margin: 0;
 		color: var(--color-text-subtle);
 	}
 	.report {
