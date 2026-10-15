@@ -8,7 +8,7 @@ import { requireEditor } from './auth/guards';
 import { listCategories } from './categories';
 import { getDb, getStorage } from './context';
 import { recipes, recipeVersions, users } from './db/schema';
-import { processAndStoreImage } from './images';
+import { imageFolder, processAndStoreImage } from './images';
 import { createRecipeId, saveRecipe } from './recipes';
 import { moveRecipeToTrash } from './trash';
 import { extractRecipe } from './recipeImport/extract';
@@ -36,18 +36,14 @@ const parseInput = (form: FormData) => {
 		: { error: parsed.error.issues.map((issue) => issue.message).join(', ') };
 };
 
-const readImage = async (form: FormData, recipeId: string) => {
+const readImage = async (form: FormData, folder: string) => {
 	const file = form.get('image');
 	if (!(file instanceof File) || file.size === 0) return {};
 	if (!file.type.startsWith('image/')) return { error: 'Die Datei ist kein Bild.' };
 	if (file.size > MAX_IMAGE_SIZE) return { error: 'Das Bild ist zu groß (max. 4 MB).' };
 	try {
 		return {
-			image: await processAndStoreImage(
-				Buffer.from(await file.arrayBuffer()),
-				recipeId,
-				getStorage()
-			)
+			image: await processAndStoreImage(Buffer.from(await file.arrayBuffer()), folder, getStorage())
 		};
 	} catch (cause) {
 		console.error(cause);
@@ -129,7 +125,7 @@ export const saveRecipeAction = async (event: RequestEvent, existingId?: string)
 	if (!input) return fail(400, { error: inputError });
 
 	const id = existingId ?? createRecipeId();
-	const { image, error: imageError } = await readImage(form, id);
+	const { image, error: imageError } = await readImage(form, imageFolder(cookbookId, id));
 	if (imageError) return fail(400, { error: imageError });
 
 	await storeAndRevalidate(event, { id, input, image, cookbookId, userId: editor.id, previous });

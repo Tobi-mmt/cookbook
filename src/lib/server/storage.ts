@@ -1,30 +1,36 @@
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { del, put } from '@vercel/blob';
+import { copy, del, put } from '@vercel/blob';
 
 export interface Storage {
 	putFile(pathname: string, body: Buffer, contentType: string): Promise<string>;
 	deleteFiles(urls: string[]): Promise<void>;
+	/** copies a stored file to a new path and returns its URL */
+	copyFile(url: string, pathname: string): Promise<string>;
 }
 
 export const LOCAL_BLOB_DIR = path.resolve('.data/blob');
 export const LOCAL_BLOB_URL_PREFIX = '/dev-blob/';
 
+const blobOptions = (token: string) => ({
+	access: 'public' as const,
+	token,
+	addRandomSuffix: false,
+	allowOverwrite: true,
+	cacheControlMaxAge: 60 * 60 * 24 * 365
+});
+
 /** Vercel Blob, used in production and preview */
 export const createBlobStorage = (token: string): Storage => ({
 	async putFile(pathname, body, contentType) {
-		const blob = await put(pathname, body, {
-			access: 'public',
-			contentType,
-			token,
-			addRandomSuffix: false,
-			allowOverwrite: true,
-			cacheControlMaxAge: 60 * 60 * 24 * 365
-		});
+		const blob = await put(pathname, body, { ...blobOptions(token), contentType });
 		return blob.url;
 	},
 	async deleteFiles(urls) {
 		if (urls.length) await del(urls, { token });
+	},
+	async copyFile(url, pathname) {
+		return (await copy(url, pathname, blobOptions(token))).url;
 	}
 });
 
@@ -48,6 +54,10 @@ export const createLocalStorage = (baseDir = LOCAL_BLOB_DIR): Storage => {
 				if (!url.startsWith(LOCAL_BLOB_URL_PREFIX)) continue;
 				await rm(resolveSafe(url.slice(LOCAL_BLOB_URL_PREFIX.length)), { force: true });
 			}
+		},
+		async copyFile(url, pathname) {
+			const body = await readFile(resolveSafe(url.slice(LOCAL_BLOB_URL_PREFIX.length)));
+			return this.putFile(pathname, body, '');
 		}
 	};
 };

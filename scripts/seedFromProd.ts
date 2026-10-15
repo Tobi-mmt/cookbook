@@ -10,7 +10,7 @@
 import { isNull } from 'drizzle-orm';
 import { createDb } from '../src/lib/server/db/client';
 import { cookbookEditors, cookbooks, recipes, users } from '../src/lib/server/db/schema';
-import { processAndStoreImage } from '../src/lib/server/images';
+import { imageFolder, processAndStoreImage } from '../src/lib/server/images';
 import { getRecipeInput, saveRecipe } from '../src/lib/server/recipes';
 import { createLocalStorage } from '../src/lib/server/storage';
 
@@ -58,7 +58,11 @@ for (const { id, title, cookbookId, createdBy } of sourceRecipes) {
 	if (largest) {
 		const response = await fetch(largest.url);
 		if (!response.ok) throw new Error(`Downloading ${largest.url} failed: ${response.status}`);
-		image = await processAndStoreImage(Buffer.from(await response.arrayBuffer()), id, storage);
+		image = await processAndStoreImage(
+			Buffer.from(await response.arrayBuffer()),
+			imageFolder(cookbookId, id),
+			storage
+		);
 	}
 	await saveRecipe(target.db, id, recipe.input, { image, cookbookId, userId: createdBy });
 }
