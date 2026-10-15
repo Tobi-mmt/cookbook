@@ -48,14 +48,27 @@
 		copiedTo = page.url.searchParams.get('kopiert');
 	});
 
+	let shareLink = $state<string | null>(null);
+
+	/** The share sheet of the phone, otherwise the clipboard, otherwise the link to copy by hand */
 	const share = async () => {
 		const url = page.url.origin + page.url.pathname;
 		if (navigator.share) {
-			await navigator.share({ title: recipe.title, url }).catch(() => {});
-			return;
+			try {
+				await navigator.share({ title: recipe.title, url });
+				return;
+			} catch (error) {
+				// closing the share sheet is no error
+				if ((error as Error).name === 'AbortError') return;
+			}
 		}
-		await navigator.clipboard.writeText(url);
-		notice = 'Link kopiert.';
+		try {
+			await navigator.clipboard.writeText(url);
+			notice = 'Link kopiert.';
+		} catch {
+			// the clipboard needs https or localhost
+			shareLink = url;
+		}
 	};
 
 	const post = (action: 'kopieren' | 'verschieben', cookbookId: string) =>
@@ -107,6 +120,17 @@
 		</p>
 	{:else if notice}
 		<p class="notice" role="status">{notice}</p>
+	{/if}
+	{#if shareLink}
+		<label class="share-link">
+			Link zum Kopieren
+			<input
+				class="input"
+				readonly
+				value={shareLink}
+				onfocus={(event) => event.currentTarget.select()}
+			/>
+		</label>
 	{/if}
 	<div class="row actions">
 		<button type="button" class="btn" onclick={share}>
@@ -188,6 +212,14 @@
 	}
 	.actions {
 		margin-left: auto;
+	}
+	.share-link {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+		width: 100%;
+		font-size: 0.875rem;
+		color: var(--color-text-muted);
 	}
 	.choose {
 		display: flex;
