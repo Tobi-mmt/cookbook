@@ -15,7 +15,7 @@
 		</a>
 		<div class="actions">
 			<Search bind:expanded={searching} />
-			<UserMenu />
+			<div class="user"><UserMenu /></div>
 		</div>
 	</div>
 </header>
@@ -62,8 +62,12 @@
 			gap: 0.75rem;
 		}
 		/* on phones the search takes the whole bar while it is open */
-		.top-bar--searching .logo {
+		.top-bar--searching .logo,
+		.top-bar--searching .user {
 			display: none;
+		}
+		.top-bar--searching .actions {
+			flex: 1;
 		}
 	}
 </style>
