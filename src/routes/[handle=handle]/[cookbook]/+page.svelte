@@ -33,6 +33,9 @@
 </svelte:head>
 
 <header class="cookbook">
+	<p class="owner">
+		Kochbuch von <a href={profilePath(cookbook.ownerUsername)}>@{cookbook.ownerUsername}</a>
+	</p>
 	<div class="title">
 		<h1>{cookbook.name}</h1>
 		{#if me.canEdit(cookbook.id)}
@@ -94,6 +97,14 @@
 	.report {
 		margin: 2rem 0;
 		text-align: center;
+	}
+	.owner {
+		margin: 0 0 0.35rem;
+		font-size: 0.875rem;
+		color: var(--color-text-subtle);
+	}
+	.owner a {
+		color: inherit;
 	}
 	.title {
 		display: flex;
