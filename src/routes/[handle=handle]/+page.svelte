@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { RecipeSummary } from '#types';
 	import { page } from '$app/state';
-	import Avatar from '#components/Avatar.svelte';
 	import QrCodeButton from '#components/QrCodeButton.svelte';
 	import AddRecipeButton from '#components/AddRecipeButton.svelte';
 	import RecipeBrowser from '#components/RecipeBrowser.svelte';
@@ -41,11 +40,12 @@
 	{#if data.noindex}<meta name="robots" content="noindex" />{/if}
 </svelte:head>
 
+<!-- like the head of a cookbook: the name, below it quietly who and how much -->
 <header class="profile">
-	<Avatar name={profile.name} size="4rem" />
 	<h1>{profile.name}</h1>
 	<p class="handle">
-		@{profile.username}
+		@{profile.username} · {data.recipes.length}
+		{data.recipes.length === 1 ? 'Rezept' : 'Rezepte'}
 		<QrCodeButton compact url={profileUrl} label="QR-Code für das Profil von {profile.name}" />
 	</p>
 </header>
@@ -74,12 +74,12 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 0.5rem;
+		gap: 0.35rem;
 		padding: 2.5rem 1.5rem 0.5rem;
 		text-align: center;
 	}
 	h1 {
-		margin: 0.5rem 0 0;
+		margin: 0;
 		font-size: 1.75rem;
 		font-weight: 400;
 		letter-spacing: -0.01em;
