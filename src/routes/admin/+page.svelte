@@ -25,7 +25,9 @@
 
 <h1>Übersicht</h1>
 <div class="cards">
-	<div class="card"><strong>{data.openCases}</strong> offene Fälle</div>
+	<a class="card" href={resolve('/admin/meldungen')}
+		><strong>{data.openCases}</strong> offene Fälle</a
+	>
 	<div class="card"><strong>{data.newPeople}</strong> neue Personen in 7 Tagen</div>
 	<div class="card"><strong>{data.newRecipes}</strong> neue Rezepte in 7 Tagen</div>
 	<div class="card">

@@ -2,6 +2,7 @@
 	import type { Category, RecipeImage } from '#types';
 	import { enhance } from '$app/forms';
 	import RecipeEditor from '#components/editor/RecipeEditor.svelte';
+	import HiddenNotice from '#components/HiddenNotice.svelte';
 	import { recipePath } from '#lib/paths.js';
 	import type { RecipeInput } from '#lib/recipeInput.js';
 	import { SITE_NAME } from '#lib/site.js';
@@ -19,6 +20,7 @@
 			image: RecipeImage | null;
 			categories: Category[];
 			asAdmin: boolean;
+			hiddenReason?: string | null;
 			version: number;
 		};
 		form: { error?: string; conflict?: Conflict; deleted?: { by: string | null } } | null;
@@ -34,6 +36,9 @@
 
 <div class="page">
 	<h1>{data.recipe.title}</h1>
+	{#if data.hiddenReason}
+		<HiddenNotice type="recipe" id={data.id} reason={data.hiddenReason} />
+	{/if}
 	{#if data.asAdmin}
 		<p class="message">Du bearbeitest als Admin ein fremdes Rezept.</p>
 	{/if}

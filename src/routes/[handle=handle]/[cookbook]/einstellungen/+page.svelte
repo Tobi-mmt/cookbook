@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import HiddenNotice from '#components/HiddenNotice.svelte';
 	import Copy from '@lucide/svelte/icons/copy';
 	import { cookbookPath, profilePath } from '#lib/paths.js';
 	import { SITE_NAME } from '#lib/site.js';
@@ -65,9 +66,7 @@
 	<h1>Einstellungen</h1>
 
 	{#if data.cookbook.hiddenReason}
-		<p class="message message--error">
-			Von der Moderation ausgeblendet: {data.cookbook.hiddenReason}
-		</p>
+		<HiddenNotice type="cookbook" id={data.cookbook.id} reason={data.cookbook.hiddenReason} />
 	{/if}
 	{#if form?.error}<p class="message message--error" role="alert">{form.error}</p>{/if}
 
