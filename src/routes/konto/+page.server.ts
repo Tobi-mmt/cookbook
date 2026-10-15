@@ -1,7 +1,12 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { and, eq, gt, isNotNull } from 'drizzle-orm';
 import { z } from 'zod';
-import { deletionDate, isLastAdmin, signOutEverywhere } from '#lib/server/accounts.js';
+import {
+	ACCOUNT_DELETION_DAYS,
+	deletionDate,
+	isLastAdmin,
+	signOutEverywhere
+} from '#lib/server/accounts.js';
 import { createEmailChangeToken } from '#lib/server/emailChange.js';
 import { affectedPaths } from '#lib/server/affectedPaths.js';
 import { requireOwner, requireUser } from '#lib/server/auth/guards.js';
@@ -43,6 +48,7 @@ export async function load(event) {
 			deletionAt: row?.deletionRequestedAt ? deletionDate(row.deletionRequestedAt) : null
 		},
 		cookbooks: editable,
+		deletionDays: ACCOUNT_DELETION_DAYS,
 		deletedCookbooks: deleted,
 		storage,
 		bounced
@@ -148,7 +154,7 @@ export const actions = {
 			db,
 			user.email,
 			renderMail({
-				subject: 'Dein Konto wird gelöscht',
+				subject: `Dein Konto wird in ${ACCOUNT_DELETION_DAYS} Tagen gelöscht`,
 				paragraphs: [
 					`Hallo ${user.name},`,
 					`dein Konto wird am ${deletionDate(now).toLocaleDateString('de-DE')} gelöscht, zusammen mit allen Kochbüchern, die nur du bearbeitest. Rezepte in gemeinsamen Kochbüchern bleiben dort. Bis dahin kannst du das Löschen abbrechen und deine Daten herunterladen.`
@@ -157,7 +163,7 @@ export const actions = {
 			}),
 			{ kind: 'account-deletion' }
 		);
-		return { saved: 'Dein Konto wird in 30 Tagen gelöscht.' };
+		return { saved: `Dein Konto wird in ${ACCOUNT_DELETION_DAYS} Tagen gelöscht.` };
 	},
 
 	cancelDeletion: async (event) => {

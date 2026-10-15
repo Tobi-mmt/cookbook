@@ -364,7 +364,7 @@ Weil alles öffentlich ist, bleibt das Caching so einfach wie heute:
 | Maßnahme der Moderation     | betroffene Bearbeiter | Ausblenden, Löschen, Sperren oder Verwarnen, mit Begründung und Weg zum Widerspruch |
 | Ergebnis einer Meldung      | meldende Person       | Fall erledigt oder abgelehnt, nur wenn eine E-Mail angegeben wurde                  |
 | Ergebnis eines Widerspruchs | betroffene Person     | Entscheidung über den Widerspruch                                                   |
-| Konto wird gelöscht         | Person                | Start der 30-Tage-Frist, mit Link zum Abbrechen und zum Datenexport                 |
+| Konto wird gelöscht         | Person                | Start der 7-Tage-Frist, mit Link zum Abbrechen und zum Datenexport                  |
 | Neue Meldungen              | Admins                | höchstens eine Sammelmail pro Tag, Urheberrecht sofort                              |
 
 **Regeln:**
@@ -521,7 +521,7 @@ Zu beachten:
 - **Benutzername ändern:** Der alte Name leitet weiter und wird 6 Monate lang nicht neu vergeben.
 - **Verwechselbare Benutzernamen** wie `tobi` und `tobi-`: Doppelte, führende und abschließende Bindestriche sind verboten.
 - **Konto löschen:**
-  - Kochbücher, in denen die Person einzige Bearbeiterin ist, werden nach 30 Tagen Wartezeit mit gelöscht. Vorher gibt es die Möglichkeit zum Datenexport.
+  - **Entschieden:** Das Konto wird nach **7 Tagen** gelöscht. Bis dahin steht auf jeder Seite und prominent unter „Konto“, in wie vielen Tagen das passiert, mit „Löschen abbrechen“ und Datenexport. Kochbücher, in denen die Person einzige Bearbeiterin ist, werden mit gelöscht.
   - In gemeinsamen Kochbüchern muss die Besitzerrolle vorher übergeben werden. Ohne Übergabe geht sie automatisch an den am längsten beteiligten Bearbeiter.
   - Rezepte, die die Person in gemeinsamen Kochbüchern angelegt hat, bleiben dort und werden als „von einer ehemaligen Person“ angezeigt.
   - `/@name` liefert danach 404, der Name bleibt 6 Monate gesperrt.
