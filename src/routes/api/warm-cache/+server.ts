@@ -7,8 +7,9 @@ import { LIST_PATHS, recipePaths, revalidate } from '#lib/server/revalidate.js';
 /**
  * Renders all public pages into the ISR cache, so that no visitor waits for a cold render.
  * A deployment starts with an empty cache, so this runs after every production deployment
- * (`.github/workflows/warm-cache.yml`) and once a day as Vercel cron (`vercel.json`),
- * which also keeps rarely visited recipes in the cache.
+ * (`.github/workflows/warm-cache.yml`) and once a week as Vercel cron (`vercel.json`).
+ * The weekly run keeps recipes in the cache that nobody visits for 31 days (then Vercel evicts them),
+ * catches failed revalidations and removes the new badge from recipes that are no longer new.
  */
 export async function GET({ request, url }) {
 	if (!CRON_SECRET || request.headers.get('authorization') !== `Bearer ${CRON_SECRET}`) {

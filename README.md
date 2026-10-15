@@ -28,9 +28,9 @@ Change `src/lib/server/db/schema.ts`, then run `yarn db:generate` to create a mi
 
 ## How changes go live
 
-The public pages use Vercel ISR: they are rendered once and then served from the cache. After a recipe is saved or deleted, the admin revalidates the affected pages (`src/lib/server/revalidate.ts`), so changes are live within seconds without a new deployment. If revalidation fails, the pages expire after 24 hours at the latest.
+The public pages use Vercel ISR: they are rendered once and then served from the cache. After a recipe is saved or deleted, the admin revalidates the affected pages (`src/lib/server/revalidate.ts`), so changes are live within seconds without a new deployment. The pages never expire on their own. If revalidation fails, they are updated by the next weekly cache warm-up.
 
-Every deployment starts with an empty cache, and the first visitor of a page would wait for it to render. Therefore `/api/warm-cache` renders all pages into the cache after every production deployment (`.github/workflows/warm-cache.yml`) and once a day as Vercel cron (`vercel.json`).
+Every deployment starts with an empty cache, and the first visitor of a page would wait for it to render. Therefore `/api/warm-cache` renders all pages into the cache after every production deployment (`.github/workflows/warm-cache.yml`) and once a week as Vercel cron (`vercel.json`). The weekly run keeps rarely visited recipes in the cache, because Vercel evicts pages that nobody requested for 31 days.
 
 ## Tracking
 
