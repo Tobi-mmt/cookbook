@@ -3,20 +3,17 @@
 </script>
 
 <script lang="ts">
+	import BookOpen from '@lucide/svelte/icons/book-open';
 	import Plus from '@lucide/svelte/icons/plus';
 
 	let {
-		question,
 		cookbooks,
 		busy,
-		onpick,
-		oncancel
+		onpick
 	}: {
-		question: string;
 		cookbooks: { id: string; name: string }[];
 		busy: boolean;
 		onpick: (target: CookbookTarget) => void;
-		oncancel: () => void;
 	} = $props();
 
 	// svelte-ignore state_referenced_locally
@@ -24,64 +21,92 @@
 	let name = $state('');
 </script>
 
-<div class="picker" role="group" aria-label={question}>
-	<p class="question">{question}</p>
-	<div class="row">
-		{#each cookbooks as cookbook (cookbook.id)}
+<ul class="choices">
+	{#each cookbooks as cookbook (cookbook.id)}
+		<li>
 			<button
 				type="button"
-				class="btn"
+				class="choice"
 				disabled={busy}
-				onclick={() => onpick({ cookbookId: cookbook.id })}>{cookbook.name}</button
+				onclick={() => onpick({ cookbookId: cookbook.id })}
 			>
-		{/each}
-		{#if !creating}
-			<button type="button" class="btn btn--quiet" onclick={() => (creating = true)}>
-				<Plus size="1em" aria-hidden="true" /> Neues Kochbuch
+				<BookOpen size="1.1em" aria-hidden="true" />
+				{cookbook.name}
+			</button>
+		</li>
+	{/each}
+	<li>
+		{#if creating}
+			<form
+				class="new"
+				onsubmit={(event) => {
+					event.preventDefault();
+					if (name.trim()) onpick({ newCookbookName: name.trim() });
+				}}
+			>
+				<!-- svelte-ignore a11y_autofocus -->
+				<input
+					class="input"
+					bind:value={name}
+					placeholder="Name, z. B. Grillen"
+					aria-label="Name des neuen Kochbuchs"
+					maxlength="80"
+					required
+					autofocus
+				/>
+				<button type="submit" class="btn btn--primary" disabled={busy || !name.trim()}
+					>Anlegen</button
+				>
+			</form>
+		{:else}
+			<button type="button" class="choice choice--new" onclick={() => (creating = true)}>
+				<Plus size="1.1em" aria-hidden="true" /> Neues Kochbuch
 			</button>
 		{/if}
-	</div>
-	{#if creating}
-		<form
-			class="row"
-			onsubmit={(event) => {
-				event.preventDefault();
-				if (name.trim()) onpick({ newCookbookName: name.trim() });
-			}}
-		>
-			<input
-				class="input"
-				bind:value={name}
-				placeholder="Name des neuen Kochbuchs, z. B. Grillen"
-				aria-label="Name des neuen Kochbuchs"
-				maxlength="80"
-				required
-			/>
-			<button type="submit" class="btn btn--primary" disabled={busy || !name.trim()}>Anlegen</button
-			>
-		</form>
-	{/if}
-	<div class="row">
-		<button type="button" class="btn btn--quiet" onclick={oncancel}>Abbrechen</button>
-	</div>
-</div>
+	</li>
+</ul>
 
 <style>
-	.picker {
+	.choices {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		border-top: 1px solid var(--color-border);
+	}
+	.choices li {
+		border-bottom: 1px solid var(--color-border);
+	}
+	.choice {
 		display: flex;
-		flex-direction: column;
+		align-items: center;
 		gap: 0.75rem;
 		width: 100%;
-		padding: 1rem 1.25rem;
+		min-height: 3rem;
+		padding: 0.5rem 0.25rem;
+		font: inherit;
+		text-align: left;
+		color: var(--color-text);
+		background: none;
+		border: none;
+		cursor: pointer;
+	}
+	.choice:hover:not(:disabled) {
 		background: var(--color-surface-muted);
-		border-radius: var(--radius-md);
 	}
-	.question {
-		margin: 0;
-		font-size: 0.9375rem;
+	.choice:disabled {
+		opacity: 0.5;
+		cursor: default;
 	}
-	form .input {
+	.choice--new {
+		color: var(--color-text-muted);
+	}
+	.new {
+		display: flex;
+		gap: 0.5rem;
+		padding: 0.6rem 0;
+	}
+	.new .input {
 		flex: 1;
-		min-width: 12rem;
+		min-width: 0;
 	}
 </style>

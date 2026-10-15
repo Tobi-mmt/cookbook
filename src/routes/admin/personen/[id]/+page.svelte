@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import Dialog from '#components/Dialog.svelte';
 	import { resolve } from '$app/paths';
 	import { cookbookPath } from '#lib/paths.js';
 	import type { EditableCookbook } from '#lib/server/cookbooks.js';
@@ -126,24 +127,22 @@
 </form>
 
 <h2>Löschen</h2>
-{#if confirmDelete}
-	<form method="POST" action="?/delete" class="stack" use:enhance>
-		<p>
-			Das Konto wird sofort gelöscht, mit allen Kochbüchern ohne andere Bearbeiter. Gemeinsame
-			Kochbücher werden übergeben.
-		</p>
-		<div class="row">
-			<button type="submit" class="btn btn--danger">Endgültig löschen</button>
-			<button type="button" class="btn btn--quiet" onclick={() => (confirmDelete = false)}
-				>Abbrechen</button
-			>
-		</div>
-	</form>
-{:else}
-	<button type="button" class="btn btn--danger" onclick={() => (confirmDelete = true)}
-		>Konto löschen</button
-	>
-{/if}
+<button type="button" class="btn btn--danger" onclick={() => (confirmDelete = true)}
+	>Konto löschen</button
+>
+<Dialog bind:open={confirmDelete} title="Konto von {person.name} löschen?">
+	<p>
+		Das Konto wird sofort gelöscht, mit allen Kochbüchern ohne andere Bearbeiter. Gemeinsame
+		Kochbücher werden übergeben.
+	</p>
+	<form id="delete-person" method="POST" action="?/delete" use:enhance></form>
+	{#snippet actions()}
+		<button type="button" class="btn btn--quiet" onclick={() => (confirmDelete = false)}
+			>Abbrechen</button
+		>
+		<button type="submit" class="btn btn--danger" form="delete-person">Endgültig löschen</button>
+	{/snippet}
+</Dialog>
 
 <style>
 	.grid {

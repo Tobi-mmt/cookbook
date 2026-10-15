@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Category } from '#types';
 	import { enhance } from '$app/forms';
+	import Dialog from '#components/Dialog.svelte';
 	import { SITE_NAME } from '#lib/site.js';
 
 	let {
@@ -70,46 +71,51 @@
 					</div>
 				</td>
 			</tr>
-			{#if confirmDelete === category.id}
-				<tr class="confirm">
-					<td class="confirm-cell" colspan="5">
-						<form
-							method="POST"
-							action="?/delete"
-							class="stack"
-							use:enhance={() =>
-								async ({ update }) => {
-									confirmDelete = null;
-									await update();
-								}}
-						>
-							<input type="hidden" name="id" value={category.id} />
-							<p>„{category.name}“ wirklich löschen?</p>
-							{#if category.recipes}
-								<label class="field">
-									{category.recipes === 1
-										? '1 Rezept verwendet diese Kategorie. Es wird verschoben nach:'
-										: `${category.recipes} Rezepte verwenden diese Kategorie. Sie werden verschoben nach:`}
-									<select class="input replacement" name="replacement" required>
-										{#each data.categories.filter(({ id }) => id !== category.id) as other (other.id)}
-											<option value={other.id}>{other.name}</option>
-										{/each}
-									</select>
-								</label>
-							{/if}
-							<div class="row">
-								<button type="submit" class="btn btn--danger">Löschen</button>
-								<button type="button" class="btn btn--quiet" onclick={() => (confirmDelete = null)}
-									>Abbrechen</button
-								>
-							</div>
-						</form>
-					</td>
-				</tr>
-			{/if}
 		{/each}
 	</tbody>
 </table>
+
+{#each data.categories as category (category.id)}
+	{@const formId = `delete-category-${category.id}`}
+	<Dialog
+		open={confirmDelete === category.id}
+		title="„{category.name}“ löschen?"
+		onclose={() => (confirmDelete = null)}
+	>
+		<form
+			id={formId}
+			method="POST"
+			action="?/delete"
+			use:enhance={() =>
+				async ({ update }) => {
+					confirmDelete = null;
+					await update();
+				}}
+		>
+			<input type="hidden" name="id" value={category.id} />
+			{#if category.recipes}
+				<label class="field">
+					{category.recipes === 1
+						? '1 Rezept verwendet diese Kategorie. Es wird verschoben nach:'
+						: `${category.recipes} Rezepte verwenden diese Kategorie. Sie werden verschoben nach:`}
+					<select class="input" name="replacement" required>
+						{#each data.categories.filter(({ id }) => id !== category.id) as other (other.id)}
+							<option value={other.id}>{other.name}</option>
+						{/each}
+					</select>
+				</label>
+			{:else}
+				<p>Kein Rezept verwendet diese Kategorie.</p>
+			{/if}
+		</form>
+		{#snippet actions()}
+			<button type="button" class="btn btn--quiet" onclick={() => (confirmDelete = null)}
+				>Abbrechen</button
+			>
+			<button type="submit" class="btn btn--danger" form={formId}>Löschen</button>
+		{/snippet}
+	</Dialog>
+{/each}
 
 <h2>Neue Kategorie</h2>
 <form method="POST" action="?/create" class="row" use:enhance>
@@ -138,17 +144,6 @@
 	}
 	td {
 		vertical-align: middle;
-	}
-	/* more specific than the cell padding of the admin tables */
-	.confirm td.confirm-cell {
-		padding: 1rem 1.25rem;
-		background: var(--color-surface-muted);
-	}
-	.confirm p {
-		margin: 0;
-	}
-	.replacement {
-		max-width: 20rem;
 	}
 	.color {
 		width: 3.5rem;

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Flag from '@lucide/svelte/icons/flag';
-	import X from '@lucide/svelte/icons/x';
 	import Captcha from '#components/Captcha.svelte';
+	import Dialog from '#components/Dialog.svelte';
 	import { me } from '#lib/me.svelte.js';
 	import {
 		REPORT_REASON_OPTIONS,
@@ -11,7 +11,6 @@
 
 	let { targets }: { targets: { type: ReportTarget; id: string }[] } = $props();
 
-	let dialog = $state<HTMLDialogElement>();
 	let open = $state(false);
 	// svelte-ignore state_referenced_locally
 	let target = $state(targets[0]);
@@ -35,7 +34,6 @@
 		open = true;
 		sent = false;
 		error = null;
-		dialog?.showModal();
 	};
 
 	const submit = async (event: SubmitEvent) => {
@@ -71,17 +69,11 @@
 	<Flag size="0.9em" aria-hidden="true" /> Melden
 </button>
 
-<dialog bind:this={dialog} aria-label="Inhalt melden" onclose={() => (open = false)}>
-	<form method="dialog" class="close">
-		<button type="submit" class="btn btn--quiet" aria-label="Schließen"
-			><X size="1.2em" aria-hidden="true" /></button
-		>
-	</form>
+<Dialog bind:open title="Melden">
 	{#if sent}
 		<p>Danke, wir prüfen das.</p>
-	{:else if open}
-		<form class="stack" onsubmit={submit}>
-			<h2>Melden</h2>
+	{:else}
+		<form id="report" class="stack" onsubmit={submit}>
 			{#if targets.length > 1}
 				<fieldset class="stack">
 					<legend>Was?</legend>
@@ -140,12 +132,24 @@
 			{/if}
 			{#key error}<Captcha bind:value={captcha} />{/key}
 			{#if error}<p class="message message--error" role="alert">{error}</p>{/if}
-			<button type="submit" class="btn btn--primary" disabled={sending || !captcha || !reason}>
-				{sending ? 'Wird gesendet…' : 'Absenden'}
-			</button>
 		</form>
 	{/if}
-</dialog>
+	{#snippet actions()}
+		{#if sent}
+			<button type="button" class="btn btn--primary" onclick={() => (open = false)}>Fertig</button>
+		{:else}
+			<button type="button" class="btn btn--quiet" onclick={() => (open = false)}>Abbrechen</button>
+			<button
+				type="submit"
+				class="btn btn--primary"
+				form="report"
+				disabled={sending || !captcha || !reason}
+			>
+				{sending ? 'Wird gesendet…' : 'Absenden'}
+			</button>
+		{/if}
+	{/snippet}
+</Dialog>
 
 <style>
 	.report {
@@ -162,25 +166,6 @@
 	}
 	.report:hover {
 		color: var(--color-text-muted);
-	}
-	dialog {
-		width: min(30rem, calc(100vw - 2rem));
-		max-height: calc(100vh - 2rem);
-		padding: 1.5rem;
-		border: 1px solid var(--color-border);
-		border-radius: var(--radius-md);
-	}
-	dialog::backdrop {
-		background: rgb(0 0 0 / 0.3);
-	}
-	.close {
-		float: right;
-		margin: -1rem -1rem 0 0;
-	}
-	h2 {
-		margin: 0;
-		font-size: 1.25rem;
-		font-weight: 400;
 	}
 	fieldset {
 		margin: 0;

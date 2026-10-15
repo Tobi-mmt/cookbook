@@ -13,7 +13,8 @@
 	import { me } from '#lib/me.svelte.js';
 	import { slugerize } from '#lib/slugerize.js';
 	import CookbookPicker, { type CookbookTarget } from '#components/CookbookPicker.svelte';
-	import ShareCookbookPanel from '#components/ShareCookbookPanel.svelte';
+	import Dialog from '#components/Dialog.svelte';
+	import ShareCookbookDialog from '#components/ShareCookbookDialog.svelte';
 
 	let { recipe }: { recipe: Recipe } = $props();
 
@@ -131,7 +132,13 @@
 		await goto(page.url.pathname, { invalidateAll: true, replace: true, reset: false });
 	};
 
+	const startMove = () => {
+		notice = null;
+		choosing = 'move';
+	};
+
 	const startCopy = () => {
+		notice = null;
 		if (copyTargets.length === 1 && !copies.length) copyTo({ cookbookId: copyTargets[0].id });
 		else choosing = 'copy';
 	};
@@ -209,27 +216,26 @@
 				})}><History size="1em" aria-hidden="true" /> Verlauf</a
 			>
 			{#if user}
-				<button type="button" class="btn" disabled={busy} onclick={() => (choosing = 'move')}>
+				<button type="button" class="btn" disabled={busy} onclick={startMove}>
 					<FolderInput size="1em" aria-hidden="true" /> Verschieben nach …
 				</button>
 			{/if}
 		{/if}
 	</div>
-	{#if choosing}
+	<Dialog
+		open={Boolean(choosing)}
+		title={choosing === 'copy' ? 'In welches Kochbuch?' : 'Wohin verschieben?'}
+		onclose={() => (choosing = null)}
+	>
+		{#if notice && choosing}<p class="message message--error" role="alert">{notice}</p>{/if}
 		<CookbookPicker
-			question={choosing === 'copy' ? 'In welches Kochbuch?' : 'Wohin verschieben?'}
 			cookbooks={choosing === 'copy' ? copyTargets : moveTargets}
 			{busy}
 			onpick={(target) => (choosing === 'copy' ? copyTo(target) : moveTo(target))}
-			oncancel={() => (choosing = null)}
 		/>
-	{/if}
+	</Dialog>
 	{#if shareTarget}
-		<ShareCookbookPanel
-			message={shareTarget.message}
-			cookbook={shareTarget.cookbook}
-			onclose={() => (shareTarget = null)}
-		/>
+		<ShareCookbookDialog open title={shareTarget.message} cookbook={shareTarget.cookbook} />
 	{/if}
 </div>
 

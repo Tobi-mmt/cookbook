@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import HiddenNotice from '#components/HiddenNotice.svelte';
+	import Dialog from '#components/Dialog.svelte';
 	import Copy from '@lucide/svelte/icons/copy';
 	import { cookbookPath, profilePath } from '#lib/paths.js';
 	import { SITE_NAME } from '#lib/site.js';
@@ -45,7 +46,17 @@
 		cookbookPath({ ownerUsername: owner?.username ?? '', slug: data.cookbook.slug })
 	);
 	let copied = $state(false);
-	let confirmDelete = $state(false);
+	type Confirmation = {
+		action: 'remove' | 'transfer' | 'leave' | 'delete' | 'deleteRecipes';
+		title: string;
+		text: string;
+		label: string;
+		fields?: Record<string, string>;
+	};
+	let confirming = $state<Confirmation | null>(null);
+	const ask = (confirmation: Confirmation) => (confirming = confirmation);
+	// svelte-ignore state_referenced_locally
+	let transferTo = $state(data.members.find(({ role }) => role === 'editor')?.userId ?? '');
 
 	const formatDate = (date: Date) =>
 		new Intl.DateTimeFormat('de-DE', { day: 'numeric', month: 'short' }).format(date);
@@ -92,10 +103,18 @@
 					<span class="role">{member.role === 'owner' ? 'Besitzer' : 'Bearbeiter'}</span>
 				</span>
 				{#if data.me.isOwner && member.role === 'editor'}
-					<form method="POST" action="?/remove" use:enhance>
-						<input type="hidden" name="userId" value={member.userId} />
-						<button type="submit" class="btn btn--quiet btn--danger">Entfernen</button>
-					</form>
+					<button
+						type="button"
+						class="btn btn--quiet btn--danger"
+						onclick={() =>
+							ask({
+								action: 'remove',
+								title: `${member.name} entfernen?`,
+								text: `${member.name} kann das Kochbuch dann nicht mehr bearbeiten. Rezepte von ${member.name} bleiben im Kochbuch.`,
+								label: 'Entfernen',
+								fields: { userId: member.userId }
+							})}>Entfernen</button
+					>
 				{/if}
 			</li>
 		{/each}
@@ -147,14 +166,27 @@
 
 	{#if data.me.isOwner && editors.length}
 		<h2>Kochbuch übergeben</h2>
-		<form method="POST" action="?/transfer" class="row" use:enhance>
-			<select class="input name" name="userId" aria-label="Neuer Besitzer">
+		<div class="row">
+			<select class="input name" bind:value={transferTo} aria-label="Neuer Besitzer">
 				{#each editors as editor (editor.userId)}
 					<option value={editor.userId}>{editor.name}</option>
 				{/each}
 			</select>
-			<button type="submit" class="btn">Übergeben</button>
-		</form>
+			<button
+				type="button"
+				class="btn"
+				onclick={() => {
+					const editor = editors.find(({ userId }) => userId === transferTo) ?? editors[0];
+					ask({
+						action: 'transfer',
+						title: `An ${editor.name} übergeben?`,
+						text: `${editor.name} wird Besitzer von „${data.cookbook.name}“ und kann danach Bearbeiter entfernen, das Kochbuch umbenennen oder löschen. Du bleibst Bearbeiter. Die Adresse ändert sich, die alte leitet weiter.`,
+						label: 'Übergeben',
+						fields: { userId: editor.userId }
+					});
+				}}>Übergeben</button
+			>
+		</div>
 		<p class="hint">
 			Das Kochbuch zieht unter den Namen der neuen Besitzerin oder des Besitzers um.
 		</p>
@@ -215,47 +247,72 @@
 
 	<h2>Verlassen oder löschen</h2>
 	{#if !data.me.isOwner}
-		<form method="POST" action="?/leave" use:enhance>
-			<button type="submit" class="btn btn--danger">Kochbuch verlassen</button>
-		</form>
-		<p class="hint">Deine Rezepte bleiben im Kochbuch, weil sie dem Kochbuch gehören.</p>
+		<button
+			type="button"
+			class="btn btn--danger"
+			onclick={() =>
+				ask({
+					action: 'leave',
+					title: `„${data.cookbook.name}“ verlassen?`,
+					text: 'Du kannst das Kochbuch dann nicht mehr bearbeiten. Deine Rezepte bleiben im Kochbuch, weil sie dem Kochbuch gehören.',
+					label: 'Verlassen'
+				})}>Kochbuch verlassen</button
+		>
 	{:else if data.isLastCookbook}
-		{#if confirmDelete}
-			<form method="POST" action="?/deleteRecipes" class="stack" use:enhance>
-				<p>
-					Dein letztes Kochbuch bleibt bestehen, alle Rezepte darin kommen für 30 Tage in den
-					Papierkorb. Kopien, die andere übernommen haben, bleiben bestehen.
-				</p>
-				<div class="row">
-					<button type="submit" class="btn btn--danger">Alle Rezepte löschen</button>
-					<button type="button" class="btn btn--quiet" onclick={() => (confirmDelete = false)}
-						>Abbrechen</button
-					>
-				</div>
-			</form>
-		{:else}
-			<button type="button" class="btn btn--danger" onclick={() => (confirmDelete = true)}
-				>Alle Rezepte löschen</button
-			>
-		{/if}
-	{:else if confirmDelete}
-		<form method="POST" action="?/delete" class="stack" use:enhance>
-			<p>
-				Das Kochbuch und alle Rezepte darin kommen für 30 Tage in den Papierkorb. Kopien, die andere
-				übernommen haben, bleiben bestehen.
-			</p>
-			<div class="row">
-				<button type="submit" class="btn btn--danger">Kochbuch löschen</button>
-				<button type="button" class="btn btn--quiet" onclick={() => (confirmDelete = false)}
-					>Abbrechen</button
-				>
-			</div>
-		</form>
+		<button
+			type="button"
+			class="btn btn--danger"
+			onclick={() =>
+				ask({
+					action: 'deleteRecipes',
+					title: 'Alle Rezepte löschen?',
+					text: 'Dein letztes Kochbuch bleibt bestehen, alle Rezepte darin kommen für 30 Tage in den Papierkorb. Kopien, die andere übernommen haben, bleiben bestehen.',
+					label: 'Alle Rezepte löschen'
+				})}>Alle Rezepte löschen</button
+		>
 	{:else}
-		<button type="button" class="btn btn--danger" onclick={() => (confirmDelete = true)}
-			>Kochbuch löschen</button
+		<button
+			type="button"
+			class="btn btn--danger"
+			onclick={() =>
+				ask({
+					action: 'delete',
+					title: `„${data.cookbook.name}“ löschen?`,
+					text: 'Das Kochbuch und alle Rezepte darin kommen für 30 Tage in den Papierkorb. Kopien, die andere übernommen haben, bleiben bestehen.',
+					label: 'Kochbuch löschen'
+				})}>Kochbuch löschen</button
 		>
 	{/if}
+
+	<Dialog
+		open={Boolean(confirming)}
+		title={confirming?.title ?? ''}
+		onclose={() => (confirming = null)}
+	>
+		<p>{confirming?.text}</p>
+		<form
+			id="confirm-action"
+			method="POST"
+			action="?/{confirming?.action}"
+			use:enhance={() =>
+				async ({ update }) => {
+					confirming = null;
+					await update();
+				}}
+		>
+			{#each Object.entries(confirming?.fields ?? {}) as [name, value] (name)}
+				<input type="hidden" {name} {value} />
+			{/each}
+		</form>
+		{#snippet actions()}
+			<button type="button" class="btn btn--quiet" onclick={() => (confirming = null)}
+				>Abbrechen</button
+			>
+			<button type="submit" class="btn btn--danger" form="confirm-action"
+				>{confirming?.label}</button
+			>
+		{/snippet}
+	</Dialog>
 	<p class="hint address">Adresse: {page.url.host}/@{owner?.username}/{data.cookbook.slug}</p>
 </div>
 
