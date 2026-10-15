@@ -130,6 +130,9 @@
 	.actions {
 		justify-content: flex-end;
 	}
+	.message {
+		margin: 1rem 0;
+	}
 	.message p {
 		margin: 0 0 0.75rem;
 	}
