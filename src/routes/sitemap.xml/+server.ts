@@ -1,39 +1,13 @@
-import type { RequestHandler } from '@sveltejs/kit';
 import { getDb } from '#lib/server/context.js';
 import { isrConfig } from '#lib/server/isr.js';
-import { listRecipeIndex } from '#lib/server/recipes.js';
-import { slugerize } from '#lib/slugerize.js';
-import type { RecipeIndexEntry } from '#types';
-
-const BASE_URL = 'https://kochbuch.monaundtobi.de';
+import { listSitemapPaths, sitemapIndex, URLS_PER_SITEMAP } from '#lib/server/sitemap.js';
 
 export const config = isrConfig;
 
-function generateSiteMap(recipes: RecipeIndexEntry[]) {
-	return `<?xml version="1.0" encoding="UTF-8"?>
-   <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-     <url>
-       <loc>${BASE_URL}/</loc>
-     </url>
-     ${recipes
-				.map(({ id, title }) => {
-					return `
-       <url>
-           <loc>${`${BASE_URL}/rezept/${id}/${slugerize(title)}`}</loc>
-       </url>
-     `;
-				})
-				.join('')}
-   </urlset>
- `;
-}
-
-export const GET: RequestHandler = async () => {
-	return new Response(generateSiteMap(await listRecipeIndex(getDb())), {
-		status: 200,
-		headers: {
-			'access-control-allow-origin': '*',
-			'Content-Type': 'text/xml'
-		}
+/** A sitemap index, so that the sitemaps stay below the limits with many recipes */
+export async function GET({ url }) {
+	const count = Math.max(1, Math.ceil((await listSitemapPaths(getDb())).length / URLS_PER_SITEMAP));
+	return new Response(sitemapIndex(url.origin, count), {
+		headers: { 'content-type': 'application/xml' }
 	});
-};
+}

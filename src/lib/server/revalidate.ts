@@ -7,7 +7,7 @@ export const recipePaths = (recipe: { id: string; title: string }) => [
 	`/rezept/${recipe.id}/${slugerize(recipe.title)}`
 ];
 
-export const LIST_PATHS = ['/', '/sitemap.xml'];
+export const LIST_PATHS = ['/', '/sitemap.xml', '/sitemap/0.xml'];
 
 const CONCURRENCY = 10;
 

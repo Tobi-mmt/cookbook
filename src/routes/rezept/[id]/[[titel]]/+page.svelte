@@ -7,7 +7,7 @@
 	import { recipePath } from '#lib/paths.js';
 	import { SITE_NAME } from '#lib/site.js';
 
-	let { data }: { data: { recipe: Recipe } } = $props();
+	let { data }: { data: { recipe: Recipe; noindex: boolean } } = $props();
 
 	const recipe = $derived(data.recipe);
 	const description = $derived(
@@ -43,6 +43,7 @@
 <svelte:head>
 	<title>{recipe.title} - {SITE_NAME}</title>
 	<link rel="canonical" href={canonical} />
+	{#if data.noindex}<meta name="robots" content="noindex" />{/if}
 	<meta name="description" content={description} />
 	{#if recipe.author}<meta name="author" content={recipe.author.name} />{/if}
 	<meta property="og:site_name" content={SITE_NAME} />
