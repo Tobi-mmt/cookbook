@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation';
 	import KeyRound from '@lucide/svelte/icons/key-round';
 	import { page } from '$app/state';
+	import { me } from '#lib/me.svelte.js';
 	import { validateUsername } from '#lib/username.js';
 
 	let {
@@ -20,6 +21,9 @@
 	let passkeyError = $state<string | null>(null);
 
 	const showPasskeyStep = $derived(data.done || form?.saved);
+	$effect(() => {
+		if (form?.saved) me.refresh();
+	});
 
 	let checkTimeout: ReturnType<typeof setTimeout> | undefined;
 	const checkUsername = () => {

@@ -66,7 +66,7 @@
 				<div class="row-actions">
 					<button
 						type="button"
-						class="button button--icon"
+						class="btn btn--icon"
 						aria-label="Nach oben"
 						title="Nach oben"
 						disabled={index === 0}
@@ -74,7 +74,7 @@
 					>
 					<button
 						type="button"
-						class="button button--icon"
+						class="btn btn--icon"
 						aria-label="Nach unten"
 						title="Nach unten"
 						disabled={index === steps.length - 1}
@@ -82,7 +82,7 @@
 					>
 					<button
 						type="button"
-						class="button button--icon button--danger"
+						class="btn btn--icon btn--danger"
 						aria-label="Entfernen"
 						title="Entfernen"
 						onclick={() => remove(index)}><Trash2 size={18} aria-hidden="true" /></button
@@ -153,10 +153,10 @@
 </ol>
 
 <div class="add">
-	<button type="button" class="button" onclick={() => add('step')}
+	<button type="button" class="btn" onclick={() => add('step')}
 		><Plus size={18} aria-hidden="true" /> Schritt</button
 	>
-	<button type="button" class="button" onclick={() => add('section')}
+	<button type="button" class="btn" onclick={() => add('section')}
 		><Plus size={18} aria-hidden="true" /> Abschnitt</button
 	>
 </div>

@@ -2,6 +2,7 @@
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import Captcha from '#components/Captcha.svelte';
+	import { me } from '#lib/me.svelte.js';
 	import KeyRound from '@lucide/svelte/icons/key-round';
 
 	let {
@@ -29,6 +30,7 @@
 				'Die Anmeldung mit Passkey hat nicht geklappt. Hast du auf diesem Gerät oder Handy einen Passkey angelegt?';
 			return;
 		}
+		await me.refresh();
 		await goto(data.next, { invalidateAll: true });
 	};
 </script>

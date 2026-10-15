@@ -12,7 +12,7 @@
 
 	import RecipeStep from './RecipeStep.svelte';
 	import WakeLock from './WakeLock.svelte';
-	let { recipe }: { recipe: Recipe } = $props();
+	let { recipe, toolbar }: { recipe: Recipe; toolbar?: import('svelte').Snippet } = $props();
 
 	// the recipe page re-creates this component via {#key} for another recipe
 	// svelte-ignore state_referenced_locally
@@ -112,6 +112,7 @@
 		</div>
 
 		<div class="content-wrapper">
+			{@render toolbar?.()}
 			{#if recipe.description}
 				<p class="description" itemprop="description">{recipe.description}</p>
 			{/if}
