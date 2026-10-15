@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Recipe } from '#types';
+	import History from '@lucide/svelte/icons/history';
 	import Pencil from '@lucide/svelte/icons/pencil';
 	import Share2 from '@lucide/svelte/icons/share-2';
 	import { onMount } from 'svelte';
@@ -41,6 +42,13 @@
 					id: recipe.id,
 					titel: slugerize(recipe.title)
 				})}><Pencil size="1em" aria-hidden="true" /> Bearbeiten</a
+			>
+			<a
+				class="btn"
+				href={resolve('/rezept/[id]/[titel]/verlauf', {
+					id: recipe.id,
+					titel: slugerize(recipe.title)
+				})}><History size="1em" aria-hidden="true" /> Verlauf</a
 			>
 		{/if}
 	</div>

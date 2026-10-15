@@ -15,6 +15,7 @@ import {
 	timestamp
 } from 'drizzle-orm/pg-core';
 import type { RecipeImage } from '../../../types';
+import type { RecipeInput } from '../../recipeInput';
 
 const timestamps = {
 	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
@@ -242,6 +243,24 @@ export const recipes = pgTable('recipes', {
 	hiddenAt: timestamp('hidden_at', { withTimezone: true }),
 	hiddenReason: text('hidden_reason')
 });
+
+/** The full state of a recipe after each save, the newest 20 per recipe are kept */
+export type RecipeSnapshot = { input: RecipeInput; image: RecipeImage | null };
+
+export const recipeVersions = pgTable(
+	'recipe_versions',
+	{
+		id: serial('id').primaryKey(),
+		recipeId: text('recipe_id')
+			.notNull()
+			.references(() => recipes.id, { onDelete: 'cascade' }),
+		version: integer('version').notNull(),
+		snapshot: jsonb('snapshot').$type<RecipeSnapshot>().notNull(),
+		createdBy: text('created_by').references(() => users.id, { onDelete: 'set null' }),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
+	},
+	(table) => [uniqueIndex('recipe_versions_recipe_version_idx').on(table.recipeId, table.version)]
+);
 
 export const ingredients = pgTable('ingredients', {
 	id: serial('id').primaryKey(),

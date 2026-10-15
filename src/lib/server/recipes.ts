@@ -25,6 +25,7 @@ import { categoriesById } from './categories';
 import type { Database } from './db/client';
 import { mapRecipe, mapRecipeInput, type RecipeRows } from './db/mapRecipe';
 import { cookbooks, ingredients, recipes, stepIngredients, steps, users } from './db/schema';
+import { pruneVersions, recordVersion } from './versions';
 
 export { createId as createRecipeId } from './ids';
 
@@ -239,8 +240,9 @@ export const getRecipeMeta = async (db: Database, id: string) => {
 };
 
 /**
- * Creates or replaces a recipe including all ingredients, steps and their links.
- * `image: undefined` keeps the current image, `cookbookId` is only used for new recipes.
+ * Creates or replaces a recipe including all ingredients, steps and their links and stores the
+ * result as a new version. `image: undefined` keeps the current image, `cookbookId` is only used
+ * for new recipes. Returns the new version and the images of versions that were pruned.
  */
 export const saveRecipe = async (
 	db: Database,
@@ -252,7 +254,10 @@ export const saveRecipe = async (
 		userId
 	}: { image?: RecipeImage | null; cookbookId: string; userId: string | null }
 ) => {
-	await db.transaction(async (tx) => {
+	const [previous] = await loadRows(db, [id]);
+
+	return db.transaction(async (tx) => {
+		const version = previous ? previous.recipe.version + 1 : 1;
 		const values = {
 			title: input.title,
 			description: input.description || null,
@@ -263,13 +268,13 @@ export const saveRecipe = async (
 			nutritionType: input.nutritionType,
 			updatedAt: new Date(),
 			updatedBy: userId,
+			version,
 			...(image !== undefined ? { image } : {})
 		};
 		await tx
 			.insert(recipes)
 			.values({ id, cookbookId, createdBy: userId, ...values })
 			.onConflictDoUpdate({ target: recipes.id, set: values });
-
 		// children are replaced as a whole, links are removed by the cascade
 		await tx.delete(ingredients).where(eq(ingredients.recipeId, id));
 		await tx.delete(steps).where(eq(steps.recipeId, id));
@@ -320,6 +325,24 @@ export const saveRecipe = async (
 				}));
 		});
 		if (links.length) await tx.insert(stepIngredients).values(links);
+
+		// recipes from before the history get their previous state as the first version
+		if (previous) {
+			await recordVersion(tx, {
+				recipeId: id,
+				version: previous.recipe.version,
+				snapshot: { input: mapRecipeInput(previous), image: previous.recipe.image },
+				createdBy: previous.recipe.updatedBy,
+				createdAt: previous.recipe.updatedAt
+			});
+		}
+		await recordVersion(tx, {
+			recipeId: id,
+			version,
+			snapshot: { input, image: image === undefined ? (previous?.recipe.image ?? null) : image },
+			createdBy: userId
+		});
+		return { version, prunedImages: await pruneVersions(tx, id) };
 	});
 };
 

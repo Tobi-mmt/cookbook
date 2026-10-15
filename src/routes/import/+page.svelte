@@ -62,6 +62,7 @@
 			{cookbookId}
 			action={resolve('/neu')}
 			cancelHref={resolve('/import')}
+			draftKey="import:{imported.url}"
 			imported
 		/>
 	{:else}

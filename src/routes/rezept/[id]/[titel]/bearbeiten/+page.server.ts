@@ -17,7 +17,8 @@ export async function load(event) {
 		recipe: recipe.input,
 		image: recipe.image,
 		categories: await listCategories(db),
-		asAdmin: editor.asAdmin
+		asAdmin: editor.asAdmin,
+		version: recipe.version
 	};
 }
 

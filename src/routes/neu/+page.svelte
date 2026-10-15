@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Category } from '#types';
 	import { resolve } from '$app/paths';
+	import { page } from '$app/state';
 	import RecipeEditor from '#components/editor/RecipeEditor.svelte';
 	import type { RecipeInput } from '#lib/recipeInput.js';
 	import { SITE_NAME } from '#lib/site.js';
@@ -33,6 +34,7 @@
 		cookbooks={data.cookbooks}
 		cookbookId={data.cookbookId}
 		cancelHref={resolve('/')}
-		error={form?.error}
+		draftKey={page.url.searchParams.get('entwurf') ?? 'new'}
+		result={form}
 	/>
 </div>

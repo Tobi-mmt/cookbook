@@ -5,6 +5,9 @@
 	import { recipePath } from '#lib/paths.js';
 	import type { RecipeInput } from '#lib/recipeInput.js';
 	import { SITE_NAME } from '#lib/site.js';
+	import { slugerize } from '#lib/slugerize.js';
+	import { resolve } from '$app/paths';
+	import type { Conflict } from '#lib/server/recipeActions.js';
 
 	let {
 		data,
@@ -16,8 +19,9 @@
 			image: RecipeImage | null;
 			categories: Category[];
 			asAdmin: boolean;
+			version: number;
 		};
-		form: { error?: string } | null;
+		form: { error?: string; conflict?: Conflict; deleted?: { by: string | null } } | null;
 	} = $props();
 
 	let confirmDelete = $state(false);
@@ -40,7 +44,13 @@
 			categories={data.categories}
 			action="?/save"
 			cancelHref={recipePath({ id: data.id, title: data.recipe.title })}
-			error={form?.error}
+			version={data.version}
+			draftKey={data.id}
+			historyHref={resolve('/rezept/[id]/[titel]/verlauf', {
+				id: data.id,
+				titel: slugerize(data.recipe.title)
+			})}
+			result={form}
 		/>
 	{/key}
 
