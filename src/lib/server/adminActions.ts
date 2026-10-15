@@ -2,6 +2,7 @@ import { fail, redirect, type RequestEvent } from '@sveltejs/kit';
 import { z } from 'zod';
 import type { RecipeImage } from '../../types';
 import { recipeInputSchema } from '../recipeInput';
+import { listCategories } from './categories';
 import { getDb, getStorage } from './context';
 import { imageUrls, processAndStoreImage } from './images';
 import { createRecipeId, deleteRecipe, getRecipeMeta, saveRecipe } from './recipes';
@@ -98,7 +99,9 @@ export const importRecipeAction = async ({ request }: RequestEvent) => {
 	const scraped = extractRecipe(html);
 	if (!scraped) return fail(422, { url, error: 'Auf dieser Seite wurde kein Rezept gefunden.' });
 
-	const parsed = recipeInputSchema.safeParse(toRecipeInput(scraped, url));
+	const parsed = recipeInputSchema.safeParse(
+		toRecipeInput(scraped, url, await listCategories(getDb()))
+	);
 	if (!parsed.success) {
 		return fail(422, { url, error: parsed.error.issues.map((issue) => issue.message).join(', ') });
 	}

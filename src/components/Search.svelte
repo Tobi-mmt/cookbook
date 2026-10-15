@@ -3,7 +3,6 @@
 	import SearchIcon from '@lucide/svelte/icons/search';
 	import { afterNavigate } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { categoryColors } from '#lib/colors.js';
 	import { loadRecipeIndex, recipeIndex } from '#lib/recipeIndex.js';
 	import { slugerize } from '#lib/slugerize.js';
 
@@ -137,8 +136,8 @@
 									recipeSlug: `${item.id}/${slugerize(item.title)}`
 								})}
 							>
-								<span class="category" style="--color: {categoryColors[item.meta.category]}"
-									>{item.meta.category}</span
+								<span class="category" style="--color: {item.meta.category.color}"
+									>{item.meta.category.name}</span
 								>
 								<span class="title">{item.title}</span>
 							</a>

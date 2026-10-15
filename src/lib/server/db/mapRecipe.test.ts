@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { testCategories } from '../../testing/categories';
 import { mapRecipe, mapRecipeInput, type RecipeRows } from './mapRecipe';
 
 const rows: RecipeRows = {
@@ -8,13 +9,14 @@ const rows: RecipeRows = {
 		description: null,
 		portion: 3,
 		duration: 30,
-		category: 'Herzhaft',
+		categoryId: 5,
 		nutritionType: 'Fleisch',
 		image: null,
 		sourceUrl: null,
 		createdAt: new Date(),
 		updatedAt: new Date()
 	},
+	category: testCategories.hauptgericht,
 	ingredients: [
 		{
 			id: 3,

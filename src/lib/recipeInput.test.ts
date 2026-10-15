@@ -6,7 +6,7 @@ const recipe: RecipeInput = {
 	description: null,
 	portion: 2,
 	duration: 40,
-	category: 'Herzhaft',
+	categoryId: 5,
 	nutritionType: 'Vegan',
 	ingredients: [
 		{ clientId: 's', kind: 'section', name: 'Basis' },

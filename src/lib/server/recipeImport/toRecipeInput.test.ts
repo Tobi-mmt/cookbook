@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { recipeInputSchema } from '../../recipeInput';
+import { allTestCategories } from '../../testing/categories';
 import type { ScrapedRecipe } from './extract';
 import { parseDuration, toRecipeInput } from './toRecipeInput';
 
@@ -35,7 +36,11 @@ describe('parseDuration', () => {
 
 describe('toRecipeInput', () => {
 	test('maps a scraped recipe to a valid editor input', () => {
-		const input = toRecipeInput(scraped, 'https://www.lecker.de/brezel-chips-1.html');
+		const input = toRecipeInput(
+			scraped,
+			'https://www.lecker.de/brezel-chips-1.html',
+			allTestCategories
+		);
 		expect(recipeInputSchema.safeParse(input).success).toBe(true);
 		expect(input).toMatchObject({
 			title: 'Brezel-Chips',
@@ -43,7 +48,7 @@ describe('toRecipeInput', () => {
 			sourceUrl: 'https://www.lecker.de/brezel-chips-1.html',
 			portion: 4,
 			duration: 70,
-			category: 'Herzhaft',
+			categoryId: 2,
 			nutritionType: 'Vegetarisch'
 		});
 		expect(input.ingredients[1]).toEqual({
@@ -56,7 +61,7 @@ describe('toRecipeInput', () => {
 	});
 
 	test('links ingredients mentioned in a step', () => {
-		const [first, second] = toRecipeInput(scraped, 'https://example.com').steps;
+		const [first, second] = toRecipeInput(scraped, 'https://example.com', allTestCategories).steps;
 		expect(first.links.map((link) => link.ingredientId)).toEqual(['import-0', 'import-1']);
 		expect(second.links.map((link) => link.ingredientId)).toEqual(['import-2', 'import-3']);
 	});
@@ -64,7 +69,8 @@ describe('toRecipeInput', () => {
 	test('keeps multiple sections and drops a single one', () => {
 		const single = toRecipeInput(
 			{ ...scraped, instructions: [{ section: 'Zubereitung', steps: ['A'] }] },
-			'https://example.com'
+			'https://example.com',
+			allTestCategories
 		);
 		expect(single.steps.map((step) => step.kind)).toEqual(['step']);
 
@@ -76,7 +82,8 @@ describe('toRecipeInput', () => {
 					{ section: 'Füllung', steps: ['B'] }
 				]
 			},
-			'https://example.com'
+			'https://example.com',
+			allTestCategories
 		);
 		expect(multiple.steps.map((step) => [step.kind, step.text])).toEqual([
 			['section', 'Teig'],
@@ -88,19 +95,29 @@ describe('toRecipeInput', () => {
 
 	test('detects category and nutrition type', () => {
 		const detect = (recipe: Partial<ScrapedRecipe>) => {
-			const { category, nutritionType } = toRecipeInput(
-				{ ...scraped, ...recipe },
-				'https://example.com'
+			const { categoryId, nutritionType } = toRecipeInput(
+				{ ...scraped, keywords: [], ...recipe },
+				'https://example.com',
+				allTestCategories
 			);
-			return [category, nutritionType];
+			return [allTestCategories.find(({ id }) => id === categoryId)!.slug, nutritionType];
 		};
-		expect(detect({ keywords: ['Hauptspeise', 'Schwein'] })).toEqual(['Herzhaft', 'Fleisch']);
-		expect(detect({ ingredients: ['200 g Lachs'] })).toEqual(['Herzhaft', 'Fleisch']);
-		expect(detect({ diets: ['VeganDiet'], categories: ['Salat'] })).toEqual(['Salat', 'Vegan']);
-		expect(detect({ keywords: ['Kuchen', 'vegetarisch'] })).toEqual(['Süßspeise', 'Vegetarisch']);
-		expect(detect({ keywords: ['Cocktail'] })).toEqual(['Getränke', 'Vegetarisch']);
+		expect(detect({ keywords: ['Hauptspeise', 'Schwein'] })).toEqual(['hauptgericht', 'Fleisch']);
+		expect(detect({ ingredients: ['200 g Lachs'] })).toEqual(['hauptgericht', 'Fisch']);
+		expect(detect({ ingredients: ['200 g Lachs', '100 g Speck'] })).toEqual([
+			'hauptgericht',
+			'Fleisch'
+		]);
+		expect(detect({ diets: ['VeganDiet'], categories: ['Salat'] })).toEqual(['salat', 'Vegan']);
+		expect(detect({ keywords: ['Kuchen', 'vegetarisch'] })).toEqual([
+			'backen-dessert',
+			'Vegetarisch'
+		]);
+		expect(detect({ keywords: ['Cocktail'] })).toEqual(['getraenke', 'Vegetarisch']);
+		expect(detect({ keywords: ['Kürbissuppe'] })).toEqual(['suppe', 'Vegetarisch']);
+		expect(detect({ keywords: ['Snacks'] })).toEqual(['vorspeise-snack', 'Vegetarisch']);
 		expect(detect({ ingredients: ['1 Süßkartoffel', 'Petersilie, gehackt'] })).toEqual([
-			'Herzhaft',
+			'hauptgericht',
 			'Vegetarisch'
 		]);
 	});
@@ -108,7 +125,8 @@ describe('toRecipeInput', () => {
 	test('falls back to defaults', () => {
 		const input = toRecipeInput(
 			{ categories: [], keywords: [], diets: [], ingredients: ['Salz'], instructions: [] },
-			'https://example.com'
+			'https://example.com',
+			allTestCategories
 		);
 		expect(input).toMatchObject({ title: 'Importiertes Rezept', portion: 2, duration: 30 });
 		expect(recipeInputSchema.safeParse(input).success).toBe(true);

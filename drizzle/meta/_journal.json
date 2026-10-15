@@ -36,6 +36,20 @@
 			"when": 1791958036742,
 			"tag": "0004_recipe_created_at",
 			"breakpoints": true
+		},
+		{
+			"idx": 5,
+			"version": "7",
+			"when": 1792065330077,
+			"tag": "0005_categories",
+			"breakpoints": true
+		},
+		{
+			"idx": 6,
+			"version": "7",
+			"when": 1792065330489,
+			"tag": "0006_drop_category_enum",
+			"breakpoints": true
 		}
 	]
 }

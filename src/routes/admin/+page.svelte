@@ -3,7 +3,6 @@
 	import type { RecipeIndexEntry } from '#types';
 	import { page } from '$app/state';
 	import { enhance } from '$app/forms';
-	import { categoryColors } from '#lib/colors.js';
 	import { slugerize } from '#lib/slugerize.js';
 	import Check from '@lucide/svelte/icons/check';
 	import Download from '@lucide/svelte/icons/download';
@@ -56,10 +55,10 @@
 
 <ul class="recipes">
 	{#each data.recipes as recipe (recipe.id)}
-		<li class="recipe" style="--color: {categoryColors[recipe.meta.category]}">
+		<li class="recipe" style="--color: {recipe.meta.category.color}">
 			<a class="recipe-title" href={resolve('/admin/recipes/[id]', { id: recipe.id })}>
 				{recipe.title}
-				<span class="recipe-meta">{recipe.meta.category} · {recipe.meta.nutritionType}</span>
+				<span class="recipe-meta">{recipe.meta.category.name} · {recipe.meta.nutritionType}</span>
 			</a>
 			<div class="actions">
 				{#if confirmDelete === recipe.id}

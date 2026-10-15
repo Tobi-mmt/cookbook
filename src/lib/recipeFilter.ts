@@ -1,7 +1,7 @@
 import type { Category, NutritionType } from '../types';
 
 export type Diet = 'Vegetarisch' | 'Vegan';
-export type RecipeFilter = { category?: Category; diet?: Diet };
+export type RecipeFilter = { category?: string; diet?: Diet };
 
 /** Vegan recipes are vegetarian as well */
 const DIETS: Record<Diet, NutritionType[]> = {
@@ -17,6 +17,12 @@ export const filterRecipes = <
 ) =>
 	recipes.filter(
 		({ meta }) =>
-			(!category || meta.category === category) &&
+			(!category || meta.category.slug === category) &&
 			(!diet || DIETS[diet].includes(meta.nutritionType))
+	);
+
+/** The categories that occur in the recipes, in their order */
+export const presentCategories = (recipes: { meta: { category: Category } }[]) =>
+	[...new Map(recipes.map(({ meta }) => [meta.category.id, meta.category])).values()].sort(
+		(a, b) => a.position - b.position
 	);

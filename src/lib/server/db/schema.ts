@@ -13,10 +13,22 @@ import {
 } from 'drizzle-orm/pg-core';
 import type { RecipeImage } from '../../../types';
 
-export const categoryEnum = pgEnum('category', ['Salat', 'Herzhaft', 'Süßspeise', 'Getränke']);
-export const nutritionTypeEnum = pgEnum('nutrition_type', ['Vegan', 'Vegetarisch', 'Fleisch']);
+export const nutritionTypeEnum = pgEnum('nutrition_type', [
+	'Vegan',
+	'Vegetarisch',
+	'Fleisch',
+	'Fisch'
+]);
 export const ingredientKindEnum = pgEnum('ingredient_kind', ['ingredient', 'section']);
 export const stepKindEnum = pgEnum('step_kind', ['step', 'section']);
+
+export const categories = pgTable('categories', {
+	id: serial('id').primaryKey(),
+	slug: text('slug').notNull().unique(),
+	name: text('name').notNull().unique(),
+	color: text('color').notNull(),
+	position: integer('position').notNull()
+});
 
 export const recipes = pgTable('recipes', {
 	id: text('id').primaryKey(),
@@ -24,7 +36,9 @@ export const recipes = pgTable('recipes', {
 	description: text('description'),
 	portion: integer('portion').notNull(),
 	duration: integer('duration').notNull(),
-	category: categoryEnum('category').notNull(),
+	categoryId: integer('category_id')
+		.notNull()
+		.references(() => categories.id),
 	nutritionType: nutritionTypeEnum('nutrition_type').notNull(),
 	image: jsonb('image').$type<RecipeImage>(),
 	sourceUrl: text('source_url'),
@@ -93,6 +107,7 @@ export const pageViews = pgTable(
 	(table) => [index('page_views_day_path_idx').on(table.day, table.path)]
 );
 
+export type CategoryRow = typeof categories.$inferSelect;
 export type RecipeRow = typeof recipes.$inferSelect;
 export type IngredientRow = typeof ingredients.$inferSelect;
 export type StepRow = typeof steps.$inferSelect;

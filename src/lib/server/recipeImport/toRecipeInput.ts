@@ -7,7 +7,8 @@ const DEFAULT_PORTION = 2;
 const DEFAULT_DURATION = 30;
 
 const MEAT =
-	/fleisch|schwein|rind|kalb|lamm|hähnchen|huhn|hühn|geflügel|pute|(?<!\p{L})ente|speck|schinken|salami|wurst|würst|(?<!\p{L})hack|bacon|pancetta|guanciale|chorizo|fisch|lachs|thunfisch|forelle|kabeljau|sardell|garnele|shrimp|scampi|muschel/iu;
+	/fleisch|schwein|rind|kalb|lamm|hähnchen|huhn|hühn|geflügel|pute|(?<!\p{L})ente|speck|schinken|salami|wurst|würst|(?<!\p{L})hack|bacon|pancetta|guanciale|chorizo/iu;
+const FISH = /fisch|lachs|thunfisch|forelle|kabeljau|sardell|garnele|shrimp|scampi|muschel/iu;
 
 export const parseDuration = (value: string | undefined): number | undefined => {
 	if (!value) return undefined;
@@ -30,24 +31,29 @@ const parsePortion = (value: string | undefined) => {
 	return portion > 0 ? portion : DEFAULT_PORTION;
 };
 
-const toCategory = (haystack: string): Category => {
-	if (/getränk|drink|cocktail|smoothie|punsch|bowle|limonade|likör|shake/i.test(haystack))
-		return 'Getränke';
-	if (/salat/i.test(haystack)) return 'Salat';
-	if (
-		/dessert|nachtisch|nachspeise|kuchen|torte|gebäck|keks|plätzchen|(?<!\p{L})süß(?!kartoffel)|muffin|brownie/iu.test(
-			haystack
-		)
-	)
-		return 'Süßspeise';
-	return 'Herzhaft';
-};
+const CATEGORY_PATTERNS: [string, RegExp][] = [
+	['getraenke', /getränk|drink|cocktail|smoothie|punsch|bowle|limonade|likör|shake/i],
+	['salat', /salat/i],
+	[
+		'backen-dessert',
+		/dessert|nachtisch|nachspeise|kuchen|torte|gebäck|keks|plätzchen|(?<!\p{L})süß(?!kartoffel)|muffin|brownie|(?<!\p{L})brot/iu
+	],
+	['suppe', /suppe|eintopf/i],
+	['fruehstueck', /frühstück|müsli|porridge|granola/i],
+	['vorspeise-snack', /vorspeise|snack|fingerfood|(?<!\p{L})dip/iu],
+	['beilage-sosse', /beilage|soße|sauce|dressing/i]
+];
+
+const toCategorySlug = (haystack: string) =>
+	CATEGORY_PATTERNS.find(([, pattern]) => pattern.test(haystack))?.[0] ?? 'hauptgericht';
 
 const toNutritionType = (recipe: ScrapedRecipe, ingredientNames: string[]): NutritionType => {
 	const tags = [...recipe.diets, ...recipe.keywords, ...recipe.categories].join(' ');
 	if (/vegan/i.test(tags)) return 'Vegan';
 	if (/vegetari/i.test(tags)) return 'Vegetarisch';
-	if (MEAT.test([tags, ...ingredientNames].join(' '))) return 'Fleisch';
+	const all = [tags, ...ingredientNames].join(' ');
+	if (MEAT.test(all)) return 'Fleisch';
+	if (FISH.test(all)) return 'Fisch';
 	return 'Vegetarisch';
 };
 
@@ -90,7 +96,11 @@ const linkIngredients = (text: string, ingredients: IngredientInput[]) =>
 		.filter((ingredient) => mentions(text, ingredient.name))
 		.map((ingredient) => ({ ingredientId: ingredient.clientId }));
 
-export const toRecipeInput = (recipe: ScrapedRecipe, sourceUrl: string): RecipeInput => {
+export const toRecipeInput = (
+	recipe: ScrapedRecipe,
+	sourceUrl: string,
+	categories: Category[]
+): RecipeInput => {
 	const ingredients: IngredientInput[] = recipe.ingredients.map((text, index) => ({
 		clientId: `import-${index}`,
 		kind: 'ingredient',
@@ -124,7 +134,12 @@ export const toRecipeInput = (recipe: ScrapedRecipe, sourceUrl: string): RecipeI
 			parseDuration(recipe.totalTime) ??
 			((parseDuration(recipe.prepTime) ?? 0) + (parseDuration(recipe.cookTime) ?? 0) ||
 				DEFAULT_DURATION),
-		category: toCategory([...recipe.categories, ...recipe.keywords, recipe.name].join(' ')),
+		categoryId: (
+			categories.find(
+				({ slug }) =>
+					slug === toCategorySlug([...recipe.categories, ...recipe.keywords, recipe.name].join(' '))
+			) ?? categories[0]
+		).id,
 		nutritionType: toNutritionType(
 			recipe,
 			ingredients.map(({ name }) => name)
