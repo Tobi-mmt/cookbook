@@ -9,6 +9,7 @@ export interface RecipeRows {
 	ingredients: IngredientRow[];
 	steps: StepRow[];
 	stepIngredients: StepIngredientRow[];
+	context: Pick<Recipe, 'cookbook' | 'author' | 'attribution'> & { hiddenCookbook: boolean };
 }
 
 const byPosition = <T extends { position: number }>(a: T, b: T) => a.position - b.position;
@@ -22,7 +23,7 @@ const toIngredient = (row: IngredientRow): Ingredient => {
 
 /** Maps the database rows of one recipe to the `Recipe` shape used by the frontend */
 export const mapRecipe = (
-	{ recipe, category, ingredients, steps, stepIngredients }: RecipeRows,
+	{ recipe, category, ingredients, steps, stepIngredients, context }: RecipeRows,
 	now = new Date()
 ): Recipe => {
 	const ingredientsById = new Map(ingredients.map((row) => [row.id, row]));
@@ -31,6 +32,12 @@ export const mapRecipe = (
 		id: recipe.id,
 		title: recipe.title,
 		...(recipe.description ? { description: recipe.description } : {}),
+		...(recipe.sourceUrl ? { sourceUrl: recipe.sourceUrl } : {}),
+		cookbook: context.cookbook,
+		author: context.author,
+		attribution: context.attribution,
+		updatedAt: recipe.updatedAt,
+		isUnchangedCopy: Boolean(recipe.copiedFromId) && recipe.version === 1,
 		meta: {
 			portion: recipe.portion,
 			duration: recipe.duration,

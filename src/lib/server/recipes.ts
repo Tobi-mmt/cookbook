@@ -1,22 +1,107 @@
-import { asc, eq, getTableColumns, inArray, type Column } from 'drizzle-orm';
-import type { Recipe, RecipeImage, RecipeIndexEntry, RecipeSummary } from '../../types';
+import {
+	and,
+	asc,
+	eq,
+	getTableColumns,
+	inArray,
+	isNull,
+	sql,
+	type Column,
+	type SQL
+} from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
+import type {
+	Category,
+	CookbookRef,
+	PersonRef,
+	RecipeImage,
+	RecipeIndexEntry,
+	RecipeSummary
+} from '../../types';
 import { isNewRecipe } from '../newRecipe';
 import type { RecipeInput } from '../recipeInput';
 import { sortRecipes } from '../sortRecipes';
 import { categoriesById } from './categories';
 import type { Database } from './db/client';
 import { mapRecipe, mapRecipeInput, type RecipeRows } from './db/mapRecipe';
-import { ingredients, recipes, stepIngredients, steps } from './db/schema';
+import { cookbooks, ingredients, recipes, stepIngredients, steps, users } from './db/schema';
 
 export { createId as createRecipeId } from './ids';
 
-/** All queries run in parallel, so that a cold page render waits for only one database round trip */
-const loadRows = async (db: Database, recipeIds?: string[]): Promise<RecipeRows[]> => {
-	const ofRecipes = (column: Column) => (recipeIds ? inArray(column, recipeIds) : undefined);
+const owners = alias(users, 'owners');
+const authors = alias(users, 'authors');
+
+/** Public pages show neither deleted nor hidden recipes, nor recipes of hidden cookbooks */
+export const isVisible = and(
+	isNull(recipes.deletedAt),
+	isNull(recipes.hiddenAt),
+	isNull(cookbooks.deletedAt),
+	isNull(cookbooks.hiddenAt)
+);
+
+const person = (username: string | null, name: string | null): PersonRef | null =>
+	username && name ? { username, name } : null;
+
+/** A recipe with its cookbook and author, the base of all recipe queries */
+const selectRecipes = (db: Database) =>
+	db
+		.select({
+			recipe: recipes,
+			cookbook: { id: cookbooks.id, name: cookbooks.name, slug: cookbooks.slug },
+			ownerUsername: owners.username,
+			hiddenCookbook: sql<boolean>`${cookbooks.hiddenAt} is not null or ${cookbooks.deletedAt} is not null`,
+			authorUsername: authors.username,
+			authorName: authors.name
+		})
+		.from(recipes)
+		.innerJoin(cookbooks, eq(cookbooks.id, recipes.cookbookId))
+		.innerJoin(owners, eq(owners.id, cookbooks.ownerId))
+		.leftJoin(authors, eq(authors.id, recipes.createdBy));
+
+type RecipeContextRow = Awaited<ReturnType<ReturnType<typeof selectRecipes>['where']>>[number];
+
+const toCookbookRef = (row: RecipeContextRow): CookbookRef => ({
+	...row.cookbook,
+	ownerUsername: row.ownerUsername ?? ''
+});
+
+/** Resolves the names in the copy chains, deleted accounts become null */
+const resolveAttribution = async (db: Database, rows: RecipeContextRow[]) => {
+	const entries = rows.flatMap(({ recipe }) => recipe.attribution);
+	if (!entries.length) return () => [];
+	const userIds = [...new Set(entries.flatMap(({ userId }) => (userId ? [userId] : [])))];
+	const recipeIds = [...new Set(entries.map(({ recipeId }) => recipeId))];
+	const [people, existing] = await Promise.all([
+		userIds.length
+			? db
+					.select({ id: users.id, username: users.username, name: users.name })
+					.from(users)
+					.where(inArray(users.id, userIds))
+			: [],
+		db
+			.select({ id: recipes.id })
+			.from(recipes)
+			.innerJoin(cookbooks, eq(cookbooks.id, recipes.cookbookId))
+			.where(and(inArray(recipes.id, recipeIds), isVisible))
+	]);
+	const peopleById = new Map(people.map((row) => [row.id, person(row.username, row.name)]));
+	const existingIds = new Set(existing.map(({ id }) => id));
+	return (row: RecipeContextRow) =>
+		row.recipe.attribution.map((entry) => ({
+			recipeId: entry.recipeId,
+			title: entry.title,
+			author: (entry.userId && peopleById.get(entry.userId)) || null,
+			exists: existingIds.has(entry.recipeId)
+		}));
+};
+
+/** All queries run in parallel, so that a cold page render waits for one database round trip */
+const loadRows = async (db: Database, recipeIds: string[]): Promise<RecipeRows[]> => {
+	const ofRecipes = (column: Column) => inArray(column, recipeIds);
 
 	const [categoryMap, recipeRows, ingredientRows, stepRows, linkRows] = await Promise.all([
 		categoriesById(db),
-		db.select().from(recipes).where(ofRecipes(recipes.id)),
+		selectRecipes(db).where(ofRecipes(recipes.id)),
 		db.select().from(ingredients).where(ofRecipes(ingredients.recipeId)),
 		db.select().from(steps).where(ofRecipes(steps.recipeId)),
 		db
@@ -25,65 +110,111 @@ const loadRows = async (db: Database, recipeIds?: string[]): Promise<RecipeRows[
 			.innerJoin(steps, eq(stepIngredients.stepId, steps.id))
 			.where(ofRecipes(steps.recipeId))
 	]);
+	const attributionOf = await resolveAttribution(db, recipeRows);
 
-	return recipeRows.map((recipe) => {
-		const recipeSteps = stepRows.filter((row) => row.recipeId === recipe.id);
-		const stepIds = new Set(recipeSteps.map((row) => row.id));
+	return recipeRows.map((row) => {
+		const { recipe } = row;
+		const recipeSteps = stepRows.filter((step) => step.recipeId === recipe.id);
+		const stepIds = new Set(recipeSteps.map((step) => step.id));
 		return {
 			recipe,
 			category: categoryMap.get(recipe.categoryId)!,
-			ingredients: ingredientRows.filter((row) => row.recipeId === recipe.id),
+			ingredients: ingredientRows.filter((ingredient) => ingredient.recipeId === recipe.id),
 			steps: recipeSteps,
-			stepIngredients: linkRows.filter((row) => stepIds.has(row.stepId))
+			stepIngredients: linkRows.filter((link) => stepIds.has(link.stepId)),
+			context: {
+				cookbook: toCookbookRef(row),
+				author: person(row.authorUsername, row.authorName),
+				attribution: attributionOf(row),
+				hiddenCookbook: row.hiddenCookbook
+			}
 		};
 	});
 };
 
-export const getRecipe = async (db: Database, id: string): Promise<Recipe | undefined> => {
+/** Also returns deleted and hidden recipes, the callers decide who may see them */
+export const getRecipe = async (db: Database, id: string) => {
 	const [rows] = await loadRows(db, [id]);
-	return rows && mapRecipe(rows);
+	if (!rows) return undefined;
+	return {
+		recipe: mapRecipe(rows),
+		cookbookId: rows.recipe.cookbookId,
+		visible: !rows.recipe.deletedAt && !rows.recipe.hiddenAt && !rows.context.hiddenCookbook,
+		hiddenReason: rows.recipe.hiddenReason,
+		deletedAt: rows.recipe.deletedAt
+	};
 };
 
 export const getRecipeInput = async (db: Database, id: string) => {
 	const [rows] = await loadRows(db, [id]);
-	return rows && { input: mapRecipeInput(rows), image: rows.recipe.image };
-};
-
-/** Data for the home page tiles, without ingredients and steps */
-export const listRecipeSummaries = async (db: Database): Promise<RecipeSummary[]> => {
-	const [categoryMap, recipeRows] = await Promise.all([
-		categoriesById(db),
-		db.select().from(recipes)
-	]);
-	return sortRecipes(
-		recipeRows.map((recipe) => ({
-			id: recipe.id,
-			title: recipe.title,
-			image: recipe.image,
-			isNew: isNewRecipe(recipe.createdAt),
-			meta: {
-				portion: recipe.portion,
-				duration: recipe.duration,
-				category: categoryMap.get(recipe.categoryId)!,
-				nutritionType: recipe.nutritionType
-			}
-		}))
+	return (
+		rows && {
+			input: mapRecipeInput(rows),
+			image: rows.recipe.image,
+			cookbookId: rows.recipe.cookbookId,
+			version: rows.recipe.version
+		}
 	);
 };
 
-/** Data for the search, kept small because the browser loads it as a whole */
-export const listRecipeIndex = async (db: Database): Promise<RecipeIndexEntry[]> => {
-	const [categoryMap, recipeRows, ingredientRows] = await Promise.all([
+/** Data for the tiles, without ingredients and steps, only visible recipes */
+export const listRecipeSummaries = async (db: Database, where?: SQL): Promise<RecipeSummary[]> => {
+	const [categoryMap, rows] = await Promise.all([
 		categoriesById(db),
-		db.select().from(recipes),
-		db
-			.select({ recipeId: ingredients.recipeId, name: ingredients.name })
-			.from(ingredients)
-			.where(eq(ingredients.kind, 'ingredient'))
-			.orderBy(asc(ingredients.position))
+		selectRecipes(db).where(and(isVisible, where))
 	]);
+	return sortRecipes(rows.map((row) => toSummary(row, categoryMap)));
+};
+
+export const toSummary = (
+	{
+		recipe,
+		authorUsername,
+		authorName
+	}: Pick<RecipeContextRow, 'recipe' | 'authorUsername' | 'authorName'>,
+	categoryMap: Map<number, Category>
+): RecipeSummary => ({
+	id: recipe.id,
+	title: recipe.title,
+	image: recipe.image,
+	isNew: isNewRecipe(recipe.createdAt),
+	cookbookId: recipe.cookbookId,
+	author: person(authorUsername, authorName),
+	meta: {
+		portion: recipe.portion,
+		duration: recipe.duration,
+		category: categoryMap.get(recipe.categoryId)!,
+		nutritionType: recipe.nutritionType
+	}
+});
+
+/** Data for the search in the browser, kept small because it is loaded as a whole */
+export const listRecipeIndex = async (db: Database, where?: SQL): Promise<RecipeIndexEntry[]> => {
+	const [categoryMap, recipeRows] = await Promise.all([
+		categoriesById(db),
+		db
+			.select({ recipe: recipes })
+			.from(recipes)
+			.innerJoin(cookbooks, eq(cookbooks.id, recipes.cookbookId))
+			.where(and(isVisible, where))
+	]);
+	const ingredientRows = recipeRows.length
+		? await db
+				.select({ recipeId: ingredients.recipeId, name: ingredients.name })
+				.from(ingredients)
+				.where(
+					and(
+						eq(ingredients.kind, 'ingredient'),
+						inArray(
+							ingredients.recipeId,
+							recipeRows.map(({ recipe }) => recipe.id)
+						)
+					)
+				)
+				.orderBy(asc(ingredients.position))
+		: [];
 	return sortRecipes(
-		recipeRows.map((recipe) => ({
+		recipeRows.map(({ recipe }) => ({
 			id: recipe.id,
 			title: recipe.title,
 			meta: {

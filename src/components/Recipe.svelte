@@ -7,6 +7,7 @@
 	import { page } from '$app/state';
 
 	import { nutritionIcons } from '#lib/nutritionIcon.js';
+	import { cookbookPath, profilePath, recipePath } from '#lib/paths.js';
 	import RecipeImage from './RecipeImage.svelte';
 
 	import RecipeStep from './RecipeStep.svelte';
@@ -36,6 +37,15 @@
 
 	const isSection = (item: Ingredient | Section | Recipe['steps'][number]): item is Section =>
 		'section' in item && Boolean(item.section);
+
+	const formatDate = (date: Date) =>
+		new Intl.DateTimeFormat('de-DE', {
+			day: 'numeric',
+			month: 'short',
+			...(date.getFullYear() !== new Date().getFullYear() ? { year: 'numeric' } : {})
+		}).format(date);
+	const original = $derived(recipe.attribution[0]);
+	const sourceHost = $derived(recipe.sourceUrl && new URL(recipe.sourceUrl).hostname);
 
 	// rendered on the server as well, so that the button does not pop in after loading
 	const bringUrl = $derived(
@@ -175,6 +185,52 @@
 					</a>
 				</aside>
 			</div>
+
+			<footer class="recipe-footer">
+				<p>
+					In <a href={cookbookPath(recipe.cookbook)}>{recipe.cookbook.name}</a> von
+					<a href={profilePath(recipe.cookbook.ownerUsername)}>@{recipe.cookbook.ownerUsername}</a
+					>{#if recipe.author}
+						· hinzugefügt von <a href={profilePath(recipe.author.username)}>{recipe.author.name}</a
+						>{/if}
+					· zuletzt geändert {formatDate(recipe.updatedAt)}
+				</p>
+				{#if original}
+					<p>
+						Übernommen von
+						{#if original.exists}
+							<a href={recipePath({ id: original.recipeId, title: original.title })}
+								>{original.title}</a
+							>
+						{:else}
+							„{original.title}“ (Original nicht mehr verfügbar)
+						{/if}
+						{#if original.author}aus dem Kochbuch von
+							<a href={profilePath(original.author.username)}>@{original.author.username}</a>{/if}
+					</p>
+				{/if}
+				<p>
+					{#if recipe.attribution.length}
+						Angepasst von {recipe.author
+							? `@${recipe.author.username}`
+							: 'einer ehemaligen Person'}{#each recipe.attribution as entry (entry.recipeId)}, nach
+							„{entry.title}“ von {entry.author
+								? `@${entry.author.username}`
+								: 'einer ehemaligen Person'}{/each},
+					{:else}
+						Rezept von {recipe.author ? `@${recipe.author.username}` : 'einer ehemaligen Person'},
+					{/if}
+					<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.de" rel="license"
+						>CC BY-SA 4.0</a
+					>
+				</p>
+				{#if recipe.sourceUrl}
+					<p>
+						<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- external link -->
+						Quelle: <a href={recipe.sourceUrl} rel="nofollow noopener noreferrer">{sourceHost}</a>
+					</p>
+				{/if}
+			</footer>
 		</div>
 	</div>
 </section>
@@ -451,6 +507,24 @@
 	}
 	.bring-button:hover {
 		opacity: 0.85;
+	}
+
+	.recipe-footer {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		margin-top: 3rem;
+		padding-top: 1.25rem;
+		font-size: 0.8125rem;
+		line-height: 1.5;
+		color: var(--color-text-subtle);
+		border-top: 1px solid var(--color-border);
+	}
+	.recipe-footer p {
+		margin: 0;
+	}
+	.recipe-footer a {
+		color: var(--color-text-muted);
 	}
 
 	@media (max-width: 700px) {

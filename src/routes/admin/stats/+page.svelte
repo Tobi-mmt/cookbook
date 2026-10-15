@@ -81,15 +81,7 @@
 			{#each data.pages as page (page.path)}
 				<tr>
 					<td>
-						<a
-							href={page.path.startsWith('/recipe/')
-								? resolve('/recipe/[...recipeSlug]', {
-										recipeSlug: page.path.slice('/recipe/'.length)
-									})
-								: resolve('/')}
-							target="_blank"
-							rel="noreferrer">{page.title ?? page.path}</a
-						>
+						<a href={page.path} target="_blank" rel="noreferrer">{page.title ?? page.path}</a>
 						{#if page.title}<span class="path">{page.path}</span>{/if}
 					</td>
 					<td class="number">{page.visitors}</td>

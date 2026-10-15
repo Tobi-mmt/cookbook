@@ -2,9 +2,8 @@
 	import type Fuse from 'fuse.js';
 	import SearchIcon from '@lucide/svelte/icons/search';
 	import { afterNavigate } from '$app/navigation';
-	import { resolve } from '$app/paths';
 	import { loadRecipeIndex, recipeIndex } from '#lib/recipeIndex.js';
-	import { slugerize } from '#lib/slugerize.js';
+	import { recipePath } from '#lib/paths.js';
 
 	/** on phones the field is hidden behind a button and takes the whole top bar when open */
 	export let expanded = false;
@@ -131,11 +130,7 @@
 				<ul class="results" bind:this={listRef}>
 					{#each results as { item } (item.id)}
 						<li>
-							<a
-								href={resolve('/recipe/[...recipeSlug]', {
-									recipeSlug: `${item.id}/${slugerize(item.title)}`
-								})}
-							>
+							<a href={recipePath(item)}>
 								<span class="category" style="--color: {item.meta.category.color}"
 									>{item.meta.category.name}</span
 								>

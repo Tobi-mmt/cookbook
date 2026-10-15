@@ -19,7 +19,7 @@ function generateSiteMap(recipes: RecipeIndexEntry[]) {
 				.map(({ id, title }) => {
 					return `
        <url>
-           <loc>${`${BASE_URL}/recipe/${id}/${slugerize(title)}`}</loc>
+           <loc>${`${BASE_URL}/rezept/${id}/${slugerize(title)}`}</loc>
        </url>
      `;
 				})
