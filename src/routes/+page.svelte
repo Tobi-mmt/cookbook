@@ -19,6 +19,7 @@
 
 	// the page is cached for everybody, the own recipes come from the browser
 	let ownRecipes = $state<RecipeSummary[]>([]);
+	let ownRecipesLoaded = $state(false);
 	$effect(() => {
 		if (!user) {
 			ownRecipes = [];
@@ -26,7 +27,10 @@
 		}
 		fetch('/api/me/rezepte')
 			.then((response) => response.json())
-			.then((list: RecipeSummary[]) => (ownRecipes = list))
+			.then((list: RecipeSummary[]) => {
+				ownRecipes = list;
+				ownRecipesLoaded = true;
+			})
 			.catch(console.error);
 	});
 
@@ -61,22 +65,30 @@
 	<meta property="og:image" content="{page.url.origin}/og-image.png" />
 </svelte:head>
 
-{#if hasTabs}
-	<div class="tabs" role="tablist" aria-label="Rezepte" bind:this={tabs}>
-		<button
-			type="button"
-			role="tab"
-			aria-selected={tab === 'meine'}
-			onclick={() => showTab('meine')}>Meine Rezepte</button
-		>
-		<button
-			type="button"
-			role="tab"
-			aria-selected={tab === 'entdecken'}
-			onclick={() => showTab('entdecken')}>Entdecken</button
-		>
-	</div>
-{/if}
+<!-- one fixed place above the search for the switch, the way in for guests or the first
+	recipe, so that nothing moves once the person is known -->
+<div class="slot">
+	{#if hasTabs}
+		<div class="tabs" role="tablist" aria-label="Rezepte" bind:this={tabs}>
+			<button
+				type="button"
+				role="tab"
+				aria-selected={tab === 'meine'}
+				onclick={() => showTab('meine')}>Meine Rezepte</button
+			>
+			<button
+				type="button"
+				role="tab"
+				aria-selected={tab === 'entdecken'}
+				onclick={() => showTab('entdecken')}>Entdecken</button
+			>
+		</div>
+	{:else if me.current && !user}
+		<a class="btn btn--primary" href={resolve('/anmelden')}>Eigenes Kochbuch anlegen</a>
+	{:else if user && ownRecipesLoaded}
+		<a class="btn" href={resolve('/neu')}>Erstes Rezept anlegen</a>
+	{/if}
+</div>
 
 {#if tab === 'meine'}
 	<!-- the search covers only the chosen part: here the own recipes -->
@@ -93,12 +105,6 @@
 	</p>
 {:else}
 	<SearchField action={resolve('/suche')} placeholder="Alle Rezepte durchsuchen" />
-
-	{#if me.current && !user}
-		<p class="entry">
-			<a class="btn btn--primary" href={resolve('/anmelden')}>Eigenes Kochbuch anlegen</a>
-		</p>
-	{/if}
 
 	<FilterChips {categories} compact />
 
@@ -125,18 +131,18 @@
 {/if}
 
 <style>
-	.entry {
+	.slot {
 		display: flex;
 		justify-content: center;
-		min-height: 2.5rem;
-		margin: 1rem 0 0;
+		align-items: center;
+		min-height: 2.75rem;
+		margin: 1.5rem 1.5rem 0;
 	}
 	.tabs {
 		display: flex;
 		justify-content: center;
 		gap: 0.25rem;
 		width: fit-content;
-		margin: 1.5rem auto 0;
 		padding: 0.25rem;
 		background: var(--color-surface-muted);
 		border-radius: var(--radius-pill);
