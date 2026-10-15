@@ -12,6 +12,7 @@ import { banUser, unbanUser } from '#lib/server/moderation/decisions.js';
 import { storageUsage } from '#lib/server/storageUsage.js';
 import { changeUsername, isUsernameAvailable } from '#lib/server/users.js';
 import { validateUsername } from '#lib/username.js';
+import { revalidate } from '#lib/server/revalidate.js';
 
 const loadPerson = async (id: string) => {
 	const person = await getDb().query.users.findFirst({ where: eq(users.id, id) });
@@ -98,6 +99,7 @@ export const actions = {
 				return fail(400, { error: 'Dieser Benutzername ist vergeben.' });
 			}
 			await changeUsername(db, before.id, values.username);
+			await revalidate(event.url.origin, [`/@${before.username}`, `/@${values.username}`]);
 		}
 		await db
 			.update(users)
