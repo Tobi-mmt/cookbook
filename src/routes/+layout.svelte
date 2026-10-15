@@ -4,6 +4,7 @@
 	import TopBar from '#components/TopBar.svelte';
 	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/state';
+	import '#lib/styles/ui.css';
 	// imported, so that the file name has a hash and the browser caches it for a year
 	import robotoRegular from '#lib/assets/fonts/roboto/roboto-v29-latin-regular.woff2';
 
