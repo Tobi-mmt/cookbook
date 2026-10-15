@@ -27,7 +27,7 @@
 		z-index: 10;
 		padding: 0.5rem 1.5rem;
 		background: var(--color-surface);
-		box-shadow: 0 0 15px rgb(0 0 0 / 0.2);
+		box-shadow: 0 1px 4px rgb(0 0 0 / 0.08);
 	}
 	/* the bar spans the whole width, its content as wide as the recipe content */
 	.top-bar-inner {
