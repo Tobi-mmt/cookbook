@@ -3,14 +3,14 @@ import type { HandleClientError } from '@sveltejs/kit/hooks';
 const MAX_REPORTS = 5;
 const sent = new Set<string>();
 
-/** Sends an error once per page load to `/api/fehler`, at most a handful */
+/** Sends an error once per page load to `/api/error`, at most a handful */
 const report = (error: unknown) => {
 	const { name, message, stack } =
 		error instanceof Error ? error : { name: 'Error', message: String(error), stack: undefined };
 	if (sent.has(message) || sent.size >= MAX_REPORTS || navigator.webdriver) return;
 	sent.add(message);
 	navigator.sendBeacon(
-		'/api/fehler',
+		'/api/error',
 		JSON.stringify({ name, message, stack, path: location.pathname })
 	);
 };
