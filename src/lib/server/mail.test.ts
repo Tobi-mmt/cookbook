@@ -11,7 +11,7 @@ describe('renderMail', () => {
 
 	test('creates a text version with the link', () => {
 		expect(mail.text).toBe(
-			'Hallo <Tobi>,\n\nklicke auf den Link.\n\nAnmelden: https://example.com/?a=1&b=2\n\n--\n\nDu hast die Anmeldung nicht angefordert? Dann ignoriere diese Mail.'
+			'Kochbuchbande\n\nHallo <Tobi>,\n\nklicke auf den Link.\n\nAnmelden: https://example.com/?a=1&b=2\n\n--\n\nDu hast die Anmeldung nicht angefordert? Dann ignoriere diese Mail.\n\nKochbuchbande · kochbuchbande.de\nRezepte sammeln und gemeinsam Kochbücher pflegen'
 		);
 	});
 
