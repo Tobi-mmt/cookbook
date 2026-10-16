@@ -186,10 +186,7 @@
 	</p>
 
 	<h2>Dienstleister</h2>
-	<p>
-		Diese Dienstleister verarbeiten Daten in unserem Auftrag. Mit allen besteht ein Vertrag zur
-		Auftragsverarbeitung.
-	</p>
+	<p>Diese Dienstleister verarbeiten Daten in unserem Auftrag.</p>
 	<dl class="providers">
 		{#each providers as provider (provider.name)}
 			<div>
