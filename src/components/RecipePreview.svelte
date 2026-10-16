@@ -49,9 +49,10 @@
 					<span class="badge">NEU</span>
 				{/if}
 				<div class="infos">
-					<p class="category">{recipe.meta.category.name}</p>
+					<p class="category">
+						{recipe.meta.category.name}{#if byline}<span class="byline">{byline}</span>{/if}
+					</p>
 					<h2 class="title">{recipe.title}</h2>
-					{#if byline}<p class="byline">{byline}</p>{/if}
 					<div class="meta">
 						<div class="meta-item">
 							<span class="icon"><Hourglass size="1.1em" aria-hidden="true" /></span>
@@ -179,9 +180,11 @@
 		display: flex;
 		align-items: center;
 		gap: 0.4em;
+		white-space: nowrap;
 	}
 	.category::before {
 		content: '';
+		flex: none;
 		width: 0.5em;
 		height: 0.5em;
 		border-radius: 50%;
@@ -204,10 +207,9 @@
 		hyphens: auto;
 	}
 	.byline {
-		margin: 0;
-		font-size: 0.75rem;
-		line-height: 1.3;
-		color: var(--color-text-subtle);
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 	.meta {
 		display: flex;
