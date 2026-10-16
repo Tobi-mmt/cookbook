@@ -3,8 +3,8 @@ import { deleteRequestedAccounts } from './accounts';
 import { closeCasesOfDeletedTargets, sendDailyReportSummary } from './moderation/reports';
 import { affectedPaths } from './affectedPaths';
 import type { Database } from './db/client';
-import { cookbookEditors, mailLog, users } from './db/schema';
-import { renderMail, resendPendingMails, sendMail } from './mail';
+import { cookbookEditors, mailLog, sessions, users } from './db/schema';
+import { deleteOldMailLog, renderMail, resendPendingMails, sendMail } from './mail';
 import { deleteExpiredRateLimits, hitRateLimit } from './rateLimit';
 import { addDays, aggregateDailyViews, deleteOldPageViews } from './recipeViews';
 import { LIST_PATHS, revalidate } from './revalidate';
@@ -129,6 +129,11 @@ export const runDailyJob = async (
 	await step('closedCases', () => closeCasesOfDeletedTargets(db));
 	await step('reportSummary', () => sendDailyReportSummary(db, origin, now));
 	await step('imageSizes', () => backfillImageSizes(db));
+	await step('mailLog', async () => (await deleteOldMailLog(db, now)).rowCount);
+	await step(
+		'sessions',
+		async () => (await db.delete(sessions).where(lt(sessions.expiresAt, now))).rowCount
+	);
 	await step('rateLimits', async () => (await deleteExpiredRateLimits(db, now)).rowCount);
 	await step('revalidate', async () =>
 		revalidate(origin, [...LIST_PATHS, ...(await newlyIndexablePaths(db, now))])
