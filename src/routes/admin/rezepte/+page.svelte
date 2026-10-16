@@ -33,19 +33,21 @@
 	<input class="input" name="person" value={data.person} placeholder="@person" />
 	<button type="submit" class="btn">Suchen</button>
 </form>
-<table class="table">
-	<thead><tr><th>Titel</th><th>Kochbuch</th><th>Von</th><th>Status</th></tr></thead>
-	<tbody>
-		{#each data.recipes as recipe (recipe.id)}
-			<tr>
-				<td><a href={resolve('/admin/rezepte/[id]', { id: recipe.id })}>{recipe.title}</a></td>
-				<td>{recipe.cookbook} (@{recipe.owner})</td>
-				<td>{recipe.author ? `@${recipe.author}` : '–'}</td>
-				<td>{recipe.deleted ? 'gelöscht' : recipe.hidden ? 'ausgeblendet' : ''}</td>
-			</tr>
-		{/each}
-	</tbody>
-</table>
+<div class="table-scroll">
+	<table class="table">
+		<thead><tr><th>Titel</th><th>Kochbuch</th><th>Von</th><th>Status</th></tr></thead>
+		<tbody>
+			{#each data.recipes as recipe (recipe.id)}
+				<tr>
+					<td><a href={resolve('/admin/rezepte/[id]', { id: recipe.id })}>{recipe.title}</a></td>
+					<td>{recipe.cookbook} (@{recipe.owner})</td>
+					<td>{recipe.author ? `@${recipe.author}` : '–'}</td>
+					<td>{recipe.deleted ? 'gelöscht' : recipe.hidden ? 'ausgeblendet' : ''}</td>
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+</div>
 
 <style>
 	.search {

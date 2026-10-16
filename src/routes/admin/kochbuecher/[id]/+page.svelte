@@ -57,27 +57,29 @@
 </form>
 
 <h2>Bearbeiter</h2>
-<table class="table">
-	<tbody>
-		{#each data.members as member (member.userId)}
-			<tr>
-				<td>
-					<a href={resolve('/admin/personen/[id]', { id: member.userId })}>{member.name}</a>
-					{member.username ? `@${member.username}` : ''}
-				</td>
-				<td>{member.role === 'owner' ? 'Besitzer' : 'Bearbeiter'}</td>
-				<td>
-					{#if member.role === 'editor'}
-						<form method="POST" action="?/removeEditor" use:enhance>
-							<input type="hidden" name="userId" value={member.userId} />
-							<button type="submit" class="btn btn--quiet btn--danger">Entfernen</button>
-						</form>
-					{/if}
-				</td>
-			</tr>
-		{/each}
-	</tbody>
-</table>
+<div class="table-scroll">
+	<table class="table">
+		<tbody>
+			{#each data.members as member (member.userId)}
+				<tr>
+					<td>
+						<a href={resolve('/admin/personen/[id]', { id: member.userId })}>{member.name}</a>
+						{member.username ? `@${member.username}` : ''}
+					</td>
+					<td>{member.role === 'owner' ? 'Besitzer' : 'Bearbeiter'}</td>
+					<td>
+						{#if member.role === 'editor'}
+							<form method="POST" action="?/removeEditor" use:enhance>
+								<input type="hidden" name="userId" value={member.userId} />
+								<button type="submit" class="btn btn--quiet btn--danger">Entfernen</button>
+							</form>
+						{/if}
+					</td>
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+</div>
 <form method="POST" action="?/addEditor" class="row add" use:enhance>
 	<input class="input" name="username" placeholder="@benutzername" required />
 	<button type="submit" class="btn">Hinzufügen</button>

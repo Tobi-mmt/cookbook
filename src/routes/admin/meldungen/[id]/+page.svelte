@@ -140,32 +140,36 @@
 
 <section>
 	<h2>Meldungen ({data.reports.length})</h2>
-	<table class="table">
-		<tbody>
-			{#each data.reports as report (report.id)}
-				<tr>
-					<td>
-						<strong>{reasonLabel(report.reason)}</strong>
-						{#if report.comment}<br />{report.comment}{/if}
-						{#if report.originalUrl}<br />Original:
-							<a href={report.originalUrl} rel="noreferrer" target="_blank">{report.originalUrl}</a>
-							({report.isRightsHolder ? 'Rechteinhaber' : 'im Auftrag'}){/if}
-					</td>
-					<td>
-						{report.reporterName ?? report.email ?? 'Gast'}
-						{#if report.unreliable}<span class="hint">(unzuverlässig)</span>{/if}
-						{#if report.reporterId && !report.unreliable}
-							<form method="POST" action="?/unreliable" use:enhance>
-								<input type="hidden" name="userId" value={report.reporterId} />
-								<button type="submit" class="btn btn--quiet">als unzuverlässig markieren</button>
-							</form>
-						{/if}
-					</td>
-					<td>{format(report.createdAt)}</td>
-				</tr>
-			{/each}
-		</tbody>
-	</table>
+	<div class="table-scroll">
+		<table class="table">
+			<tbody>
+				{#each data.reports as report (report.id)}
+					<tr>
+						<td>
+							<strong>{reasonLabel(report.reason)}</strong>
+							{#if report.comment}<br />{report.comment}{/if}
+							{#if report.originalUrl}<br />Original:
+								<a href={report.originalUrl} rel="noreferrer" target="_blank"
+									>{report.originalUrl}</a
+								>
+								({report.isRightsHolder ? 'Rechteinhaber' : 'im Auftrag'}){/if}
+						</td>
+						<td>
+							{report.reporterName ?? report.email ?? 'Gast'}
+							{#if report.unreliable}<span class="hint">(unzuverlässig)</span>{/if}
+							{#if report.reporterId && !report.unreliable}
+								<form method="POST" action="?/unreliable" use:enhance>
+									<input type="hidden" name="userId" value={report.reporterId} />
+									<button type="submit" class="btn btn--quiet">als unzuverlässig markieren</button>
+								</form>
+							{/if}
+						</td>
+						<td>{format(report.createdAt)}</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
 </section>
 
 {#if data.history.length}

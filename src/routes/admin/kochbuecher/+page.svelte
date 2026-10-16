@@ -28,21 +28,24 @@
 	<input class="input" name="q" value={data.query} placeholder="Name oder Besitzer" />
 	<button type="submit" class="btn">Suchen</button>
 </form>
-<table class="table">
-	<thead><tr><th>Name</th><th>Besitzer</th><th>Rezepte</th><th>Status</th></tr></thead>
-	<tbody>
-		{#each data.cookbooks as cookbook (cookbook.id)}
-			<tr>
-				<td
-					><a href={resolve('/admin/kochbuecher/[id]', { id: cookbook.id })}>{cookbook.name}</a></td
-				>
-				<td>@{cookbook.owner}</td>
-				<td>{cookbook.recipes}</td>
-				<td>{cookbook.deleted ? 'gelöscht' : cookbook.hidden ? 'ausgeblendet' : ''}</td>
-			</tr>
-		{/each}
-	</tbody>
-</table>
+<div class="table-scroll">
+	<table class="table">
+		<thead><tr><th>Name</th><th>Besitzer</th><th>Rezepte</th><th>Status</th></tr></thead>
+		<tbody>
+			{#each data.cookbooks as cookbook (cookbook.id)}
+				<tr>
+					<td
+						><a href={resolve('/admin/kochbuecher/[id]', { id: cookbook.id })}>{cookbook.name}</a
+						></td
+					>
+					<td>@{cookbook.owner}</td>
+					<td>{cookbook.recipes}</td>
+					<td>{cookbook.deleted ? 'gelöscht' : cookbook.hidden ? 'ausgeblendet' : ''}</td>
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+</div>
 
 <style>
 	.search {

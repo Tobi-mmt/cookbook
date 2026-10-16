@@ -41,17 +41,19 @@
 </div>
 
 <h2>Neue Personen</h2>
-<table class="table">
-	<tbody>
-		{#each data.latestPeople as person (person.id)}
-			<tr>
-				<td><a href={resolve('/admin/personen/[id]', { id: person.id })}>{person.name}</a></td>
-				<td>{person.username ? `@${person.username}` : '–'}</td>
-				<td>{person.createdAt.toLocaleDateString('de-DE')}</td>
-			</tr>
-		{/each}
-	</tbody>
-</table>
+<div class="table-scroll">
+	<table class="table">
+		<tbody>
+			{#each data.latestPeople as person (person.id)}
+				<tr>
+					<td><a href={resolve('/admin/personen/[id]', { id: person.id })}>{person.name}</a></td>
+					<td>{person.username ? `@${person.username}` : '–'}</td>
+					<td>{person.createdAt.toLocaleDateString('de-DE')}</td>
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+</div>
 <p><a class="btn" href={resolve('/admin/stats')}>Aufrufstatistik</a></p>
 
 <style>

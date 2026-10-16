@@ -42,25 +42,27 @@
 	>
 </p>
 
-<table class="table">
-	<thead>
-		<tr><th>Fall</th><th>Gründe</th><th>Meldungen</th><th>Status</th><th>Seit</th></tr>
-	</thead>
-	<tbody>
-		{#each data.cases as item (item.id)}
-			<tr>
-				<td>
-					<a href={resolve('/admin/meldungen/[id]', { id: String(item.id) })}>
-						{item.appealOf ? 'Widerspruch: ' : ''}{REPORT_TARGET_LABELS[item.targetType]} „{item.title}“
-					</a>
-				</td>
-				<td>{(item.reasons ?? []).map(reasonLabel).join(', ') || '–'}</td>
-				<td>{item.reports}</td>
-				<td>{STATUS[item.status]}</td>
-				<td>{item.createdAt.toLocaleDateString('de-DE')}</td>
-			</tr>
-		{:else}
-			<tr><td colspan="5">Keine Fälle.</td></tr>
-		{/each}
-	</tbody>
-</table>
+<div class="table-scroll">
+	<table class="table">
+		<thead>
+			<tr><th>Fall</th><th>Gründe</th><th>Meldungen</th><th>Status</th><th>Seit</th></tr>
+		</thead>
+		<tbody>
+			{#each data.cases as item (item.id)}
+				<tr>
+					<td>
+						<a href={resolve('/admin/meldungen/[id]', { id: String(item.id) })}>
+							{item.appealOf ? 'Widerspruch: ' : ''}{REPORT_TARGET_LABELS[item.targetType]} „{item.title}“
+						</a>
+					</td>
+					<td>{(item.reasons ?? []).map(reasonLabel).join(', ') || '–'}</td>
+					<td>{item.reports}</td>
+					<td>{STATUS[item.status]}</td>
+					<td>{item.createdAt.toLocaleDateString('de-DE')}</td>
+				</tr>
+			{:else}
+				<tr><td colspan="5">Keine Fälle.</td></tr>
+			{/each}
+		</tbody>
+	</table>
+</div>

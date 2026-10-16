@@ -23,57 +23,65 @@
 {#if form?.saved}<p class="message" role="status">{form.saved}</p>{/if}
 {#if form?.error}<p class="message message--error" role="alert">{form.error}</p>{/if}
 
-<table class="table">
-	<thead>
-		<tr><th>Name</th><th>Farbe</th><th>Position</th><th>Rezepte</th><th></th></tr>
-	</thead>
-	<tbody>
-		{#each data.categories as category (category.id)}
-			{@const formId = `category-${category.id}`}
-			<tr>
-				<!-- the inputs of a row belong to the form in its last cell -->
-				<td
-					><input class="input name" name="name" value={category.name} form={formId} required /></td
-				>
-				<td>
-					<input
-						class="input color"
-						type="color"
-						name="color"
-						value={category.color}
-						form={formId}
-						aria-label="Farbe von {category.name}"
-					/>
-				</td>
-				<td>
-					<input
-						class="input position"
-						type="number"
-						name="position"
-						value={category.position}
-						form={formId}
-						aria-label="Position von {category.name}"
-					/>
-				</td>
-				<td>{category.recipes}</td>
-				<td>
-					<div class="row">
-						<form id={formId} method="POST" action="?/update" use:enhance>
-							<input type="hidden" name="id" value={category.id} />
-							<button type="submit" class="btn">Speichern</button>
-						</form>
-						<button
-							type="button"
-							class="btn btn--quiet btn--danger"
-							aria-expanded={confirmDelete === category.id}
-							onclick={() => (confirmDelete = category.id)}>Löschen</button
-						>
-					</div>
-				</td>
-			</tr>
-		{/each}
-	</tbody>
-</table>
+<div class="table-scroll">
+	<table class="table">
+		<thead>
+			<tr><th>Name</th><th>Farbe</th><th>Position</th><th>Rezepte</th><th></th></tr>
+		</thead>
+		<tbody>
+			{#each data.categories as category (category.id)}
+				{@const formId = `category-${category.id}`}
+				<tr>
+					<!-- the inputs of a row belong to the form in its last cell -->
+					<td
+						><input
+							class="input name"
+							name="name"
+							value={category.name}
+							form={formId}
+							required
+						/></td
+					>
+					<td>
+						<input
+							class="input color"
+							type="color"
+							name="color"
+							value={category.color}
+							form={formId}
+							aria-label="Farbe von {category.name}"
+						/>
+					</td>
+					<td>
+						<input
+							class="input position"
+							type="number"
+							name="position"
+							value={category.position}
+							form={formId}
+							aria-label="Position von {category.name}"
+						/>
+					</td>
+					<td>{category.recipes}</td>
+					<td>
+						<div class="row">
+							<form id={formId} method="POST" action="?/update" use:enhance>
+								<input type="hidden" name="id" value={category.id} />
+								<button type="submit" class="btn">Speichern</button>
+							</form>
+							<button
+								type="button"
+								class="btn btn--quiet btn--danger"
+								aria-expanded={confirmDelete === category.id}
+								onclick={() => (confirmDelete = category.id)}>Löschen</button
+							>
+						</div>
+					</td>
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+</div>
 
 {#each data.categories as category (category.id)}
 	{@const formId = `delete-category-${category.id}`}

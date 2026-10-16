@@ -70,57 +70,61 @@
 {#if data.pages.length === 0}
 	<p>In diesem Zeitraum gab es keine Besucher.</p>
 {:else}
-	<table>
-		<thead>
-			<tr>
-				<th>Seite</th>
-				<th class="number">Besucher</th>
-				<th class="number">Aufrufe</th>
-			</tr>
-		</thead>
-		<tbody>
-			{#each data.pages as page (page.path)}
+	<div class="table-scroll">
+		<table>
+			<thead>
 				<tr>
-					<td>
-						<a href={page.path} target="_blank" rel="noreferrer">{page.title ?? page.path}</a>
-						{#if page.title}<span class="path">{page.path}</span>{/if}
-					</td>
-					<td class="number">{page.visitors}</td>
-					<td class="number">{page.pageViews}</td>
+					<th>Seite</th>
+					<th class="number">Besucher</th>
+					<th class="number">Aufrufe</th>
 				</tr>
-			{/each}
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				{#each data.pages as page (page.path)}
+					<tr>
+						<td>
+							<a href={page.path} target="_blank" rel="noreferrer">{page.title ?? page.path}</a>
+							{#if page.title}<span class="path">{page.path}</span>{/if}
+						</td>
+						<td class="number">{page.visitors}</td>
+						<td class="number">{page.pageViews}</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
 {/if}
 
 {#snippet breakdown(title: string, rows: BreakdownStats[])}
 	<section>
 		<h2>{title}</h2>
-		<table>
-			<thead>
-				<tr>
-					<th>{title}</th>
-					<th class="number">Besucher</th>
-					<th class="number">Aufrufe</th>
-					<th class="number">Anteil</th>
-				</tr>
-			</thead>
-			<tbody>
-				{#each rows as row (row.value)}
-					{@const share = pageViews ? row.pageViews / pageViews : 0}
+		<div class="table-scroll">
+			<table>
+				<thead>
 					<tr>
-						<td>{row.value ?? 'Unbekannt'}</td>
-						<td class="number">{row.visitors}</td>
-						<td class="number">{row.pageViews}</td>
-						<td class="number share" style="--share: {share * 100}%">
-							{percentFormat.format(share)}
-						</td>
+						<th>{title}</th>
+						<th class="number">Besucher</th>
+						<th class="number">Aufrufe</th>
+						<th class="number">Anteil</th>
 					</tr>
-				{:else}
-					<tr><td colspan="4">Keine Daten</td></tr>
-				{/each}
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					{#each rows as row (row.value)}
+						{@const share = pageViews ? row.pageViews / pageViews : 0}
+						<tr>
+							<td>{row.value ?? 'Unbekannt'}</td>
+							<td class="number">{row.visitors}</td>
+							<td class="number">{row.pageViews}</td>
+							<td class="number share" style="--share: {share * 100}%">
+								{percentFormat.format(share)}
+							</td>
+						</tr>
+					{:else}
+						<tr><td colspan="4">Keine Daten</td></tr>
+					{/each}
+				</tbody>
+			</table>
+		</div>
 	</section>
 {/snippet}
 
@@ -131,24 +135,26 @@
 
 <details>
 	<summary>Alle Tage</summary>
-	<table>
-		<thead>
-			<tr>
-				<th>Tag</th>
-				<th class="number">Besucher</th>
-				<th class="number">Aufrufe</th>
-			</tr>
-		</thead>
-		<tbody>
-			{#each [...data.days].reverse() as day (day.day)}
+	<div class="table-scroll">
+		<table>
+			<thead>
 				<tr>
-					<td>{formatDay(day.day)}</td>
-					<td class="number">{day.visitors}</td>
-					<td class="number">{day.pageViews}</td>
+					<th>Tag</th>
+					<th class="number">Besucher</th>
+					<th class="number">Aufrufe</th>
 				</tr>
-			{/each}
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				{#each [...data.days].reverse() as day (day.day)}
+					<tr>
+						<td>{formatDay(day.day)}</td>
+						<td class="number">{day.visitors}</td>
+						<td class="number">{day.pageViews}</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
 </details>
 
 <p class="hint">

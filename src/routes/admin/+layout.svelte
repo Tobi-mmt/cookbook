@@ -93,6 +93,10 @@
 		font-size: 1.5rem;
 		font-weight: 400;
 	}
+	.admin :global(.table-scroll) {
+		max-width: 100%;
+		overflow-x: auto;
+	}
 	.admin :global(.table) {
 		width: 100%;
 		border-collapse: collapse;
