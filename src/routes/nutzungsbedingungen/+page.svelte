@@ -1,6 +1,7 @@
 <script lang="ts">
+	import Email from '#components/Email.svelte';
 	import { resolve } from '$app/paths';
-	import { SITE_NAME, SUPPORT_EMAIL } from '#lib/site.js';
+	import { SITE_NAME } from '#lib/site.js';
 </script>
 
 <svelte:head>
@@ -75,8 +76,7 @@
 		Ändern sich diese Bedingungen, informieren wir dich mindestens 4 Wochen vorher per E-Mail. Was
 		mit deinen Daten geschieht, steht in der <a href={resolve('/datenschutz')}
 			>Datenschutzerklärung</a
-		>. Fragen beantworten wir unter <a href="mailto:{SUPPORT_EMAIL}">{SUPPORT_EMAIL}</a>. Es gilt
-		deutsches Recht.
+		>. Fragen beantworten wir unter <Email />. Es gilt deutsches Recht.
 	</p>
 </article>
 

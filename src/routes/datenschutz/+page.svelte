@@ -1,6 +1,7 @@
 <script lang="ts">
+	import Email from '#components/Email.svelte';
 	import { resolve } from '$app/paths';
-	import { OPERATOR, SITE_NAME, SUPPORT_EMAIL } from '#lib/site.js';
+	import { OPERATOR, SITE_NAME } from '#lib/site.js';
 
 	const US_TRANSFER =
 		'Das Unternehmen sitzt in den USA und ist nach dem EU-US Data Privacy Framework zertifiziert, das ein angemessenes Datenschutzniveau sicherstellt.';
@@ -77,7 +78,7 @@
 	<p>
 		{OPERATOR.name}<br />
 		{#each OPERATOR.address as line, index (index)}{line}<br />{/each}
-		E-Mail: <a href="mailto:{SUPPORT_EMAIL}">{SUPPORT_EMAIL}</a>
+		E-Mail: <Email />
 	</p>
 
 	<h2>Beim Aufruf der Seite</h2>
@@ -217,8 +218,8 @@
 		Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung,
 		Datenübertragbarkeit und Widerspruch gegen Verarbeitungen aus berechtigtem Interesse. Vieles
 		kannst du selbst unter „Konto“ erledigen, sonst schreib an
-		<a href="mailto:{SUPPORT_EMAIL}">{SUPPORT_EMAIL}</a>. Du kannst dich außerdem bei einer
-		Datenschutz-Aufsichtsbehörde beschweren, zum Beispiel der deines Bundeslands.
+		<Email />. Du kannst dich außerdem bei einer Datenschutz-Aufsichtsbehörde beschweren, zum
+		Beispiel der deines Bundeslands.
 	</p>
 	<p>
 		Für die Nutzung gelten die <a href={resolve('/nutzungsbedingungen')}>Nutzungsbedingungen</a>.
