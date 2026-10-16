@@ -8,14 +8,14 @@ export const ingredientInputSchema = z.object({
 	/** stable id within the editor, referenced by the steps */
 	clientId: z.string().min(1),
 	kind: z.enum(['ingredient', 'section']),
-	name: trimmed.min(1, 'Name fehlt'),
+	name: trimmed.min(1, 'Eine Zutat oder ein Abschnitt hat keinen Namen'),
 	quantity: z.number().positive().nullable().optional(),
 	unit: trimmed.nullable().optional()
 });
 
 export const stepInputSchema = z.object({
 	kind: z.enum(['step', 'section']),
-	text: trimmed.min(1, 'Text fehlt'),
+	text: trimmed.min(1, 'Ein Schritt oder Abschnitt hat keinen Text'),
 	links: z
 		.array(
 			z.object({
@@ -38,12 +38,18 @@ export const recipeInputSchema = z
 				.nullable()
 				.optional()
 		),
-		portion: z.number().int().positive(),
-		duration: z.number().int().positive(),
-		categoryId: z.number().int().positive(),
-		nutritionType: z.enum(NUTRITION_TYPES),
+		portion: z
+			.number({ error: 'Portionen fehlen' })
+			.int('Portionen müssen eine ganze Zahl sein')
+			.positive('Portionen müssen mindestens 1 sein'),
+		duration: z
+			.number({ error: 'Dauer fehlt' })
+			.int('Dauer muss eine ganze Zahl sein')
+			.positive('Dauer muss mindestens 1 Minute sein'),
+		categoryId: z.number({ error: 'Kategorie fehlt' }).int().positive(),
+		nutritionType: z.enum(NUTRITION_TYPES, { error: 'Ernährung fehlt' }),
 		ingredients: z.array(ingredientInputSchema),
-		steps: z.array(stepInputSchema).min(1, 'Mindestens ein Schritt')
+		steps: z.array(stepInputSchema).min(1, 'Mindestens ein Zubereitungsschritt fehlt')
 	})
 	.superRefine((recipe, ctx) => {
 		const ingredientIds = new Set(
