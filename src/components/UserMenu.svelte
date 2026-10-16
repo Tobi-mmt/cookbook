@@ -6,7 +6,7 @@
 	import { cookbookPath, profilePath } from '#lib/paths.js';
 	import BookOpen from '@lucide/svelte/icons/book-open';
 	import Plus from '@lucide/svelte/icons/plus';
-	import Dialog from '#components/Dialog.svelte';
+	import NewCookbookDialog from '#components/NewCookbookDialog.svelte';
 
 	let open = $state(false);
 	let root = $state<HTMLDivElement>();
@@ -25,27 +25,6 @@
 	};
 
 	let creating = $state(false);
-	let newName = $state('');
-	let createError = $state<string | null>(null);
-
-	const createCookbook = async (event: SubmitEvent) => {
-		event.preventDefault();
-		createError = null;
-		const response = await fetch('/api/kochbuch', {
-			method: 'POST',
-			headers: { 'content-type': 'application/json' },
-			body: JSON.stringify({ name: newName })
-		});
-		const body = await response.json().catch(() => null);
-		if (!response.ok) {
-			createError = body?.message ?? 'Das Kochbuch konnte nicht angelegt werden.';
-			return;
-		}
-		creating = false;
-		newName = '';
-		await me.refresh();
-		await goto(body.path);
-	};
 
 	const close = (event: Event) => {
 		if (!root?.contains(event.target as Node)) open = false;
@@ -110,32 +89,7 @@
 			</ul>
 		{/if}
 	</div>
-	<Dialog bind:open={creating} title="Neues Kochbuch">
-		<form id="new-cookbook" onsubmit={createCookbook}>
-			<label class="field">
-				Name
-				<!-- svelte-ignore a11y_autofocus -->
-				<input
-					class="input"
-					bind:value={newName}
-					placeholder="z. B. Grillen oder Weihnachten"
-					maxlength="80"
-					required
-					autofocus
-				/>
-			</label>
-			{#if createError}<p class="message message--error" role="alert">{createError}</p>{/if}
-		</form>
-		<p class="hint">Danach kannst du das Kochbuch mit anderen teilen.</p>
-		{#snippet actions()}
-			<button type="button" class="btn btn--quiet" onclick={() => (creating = false)}
-				>Abbrechen</button
-			>
-			<button type="submit" class="btn btn--primary" form="new-cookbook" disabled={!newName.trim()}
-				>Anlegen</button
-			>
-		{/snippet}
-	</Dialog>
+	<NewCookbookDialog bind:open={creating} />
 {:else if me.current?.needsOnboarding}
 	<a class="btn" href={resolve('/willkommen')}>Registrierung abschließen</a>
 {:else if me.current}

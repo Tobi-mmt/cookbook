@@ -7,6 +7,8 @@
 	import ReportDialog from '#components/ReportDialog.svelte';
 	import { me } from '#lib/me.svelte.js';
 	import BookOpen from '@lucide/svelte/icons/book-open';
+	import Plus from '@lucide/svelte/icons/plus';
+	import NewCookbookDialog from '#components/NewCookbookDialog.svelte';
 	import { cookbookPath, profilePath } from '#lib/paths.js';
 	import type { CookbookWithMembers } from '#lib/server/profiles.js';
 	import { SITE_NAME } from '#lib/site.js';
@@ -30,6 +32,8 @@
 			? me.current.cookbooks.find(({ role }) => role === 'owner')
 			: undefined
 	);
+	const isOwnProfile = $derived(me.current?.user?.username === profile.username);
+	let creating = $state(false);
 	const profileUrl = $derived(new URL(profilePath(profile.username), page.url.origin).href);
 </script>
 
@@ -51,7 +55,7 @@
 </header>
 
 <!-- the cookbooks are places of their own, a click leads there -->
-{#if data.cookbooks.length}
+{#if data.cookbooks.length || isOwnProfile}
 	<nav class="cookbooks" aria-label="Kochbücher von {profile.name}">
 		{#each data.cookbooks as cookbook (cookbook.id)}
 			<a class="cookbook" href={cookbookPath(cookbook)}>
@@ -67,7 +71,19 @@
 				</span>
 			</a>
 		{/each}
+		{#if isOwnProfile}
+			<button
+				type="button"
+				class="cookbook cookbook--new"
+				aria-label="Neues Kochbuch"
+				title="Neues Kochbuch"
+				onclick={() => (creating = true)}
+			>
+				<Plus size="1.1em" aria-hidden="true" />
+			</button>
+		{/if}
 	</nav>
+	<NewCookbookDialog bind:open={creating} />
 {/if}
 
 <RecipeBrowser
@@ -135,6 +151,15 @@
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius-md);
 		transition: border-color 0.15s;
+	}
+	.cookbook--new {
+		justify-content: center;
+		min-width: 3rem;
+		padding: 0.55rem 0.85rem;
+		font: inherit;
+		color: var(--color-text-subtle);
+		border-style: dashed;
+		cursor: pointer;
 	}
 	.cookbook:hover {
 		border-color: var(--color-text-subtle);
