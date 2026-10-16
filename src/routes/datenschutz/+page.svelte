@@ -22,11 +22,6 @@
 		die aufgerufene Seite, der Tag sowie Browser- und Betriebssystemfamilie ohne Version. Die
 		Rohdaten löschen wir nach 30 Monaten, die Summen pro Rezept und Tag behalten wir.
 	</p>
-	<p>
-		Tritt ein technischer Fehler auf, speichern wir eine Fehlermeldung mit der betroffenen Seite
-		ohne Parameter, dem Zeitpunkt sowie Browser- und Betriebssystemfamilie in unserem Fehler-Tracker
-		Bugsink. IP-Adresse, Konto und Inhalte gehören nicht dazu.
-	</p>
 
 	<h2>Mit Konto</h2>
 	<p>
@@ -43,11 +38,28 @@
 		einen Hash deiner IP-Adresse, um Missbrauch zu begrenzen.
 	</p>
 
+	<h2>Fehlerberichte</h2>
+	<p>
+		Damit wir technische Fehler finden und beheben können, schicken wir bei einem unerwarteten
+		Fehler einen Bericht an den Fehler-Tracker Bugsink. Er enthält die Fehlermeldung, die Stelle im
+		Programmcode, die betroffene Seite ohne Parameter, den Zeitpunkt, die Version der Anwendung und
+		bei Fehlern im Browser die Browser- und Betriebssystemfamilie ohne Version. Fehler im Browser
+		gehen zuerst an unseren Server, Bugsink erhält deine IP-Adresse deshalb nicht. Dein Konto und
+		deine Inhalte gehören nicht zum Bericht. Rechtsgrundlage ist unser berechtigtes Interesse an
+		einer fehlerfreien Anwendung (Art. 6 Abs. 1 lit. f DSGVO). Bugsink löscht die einzelnen Berichte
+		nach 60 Tagen. Die Zusammenfassung je Fehler, also Meldung, Anzahl und Zeitraum, bleibt
+		gespeichert, bis wir sie löschen.
+	</p>
+
 	<h2>Dienstleister</h2>
 	<p>
 		Die Anwendung läuft bei Vercel (Hosting und Bilder), die Datenbank bei Neon in Frankfurt,
-		E-Mails verschicken wir über Scaleway in Paris, Backups liegen verschlüsselt bei Scaleway. Mit
-		allen besteht ein Vertrag zur Auftragsverarbeitung.
+		E-Mails verschicken wir über Scaleway in Paris, Backups liegen verschlüsselt bei Scaleway.
+		Fehlerberichte verarbeitet Bugsink B.V., Peter Schathof 41, 3533 HZ Utrecht, Niederlande (<a
+			href="https://www.bugsink.com/privacy-policy/">Datenschutzerklärung von Bugsink</a
+		>). Bugsink speichert die Berichte ausschließlich in der EU, bei Hetzner als
+		Rechenzentrumsbetreiber, und gibt sie nicht in Drittländer weiter. Mit allen Dienstleistern
+		besteht ein Vertrag zur Auftragsverarbeitung.
 	</p>
 
 	<h2>Deine Rechte</h2>
