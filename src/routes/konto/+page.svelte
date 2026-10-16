@@ -5,9 +5,7 @@
 	import { onMount } from 'svelte';
 	import KeyRound from '@lucide/svelte/icons/key-round';
 	import Dialog from '#components/Dialog.svelte';
-	import { cookbookPath } from '#lib/paths.js';
 	import { daysUntil, inDays } from '#lib/daysUntil.js';
-	import type { EditableCookbook } from '#lib/server/cookbooks.js';
 	import { SITE_NAME } from '#lib/site.js';
 	import { createPasskey, deviceName, renamePasskey } from '#lib/passkeys.js';
 
@@ -17,7 +15,6 @@
 	}: {
 		data: {
 			account: { name: string; username: string; email: string; deletionAt: Date | null };
-			cookbooks: EditableCookbook[];
 			deletionDays: number;
 			deletedCookbooks: { id: string; name: string; deletedAt: Date | null }[];
 			storage: { used: number; limit: number; full: boolean };
@@ -241,37 +238,20 @@
 		{/snippet}
 	</Dialog>
 
-	<h2>Kochbücher</h2>
-	<ul class="list">
-		{#each data.cookbooks as cookbook (cookbook.id)}
-			<li>
-				<a href={cookbookPath(cookbook)}>{cookbook.name}</a>
-				<span class="hint"
-					>{cookbook.role === 'owner' ? 'Besitzer' : `von @${cookbook.ownerUsername}`}</span
-				>
-			</li>
-		{/each}
-		{#each data.deletedCookbooks as cookbook (cookbook.id)}
-			<li>
-				<span>{cookbook.name} <span class="hint">im Papierkorb</span></span>
-				<form method="POST" action="?/restoreCookbook" use:enhance>
-					<input type="hidden" name="id" value={cookbook.id} />
-					<button type="submit" class="btn btn--quiet">Wiederherstellen</button>
-				</form>
-			</li>
-		{/each}
-	</ul>
-	<form method="POST" action="?/createCookbook" class="row new-cookbook" use:enhance>
-		<input
-			class="input"
-			name="name"
-			placeholder="Name, z. B. Weihnachten"
-			aria-label="Name des neuen Kochbuchs"
-			maxlength="80"
-			required
-		/>
-		<button type="submit" class="btn">Neues Kochbuch</button>
-	</form>
+	{#if data.deletedCookbooks.length}
+		<h2>Gelöschte Kochbücher</h2>
+		<ul class="list">
+			{#each data.deletedCookbooks as cookbook (cookbook.id)}
+				<li>
+					<span>{cookbook.name}</span>
+					<form method="POST" action="?/restoreCookbook" use:enhance>
+						<input type="hidden" name="id" value={cookbook.id} />
+						<button type="submit" class="btn btn--quiet">Wiederherstellen</button>
+					</form>
+				</li>
+			{/each}
+		</ul>
+	{/if}
 
 	<h2>Speicher für Bilder</h2>
 	<div class="stack">
@@ -371,16 +351,6 @@
 		min-height: 3rem;
 		border-bottom: 1px solid var(--color-border);
 		overflow-wrap: anywhere;
-	}
-	.list a {
-		color: var(--color-text);
-	}
-	.new-cookbook {
-		margin-top: 1rem;
-	}
-	.new-cookbook .input {
-		flex: 1;
-		min-width: 12rem;
 	}
 	.bar {
 		height: 0.5rem;

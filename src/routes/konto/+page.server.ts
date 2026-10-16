@@ -11,7 +11,7 @@ import { createEmailChangeToken } from '#lib/server/emailChange.js';
 import { affectedPaths } from '#lib/server/affectedPaths.js';
 import { requireOwner, requireUser } from '#lib/server/auth/guards.js';
 import { getDb } from '#lib/server/context.js';
-import { createCookbook, listEditableCookbooks } from '#lib/server/cookbooks.js';
+import { listEditableCookbooks } from '#lib/server/cookbooks.js';
 import { cookbooks, users } from '#lib/server/db/schema.js';
 import { isSuppressed, renderMail, sendMail } from '#lib/server/mail.js';
 import { hitRateLimit } from '#lib/server/rateLimit.js';
@@ -24,9 +24,8 @@ import { validateUsername } from '#lib/username.js';
 export async function load(event) {
 	const user = await requireUser(event);
 	const db = getDb();
-	const [row, editable, deleted, storage, bounced] = await Promise.all([
+	const [row, deleted, storage, bounced] = await Promise.all([
 		db.query.users.findFirst({ where: eq(users.id, user.id) }),
-		listEditableCookbooks(db, user.id),
 		db
 			.select({ id: cookbooks.id, name: cookbooks.name, deletedAt: cookbooks.deletedAt })
 			.from(cookbooks)
@@ -47,7 +46,6 @@ export async function load(event) {
 			email: user.email,
 			deletionAt: row?.deletionRequestedAt ? deletionDate(row.deletionRequestedAt) : null
 		},
-		cookbooks: editable,
 		deletionDays: ACCOUNT_DELETION_DAYS,
 		deletedCookbooks: deleted,
 		storage,
@@ -125,15 +123,6 @@ export const actions = {
 		const user = await requireUser(event);
 		await signOutEverywhere(getDb(), user.id);
 		redirect(303, '/anmelden');
-	},
-
-	createCookbook: async (event) => {
-		const user = await requireUser(event);
-		const name = String((await event.request.formData()).get('name') ?? '').trim();
-		if (!name || name.length > 80) return fail(400, { error: 'Bitte gib einen Namen an.' });
-		const { slug } = await createCookbook(getDb(), user.id, name);
-		await revalidate(event.url.origin, [`/@${user.username}`]);
-		redirect(303, `/@${user.username}/${slug}`);
 	},
 
 	restoreCookbook: async (event) => {
