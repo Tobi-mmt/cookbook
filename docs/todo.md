@@ -72,6 +72,7 @@ So funktionieren die Rechte bei Scaleway: Rechte hängen nie an einem API-Key, s
 - [x] Organisation → Projects → **Create project**, Name `kochbuchbande-backups`. Oben links in dieses Projekt wechseln.
 - [x] Object Storage → **Create bucket**: Region `Paris (fr-par)`, Name z. B. `kochbuchbande-backups` (weltweit eindeutig), Sichtbarkeit **Private**. Optional „Object Lock“ aktivieren: Dann kann niemand Backups vor Ablauf löschen, auch kein gestohlener Key. Das geht nur beim Anlegen.
 - [x] Im Bucket → **Lifecycle rules** drei Regeln „Expiration“ anlegen: Präfix `database/daily/` nach 30 Tagen, `database/monthly/` nach 360 Tagen, `images/` nach 30 Tagen.
+- [x] Lifecycle-Regeln für Bilder umstellen: Die Regel für `images/` auf Präfix `images/weekly/` ändern (30 Tage) und eine neue Regel `images/monthly/` nach 360 Tagen anlegen. Sonst löscht die alte Regel auch die monatlichen Bilder nach 30 Tagen.
 
 ### Anwendung und API-Key für GitHub
 

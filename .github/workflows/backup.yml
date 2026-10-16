@@ -120,6 +120,10 @@ jobs:
         run: |
           tar -czf images.tar.gz images
           age --recipient "$AGE_PUBLIC_KEY" --output images.tar.gz.age images.tar.gz
-          aws s3 cp images.tar.gz.age "s3://$BUCKET/images/$(date -u +%F).tar.gz.age" --endpoint-url "$S3_ENDPOINT"
+          day=$(date -u +%F)
+          aws s3 cp images.tar.gz.age "s3://$BUCKET/images/weekly/$day.tar.gz.age" --endpoint-url "$S3_ENDPOINT"
+          if [ "$(date -u +%-d)" -le 7 ]; then
+            aws s3 cp images.tar.gz.age "s3://$BUCKET/images/monthly/$day.tar.gz.age" --endpoint-url "$S3_ENDPOINT"
+          fi
         env:
           AGE_PUBLIC_KEY: ${{ vars.AGE_PUBLIC_KEY }}
