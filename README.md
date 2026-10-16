@@ -69,7 +69,7 @@ Visitors are counted without cookies, like [Plausible](https://plausible.io/data
 
 ## Backups
 
-Every night `.github/workflows/backup.yml` dumps the database with a read-only role, refuses a dump smaller than half of the last one, restores it into a temporary Postgres as a test, encrypts it with [age](https://age-encryption.org) and uploads it to Scaleway Object Storage with a key that may only write. On the first of a month the dump is also stored as a monthly backup. On Sundays the images of Vercel Blob follow. Lifecycle rules of the bucket delete daily backups after 30 days, monthly ones after 6 months and images after 4 weeks.
+Every night `.github/workflows/backup.yml` dumps the database with a read-only role, refuses a dump smaller than half of the last one, restores it into a temporary Postgres as a test, encrypts it with [age](https://age-encryption.org) and uploads it to Scaleway Object Storage with a key that may only write. On the first of a month the dump is also stored as a monthly backup. On Sundays the images of Vercel Blob follow, the first Sunday of a month also as a monthly backup. Lifecycle rules of the bucket delete daily dumps and weekly images after 30 days, monthly backups of both after 360 days.
 
 ### Restore
 
