@@ -94,6 +94,9 @@ export const actions = {
 		if (!z.email().safeParse(email).success) {
 			return fail(400, { error: 'Bitte gib eine gültige E-Mail-Adresse ein.' });
 		}
+		if (email === user.email.toLowerCase()) {
+			return fail(400, { error: 'Das ist schon die Adresse deines Kontos.' });
+		}
 		const db = getDb();
 		if (!(await hitRateLimit(db, `email-change:${user.id}`, 5, HOUR))) {
 			return fail(429, { error: 'Zu viele Versuche. Bitte warte etwas.' });

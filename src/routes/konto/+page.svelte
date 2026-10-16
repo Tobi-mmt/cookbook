@@ -30,6 +30,7 @@
 	let passkeys = $state<Passkey[] | null>(null);
 	let passkeyError = $state<string | null>(null);
 	let confirmDeletion = $state(false);
+	let editingEmail = $state(false);
 
 	const megabytes = (bytes: number) =>
 		`${(bytes / 1024 / 1024).toLocaleString('de-DE', { maximumFractionDigits: 1 })} MB`;
@@ -123,13 +124,49 @@
 	</form>
 
 	<h2>E-Mail-Adresse</h2>
-	<form method="POST" action="?/email" class="stack" use:enhance>
-		<label class="field">
-			Neue Adresse für {data.account.email}
-			<input class="input" type="email" name="email" required />
-		</label>
-		<div class="row"><button type="submit" class="btn">Bestätigungslink schicken</button></div>
-	</form>
+	{#if editingEmail}
+		<form
+			method="POST"
+			action="?/email"
+			class="stack"
+			use:enhance={() =>
+				async ({ result, update }) => {
+					await update();
+					if (result.type === 'success') editingEmail = false;
+				}}
+		>
+			<label class="field">
+				Neue E-Mail-Adresse für dein Konto
+				<!-- svelte-ignore a11y_autofocus -->
+				<input
+					class="input"
+					type="email"
+					name="email"
+					value={data.account.email}
+					autocomplete="email"
+					required
+					autofocus
+				/>
+				<span class="hint"
+					>Wir schicken einen Bestätigungslink an die neue Adresse. Bis du ihn öffnest, gilt die
+					bisherige.</span
+				>
+			</label>
+			<div class="row">
+				<button type="button" class="btn btn--quiet" onclick={() => (editingEmail = false)}
+					>Abbrechen</button
+				>
+				<button type="submit" class="btn">Bestätigungslink schicken</button>
+			</div>
+		</form>
+	{:else}
+		<div class="list-row">
+			<span>{data.account.email}</span>
+			<button type="button" class="btn btn--quiet" onclick={() => (editingEmail = true)}
+				>Ändern</button
+			>
+		</div>
+	{/if}
 
 	<h2>Passkeys</h2>
 	<div class="stack">
@@ -325,6 +362,15 @@
 		gap: 1rem;
 		min-height: 3rem;
 		border-bottom: 1px solid var(--color-border);
+	}
+	.list-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		min-height: 3rem;
+		border-bottom: 1px solid var(--color-border);
+		overflow-wrap: anywhere;
 	}
 	.list a {
 		color: var(--color-text);
