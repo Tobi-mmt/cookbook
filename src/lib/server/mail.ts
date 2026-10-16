@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { eq, lt } from 'drizzle-orm';
 import { MAIL_FROM, MAIL_REPLY_TO, SCW_PROJECT_ID, SCW_SECRET_KEY } from '$app/env/private';
 import type { Database } from './db/client';
 import { mailLog, mailSuppressions } from './db/schema';
@@ -145,3 +145,10 @@ export const resendPendingMails = async (db: Database, maxAttempts = 5) => {
 
 export const suppressAddress = (db: Database, email: string, reason: string) =>
 	db.insert(mailSuppressions).values({ email: email.toLowerCase(), reason }).onConflictDoNothing();
+
+export const MAIL_LOG_DAYS = 90;
+
+export const deleteOldMailLog = (db: Database, now = new Date()) =>
+	db
+		.delete(mailLog)
+		.where(lt(mailLog.createdAt, new Date(now.getTime() - MAIL_LOG_DAYS * 24 * 60 * 60 * 1000)));
