@@ -22,6 +22,11 @@
 		die aufgerufene Seite, der Tag sowie Browser- und Betriebssystemfamilie ohne Version. Die
 		Rohdaten löschen wir nach 30 Monaten, die Summen pro Rezept und Tag behalten wir.
 	</p>
+	<p>
+		Tritt ein technischer Fehler auf, speichern wir eine Fehlermeldung mit der betroffenen Seite
+		ohne Parameter, dem Zeitpunkt sowie Browser- und Betriebssystemfamilie in unserem Fehler-Tracker
+		Bugsink. IP-Adresse, Konto und Inhalte gehören nicht dazu.
+	</p>
 
 	<h2>Mit Konto</h2>
 	<p>
