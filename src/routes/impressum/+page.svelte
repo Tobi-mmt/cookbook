@@ -1,6 +1,7 @@
 <script lang="ts">
+	import Email from '#components/Email.svelte';
 	import { resolve } from '$app/paths';
-	import { OPERATOR, SITE_NAME, SUPPORT_EMAIL } from '#lib/site.js';
+	import { OPERATOR, SITE_NAME } from '#lib/site.js';
 </script>
 
 <svelte:head>
@@ -21,7 +22,7 @@
 	</p>
 
 	<h2>Kontakt</h2>
-	<p>E-Mail: <a href="mailto:{SUPPORT_EMAIL}">{SUPPORT_EMAIL}</a></p>
+	<p>E-Mail: <Email /></p>
 
 	<h2>Inhalte melden</h2>
 	<p>
