@@ -30,7 +30,7 @@ const createAuth = (origin: string) =>
 				authMethod: { type: 'string', required: false, input: false }
 			}
 		},
-		advanced: { cookiePrefix: 'kochbuch' },
+		advanced: { cookiePrefix: 'kochbuch', ipAddress: { disableIpTracking: true } },
 		// our own limits in Postgres, see `requestSignInLink`
 		rateLimit: { enabled: false },
 		databaseHooks: {
@@ -39,6 +39,8 @@ const createAuth = (origin: string) =>
 					before: async (session, context) => ({
 						data: {
 							...session,
+							ipAddress: null,
+							userAgent: null,
 							authMethod: context?.path?.includes('passkey') ? 'passkey' : 'magic-link'
 						}
 					})
