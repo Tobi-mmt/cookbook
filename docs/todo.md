@@ -67,30 +67,55 @@ Vorsicht: SvelteKits CSRF-Schutz blockt in Produktion POSTs mit `Content-Type: t
 
 ## 5. Backups
 
-- [ ] Bucket in Scaleway Object Storage (`fr-par`) anlegen, getrennt vom Rest.
-- [ ] Lifecycle-Regeln: `database/daily/` nach 30 Tagen, `database/monthly/` nach 180 Tagen, `images/` nach 28 Tagen löschen. Optional Object Lock.
-- [ ] API-Key, der nur Objekte schreiben darf (kein Lesen, kein Löschen).
-- [ ] In Neon eine Rolle nur mit Leserechten anlegen.
-- [ ] `age-keygen -o key.txt`: privaten Schlüssel in den Passwort-Manager und ausgedruckt sicher verwahren, `key.txt` danach löschen.
-- [ ] GitHub-Secrets: `BACKUP_DATABASE_URL` (Leserolle), `SCW_BACKUP_ACCESS_KEY`, `SCW_BACKUP_SECRET_KEY`, `BLOB_READ_WRITE_TOKEN`. GitHub-Variablen: `BACKUP_BUCKET`, `AGE_PUBLIC_KEY`, `PG_MAJOR` (Postgres-Version von Neon, Standard 17).
-- [ ] Workflow „Backup“ einmal von Hand starten, auch mit Bildern.
-- [ ] Einmal ein Backup nach README entschlüsseln und in einen Neon-Branch einspielen. Der nächtliche Test spielt den Dump vor dem Verschlüsseln ein, das Entschlüsseln prüft er nicht, weil der private Schlüssel nicht in GitHub liegt.
+So funktionieren die Rechte bei Scaleway: Rechte hängen nie an einem API-Key, sondern an einer **Anwendung** (IAM → Applications). Eine **Policy** gibt der Anwendung Rechte in einem Projekt. Jeder API-Key einer Anwendung hat genau deren Rechte. Für unterschiedliche Rechte braucht es also unterschiedliche Anwendungen, z. B. `kochbuchbande-mail` (Mails senden) und `kochbuchbande-backup` (Backups schreiben). Eine Policy gilt immer für alle Buckets eines Projekts, deshalb liegen die Backups in einem eigenen Projekt.
+
+### Projekt und Bucket
+
+- [x] Organisation → Projects → **Create project**, Name `kochbuchbande-backups`. Oben links in dieses Projekt wechseln.
+- [x] Object Storage → **Create bucket**: Region `Paris (fr-par)`, Name z. B. `kochbuchbande-backups` (weltweit eindeutig), Sichtbarkeit **Private**. Optional „Object Lock“ aktivieren: Dann kann niemand Backups vor Ablauf löschen, auch kein gestohlener Key. Das geht nur beim Anlegen.
+- [x] Im Bucket → **Lifecycle rules** drei Regeln „Expiration“ anlegen: Präfix `database/daily/` nach 30 Tagen, `database/monthly/` nach 360 Tagen, `images/` nach 30 Tagen.
+
+### Anwendung und API-Key für GitHub
+
+- [x] IAM → Applications → **Create application**, Name `kochbuchbande-backup`.
+- [x] Beim Anlegen (oder danach unter „Policies“) eine Policy hinzufügen: **Scope** „Access to resources“, Projekt `kochbuchbande-backups`. **Permission set** nur `ObjectStorageObjectsWrite`. Nicht `ObjectStorageObjectsRead`, nicht `ObjectStorageObjectsDelete`, nicht `ObjectStorageFullAccess`: Wer den Key stiehlt, kann damit nur neue Dateien hochladen, aber keine Backups lesen oder löschen.
+- [x] In der Anwendung → **API keys** → **Generate API key**. Bei „Will this API key be used for Object Storage?“ **Yes** wählen und als „Preferred project“ `kochbuchbande-backups` angeben, sonst sucht der Key den Bucket im falschen Projekt.
+- [x] Access Key und Secret Key sofort notieren, das Secret wird nur einmal angezeigt.
+
+### Neon
+
+- [x] In der Neon-Konsole (Production-Projekt) → **Roles** → neue Rolle `backup` anlegen und im SQL-Editor nur Leserechte geben:
+  ```sql
+  grant usage on schema public, drizzle to backup;
+  grant select on all tables in schema public, drizzle to backup;
+  alter default privileges in schema public grant select on tables to backup;
+  ```
+- [ ] Die Verbindungs-URL dieser Rolle (direkt, nicht „pooled“) ist `BACKUP_DATABASE_URL`.
+
+### Verschlüsselung
+
+- [ ] `age-keygen -o key.txt`. Die Zeile „public key: age1…“ ist `AGE_PUBLIC_KEY`. Den Inhalt von `key.txt` in den Passwort-Manager und ausgedruckt sicher verwahren, dann `key.txt` löschen. Ohne diesen Schlüssel sind alle Backups wertlos.
+
+### GitHub
+
+- [x] Repository → Settings → Secrets and variables → Actions. **Secrets:** `BACKUP_DATABASE_URL`, `SCW_BACKUP_ACCESS_KEY`, `SCW_BACKUP_SECRET_KEY`, `BLOB_READ_WRITE_TOKEN` (aus Vercel, für die Bilder). **Variables:** `BACKUP_BUCKET` (Bucket-Name), `AGE_PUBLIC_KEY`, `PG_MAJOR` (Postgres-Version von Neon, Standard 18).
+- [x] Actions → „Backup“ → **Run workflow**, einmal mit „images“ angehakt. Danach in Scaleway im Bucket prüfen, dass `database/daily/…` und `images/…` angekommen sind.
+- [ ] Einmal ein Backup nach README entschlüsseln und in einen Neon-Branch einspielen. Der nächtliche Test spielt den Dump vor dem Verschlüsseln ein, das Entschlüsseln prüft er nicht, weil der private Schlüssel nicht in GitHub liegt. Zum Herunterladen brauchst du Lesezugriff: im Projekt `kochbuchbande-backups` über die Konsole (als Besitzer darfst du alles) oder mit einem eigenen, kurzlebigen Key einer Anwendung mit `ObjectStorageObjectsRead`.
 
 ## 6. Neon
 
-- [ ] Region prüfen: `aws-eu-central-1` (Frankfurt).
-- [ ] CU-Stunden ab und zu in der Neon-Konsole ansehen. Für den Speicher warnt der nächtliche Job ab 80 %, für die CU-Stunden nicht.
+- [x] Region prüfen: `aws-eu-central-1` (Frankfurt).
+- [x] CU-Stunden ab und zu in der Neon-Konsole ansehen. Für den Speicher warnt der nächtliche Job ab 80 %, für die CU-Stunden nicht.
 
 ## 7. Recht
 
 - [ ] Nutzungsbedingungen, Datenschutzerklärung und Impressum (`/nutzungsbedingungen`, `/datenschutz`, `/impressum`) rechtlich prüfen lassen, Anbieter und Kontaktstelle nach DSA im Impressum ergänzen.
 - [ ] Bildregel beim Import (nur CC0, CC BY, CC BY-SA) prüfen lassen.
-- [ ] Auftragsverarbeitungsverträge mit Vercel, Neon und Scaleway abschließen.
 
 ## 8. Bestand
 
-- [ ] Rezepte, deren Texte wörtlich von anderen Seiten stammen, in eigenen Worten umformulieren.
-- [ ] Kategorien nachsortieren: Die Migration hat „Herzhaft“ zu „Hauptgericht“ gemacht. Suppen, Soßen, Spätzle, Energiekugeln usw. in die neuen Kategorien verschieben.
+- [x] Rezepte, deren Texte wörtlich von anderen Seiten stammen, in eigenen Worten umformulieren.
+- [x] Kategorien nachsortieren: Die Migration hat „Herzhaft“ zu „Hauptgericht“ gemacht. Suppen, Soßen, Spätzle, Energiekugeln usw. in die neuen Kategorien verschieben.
 
 ## Nicht umgesetzt
 
