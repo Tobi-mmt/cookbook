@@ -71,15 +71,25 @@ Visitors are counted without cookies, like [Plausible](https://plausible.io/data
 
 Every night `.github/workflows/backup.yml` dumps the database with a read-only role, refuses a dump smaller than half of the last one, restores it into a temporary Postgres as a test, encrypts it with [age](https://age-encryption.org) and uploads it to Scaleway Object Storage with a key that may only write. On the first of a month the dump is also stored as a monthly backup. On Sundays the images of Vercel Blob follow. Lifecycle rules of the bucket delete daily backups after 30 days, monthly ones after 6 months and images after 4 weeks.
 
-To restore a backup:
+### Restore
 
-1. Download it from the bucket (`database/daily/…` or `database/monthly/…`) and decrypt it with the private key from the password manager: `age --decrypt --identity key.txt --output database.dump database.dump.age`.
-2. Create a new branch in the Neon console and restore into it, never directly into production: `pg_restore --no-owner --no-privileges --clean --dbname=<url of the branch> database.dump`.
-3. Delete the accounts that were deleted after the backup: `POSTGRES_URL=<url of the branch> yarn db:reapply-deletions`.
-4. Check the branch with a preview deployment that points to it.
-5. Make the branch the main branch or copy single rows back.
+You need the private age key from the password manager as `key.txt`. Download the backups in the Scaleway console, the key in GitHub may only write.
 
-Images: download `images/…tar.gz.age`, decrypt it the same way and upload the files to Vercel Blob under their paths.
+Database:
+
+1. `age --decrypt --identity key.txt --output database.dump <day>.dump.age`
+2. Create a branch of production in the Neon console, never restore into production directly.
+3. `pg_restore --no-owner --no-privileges --clean --if-exists -n public -n drizzle --dbname=<direct url of the branch> database.dump` (`-n` skips Neon's own `neon_auth` schema).
+4. Delete the accounts that were deleted after the backup: `POSTGRES_URL=<url of the branch> yarn db:reapply-deletions`.
+5. Check the branch with a preview deployment, then make it the main branch or copy single rows back.
+
+Images:
+
+1. `age --decrypt --identity key.txt --output images.tar.gz <day>.tar.gz.age && tar -xzf images.tar.gz`
+2. `BLOB_READ_WRITE_TOKEN=<token of the store> yarn restore:images images --dry-run`, then without `--dry-run`. Files already in the store are skipped, `--overwrite` uploads all.
+3. Only for a new store: image URLs contain the store, so also run it with `--rewrite-urls` and `POSTGRES_URL=<database>`, then redeploy.
+
+Delete `key.txt` and the decrypted files afterwards.
 
 ## Environment variables
 
