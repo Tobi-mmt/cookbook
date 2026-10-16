@@ -1,11 +1,14 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { SITE_NAME } from '#lib/site.js';
+	import Pagination from '#components/Pagination.svelte';
+	import type { Pagination as PaginationData } from '#lib/server/pagination.js';
 
 	let {
 		data
 	}: {
 		data: {
+			pagination: PaginationData;
 			query: string;
 			cookbooks: {
 				id: string;
@@ -46,6 +49,7 @@
 		</tbody>
 	</table>
 </div>
+<Pagination pagination={data.pagination} />
 
 <style>
 	.search {

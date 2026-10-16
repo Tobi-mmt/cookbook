@@ -1,10 +1,13 @@
 <script lang="ts">
 	import { SITE_NAME } from '#lib/site.js';
+	import Pagination from '#components/Pagination.svelte';
+	import type { Pagination as PaginationData } from '#lib/server/pagination.js';
 
 	let {
 		data
 	}: {
 		data: {
+			pagination: PaginationData;
 			entries: {
 				id: number;
 				admin: string | null;
@@ -71,6 +74,7 @@
 		</tbody>
 	</table>
 </div>
+<Pagination pagination={data.pagination} />
 
 <style>
 	.filter {
