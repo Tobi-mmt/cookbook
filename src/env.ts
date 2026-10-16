@@ -44,6 +44,18 @@ export const variables = defineEnvVars({
 		description: 'Random string in the URL of the Scaleway webhook for bounces and complaints',
 		schema: optional
 	},
+	BUGSINK_DSN: {
+		description: 'DSN of the Bugsink project for error tracking, errors are only logged without it',
+		schema: optional
+	},
+	VERCEL_ENV: {
+		description: 'Set by Vercel: production, preview or development',
+		schema: optional
+	},
+	VERCEL_GIT_COMMIT_SHA: {
+		description: 'Set by Vercel: the deployed commit, the release in Bugsink',
+		schema: optional
+	},
 	CRON_SECRET: {
 		description: 'Random string that protects /api/warm-cache',
 		schema: optional
