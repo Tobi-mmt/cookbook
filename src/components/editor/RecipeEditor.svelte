@@ -1,11 +1,16 @@
 <script lang="ts">
 	import type { Category, RecipeImage } from '#types';
 	import { enhance, type SubmitFunction } from '$app/forms';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { resolve } from '$app/paths';
 	import type { Conflict } from '#lib/server/recipeActions.js';
 	import Globe from '@lucide/svelte/icons/globe';
-	import { NUTRITION_TYPES, findUnusedIngredients, type RecipeInput } from '#lib/recipeInput.js';
+	import {
+		NUTRITION_TYPES,
+		findUnusedIngredients,
+		recipeInputSchema,
+		type RecipeInput
+	} from '#lib/recipeInput.js';
 	import IngredientList from './IngredientList.svelte';
 	import StepList from './StepList.svelte';
 	import { resizeImage } from './resizeImage';
@@ -59,6 +64,10 @@
 	let sessionExpired = $state(false);
 	let rightsLost = $state(false);
 	let draft = $state<{ recipe: RecipeInput; savedAt: number } | null>(null);
+	let issues = $state<string[]>([]);
+	// svelte-ignore state_referenced_locally
+	let outcome = $state(result);
+	let problems = $state<HTMLElement>();
 
 	const DRAFT_PREFIX = 'kochbuch:draft:';
 
@@ -136,8 +145,21 @@
 		}
 	};
 
-	const submit: SubmitFunction = ({ formData }) => {
+	const showProblems = async () => {
+		await tick();
+		problems?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+	};
+
+	const submit: SubmitFunction = ({ formData, cancel }) => {
+		const parsed = recipeInputSchema.safeParse($state.snapshot(recipe));
+		issues = parsed.success ? [] : [...new Set(parsed.error.issues.map(({ message }) => message))];
+		if (issues.length) {
+			cancel();
+			showProblems();
+			return;
+		}
 		saving = true;
+		outcome = null;
 		sessionExpired = false;
 		formData.set('recipe', JSON.stringify(recipe));
 		formData.delete('image');
@@ -153,6 +175,11 @@
 			}
 			if (response.type === 'error' && response.status === 403) {
 				rightsLost = true;
+				return;
+			}
+			if (response.type === 'failure') {
+				outcome = response.data ?? null;
+				showProblems();
 				return;
 			}
 			if (response.type === 'redirect') clearDraft();
@@ -174,6 +201,11 @@
 	{:else if cookbooks}
 		<input type="hidden" name="cookbookId" value={selectedCookbook} />
 	{/if}
+
+	<p class="hint">
+		Nötig sind Titel, Portionen, Dauer und mindestens ein Zubereitungsschritt. Alles mit „optional“
+		kannst du leer lassen.
+	</p>
 
 	{#if draft}
 		<div class="message">
@@ -304,7 +336,18 @@
 					.join(', ')}
 			</p>
 		{/if}
-		{#if result?.error}<p class="message message--error" role="alert">{result.error}</p>{/if}
+		<div bind:this={problems}>
+			{#if issues.length}
+				<div class="message message--error" role="alert">
+					<p>Bevor du speichern kannst, fehlt noch etwas:</p>
+					<ul>
+						{#each issues as issue (issue)}<li>{issue}</li>{/each}
+					</ul>
+				</div>
+			{:else if outcome?.error}
+				<p class="message message--error" role="alert">{outcome.error}</p>
+			{/if}
+		</div>
 		{#if sessionExpired}
 			<p class="message message--error" role="alert">
 				Deine Anmeldung ist abgelaufen. Dein Stand ist gesichert.
@@ -320,16 +363,16 @@
 				>.
 			</p>
 		{/if}
-		{#if result?.deleted}
+		{#if outcome?.deleted}
 			<p class="message message--error" role="alert">
-				Das Rezept wurde {result.deleted.by ? `von ${result.deleted.by}` : ''} gelöscht. Im Papierkorb
+				Das Rezept wurde {outcome.deleted.by ? `von ${outcome.deleted.by}` : ''} gelöscht. Im Papierkorb
 				des Kochbuchs kannst du es wiederherstellen, dein Stand bleibt hier gesichert.
 			</p>
 		{/if}
-		{#if result?.conflict && !force}
+		{#if outcome?.conflict && !force}
 			<div class="message message--error" role="alert">
 				<p>
-					{result.conflict.by ?? 'Jemand'} hat dieses Rezept {timeAgo(result.conflict.at)} geändert.
+					{outcome.conflict.by ?? 'Jemand'} hat dieses Rezept {timeAgo(outcome.conflict.at)} geändert.
 				</p>
 				<div class="row">
 					{#if historyHref}
