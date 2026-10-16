@@ -1,9 +1,10 @@
 import { error, redirect } from '@sveltejs/kit';
-import type { Handle } from '@sveltejs/kit/hooks';
+import type { Handle, HandleServerError } from '@sveltejs/kit/hooks';
 import { eq } from 'drizzle-orm';
 import { dev } from '$app/env';
 import { loadSession } from '#lib/server/auth/session.js';
 import { getDb } from '#lib/server/context.js';
+import { describeError, reportError } from '#lib/server/errorReporting.js';
 import { users } from '#lib/server/db/schema.js';
 import { findRenamedUsername } from '#lib/server/users.js';
 
@@ -41,4 +42,16 @@ export const handle: Handle = async ({ event, resolve }) => {
 		if (username) redirect(308, `/@${username}`);
 	}
 	return response;
+};
+
+/** Only unexpected errors go to Bugsink, `error(404)` and the like are part of the app */
+export const handleError: HandleServerError = async ({ error, kind, event }) => {
+	if (kind !== 'unknown') return;
+	console.error(error);
+	await reportError({
+		...describeError(error),
+		path: event.route.id ?? event.url.pathname,
+		method: event.request.method,
+		runtime: 'server'
+	});
 };
