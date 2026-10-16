@@ -30,11 +30,23 @@
 		Englisch.
 	</p>
 
-	<h2>Inhalte der Nutzerinnen und Nutzer</h2>
+	<h2>Haftung für Inhalte</h2>
 	<p>
-		Rezepte, Fotos und Kochbücher stammen von den Personen, die sie einstellen. Wie wir mit
-		Meldungen umgehen, steht in den <a href={resolve('/nutzungsbedingungen')}>Nutzungsbedingungen</a
-		>.
+		Rezepte, Fotos, Kochbücher und Profile stellen die Nutzerinnen und Nutzer selbst ein und sind
+		für sie verantwortlich. Wir prüfen sie nicht vorab und sind dazu auch nicht verpflichtet. Trotz
+		Moderation lässt sich nicht ausschließen, dass Inhalte fehlerhaft, unvollständig oder
+		rechtswidrig sind. Sobald wir von einem rechtswidrigen Inhalt erfahren, entfernen wir ihn
+		umgehend. Wie Meldungen ablaufen, steht in den
+		<a href={resolve('/nutzungsbedingungen')}>Nutzungsbedingungen</a>. Angaben in Rezepten, etwa zu
+		Mengen, Garzeiten oder Unverträglichkeiten, prüfst du bitte selbst.
+	</p>
+
+	<h2>Haftung für Links</h2>
+	<p>
+		Rezepte können auf fremde Seiten verweisen, zum Beispiel als Quelle. Für deren Inhalte sind
+		allein ihre Betreiber verantwortlich, wir haben darauf keinen Einfluss. Rechtswidrige Inhalte
+		waren beim Einstellen nicht erkennbar. Erfahren wir von einer Rechtsverletzung, entfernen wir
+		den Link umgehend.
 	</p>
 </article>
 
