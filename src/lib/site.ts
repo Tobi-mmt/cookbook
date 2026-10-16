@@ -5,5 +5,5 @@ export const SUPPORT_MAILBOX = 'support';
 
 export const OPERATOR = {
 	name: 'Tobias Linkohr',
-	address: ['[c/o Anbieter]', '[Straße Hausnummer]', '[PLZ Ort]']
+	address: ['Eidelstedter Dorfstraße 3h', '22527 Hamburg', 'Deutschland']
 };

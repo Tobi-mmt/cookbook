@@ -108,10 +108,7 @@ So funktionieren die Rechte bei Scaleway: Rechte hängen nie an einem API-Key, s
 
 ## 7. Recht
 
-- [ ] Eine ladungsfähige c/o-Adresse buchen (Impressum-Service, ab ca. 6 € im Monat), damit die Privatadresse nicht im Netz steht. Ein Postfach reicht nicht.
-- [ ] Name und diese Adresse in `src/lib/site.ts` (`OPERATOR`) eintragen. Bis dahin stehen dort Platzhalter in eckigen Klammern.
 - [ ] Postfach `support@kochbuchbande.de` einrichten, es steht in Impressum, Datenschutz und Nutzungsbedingungen.
-- [ ] Mit GitHub einen Vertrag zur Auftragsverarbeitung prüfen (GitHub Data Protection Agreement), die Backups laufen dort unverschlüsselt durch.
 - [ ] Nutzungsbedingungen, Datenschutzerklärung und Impressum (`/nutzungsbedingungen`, `/datenschutz`, `/impressum`) rechtlich prüfen lassen. Kommen je Einnahmen dazu (Spenden, Affiliate-Links), gilt zusätzlich § 5 DDG: dann ein zweiter schneller Kontaktweg, z. B. ein Kontaktformular.
 - [ ] Bildregel beim Import (nur CC0, CC BY, CC BY-SA) prüfen lassen.
 
