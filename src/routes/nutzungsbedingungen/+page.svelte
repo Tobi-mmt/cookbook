@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { SITE_NAME } from '#lib/site.js';
+	import { resolve } from '$app/paths';
+	import { SITE_NAME, SUPPORT_EMAIL } from '#lib/site.js';
 </script>
 
 <svelte:head>
@@ -8,13 +9,13 @@
 
 <article class="page">
 	<h1>Nutzungsbedingungen</h1>
-	<p class="message">Entwurf, wird vor dem Start rechtlich geprüft.</p>
 
 	<h2>Worum es geht</h2>
 	<p>
 		{SITE_NAME} ist eine Plattform für Kochbücher. Du kannst Rezepte anlegen, aus Links importieren, mit
 		anderen gemeinsam bearbeiten und Rezepte anderer in dein eigenes Kochbuch übernehmen. Die Nutzung
-		ist kostenlos.
+		ist kostenlos. Anbieter ist die im <a href={resolve('/impressum')}>Impressum</a> genannte Person,
+		ein privates, nicht kommerzielles Projekt.
 	</p>
 
 	<h2>Konto</h2>
@@ -58,7 +59,24 @@
 	<p>
 		Rezepte stammen von den Personen, die sie einstellen. Prüfe Angaben zu Mengen, Garzeiten und
 		Unverträglichkeiten selbst. Wir bemühen uns um einen zuverlässigen Betrieb, können ihn aber
-		nicht garantieren.
+		nicht garantieren. Wir haften unbeschränkt für Vorsatz und grobe Fahrlässigkeit sowie für
+		Schäden an Leben, Körper und Gesundheit, im Übrigen nur, soweit das Gesetz es zwingend vorsieht.
+	</p>
+
+	<h2>Ende der Nutzung</h2>
+	<p>
+		Du kannst dein Konto jederzeit unter „Konto“ löschen. Wir können Konten sperren oder löschen,
+		wenn jemand gegen diese Bedingungen verstößt. Sollten wir {SITE_NAME} einstellen, kündigen wir das
+		mindestens 4 Wochen vorher per E-Mail an, damit du deine Daten herunterladen kannst.
+	</p>
+
+	<h2>Änderungen</h2>
+	<p>
+		Ändern sich diese Bedingungen, informieren wir dich mindestens 4 Wochen vorher per E-Mail. Was
+		mit deinen Daten geschieht, steht in der <a href={resolve('/datenschutz')}
+			>Datenschutzerklärung</a
+		>. Fragen beantworten wir unter <a href="mailto:{SUPPORT_EMAIL}">{SUPPORT_EMAIL}</a>. Es gilt
+		deutsches Recht.
 	</p>
 </article>
 
