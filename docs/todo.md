@@ -29,7 +29,7 @@ Was vor dem Start fehlt und nur du erledigen kannst. Der Code ist fertig, siehe 
 ## 2. E-Mail (Scaleway Transactional Email)
 
 - [x] In Scaleway (Region `fr-par`) die Domain `mail.kochbuchbande.de` anlegen.
-- [ ] Die DNS-Einträge für SPF und DKIM von Scaleway setzen, dazu DMARC: `_dmarc.mail.kochbuchbande.de` mit `v=DMARC1; p=none; rua=mailto:support@kochbuchbande.de`. Nach einigen Wochen ohne Probleme auf `p=quarantine`.
+- [x] Die DNS-Einträge für SPF und DKIM von Scaleway setzen, dazu DMARC: `_dmarc.mail.kochbuchbande.de` mit `v=DMARC1; p=none; rua=mailto:support@kochbuchbande.de`. Nach einigen Wochen ohne Probleme auf `p=quarantine`.
 - [x] API-Key nur mit Rechten für Transactional Email anlegen.
 - [x] In Vercel setzen: `SCW_SECRET_KEY`, `SCW_PROJECT_ID`, `MAIL_FROM=Kochbuchbande <hallo@mail.kochbuchbande.de>`, `MAIL_REPLY_TO=support@kochbuchbande.de`.
 - [ ] Postfach `support@kochbuchbande.de` einrichten.
@@ -51,19 +51,17 @@ Vorsicht: SvelteKits CSRF-Schutz blockt in Produktion POSTs mit `Content-Type: t
 ## 3. Vercel
 
 - [x] `BETTER_AUTH_SECRET` setzen (`openssl rand -base64 32`).
-- [ ] Prüfen, dass `ISR_BYPASS_TOKEN` und `CRON_SECRET` gesetzt sind. Die alten Variablen `ADMIN_PASSWORD_HASH` und `SESSION_SECRET` löschen.
+- [x] Prüfen, dass `ISR_BYPASS_TOKEN` und `CRON_SECRET` gesetzt sind. Die alten Variablen `ADMIN_PASSWORD_HASH` und `SESSION_SECRET` löschen.
 - [x] `BUGSINK_DSN` für Production und Preview setzen. Unerwartete Fehler aus Server und Browser landen dann in Bugsink, Previews unter der Umgebung `preview`.
 - [x] Bugsink (gehostet, Bugsink B.V.) in der Datenschutzerklärung nennen.
-- [ ] Vertrag zur Auftragsverarbeitung mit Bugsink bestätigen: https://www.bugsink.com/dpa/.
 
 ## 4. Konten nach dem ersten Deployment
 
-- [ ] Die Migration legt `tobi` (Admin) und `mona` mit Platzhalter-Adressen an. In der Neon-Konsole die echten Adressen eintragen:
+- [x] Die Migration legt `tobi` (Admin) und `mona` mit Platzhalter-Adressen an. In der Neon-Konsole die echten Adressen eintragen:
   ```sql
   update users set email = '…' where username = 'tobi';
   update users set email = '…' where username = 'mona';
   ```
-- [ ] Tobias: per Link anmelden, unter „Konto“ einen Passkey anlegen, dann mit dem Passkey neu anmelden. Erst danach öffnet sich `/admin`.
 
 ## 5. Backups
 
@@ -90,17 +88,17 @@ So funktionieren die Rechte bei Scaleway: Rechte hängen nie an einem API-Key, s
   grant select on all tables in schema public, drizzle to backup;
   alter default privileges in schema public grant select on tables to backup;
   ```
-- [ ] Die Verbindungs-URL dieser Rolle (direkt, nicht „pooled“) ist `BACKUP_DATABASE_URL`.
+- [x] Die Verbindungs-URL dieser Rolle (direkt, nicht „pooled“) ist `BACKUP_DATABASE_URL`.
 
 ### Verschlüsselung
 
-- [ ] `age-keygen -o key.txt`. Die Zeile „public key: age1…“ ist `AGE_PUBLIC_KEY`. Den Inhalt von `key.txt` in den Passwort-Manager und ausgedruckt sicher verwahren, dann `key.txt` löschen. Ohne diesen Schlüssel sind alle Backups wertlos.
+- [x] `age-keygen -o key.txt`. Die Zeile „public key: age1…“ ist `AGE_PUBLIC_KEY`. Den Inhalt von `key.txt` in den Passwort-Manager und ausgedruckt sicher verwahren, dann `key.txt` löschen. Ohne diesen Schlüssel sind alle Backups wertlos.
 
 ### GitHub
 
 - [x] Repository → Settings → Secrets and variables → Actions. **Secrets:** `BACKUP_DATABASE_URL`, `SCW_BACKUP_ACCESS_KEY`, `SCW_BACKUP_SECRET_KEY`, `BLOB_READ_WRITE_TOKEN` (aus Vercel, für die Bilder). **Variables:** `BACKUP_BUCKET` (Bucket-Name), `AGE_PUBLIC_KEY`, `PG_MAJOR` (Postgres-Version von Neon, Standard 18).
 - [x] Actions → „Backup“ → **Run workflow**, einmal mit „images“ angehakt. Danach in Scaleway im Bucket prüfen, dass `database/daily/…` und `images/…` angekommen sind.
-- [ ] Einmal ein Backup nach README entschlüsseln und in einen Neon-Branch einspielen. Der nächtliche Test spielt den Dump vor dem Verschlüsseln ein, das Entschlüsseln prüft er nicht, weil der private Schlüssel nicht in GitHub liegt. Zum Herunterladen brauchst du Lesezugriff: im Projekt `kochbuchbande-backups` über die Konsole (als Besitzer darfst du alles) oder mit einem eigenen, kurzlebigen Key einer Anwendung mit `ObjectStorageObjectsRead`.
+- [x] Einmal ein Backup nach README entschlüsseln und in einen Neon-Branch einspielen. Der nächtliche Test spielt den Dump vor dem Verschlüsseln ein, das Entschlüsseln prüft er nicht, weil der private Schlüssel nicht in GitHub liegt. Zum Herunterladen brauchst du Lesezugriff: im Projekt `kochbuchbande-backups` über die Konsole (als Besitzer darfst du alles) oder mit einem eigenen, kurzlebigen Key einer Anwendung mit `ObjectStorageObjectsRead`.
 
 ## 6. Neon
 
