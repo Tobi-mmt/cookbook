@@ -46,7 +46,7 @@
 
 	// the editor works on a copy, the page re-creates it via {#key} for another recipe
 	// svelte-ignore state_referenced_locally
-	let recipe = $state(structuredClone(initialRecipe));
+	let recipe = $state($state.snapshot(initialRecipe));
 	// svelte-ignore state_referenced_locally
 	let selectedCookbook = $state(cookbookId ?? cookbooks?.[0]?.id ?? '');
 	let imageFile = $state<Blob | null>(null);
@@ -183,7 +183,7 @@
 					type="button"
 					class="btn"
 					onclick={() => {
-						recipe = structuredClone(draft!.recipe);
+						recipe = $state.snapshot(draft!.recipe);
 						draft = null;
 					}}>Wiederherstellen</button
 				>
