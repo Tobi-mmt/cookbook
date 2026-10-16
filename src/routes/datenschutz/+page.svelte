@@ -1,5 +1,39 @@
 <script lang="ts">
 	import { SITE_NAME } from '#lib/site.js';
+
+	const US_TRANSFER =
+		'Das Unternehmen sitzt in den USA und ist nach dem EU-US Data Privacy Framework zertifiziert, das ein angemessenes Datenschutzniveau sicherstellt.';
+
+	const providers = [
+		{
+			name: 'Vercel Inc.',
+			address: '440 N Barranca Avenue #4133, Covina, CA 91723, USA',
+			purpose: 'Betrieb der Anwendung und Speicherung der Rezeptbilder',
+			data: 'Jede Anfrage an die Seite mit IP-Adresse und Browserangaben, Inhalte und Bilder',
+			location: `Server in Frankfurt, Bilder und Auslieferung auch weltweit. ${US_TRANSFER}`
+		},
+		{
+			name: 'Neon, LLC (Databricks, Inc.)',
+			address: '160 Spear Street, Suite 1300, San Francisco, CA 94105, USA',
+			purpose: 'Datenbank',
+			data: 'Konten, Kochbücher, Rezepte, Meldungen und die anonyme Besucherstatistik',
+			location: `Rechenzentrum in Frankfurt. ${US_TRANSFER}`
+		},
+		{
+			name: 'Scaleway SAS',
+			address: '8 rue de la Ville l’Evêque, 75008 Paris, Frankreich',
+			purpose: 'Versand von E-Mails und Speicherung der verschlüsselten Backups',
+			data: 'E-Mail-Adresse und Inhalt der Mails, Backups der Datenbank und der Bilder',
+			location: 'Rechenzentren in Paris'
+		},
+		{
+			name: 'Bugsink B.V.',
+			address: 'Peter Schathof 41, 3533 HZ Utrecht, Niederlande',
+			purpose: 'Fehlerberichte, siehe oben',
+			data: 'Fehlermeldung, betroffene Seite, Browser- und Betriebssystemfamilie',
+			location: 'Rechenzentren von Hetzner in der EU'
+		}
+	];
 </script>
 
 <svelte:head>
@@ -52,15 +86,18 @@
 	</p>
 
 	<h2>Dienstleister</h2>
-	<p>
-		Die Anwendung läuft bei Vercel (Hosting und Bilder), die Datenbank bei Neon in Frankfurt,
-		E-Mails verschicken wir über Scaleway in Paris, Backups liegen verschlüsselt bei Scaleway.
-		Fehlerberichte verarbeitet Bugsink B.V., Peter Schathof 41, 3533 HZ Utrecht, Niederlande (<a
-			href="https://www.bugsink.com/privacy-policy/">Datenschutzerklärung von Bugsink</a
-		>). Bugsink speichert die Berichte ausschließlich in der EU, bei Hetzner als
-		Rechenzentrumsbetreiber, und gibt sie nicht in Drittländer weiter. Mit allen Dienstleistern
-		besteht ein Vertrag zur Auftragsverarbeitung.
-	</p>
+	<p>Diese Dienstleister verarbeiten Daten in unserem Auftrag:</p>
+	<dl class="providers">
+		{#each providers as provider (provider.name)}
+			<div>
+				<dt>{provider.name}</dt>
+				<dd>{provider.address}</dd>
+				<dd><span>Zweck:</span> {provider.purpose}</dd>
+				<dd><span>Daten:</span> {provider.data}</dd>
+				<dd><span>Ort:</span> {provider.location}</dd>
+			</div>
+		{/each}
+	</dl>
 
 	<h2>Deine Rechte</h2>
 	<p>
@@ -78,5 +115,21 @@
 	}
 	a {
 		color: inherit;
+	}
+	.providers {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+		margin: 1rem 0 0;
+		line-height: 1.6;
+	}
+	dt {
+		font-weight: 700;
+	}
+	dd {
+		margin: 0;
+	}
+	dd span {
+		color: var(--color-text-muted);
 	}
 </style>
