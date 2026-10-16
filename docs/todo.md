@@ -52,6 +52,8 @@ Vorsicht: SvelteKits CSRF-Schutz blockt in Produktion POSTs mit `Content-Type: t
 
 - [x] `BETTER_AUTH_SECRET` setzen (`openssl rand -base64 32`).
 - [ ] Prüfen, dass `ISR_BYPASS_TOKEN` und `CRON_SECRET` gesetzt sind. Die alten Variablen `ADMIN_PASSWORD_HASH` und `SESSION_SECRET` löschen.
+- [ ] `BUGSINK_DSN` für Production und Preview setzen. Unerwartete Fehler aus Server und Browser landen dann in Bugsink, Previews unter der Umgebung `preview`.
+- [ ] Prüfen, wo die Bugsink-Instanz läuft, und den Dienstleister in der Datenschutzerklärung nennen (bei Fremd-Hosting mit Vertrag zur Auftragsverarbeitung).
 
 ## 4. Konten nach dem ersten Deployment
 

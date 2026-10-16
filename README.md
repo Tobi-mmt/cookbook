@@ -97,5 +97,6 @@ They are declared in `src/env.ts` and read from `$app/env/private`. All of them 
 | `MAIL_WEBHOOK_SECRET`   | Secret in the URL of the Scaleway webhook for bounces          |
 | `ISR_BYPASS_TOKEN`      | Random string with at least 32 characters for the revalidation |
 | `CRON_SECRET`           | Random string for the crons, also a GitHub secret              |
+| `BUGSINK_DSN`           | DSN of the Bugsink project, errors are only logged without it  |
 
 The backup workflow uses the GitHub secrets `BACKUP_DATABASE_URL`, `SCW_BACKUP_ACCESS_KEY`, `SCW_BACKUP_SECRET_KEY` and `BLOB_READ_WRITE_TOKEN` and the variables `BACKUP_BUCKET`, `AGE_PUBLIC_KEY` and optionally `PG_MAJOR`.
