@@ -4,6 +4,7 @@
 	import Captcha from '#components/Captcha.svelte';
 	import { me } from '#lib/me.svelte.js';
 	import KeyRound from '@lucide/svelte/icons/key-round';
+	import { SITE_NAME } from '#lib/site.js';
 
 	let {
 		data,
@@ -21,13 +22,12 @@
 
 	const signInWithPasskey = async () => {
 		passkeyError = null;
-		// stores the choice for "angemeldet bleiben" before the session is created
 		await fetch('?/remember', { method: 'POST', body: new FormData(rememberForm) });
 		const { authClient } = await import('#lib/authClient.js');
 		const { error } = await authClient.signIn.passkey();
 		if (error) {
 			passkeyError =
-				'Die Anmeldung mit Passkey hat nicht geklappt. Hast du auf diesem Gerät oder Handy einen Passkey angelegt?';
+				'Die Anmeldung mit Passkey hat nicht geklappt. Hast du auf diesem Gerät oder Handy einen Passkey angelegt? Noch kein Konto? Dann lass dir oben zuerst einen Link per E-Mail schicken, danach kannst du einen Passkey anlegen.';
 			return;
 		}
 		await me.refresh();
@@ -36,7 +36,7 @@
 </script>
 
 <svelte:head>
-	<title>Anmelden - Kochbuch</title>
+	<title>Anmelden - {SITE_NAME}</title>
 	<meta name="robots" content="noindex" />
 </svelte:head>
 
@@ -113,6 +113,7 @@
 				<p class="message message--error" role="alert">{passkeyError}</p>
 			{/if}
 			<p class="hint">
+				Nur für bestehende Konten mit Passkey. Ein neues Konto legst du über den Link per E-Mail an.
 				An einem fremden Gerät kannst du den Passkey auf deinem Handy nutzen: Der Browser zeigt
 				dafür einen QR-Code.
 			</p>
