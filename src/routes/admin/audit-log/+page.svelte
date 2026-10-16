@@ -45,30 +45,32 @@
 	<button type="submit" class="btn">Filtern</button>
 </form>
 
-<table class="table">
-	<thead><tr><th>Wann</th><th>Wer</th><th>Was</th><th>Objekt</th><th>Details</th></tr></thead>
-	<tbody>
-		{#each data.entries as entry (entry.id)}
-			<tr>
-				<td>{format(entry.createdAt)}</td>
-				<td>{entry.admin ?? '–'}</td>
-				<td>
-					{entry.action}
-					{#if entry.note}<br /><span class="hint">{entry.note}</span>{/if}
-				</td>
-				<td>{entry.targetType} {entry.targetId}</td>
-				<td>
-					<details>
-						<summary>vorher / nachher</summary>
-						<pre>{JSON.stringify({ before: entry.before, after: entry.after }, null, 2)}</pre>
-					</details>
-				</td>
-			</tr>
-		{:else}
-			<tr><td colspan="5">Keine Einträge.</td></tr>
-		{/each}
-	</tbody>
-</table>
+<div class="table-scroll">
+	<table class="table">
+		<thead><tr><th>Wann</th><th>Wer</th><th>Was</th><th>Objekt</th><th>Details</th></tr></thead>
+		<tbody>
+			{#each data.entries as entry (entry.id)}
+				<tr>
+					<td>{format(entry.createdAt)}</td>
+					<td>{entry.admin ?? '–'}</td>
+					<td>
+						{entry.action}
+						{#if entry.note}<br /><span class="hint">{entry.note}</span>{/if}
+					</td>
+					<td>{entry.targetType} {entry.targetId}</td>
+					<td>
+						<details>
+							<summary>vorher / nachher</summary>
+							<pre>{JSON.stringify({ before: entry.before, after: entry.after }, null, 2)}</pre>
+						</details>
+					</td>
+				</tr>
+			{:else}
+				<tr><td colspan="5">Keine Einträge.</td></tr>
+			{/each}
+		</tbody>
+	</table>
+</div>
 
 <style>
 	.filter {
