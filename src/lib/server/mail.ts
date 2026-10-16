@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import { MAIL_FROM, MAIL_REPLY_TO, SCW_PROJECT_ID, SCW_SECRET_KEY } from '$app/env/private';
 import type { Database } from './db/client';
 import { mailLog, mailSuppressions } from './db/schema';
-import { SITE_NAME } from '../site';
+import { SITE_DOMAIN, SITE_NAME, SITE_TAGLINE } from '../site';
 
 export type MailContent = { subject: string; text: string; html: string };
 
@@ -26,17 +26,25 @@ export const renderMail = ({
 	button?: { label: string; url: string };
 	footer?: string;
 }): MailContent => {
+	const signature = `${SITE_NAME} · ${SITE_DOMAIN}\n${SITE_TAGLINE}`;
 	const text = [
+		SITE_NAME,
 		...paragraphs,
 		...(button ? [`${button.label}: ${button.url}`] : []),
-		...(footer ? ['--', footer] : [])
+		'--',
+		...(footer ? [footer] : []),
+		signature
 	].join('\n\n');
 
 	const html = `<!doctype html><html lang="de"><body style="margin:0;padding:32px 16px;background:#fff;color:#222;font-family:Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.5">
 <div style="max-width:520px;margin:0 auto">
+<p style="margin:0 0 24px;font-size:20px;letter-spacing:-0.01em">${SITE_NAME}</p>
 ${paragraphs.map((paragraph) => `<p style="margin:0 0 16px">${escapeHtml(paragraph).replace(/\n/g, '<br>')}</p>`).join('\n')}
 ${button ? `<p style="margin:24px 0"><a href="${escapeHtml(button.url)}" style="display:inline-block;padding:10px 20px;border-radius:999px;background:#27343a;color:#fff;text-decoration:none">${escapeHtml(button.label)}</a></p>` : ''}
-${footer ? `<p style="margin:32px 0 0;color:#888;font-size:13px">${escapeHtml(footer)}</p>` : ''}
+<div style="margin:32px 0 0;padding-top:16px;border-top:1px solid #ddd;color:#888;font-size:13px">
+${footer ? `<p style="margin:0 0 12px">${escapeHtml(footer)}</p>` : ''}
+<p style="margin:0">${SITE_NAME} · <a href="https://${SITE_DOMAIN}" style="color:#888">${SITE_DOMAIN}</a><br>${SITE_TAGLINE}</p>
+</div>
 </div></body></html>`;
 
 	return { subject, text, html };

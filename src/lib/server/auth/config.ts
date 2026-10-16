@@ -54,10 +54,10 @@ const createAuth = (origin: string) =>
 						getDb(),
 						email,
 						renderMail({
-							subject: 'Dein Anmelde-Link',
+							subject: `Dein Anmelde-Link für die ${SITE_NAME}`,
 							paragraphs: [
 								'Hallo,',
-								'mit diesem Link meldest du dich an. Er ist 15 Minuten gültig und funktioniert einmal.'
+								`mit diesem Link meldest du dich bei der ${SITE_NAME} an. Er ist 15 Minuten gültig und funktioniert einmal.`
 							],
 							button: { label: 'Anmelden', url },
 							footer:

@@ -4,6 +4,7 @@ import type { Database } from './db/client';
 import { cookbookEditors, cookbooks, invitations, users } from './db/schema';
 import { createId } from './ids';
 import { renderMail, sendMail } from './mail';
+import { SITE_NAME } from '../site';
 
 const VALID_DAYS = 7;
 
@@ -101,10 +102,11 @@ export const inviteToCookbook = async (
 			db,
 			email,
 			renderMail({
-				subject: `${inviter.name} lädt dich in ein Kochbuch ein`,
+				subject: `${inviter.name} lädt dich in ein Kochbuch der ${SITE_NAME} ein`,
 				paragraphs: [
 					'Hallo,',
-					`${inviter.name} lädt dich ein, das Kochbuch „${cookbook.name}“ gemeinsam zu bearbeiten. Der Link ist 7 Tage gültig.`
+					`${inviter.name} lädt dich ein, das Kochbuch „${cookbook.name}“ bei der ${SITE_NAME} gemeinsam zu bearbeiten. Der Link ist 7 Tage gültig.`,
+					`Bei der ${SITE_NAME} sammelt man Rezepte digital und pflegt Kochbücher zusammen mit Familie und Freunden. Für ein Konto brauchst du nur deine E-Mail-Adresse.`
 				],
 				button: { label: 'Einladung ansehen', url: link }
 			}),
