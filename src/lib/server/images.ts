@@ -26,44 +26,71 @@ export const createPlaceholder = async (input: Buffer) => {
 export const imageFolder = (cookbookId: string, recipeId: string) =>
 	`cookbooks/${cookbookId}/recipes/${recipeId}`;
 
-/** Resizes the uploaded image to all responsive widths in AVIF and one WebP and stores them */
+const storeVariant = async (
+	normalized: Buffer,
+	format: ImageFormat,
+	width: number,
+	{ folder, hash, storage }: { folder: string; hash: string; storage: Storage }
+) => {
+	const body = await FORMAT_OPTIONS[format](sharp(normalized).resize(width)).toBuffer();
+	const url = await storage.putFile(
+		`${folder}/${hash}-${width}.${format}`,
+		body,
+		`image/${format}`
+	);
+	return { variant: { width, url }, bytes: body.length };
+};
+
+export type AvifVariants = { variants: ImageVariant[]; bytes: number };
+
+/**
+ * Stores the placeholder and the WebP, which takes a fraction of a second, and returns the
+ * AVIF variants as a separate step: encoding them takes many seconds and can run after the
+ * response.
+ */
+export const storeImagePreview = async (input: Buffer, folder: string, storage: Storage) => {
+	// .rotate() applies the EXIF orientation of phone photos
+	const { data: normalized, info } = await sharp(input)
+		.rotate()
+		.toBuffer({ resolveWithObject: true });
+	const target = {
+		folder,
+		hash: createHash('sha256').update(input).digest('hex').slice(0, 10),
+		storage
+	};
+	const webp = await storeVariant(normalized, 'webp', Math.min(WEBP_WIDTH, info.width), target);
+
+	const image: RecipeImage = {
+		width: info.width,
+		height: info.height,
+		placeholder: await createPlaceholder(normalized),
+		variants: { avif: [], webp: [webp.variant] },
+		bytes: webp.bytes
+	};
+	const createAvif = async (): Promise<AvifVariants> => {
+		const widths = [...new Set(IMAGE_WIDTHS.map((width) => Math.min(width, info.width)))];
+		const stored = [];
+		for (const width of widths) stored.push(await storeVariant(normalized, 'avif', width, target));
+		return {
+			variants: stored.map(({ variant }) => variant),
+			bytes: stored.reduce((sum, { bytes }) => sum + bytes, 0)
+		};
+	};
+	return { image, createAvif };
+};
+
+/** Resizes the image to all responsive widths in AVIF and one WebP and stores them */
 export const processAndStoreImage = async (
 	input: Buffer,
 	folder: string,
 	storage: Storage
 ): Promise<RecipeImage> => {
-	// .rotate() applies the EXIF orientation of phone photos
-	const { data: normalized, info } = await sharp(input)
-		.rotate()
-		.toBuffer({ resolveWithObject: true });
-	const hash = createHash('sha256').update(input).digest('hex').slice(0, 10);
-
-	const widthsByFormat: Record<ImageFormat, number[]> = {
-		avif: [...new Set(IMAGE_WIDTHS.map((width) => Math.min(width, info.width)))],
-		webp: [Math.min(WEBP_WIDTH, info.width)]
-	};
-	const variants: Record<ImageFormat, ImageVariant[]> = { avif: [], webp: [] };
-	let bytes = 0;
-
-	for (const format of Object.keys(FORMAT_OPTIONS) as ImageFormat[]) {
-		for (const width of widthsByFormat[format]) {
-			const body = await FORMAT_OPTIONS[format](sharp(normalized).resize(width)).toBuffer();
-			bytes += body.length;
-			const url = await storage.putFile(
-				`${folder}/${hash}-${width}.${format}`,
-				body,
-				`image/${format}`
-			);
-			variants[format].push({ width, url });
-		}
-	}
-
+	const { image, createAvif } = await storeImagePreview(input, folder, storage);
+	const avif = await createAvif();
 	return {
-		width: info.width,
-		height: info.height,
-		placeholder: await createPlaceholder(normalized),
-		variants,
-		bytes
+		...image,
+		variants: { ...image.variants, avif: avif.variants },
+		bytes: (image.bytes ?? 0) + avif.bytes
 	};
 };
 
