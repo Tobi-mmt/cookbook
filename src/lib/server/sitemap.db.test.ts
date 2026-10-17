@@ -2,6 +2,7 @@ import { eq } from 'drizzle-orm';
 import { describe, expect, test } from 'vitest';
 import { users } from './db/schema';
 import { saveRecipe } from './recipes';
+import { listLandings } from './landings';
 import { listSitemapPaths } from './sitemap';
 import { hasTestDatabase, useTestDatabase } from './testing/db';
 import { createTestCookbook, createTestUser, testInput } from './testing/fixtures';
@@ -23,6 +24,18 @@ describe.skipIf(!hasTestDatabase)('listSitemapPaths', () => {
 		await saveRecipe(db, 'b', testInput('Spam'), { cookbookId: youngBook.id, userId: young.id });
 
 		const paths = (await listSitemapPaths(db)).map(({ path }) => path);
-		expect(paths).toEqual(['/', '/@old', '/@old/alt', '/rezept/a/Suppe']);
+		expect(paths.filter((path) => !path.startsWith('/rezepte/'))).toEqual([
+			'/',
+			'/ueber',
+			'/rezepte',
+			'/@old',
+			'/@old/alt',
+			'/rezept/a/Suppe'
+		]);
+		const landings = await listLandings(db);
+		expect(landings.map(({ count }) => count)).toEqual([1, 1]);
+		expect(paths.filter((path) => path.startsWith('/rezepte/'))).toEqual(
+			landings.map(({ slug }) => `/rezepte/${slug}`)
+		);
 	});
 });
