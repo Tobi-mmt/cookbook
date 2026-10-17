@@ -22,9 +22,8 @@ export const createPlaceholder = async (input: Buffer) => {
 	return `data:image/webp;base64,${buffer.toString('base64')}`;
 };
 
-/** Images live with their recipe and cookbook, a copied recipe gets copies of its images */
-export const imageFolder = (cookbookId: string, recipeId: string) =>
-	`cookbooks/${cookbookId}/recipes/${recipeId}`;
+/** Images belong to their recipe and keep their path when it moves, a copy gets copies */
+export const imageFolder = (recipeId: string) => `recipes/${recipeId}`;
 
 const storeVariant = async (
 	normalized: Buffer,

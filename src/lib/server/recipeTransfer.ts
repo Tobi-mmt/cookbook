@@ -23,7 +23,7 @@ export const copyRecipe = async (
 	const id = createRecipeId();
 	const image = source.image
 		? {
-				...(await copyImage(source.image, imageFolder(cookbookId, id), storage)),
+				...(await copyImage(source.image, imageFolder(id), storage)),
 				uploadedBy: userId
 			}
 		: null;

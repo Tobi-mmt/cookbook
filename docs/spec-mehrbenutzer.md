@@ -443,7 +443,7 @@ Zu beachten:
 
 ### Bilder
 
-- Speicherort in Blob: `cookbooks/{cookbook_id}/recipes/{recipe_id}/…`.
+- Speicherort in Blob: `recipes/{recipe_id}/…`, unabhängig vom Kochbuch, damit der Pfad beim Verschieben stimmt. Ältere Bilder liegen noch unter `cookbooks/{cookbook_id}/recipes/{recipe_id}/…`.
 - Beim Übernehmen werden die Bilder kopiert, damit Original und Kopie unabhängig gelöscht werden können.
 - Zum Bild (heute das JSON-Feld `image`) kommen Herkunftsangaben: `license` (z. B. `CC-BY-4.0`, leer bei eigenen Fotos), `author`, `source_url` und `ai_generated`. Daraus entsteht die Bildunterschrift. Regeln für den Import siehe Abschnitt 9, „Inhalte und Recht“.
 - Limits: maximale Bildgröße wie heute. **Entschieden:** **100 MB Bild-Speicher pro Person**, das reicht für etwa 100–200 Rezepte mit Foto.
