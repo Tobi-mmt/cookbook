@@ -10,7 +10,10 @@ const TILES = 12;
 const NEW_ACCOUNT_MONTHS = 6;
 
 /** Unchanged copies only show up through their original, otherwise a recipe would appear twice */
-const notAnUnchangedCopy = or(sql`${recipes.copiedFromId} is null`, sql`${recipes.version} > 1`);
+export const notAnUnchangedCopy = or(
+	sql`${recipes.copiedFromId} is null`,
+	sql`${recipes.version} > 1`
+);
 
 const byIds = (summaries: RecipeSummary[], ids: string[]) => {
 	const byId = new Map(summaries.map((summary) => [summary.id, summary]));

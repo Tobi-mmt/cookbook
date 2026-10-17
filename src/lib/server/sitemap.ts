@@ -2,10 +2,11 @@ import { and, desc, eq, gt, isNull, lt, sql } from 'drizzle-orm';
 import { slugerize } from '../slugerize';
 import type { Database } from './db/client';
 import { cookbooks, recipes, users } from './db/schema';
+import { INDEXING_DELAY } from './indexing';
+import { listLandings } from './landings';
 import { isVisible } from './recipes';
 
 export const URLS_PER_SITEMAP = 5000;
-const INDEXING_DELAY = 14 * 24 * 60 * 60 * 1000;
 
 /**
  * Everything search engines may index: visible content of accounts that are older than two weeks,
@@ -18,7 +19,7 @@ export const listSitemapPaths = async (db: Database, now = new Date()) => {
 	);
 	const recipeCount = sql<number>`(select count(*)::int from ${recipes} where ${recipes.cookbookId} = ${cookbooks.id} and ${recipes.deletedAt} is null and ${recipes.hiddenAt} is null)`;
 
-	const [recipeRows, cookbookRows] = await Promise.all([
+	const [recipeRows, cookbookRows, landings] = await Promise.all([
 		db
 			.select({ id: recipes.id, title: recipes.title, updatedAt: recipes.updatedAt })
 			.from(recipes)
@@ -32,12 +33,16 @@ export const listSitemapPaths = async (db: Database, now = new Date()) => {
 			.innerJoin(users, eq(users.id, cookbooks.ownerId))
 			.where(
 				and(isNull(cookbooks.deletedAt), isNull(cookbooks.hiddenAt), indexable, gt(recipeCount, 0))
-			)
+			),
+		listLandings(db)
 	]);
 	const owners = [...new Set(cookbookRows.map(({ owner }) => owner))];
 
 	return [
 		{ path: '/' },
+		{ path: '/ueber' },
+		{ path: '/rezepte' },
+		...landings.map(({ slug }) => ({ path: `/rezepte/${slug}` })),
 		...owners.map((owner) => ({ path: `/@${owner}` })),
 		...cookbookRows.map(({ owner, slug }) => ({ path: `/@${owner}/${slug}` })),
 		...recipeRows.map(({ id, title, updatedAt }) => ({
