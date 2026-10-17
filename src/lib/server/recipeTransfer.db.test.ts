@@ -48,9 +48,7 @@ describe.skipIf(!hasTestDatabase)('copyRecipe', () => {
 
 		const copy = (await getRecipe(db, second.id))!.recipe;
 		expect(copy.isUnchangedCopy).toBe(true);
-		expect(copy.image?.variants.avif[0].url).toBe(
-			`/blob/cookbooks/${annas.id}/recipes/${second.id}/1.avif`
-		);
+		expect(copy.image?.variants.avif[0].url).toBe(`/blob/recipes/${second.id}/1.avif`);
 		expect(copy.attribution.map(({ author }) => author?.username)).toEqual(['tobi', 'mona']);
 
 		await saveRecipe(db, second.id, testInput('Meine Suppe'), {

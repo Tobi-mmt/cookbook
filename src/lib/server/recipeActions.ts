@@ -196,11 +196,7 @@ export const saveRecipeAction = async (event: RequestEvent, existingId?: string)
 	}
 
 	const id = existingId ?? createRecipeId();
-	const {
-		image,
-		createAvif,
-		error: imageError
-	} = await readImage(form, imageFolder(cookbookId, id), editor);
+	const { image, createAvif, error: imageError } = await readImage(form, imageFolder(id), editor);
 	if (imageError) return fail(400, { error: imageError });
 
 	await storeAndRevalidate(event, { id, input, image, cookbookId, userId: editor.id, previous });

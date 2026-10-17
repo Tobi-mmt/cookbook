@@ -60,7 +60,7 @@ for (const { id, title, cookbookId, createdBy } of sourceRecipes) {
 		if (!response.ok) throw new Error(`Downloading ${largest.url} failed: ${response.status}`);
 		image = await processAndStoreImage(
 			Buffer.from(await response.arrayBuffer()),
-			imageFolder(cookbookId, id),
+			imageFolder(id),
 			storage
 		);
 	}
