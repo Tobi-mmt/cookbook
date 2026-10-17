@@ -95,7 +95,7 @@
 	</div>
 {/if}
 
-{#snippet breakdown(title: string, rows: BreakdownStats[])}
+{#snippet breakdown(title: string, rows: BreakdownStats[], total: number)}
 	<section>
 		<h2>{title}</h2>
 		<div class="table-scroll">
@@ -110,7 +110,7 @@
 				</thead>
 				<tbody>
 					{#each rows as row (row.value)}
-						{@const share = pageViews ? row.pageViews / pageViews : 0}
+						{@const share = total ? row.pageViews / total : 0}
 						<tr>
 							<td>{row.value ?? 'Unbekannt'}</td>
 							<td class="number">{row.visitors}</td>
@@ -128,9 +128,15 @@
 	</section>
 {/snippet}
 
+{@render breakdown(
+	'Herkunft',
+	data.referrers,
+	data.referrers.reduce((sum, row) => sum + row.pageViews, 0)
+)}
+
 <div class="systems">
-	{@render breakdown('Browser', data.browsers)}
-	{@render breakdown('Betriebssystem', data.operatingSystems)}
+	{@render breakdown('Browser', data.browsers, pageViews)}
+	{@render breakdown('Betriebssystem', data.operatingSystems, pageViews)}
 </div>
 
 <details>

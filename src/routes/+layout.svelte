@@ -17,11 +17,20 @@
 	onMount(() => me.load());
 
 	// cookieless page view tracking, see src/lib/server/tracking.ts
-	afterNavigate(({ to, shallow }) => {
+	afterNavigate(({ to, shallow, type }) => {
 		// shallow navigations only change the recipe filter, the page stays the same
 		if (shallow) return;
 		if (!to || to.url.pathname.startsWith('/admin') || navigator.webdriver) return;
-		navigator.sendBeacon('/api/event', JSON.stringify({ path: to.url.pathname }));
+		// where people come from is only known when they arrive
+		const entry = type === 'enter';
+		navigator.sendBeacon(
+			'/api/event',
+			JSON.stringify({
+				path: to.url.pathname,
+				entry,
+				referrer: entry ? document.referrer : undefined
+			})
+		);
 	});
 </script>
 

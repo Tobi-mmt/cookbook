@@ -1,5 +1,12 @@
 import { describe, expect, test } from 'vitest';
-import { isBot, normalizePath, parseUserAgent, trackingDay, visitorHash } from './tracking';
+import {
+	isBot,
+	normalizePath,
+	normalizeReferrer,
+	parseUserAgent,
+	trackingDay,
+	visitorHash
+} from './tracking';
 
 const browser =
 	'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15';
@@ -48,6 +55,14 @@ describe('isBot', () => {
 });
 
 describe('normalizePath', () => {
+	test('counts the landing pages and the about page', () => {
+		expect(normalizePath('/rezepte')).toBe('/rezepte');
+		expect(normalizePath('/rezepte/vegan')).toBe('/rezepte/vegan');
+		expect(normalizePath('/ueber')).toBe('/ueber');
+		expect(normalizePath('/kosten')).toBe('/kosten');
+		expect(normalizePath('/rezepteabc')).toBeNull();
+	});
+
 	test('accepts public pages without query and hash', () => {
 		expect(normalizePath('/')).toBe('/');
 		expect(normalizePath('/rezept/abc/pfannkuchen?x=1#top')).toBe('/rezept/abc/pfannkuchen');
@@ -95,5 +110,22 @@ describe('parseUserAgent', () => {
 		['something else', null, null]
 	])('%s', (userAgent, browser, os) => {
 		expect(parseUserAgent(userAgent)).toEqual({ browser, os });
+	});
+});
+
+describe('normalizeReferrer', () => {
+	test('keeps only the domain of other sites', () => {
+		expect(normalizeReferrer('https://www.google.com/search?q=dal', 'kochbuchbande.de')).toBe(
+			'google.com'
+		);
+		expect(normalizeReferrer('https://chatgpt.com/c/123', 'kochbuchbande.de')).toBe('chatgpt.com');
+	});
+
+	test('ignores the own site, other protocols and junk', () => {
+		expect(normalizeReferrer('https://kochbuchbande.de/rezepte', 'kochbuchbande.de')).toBeNull();
+		expect(normalizeReferrer('https://www.kochbuchbande.de/', 'kochbuchbande.de')).toBeNull();
+		expect(normalizeReferrer('android-app://com.google.android.gm', 'kochbuchbande.de')).toBeNull();
+		expect(normalizeReferrer('kein link', 'kochbuchbande.de')).toBeNull();
+		expect(normalizeReferrer(undefined, 'kochbuchbande.de')).toBeNull();
 	});
 });

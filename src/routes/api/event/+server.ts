@@ -1,8 +1,12 @@
 import { z } from 'zod';
 import { getDb } from '#lib/server/context.js';
-import { isBot, normalizePath, recordPageView } from '#lib/server/tracking.js';
+import { isBot, normalizePath, normalizeReferrer, recordPageView } from '#lib/server/tracking.js';
 
-const eventSchema = z.object({ path: z.string() });
+const eventSchema = z.object({
+	path: z.string(),
+	entry: z.boolean().optional(),
+	referrer: z.string().max(2000).optional()
+});
 
 /** Receives the page view beacon from the layout, see `src/lib/server/tracking.ts` */
 export async function POST({ request, url, getClientAddress }) {
@@ -15,7 +19,8 @@ export async function POST({ request, url, getClientAddress }) {
 			path,
 			host: url.host,
 			ip: getClientAddress(),
-			userAgent
+			userAgent,
+			referrer: event.data?.entry ? (normalizeReferrer(event.data.referrer, url.host) ?? '') : null
 		});
 	}
 

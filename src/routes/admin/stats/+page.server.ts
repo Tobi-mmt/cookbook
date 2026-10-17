@@ -27,13 +27,16 @@ export async function load({ url }) {
 	if (from > to) [from, to] = [to, from];
 
 	const db = getDb();
-	const [dailyStats, pageStats, browsers, operatingSystems, recipes] = await Promise.all([
-		getDailyStats(db, from, to),
-		getBreakdown(db, 'path', from, to),
-		getBreakdown(db, 'browser', from, to),
-		getBreakdown(db, 'os', from, to),
-		listRecipeIndex(db)
-	]);
+	const [dailyStats, pageStats, browsers, operatingSystems, referrers, recipes] = await Promise.all(
+		[
+			getDailyStats(db, from, to),
+			getBreakdown(db, 'path', from, to),
+			getBreakdown(db, 'browser', from, to),
+			getBreakdown(db, 'os', from, to),
+			getBreakdown(db, 'referrer', from, to),
+			listRecipeIndex(db)
+		]
+	);
 
 	const statsByDay = new Map(dailyStats.map((stats) => [stats.day, stats]));
 	const titles = new Map(recipes.map(({ id, title }) => [id, title]));
@@ -59,6 +62,7 @@ export async function load({ url }) {
 			};
 		}),
 		browsers,
-		operatingSystems
+		operatingSystems,
+		referrers: referrers.map((row) => ({ ...row, value: row.value || 'Direkt oder unbekannt' }))
 	};
 }
