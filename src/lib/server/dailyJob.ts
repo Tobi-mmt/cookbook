@@ -9,7 +9,6 @@ import { deleteExpiredRateLimits, hitRateLimit } from './rateLimit';
 import { addDays, aggregateDailyViews, deleteOldPageViews } from './recipeViews';
 import { LIST_PATHS, revalidate } from './revalidate';
 import type { Storage } from './storage';
-import { backfillImageSizes } from './storageUsage';
 import { trackingDay } from './tracking';
 import { purgeTrash } from './trash';
 
@@ -128,7 +127,6 @@ export const runDailyJob = async (
 	await step('databaseSize', () => warnAboutDatabaseSize(db, now));
 	await step('closedCases', () => closeCasesOfDeletedTargets(db));
 	await step('reportSummary', () => sendDailyReportSummary(db, origin, now));
-	await step('imageSizes', () => backfillImageSizes(db));
 	await step('mailLog', async () => (await deleteOldMailLog(db, now)).rowCount);
 	await step(
 		'sessions',
