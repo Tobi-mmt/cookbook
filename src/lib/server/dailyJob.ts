@@ -1,5 +1,6 @@
 import { and, eq, gte, inArray, lt, sql } from 'drizzle-orm';
 import { deleteRequestedAccounts } from './accounts';
+import { LIMITS } from './costs';
 import { closeCasesOfDeletedTargets, sendDailyReportSummary } from './moderation/reports';
 import { affectedPaths } from './affectedPaths';
 import type { Database } from './db/client';
@@ -13,8 +14,6 @@ import { trackingDay } from './tracking';
 import { purgeTrash } from './trash';
 
 const MAIL_WARNING_THRESHOLD = 1000;
-/** Neon Free includes 1 GB */
-const DATABASE_LIMIT_BYTES = 1024 * 1024 * 1024;
 
 /** Pages of accounts that just turned 14 days old and may be indexed now */
 const newlyIndexablePaths = async (db: Database, now: Date) => {
@@ -57,7 +56,7 @@ const warnAboutDatabaseSize = async (db: Database, now: Date) => {
 		sql`select pg_database_size(current_database()) as bytes`
 	);
 	const bytes = Number(result.rows[0]?.bytes ?? 0);
-	if (bytes < DATABASE_LIMIT_BYTES * 0.8) return bytes;
+	if (bytes < LIMITS.databaseBytes * 0.8) return bytes;
 	const month = now.toISOString().slice(0, 7);
 	if (await hitRateLimit(db, `database-warning:${month}`, 1, 40 * 24 * 60 * 60)) {
 		await mailAdmins(
