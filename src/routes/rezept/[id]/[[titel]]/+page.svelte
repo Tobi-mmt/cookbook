@@ -6,6 +6,7 @@
 	import { page } from '$app/state';
 	import { recipePath } from '#lib/paths.js';
 	import { SITE_NAME } from '#lib/site.js';
+	import { jsonLdScript, recipeJsonLd } from '#lib/recipeText.js';
 
 	let { data }: { data: { recipe: Recipe; noindex: boolean } } = $props();
 
@@ -22,6 +23,10 @@
 				: recipePath(recipe),
 			page.url.origin
 		).href
+	);
+
+	const structuredData = $derived(
+		jsonLdScript(recipeJsonLd(recipe, { origin: page.url.origin, canonical }))
 	);
 
 	const imageData = $derived.by(() => {
@@ -43,6 +48,7 @@
 <svelte:head>
 	<title>{recipe.title} - {SITE_NAME}</title>
 	<link rel="canonical" href={canonical} />
+	<link rel="alternate" type="text/markdown" href="/rezept/{recipe.id}.md" />
 	{#if data.noindex}<meta name="robots" content="noindex" />{/if}
 	<meta name="description" content={description} />
 	{#if recipe.author}<meta name="author" content={recipe.author.name} />{/if}
@@ -56,6 +62,8 @@
 		<meta property="og:image:width" content={imageData.width.toString()} />
 		<meta property="og:image:height" content={imageData.height.toString()} />
 	{/if}
+	<!-- eslint-disable-next-line svelte/no-at-html-tags -- escaped JSON of own data -->
+	{@html structuredData}
 </svelte:head>
 
 {#key recipe}
