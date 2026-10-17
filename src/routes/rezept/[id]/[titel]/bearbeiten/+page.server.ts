@@ -9,6 +9,8 @@ import { eq } from 'drizzle-orm';
 import { recipes } from '#lib/server/db/schema.js';
 import { cookbookUrl } from '#lib/server/cookbooks.js';
 
+export const config = { maxDuration: 60 };
+
 export async function load(event) {
 	const db = getDb();
 	const recipe = await getRecipeInput(db, event.params.id);
