@@ -4,7 +4,8 @@ import { slugerize } from '../slugerize';
 
 /** All public paths that show the given recipe, including the client-side navigation data */
 export const recipePaths = (recipe: { id: string; title: string }) => [
-	`/rezept/${recipe.id}/${slugerize(recipe.title)}`
+	`/rezept/${recipe.id}/${slugerize(recipe.title)}`,
+	`/rezept/${recipe.id}.md`
 ];
 
 export const LIST_PATHS = ['/', '/sitemap.xml', '/sitemap/0.xml'];
@@ -24,7 +25,7 @@ export const revalidate = async (origin: string, paths: string[]): Promise<strin
 
 	// pages are also cached as `__data.json` for client-side navigations
 	const urls = paths.flatMap((path) =>
-		path.startsWith('/api/') || path.endsWith('.xml')
+		path.startsWith('/api/') || /\.(xml|md|txt)$/.test(path)
 			? [path]
 			: [path, `${path === '/' ? '' : path}/__data.json`]
 	);
