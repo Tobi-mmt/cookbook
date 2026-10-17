@@ -60,6 +60,8 @@
 	// svelte-ignore state_referenced_locally
 	let useImportedImage = $state(Boolean(importedImage));
 	let saving = $state(false);
+	let savingSeconds = $state(0);
+	let uploadingImage = $state(false);
 	let force = $state(false);
 	let sessionExpired = $state(false);
 	let rightsLost = $state(false);
@@ -145,6 +147,21 @@
 		}
 	};
 
+	$effect(() => {
+		if (!saving) return;
+		savingSeconds = 0;
+		const timer = setInterval(() => savingSeconds++, 1000);
+		return () => clearInterval(timer);
+	});
+
+	const savingText = $derived(
+		savingSeconds >= 12
+			? 'Das dauert gerade länger als sonst. Bitte lass die Seite offen, dein Stand ist gesichert.'
+			: uploadingImage && savingSeconds < 4
+				? 'Das Bild wird hochgeladen …'
+				: 'Das Rezept wird gespeichert …'
+	);
+
 	const showProblems = async () => {
 		await tick();
 		problems?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -159,6 +176,7 @@
 			return;
 		}
 		saving = true;
+		uploadingImage = Boolean(imageFile || (importedImage && useImportedImage));
 		outcome = null;
 		sessionExpired = false;
 		formData.set('recipe', JSON.stringify(recipe));
@@ -179,6 +197,14 @@
 			}
 			if (response.type === 'failure') {
 				outcome = response.data ?? null;
+				showProblems();
+				return;
+			}
+			if (response.type === 'error') {
+				outcome = {
+					error:
+						'Das Speichern hat nicht geklappt. Dein Stand ist gesichert, versuche es gleich noch einmal.'
+				};
 				showProblems();
 				return;
 			}
@@ -393,12 +419,18 @@
 				</div>
 			</div>
 		{/if}
+		{#if saving}
+			<div class="saving" role="status" aria-live="polite">
+				<span class="progress" aria-hidden="true"><span></span></span>
+				<span>{savingText}</span>
+			</div>
+		{/if}
 		<div class="footer-actions">
 			<span class="public"><Globe size="1em" aria-hidden="true" /> Öffentlich sichtbar</span>
 			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- built with resolve() -->
 			<a href={cancelHref} class="btn">Abbrechen</a>
-			<button type="submit" class="btn btn--primary" disabled={saving}>
-				{saving ? 'Speichert…' : 'Speichern'}
+			<button type="submit" class="btn btn--primary" disabled={saving} aria-busy={saving}>
+				{#if saving}<span class="spinner" aria-hidden="true"></span>Speichert …{:else}Speichern{/if}
 			</button>
 		</div>
 	</div>
@@ -488,6 +520,55 @@
 		align-items: center;
 		justify-content: flex-end;
 		gap: 0.5rem;
+	}
+	.saving {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		font-size: 0.9375rem;
+		color: var(--color-text-muted);
+	}
+	.progress {
+		position: relative;
+		height: 3px;
+		overflow: hidden;
+		background: var(--color-surface-muted);
+		border-radius: var(--radius-pill);
+	}
+	.progress span {
+		position: absolute;
+		inset: 0 auto 0 0;
+		width: 35%;
+		background: var(--color-dark);
+		border-radius: inherit;
+		animation: progress 1.2s ease-in-out infinite;
+	}
+	@keyframes progress {
+		from {
+			transform: translateX(-100%);
+		}
+		to {
+			transform: translateX(300%);
+		}
+	}
+	.spinner {
+		width: 0.9em;
+		height: 0.9em;
+		border: 2px solid currentColor;
+		border-right-color: transparent;
+		border-radius: 50%;
+		animation: spin 0.8s linear infinite;
+	}
+	@keyframes spin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.progress span,
+		.spinner {
+			animation-duration: 3s;
+		}
 	}
 	.public {
 		display: inline-flex;
