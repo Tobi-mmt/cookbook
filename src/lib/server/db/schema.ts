@@ -324,6 +324,8 @@ export const pageViews = pgTable(
 		/** only the browser and OS family without versions, null if unknown */
 		browser: text('browser'),
 		os: text('os'),
+		/** domain of the linking page for the first page of a visit, '' if unknown, null afterwards */
+		referrer: text('referrer'),
 		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
 	},
 	(table) => [index('page_views_day_path_idx').on(table.day, table.path)]

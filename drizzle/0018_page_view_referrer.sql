@@ -1,0 +1,1 @@
+ALTER TABLE "page_views" ADD COLUMN "referrer" text;

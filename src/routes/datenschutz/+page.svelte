@@ -91,8 +91,9 @@
 		Seitenaufrufe zählen wir selbst und ohne Cookies: Aus einem täglich wechselnden Zufallswert,
 		deiner IP-Adresse und deinem Browser bilden wir einen Hash. Die IP-Adresse speichern wir nicht,
 		und der Zufallswert wird nach einem Tag gelöscht. Danach lässt sich der Hash niemandem mehr
-		zuordnen. Gespeichert werden nur die aufgerufene Seite, der Tag sowie Browser- und
-		Betriebssystemfamilie ohne Version.
+		zuordnen. Gespeichert werden nur die aufgerufene Seite, der Tag, Browser- und
+		Betriebssystemfamilie ohne Version und beim ersten Aufruf der Domainname der Seite, über deren
+		Link du gekommen bist, ohne die genaue Adresse.
 	</p>
 	<p>
 		Schriften, Bilder und Programmcode kommen von unserem eigenen Server. Die Sicherheitsabfrage

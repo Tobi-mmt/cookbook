@@ -1,5 +1,5 @@
 import { createHash, randomBytes } from 'node:crypto';
-import { and, count, countDistinct, desc, gte, lt, lte, sql } from 'drizzle-orm';
+import { and, count, countDistinct, desc, gte, isNotNull, lt, lte, sql } from 'drizzle-orm';
 import { isbot } from 'isbot';
 import type { Database } from './db/client';
 import { pageViews, trackingSalts } from './db/schema';
@@ -59,7 +59,9 @@ export const normalizePath = (path: string) => {
 	if (!path.startsWith('/') || path.startsWith('//')) return null;
 	const { pathname } = new URL(path, 'http://localhost');
 	if (pathname.length > MAX_PATH_LENGTH) return null;
-	if (pathname !== '/' && !/^\/(@|rezept\/)/.test(pathname)) return null;
+	if (pathname !== '/' && !/^\/(@|rezept\/|rezepte(\/|$)|ueber$|kosten$|suche$)/.test(pathname)) {
+		return null;
+	}
 	return pathname;
 };
 
@@ -84,6 +86,30 @@ export const getDailySalt = async (db: Database, day: string) => {
 	return salt;
 };
 
+const MAX_REFERRER_LENGTH = 100;
+
+/** Only the domain of an external page, so that no addresses with personal data are stored */
+export const normalizeReferrer = (referrer: string | undefined, ownHost: string) => {
+	if (!referrer) return null;
+	try {
+		const url = new URL(referrer);
+		if (url.protocol !== 'https:' && url.protocol !== 'http:') return null;
+		const host = url.hostname.toLowerCase().replace(/^www\./, '');
+		if (
+			!host ||
+			host ===
+				ownHost
+					.toLowerCase()
+					.replace(/^www\./, '')
+					.split(':')[0]
+		)
+			return null;
+		return host.slice(0, MAX_REFERRER_LENGTH);
+	} catch {
+		return null;
+	}
+};
+
 export const recordPageView = async (
 	db: Database,
 	{
@@ -91,8 +117,16 @@ export const recordPageView = async (
 		host,
 		ip,
 		userAgent,
+		referrer = null,
 		now = new Date()
-	}: { path: string; host: string; ip: string; userAgent: string; now?: Date }
+	}: {
+		path: string;
+		host: string;
+		ip: string;
+		userAgent: string;
+		referrer?: string | null;
+		now?: Date;
+	}
 ) => {
 	const day = trackingDay(now);
 	const salt = await getDailySalt(db, day);
@@ -100,6 +134,7 @@ export const recordPageView = async (
 		day,
 		path,
 		visitorHash: visitorHash(salt, host, ip, userAgent),
+		referrer,
 		...parseUserAgent(userAgent)
 	});
 };
@@ -125,7 +160,7 @@ export const getDailyStats = (db: Database, from: string, to: string): Promise<D
 /** Visitors per page, browser or OS are unique per day, like the visitors of the whole site */
 export const getBreakdown = async (
 	db: Database,
-	column: 'path' | 'browser' | 'os',
+	column: 'path' | 'browser' | 'os' | 'referrer',
 	from: string,
 	to: string
 ): Promise<BreakdownStats[]> => {
@@ -136,7 +171,9 @@ export const getBreakdown = async (
 			pageViews: count().as('page_views')
 		})
 		.from(pageViews)
-		.where(inRange(from, to))
+		.where(
+			and(inRange(from, to), column === 'referrer' ? isNotNull(pageViews.referrer) : undefined)
+		)
 		.groupBy(pageViews.day, pageViews[column])
 		.as('per_day');
 
