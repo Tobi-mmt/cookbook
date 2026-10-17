@@ -10,7 +10,8 @@
 	import { me } from '#lib/me.svelte.js';
 	import { setFilterParam } from '#lib/filterNavigation.js';
 	import { filterRecipes, presentCategories, readFilter } from '#lib/recipeFilter.js';
-	import { SITE_NAME } from '#lib/site.js';
+	import { SITE_NAME, SITE_TAGLINE } from '#lib/site.js';
+	import { jsonLdScript } from '#lib/recipeText.js';
 
 	let { data }: { data: { popular: RecipeSummary[]; fresh: RecipeSummary[] } } = $props();
 
@@ -55,15 +56,30 @@
 </script>
 
 <svelte:head>
-	<title>{SITE_NAME}</title>
+	<title>{SITE_NAME} – {SITE_TAGLINE}</title>
 	<meta property="og:title" content={SITE_NAME} />
 	<meta
 		name="description"
-		content="Kochbücher zum Teilen: Rezepte sammeln, gemeinsam bearbeiten und von anderen übernehmen."
+		content="Rezepte digital speichern, aus Links importieren und zusammen mit Familie und Freunden in gemeinsamen Kochbüchern pflegen. Kostenlos und ohne Werbung."
 	/>
+	<link rel="canonical" href="{page.url.origin}/" />
 	<meta property="og:site_name" content={SITE_NAME} />
 	<meta property="og:type" content="website" />
 	<meta property="og:image" content="{page.url.origin}/og-image.png" />
+	<!-- eslint-disable-next-line svelte/no-at-html-tags -- escaped JSON of own data -->
+	{@html jsonLdScript({
+		'@context': 'https://schema.org',
+		'@type': 'WebSite',
+		name: SITE_NAME,
+		description: SITE_TAGLINE,
+		url: `${page.url.origin}/`,
+		inLanguage: 'de',
+		potentialAction: {
+			'@type': 'SearchAction',
+			target: `${page.url.origin}/suche?q={search_term_string}`,
+			'query-input': 'required name=search_term_string'
+		}
+	})}
 </svelte:head>
 
 {#if !user}
