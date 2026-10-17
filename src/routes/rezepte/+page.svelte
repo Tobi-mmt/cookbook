@@ -26,7 +26,11 @@
 		Alle Rezepte der {SITE_NAME} stammen aus Kochbüchern von Menschen, die gern kochen. Such dir eine
 		Kategorie aus oder durchsuche alle Rezepte.
 	</p>
-	<LandingLinks landings={data.landings} />
+	{#if data.landings.length}
+		<LandingLinks landings={data.landings} />
+	{:else}
+		<p class="hint">Hier erscheinen bald die ersten Rezepte.</p>
+	{/if}
 	<SearchField action={resolve('/suche')} placeholder="Alle Rezepte durchsuchen" />
 </div>
 
