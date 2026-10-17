@@ -16,7 +16,9 @@
 </script>
 
 <picture>
-	<source type="image/avif" srcset={srcset(image.variants.avif)} {sizes} />
+	{#if image.variants.avif.length}
+		<source type="image/avif" srcset={srcset(image.variants.avif)} {sizes} />
+	{/if}
 	<source type="image/webp" srcset={srcset(image.variants.webp)} {sizes} />
 	<img
 		class={className}
