@@ -1,4 +1,5 @@
 import { error, fail, redirect, type RequestEvent } from '@sveltejs/kit';
+import { waitUntil } from '@vercel/functions';
 import { and, eq, isNull } from 'drizzle-orm';
 import { z } from 'zod';
 import { recipeInputSchema, type RecipeInput } from '../recipeInput';
@@ -12,7 +13,8 @@ import { storageStatus } from './storageUsage';
 import { listCategories } from './categories';
 import { getDb, getStorage } from './context';
 import { recipes, recipeVersions, users } from './db/schema';
-import { imageFolder, processAndStoreImage } from './images';
+import { imageFolder, storeImagePreview, type AvifVariants } from './images';
+import { completeImage } from './imageCompletion';
 import { createRecipeId, saveRecipe } from './recipes';
 import { moveRecipeToTrash } from './trash';
 import { extractRecipe } from './recipeImport/extract';
@@ -56,7 +58,15 @@ export const withinDailyLimit = (
 	);
 
 /** An uploaded photo or a freely licensed image of an imported page */
-const readImage = async (form: FormData, folder: string, user: Editor) => {
+const readImage = async (
+	form: FormData,
+	folder: string,
+	user: Editor
+): Promise<{
+	image?: Parameters<typeof saveRecipe>[3]['image'];
+	createAvif?: () => Promise<AvifVariants>;
+	error?: string;
+}> => {
 	const file = form.get('image');
 	const importUrl = String(form.get('importImageUrl') ?? '');
 	const hasFile = file instanceof File && file.size > 0;
@@ -81,8 +91,9 @@ const readImage = async (form: FormData, folder: string, user: Editor) => {
 
 	try {
 		const body = hasFile ? Buffer.from(await file.arrayBuffer()) : await fetchImage(importUrl);
-		const image = await processAndStoreImage(body, folder, getStorage());
+		const { image, createAvif } = await storeImagePreview(body, folder, getStorage());
 		return {
+			createAvif,
 			image: {
 				...image,
 				uploadedBy: user.id,
@@ -185,18 +196,26 @@ export const saveRecipeAction = async (event: RequestEvent, existingId?: string)
 	}
 
 	const id = existingId ?? createRecipeId();
-	const { image, error: imageError } = await readImage(form, imageFolder(cookbookId, id), editor);
+	const {
+		image,
+		createAvif,
+		error: imageError
+	} = await readImage(form, imageFolder(cookbookId, id), editor);
 	if (imageError) return fail(400, { error: imageError });
 
 	await storeAndRevalidate(event, { id, input, image, cookbookId, userId: editor.id, previous });
 
-	await revalidate(
-		event.url.origin,
-		await affectedPaths(db, {
-			cookbookIds: [cookbookId],
-			recipes: [{ id, title: input.title }, ...(previous ? [previous] : [])]
-		})
-	);
+	if (image && createAvif) {
+		waitUntil(
+			completeImage(db, getStorage(), {
+				webpUrl: image.variants.webp[0].url,
+				createAvif,
+				origin: event.url.origin,
+				cookbookId,
+				recipe: { id, title: input.title }
+			}).catch((cause) => console.error('Creating the AVIF variants failed', cause))
+		);
+	}
 	redirect(303, `${recipeUrl({ id, title: input.title })}?gespeichert`);
 };
 
