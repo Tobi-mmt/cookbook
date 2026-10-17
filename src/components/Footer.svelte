@@ -3,6 +3,8 @@
 </script>
 
 <footer>
+	<a href={resolve('/ueber')}>Über die Kochbuchbande</a>
+	<a href={resolve('/rezepte')}>Rezepte nach Kategorie</a>
 	<a href={resolve('/nutzungsbedingungen')}>Nutzungsbedingungen</a>
 	<a href={resolve('/datenschutz')}>Datenschutz</a>
 	<a href={resolve('/impressum')}>Impressum</a>
