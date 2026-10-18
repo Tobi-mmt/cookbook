@@ -98,7 +98,10 @@
 			</div>
 			<div class="infos">
 				<div class="labels">
-					<p class="category">{recipe.meta.category.name}</p>
+					<p class="category">
+						<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- static path -->
+						<a href="/rezepte/{recipe.meta.category.slug}">{recipe.meta.category.name}</a>
+					</p>
 					{#if recipe.isNew}<span class="badge">NEU</span>{/if}
 				</div>
 				<h1 itemprop="name" class="title">{recipe.title}</h1>
@@ -342,6 +345,13 @@
 		font-size: 0.875rem;
 		line-height: 1.2;
 		color: var(--color-text-subtle);
+	}
+	.category a {
+		color: inherit;
+		text-decoration: none;
+	}
+	.category a:hover {
+		text-decoration: underline;
 	}
 	.category::before {
 		content: '';

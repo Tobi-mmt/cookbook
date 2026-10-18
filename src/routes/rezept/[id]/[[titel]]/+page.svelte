@@ -26,7 +26,16 @@
 	);
 
 	const structuredData = $derived(
-		jsonLdScript(recipeJsonLd(recipe, { origin: page.url.origin, canonical }))
+		jsonLdScript(recipeJsonLd(recipe, { origin: page.url.origin, canonical })) +
+			jsonLdScript({
+				'@context': 'https://schema.org',
+				'@type': 'BreadcrumbList',
+				itemListElement: [
+					['Rezepte', `${page.url.origin}/rezepte`],
+					[recipe.meta.category.name, `${page.url.origin}/rezepte/${recipe.meta.category.slug}`],
+					[recipe.title, canonical]
+				].map(([name, item], index) => ({ '@type': 'ListItem', position: index + 1, name, item }))
+			})
 	);
 
 	const imageData = $derived.by(() => {
