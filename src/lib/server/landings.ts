@@ -28,9 +28,16 @@ const STAPLES = new Set([
 
 const listed = () => and(isVisible, indexableOwner(), notAnUnchangedCopy);
 
-const ingredientName = sql<string>`trim(regexp_replace(${ingredients.name}, '\\s*\\([^)]*\\)', '', 'g'))`;
-/** lower case without notes in brackets, a plural "-en", "-ln" or "-rn" loses its "n" */
-const ingredientKey = sql<string>`regexp_replace(lower(${ingredientName}), '([elr])n$', '\\1')`;
+const ingredientName = sql<string>`trim(regexp_replace(regexp_replace(${ingredients.name}, '\\s*\\([^)]*\\)', '', 'g'), '\\s*,.*$', ''))`;
+/**
+ * Every word through the German stemmer of Postgres (Tomaten, Äpfel, Champignons), plurals on
+ * "-ln" and "-rn" that it keeps (Zwiebeln, Kartoffeln) additionally lose their "n"
+ */
+const ingredientKey = sql<string>`(
+	select string_agg(regexp_replace(coalesce((ts_lexize('german_stem', word))[1], word), '([lr])n$', '\\1'), ' ' order by position)
+	from unnest(regexp_split_to_array(lower(${ingredientName}), '[^[:alpha:]]+')) with ordinality as words(word, position)
+	where word <> ''
+)`;
 
 const countBy = async <T extends string | number>(
 	db: Database,
@@ -73,7 +80,7 @@ export const listLandings = async (db: Database): Promise<Landing[]> => {
 /** Ingredients in at least two recipes, spelled as most recipes spell them */
 /**
  * Ingredients in at least two recipes. Singular and plural share a page ("Zwiebel" and "Zwiebeln"),
- * which is named after the plural if any recipe uses it.
+ * named after the longest spelling, which is the plural if any recipe uses it.
  */
 export const listIngredientLandings = async (
 	db: Database
@@ -100,19 +107,21 @@ export const listIngredientLandings = async (
 		from().groupBy(ingredientKey, ingredientName)
 	]);
 
-	const nameOf = (key: string) => {
-		const variants = spellings
+	const nameOf = (key: string) =>
+		spellings
 			.filter((spelling) => spelling.key === key)
-			.sort((a, b) => b.count - a.count);
-		const plural = variants.find(({ name }) => name.toLowerCase() !== key);
-		return (plural ?? variants[0])?.name ?? key;
-	};
+			.sort(
+				(a, b) =>
+					b.name.length - a.name.length ||
+					Number(b.name.toLowerCase() !== key) - Number(a.name.toLowerCase() !== key) ||
+					b.count - a.count
+			)[0]?.name ?? key;
 
 	const seen = new Set<string>();
 	return keys
-		.filter(({ key }) => key && !STAPLES.has(key))
-		.map(({ key, count }) => {
-			const name = nameOf(key);
+		.map(({ key, count }) => ({ key, count, name: nameOf(key) }))
+		.filter(({ key, name }) => key && !STAPLES.has(name.toLowerCase()))
+		.map(({ key, count, name }) => {
 			return {
 				kind: 'ingredient' as const,
 				key,
