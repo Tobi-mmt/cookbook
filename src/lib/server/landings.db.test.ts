@@ -81,6 +81,41 @@ describe.skipIf(!hasTestDatabase)('ingredient landing pages', () => {
 	});
 });
 
+describe.skipIf(!hasTestDatabase)('ingredient keys', () => {
+	const handle = useTestDatabase();
+
+	test('stem German plurals and ignore notes after a comma', async () => {
+		const { db } = handle;
+		const user = await createTestUser(db, 'stamm');
+		await db
+			.update(users)
+			.set({ createdAt: new Date('2020-01-01') })
+			.where(eq(users.id, user.id));
+		const { id: cookbookId } = await createTestCookbook(db, user.id);
+		const options = { cookbookId, userId: user.id };
+		await saveRecipe(
+			db,
+			'k1',
+			withIngredients('Kuchen', ['Äpfel', 'Tomaten', 'Kartoffeln']),
+			options
+		);
+		await saveRecipe(
+			db,
+			'k2',
+			withIngredients('Mus', ['Apfel', 'Tomate', 'Kartoffel, gewürfelt']),
+			options
+		);
+
+		expect(
+			(await listIngredientLandings(db)).map(({ slug, count }) => [slug, count]).sort()
+		).toEqual([
+			['aepfel', 2],
+			['kartoffeln', 2],
+			['tomaten', 2]
+		]);
+	});
+});
+
 describe('similarity', () => {
 	test('is high for typos and low for other words', () => {
 		expect(similarity('ziwbelen', 'zwiebeln')).toBeGreaterThanOrEqual(0.6);
