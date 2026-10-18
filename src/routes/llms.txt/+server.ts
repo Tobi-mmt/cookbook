@@ -2,7 +2,7 @@ import { and, desc, eq } from 'drizzle-orm';
 import { getDb } from '#lib/server/context.js';
 import { cookbooks, recipes } from '#lib/server/db/schema.js';
 import { notAnUnchangedCopy } from '#lib/server/home.js';
-import { listLandings } from '#lib/server/landings.js';
+import { listIngredientLandings, listLandings } from '#lib/server/landings.js';
 import { isVisible } from '#lib/server/recipes.js';
 import { indexableOwner } from '#lib/server/indexing.js';
 import { landingPath } from '#lib/landings.js';
@@ -15,8 +15,9 @@ const RECIPES = 200;
 /** A guide to the site for AI assistants, see https://llmstxt.org */
 export async function GET({ url }) {
 	const db = getDb();
-	const [landings, newest] = await Promise.all([
+	const [landings, ingredientLandings, newest] = await Promise.all([
 		listLandings(db),
+		listIngredientLandings(db),
 		db
 			.select({ id: recipes.id, title: recipes.title })
 			.from(recipes)
@@ -43,7 +44,11 @@ Jedes Rezept gibt es auch als Markdown: \`${url.origin}/rezept/<id>.md\`. Rezept
 
 ## Kategorien
 
-${landings.map(({ slug, title, count }) => `- [${title}](${link(landingPath(slug))}): ${count} Rezepte`).join('\n')}
+${landings.map((landing) => `- [${landing.title}](${link(landingPath(landing))}): ${landing.count} Rezepte`).join('\n')}
+
+## Rezepte nach Zutat
+
+${ingredientLandings.map((landing) => `- [${landing.title}](${link(landingPath(landing))}): ${landing.count} Rezepte`).join('\n')}
 
 ## Neueste Rezepte
 
