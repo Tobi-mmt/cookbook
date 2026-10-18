@@ -136,3 +136,59 @@ export const loadIngredientLanding = async (db: Database, slug: string) => {
 	const where = sql`exists (select 1 from ${ingredients} where ${ingredients.recipeId} = ${recipes.id} and ${ingredients.kind} = 'ingredient' and ${ingredientKey} = ${key})`;
 	return { ...rest, recipes: await listedRecipes(db, where) };
 };
+
+const allLandings = async (db: Database): Promise<Landing[]> => {
+	const [landings, ingredientLandings] = await Promise.all([
+		listLandings(db),
+		listIngredientLandings(db)
+	]);
+	return [
+		...landings,
+		...ingredientLandings.map(({ kind, slug, title, name, count }) => ({
+			kind,
+			slug,
+			title,
+			name,
+			count
+		}))
+	];
+};
+
+/** 1 for equal words, lower the more letters are missing, added, changed or swapped */
+export const similarity = (a: string, b: string) => {
+	const distance: number[][] = Array.from({ length: a.length + 1 }, (_, i) =>
+		Array.from({ length: b.length + 1 }, (_, j) => (i === 0 ? j : j === 0 ? i : 0))
+	);
+	for (let i = 1; i <= a.length; i++) {
+		for (let j = 1; j <= b.length; j++) {
+			const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+			distance[i][j] = Math.min(
+				distance[i - 1][j] + 1,
+				distance[i][j - 1] + 1,
+				distance[i - 1][j - 1] + cost
+			);
+			if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
+				distance[i][j] = Math.min(distance[i][j], distance[i - 2][j - 2] + 1);
+			}
+		}
+	}
+	return 1 - distance[a.length][b.length] / Math.max(a.length, b.length, 1);
+};
+
+const MIN_SIMILARITY = 0.6;
+
+/** Landing pages that fit a search, the best first */
+export const searchLandings = async (db: Database, query: string, limit = 3) => {
+	const term = ingredientSlug(query.trim().slice(0, 100));
+	if (term.length < 3) return [];
+	return (await allLandings(db))
+		.map((landing) => {
+			const name = ingredientSlug(landing.name);
+			const prefix = name.startsWith(term) || term.startsWith(name);
+			return { landing, score: prefix ? 1 : similarity(term, name) };
+		})
+		.filter(({ score }) => score >= MIN_SIMILARITY)
+		.sort((a, b) => b.score - a.score || b.landing.count - a.landing.count)
+		.slice(0, limit)
+		.map(({ landing }) => landing);
+};

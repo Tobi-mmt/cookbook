@@ -4,6 +4,7 @@
 	import { afterNavigate } from '$app/navigation';
 	import { recipePath } from '#lib/paths.js';
 	import type { SearchResult } from '#lib/server/search.js';
+	import { landingPath, type Landing } from '#lib/landings.js';
 
 	/** on phones the field is hidden behind a button and takes the whole top bar when open */
 	export let expanded = false;
@@ -12,6 +13,7 @@
 	let active = false;
 	let loading = false;
 	let results: SearchResult[] = [];
+	let landings: Landing[] = [];
 	let root: HTMLDivElement | undefined;
 	let inputRef: HTMLInputElement | undefined;
 	let listRef: HTMLUListElement | undefined;
@@ -25,6 +27,7 @@
 		controller?.abort();
 		if (query.length < 2) {
 			results = [];
+			landings = [];
 			loading = false;
 			return;
 		}
@@ -35,7 +38,7 @@
 				const response = await fetch(`/api/suche?q=${encodeURIComponent(query)}`, {
 					signal: controller.signal
 				});
-				results = await response.json();
+				({ recipes: results, landings } = await response.json());
 				loading = false;
 			} catch (error) {
 				if ((error as Error).name !== 'AbortError') {
@@ -138,12 +141,21 @@
 
 	{#if showPanel}
 		<div class="panel" id="search-results">
-			{#if loading && !results.length}
+			{#if loading && !results.length && !landings.length}
 				<p class="hint">Suche…</p>
-			{:else if !results.length}
+			{:else if !results.length && !landings.length}
 				<p class="hint">Keine Rezepte zu „{query}“</p>
 			{:else}
 				<ul class="results" bind:this={listRef}>
+					{#each landings as landing (landingPath(landing))}
+						<li>
+							<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- static paths -->
+							<a href={landingPath(landing)} class="landing">
+								<span class="title">{landing.title}</span>
+								<span class="author">{landing.count} Rezepte</span>
+							</a>
+						</li>
+					{/each}
 					{#each results as item (item.id)}
 						<li>
 							<a href={recipePath(item)}>
@@ -244,6 +256,9 @@
 		background: var(--color-surface-muted);
 	}
 
+	.landing .title {
+		font-weight: 700;
+	}
 	.panel {
 		position: absolute;
 		top: calc(100% + 0.5rem);
