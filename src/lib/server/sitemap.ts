@@ -3,7 +3,8 @@ import { slugerize } from '../slugerize';
 import type { Database } from './db/client';
 import { cookbooks, recipes, users } from './db/schema';
 import { INDEXING_DELAY } from './indexing';
-import { listLandings } from './landings';
+import { listIngredientLandings, listLandings } from './landings';
+import { landingPath } from '../landings';
 import { isVisible } from './recipes';
 
 export const URLS_PER_SITEMAP = 5000;
@@ -19,7 +20,7 @@ export const listSitemapPaths = async (db: Database, now = new Date()) => {
 	);
 	const recipeCount = sql<number>`(select count(*)::int from ${recipes} where ${recipes.cookbookId} = ${cookbooks.id} and ${recipes.deletedAt} is null and ${recipes.hiddenAt} is null)`;
 
-	const [recipeRows, cookbookRows, landings] = await Promise.all([
+	const [recipeRows, cookbookRows, landings, ingredientLandings] = await Promise.all([
 		db
 			.select({ id: recipes.id, title: recipes.title, updatedAt: recipes.updatedAt })
 			.from(recipes)
@@ -34,7 +35,8 @@ export const listSitemapPaths = async (db: Database, now = new Date()) => {
 			.where(
 				and(isNull(cookbooks.deletedAt), isNull(cookbooks.hiddenAt), indexable, gt(recipeCount, 0))
 			),
-		listLandings(db)
+		listLandings(db),
+		listIngredientLandings(db)
 	]);
 	const owners = [...new Set(cookbookRows.map(({ owner }) => owner))];
 
@@ -42,7 +44,7 @@ export const listSitemapPaths = async (db: Database, now = new Date()) => {
 		{ path: '/' },
 		{ path: '/ueber' },
 		{ path: '/rezepte' },
-		...landings.map(({ slug }) => ({ path: `/rezepte/${slug}` })),
+		...[...landings, ...ingredientLandings].map((landing) => ({ path: landingPath(landing) })),
 		...owners.map((owner) => ({ path: `/@${owner}` })),
 		...cookbookRows.map(({ owner, slug }) => ({ path: `/@${owner}/${slug}` })),
 		...recipeRows.map(({ id, title, updatedAt }) => ({

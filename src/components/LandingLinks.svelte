@@ -8,7 +8,7 @@
 	{#each landings as landing (landing.slug)}
 		<li>
 			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- static paths -->
-			<a href={landingPath(landing.slug)}>{landing.title} <span>{landing.count}</span></a>
+			<a href={landingPath(landing)}>{landing.title} <span>{landing.count}</span></a>
 		</li>
 	{/each}
 </ul>
