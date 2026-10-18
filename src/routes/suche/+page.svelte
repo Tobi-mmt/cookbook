@@ -4,8 +4,11 @@
 	import { resolve } from '$app/paths';
 	import SearchField from '#components/SearchField.svelte';
 	import { SITE_NAME } from '#lib/site.js';
+	import LandingLinks from '#components/LandingLinks.svelte';
+	import type { Landing } from '#lib/landings.js';
 
-	let { data }: { data: { query: string; recipes: RecipeSummary[] } } = $props();
+	let { data }: { data: { query: string; landings: Landing[]; recipes: RecipeSummary[] } } =
+		$props();
 </script>
 
 <svelte:head>
@@ -14,6 +17,12 @@
 </svelte:head>
 
 <SearchField action={resolve('/suche')} value={data.query} placeholder="Alle Rezepte durchsuchen" />
+
+{#if data.landings.length}
+	<nav class="landings" aria-label="Passende Sammlungen">
+		<LandingLinks landings={data.landings} />
+	</nav>
+{/if}
 
 {#if data.recipes.length}
 	<div class="recipe-grid">
@@ -30,6 +39,11 @@
 {/if}
 
 <style>
+	.landings {
+		display: flex;
+		justify-content: center;
+		padding: 0.75rem 1.5rem 1rem;
+	}
 	.empty {
 		padding: 2rem 1.5rem;
 		text-align: center;

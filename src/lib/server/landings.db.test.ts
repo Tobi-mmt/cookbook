@@ -2,7 +2,12 @@ import { eq } from 'drizzle-orm';
 import { describe, expect, test } from 'vitest';
 import type { RecipeInput } from '../recipeInput';
 import { users } from './db/schema';
-import { listIngredientLandings, loadIngredientLanding } from './landings';
+import {
+	listIngredientLandings,
+	loadIngredientLanding,
+	searchLandings,
+	similarity
+} from './landings';
 import { saveRecipe } from './recipes';
 import { hasTestDatabase, useTestDatabase } from './testing/db';
 import { createTestCookbook, createTestUser, testInput } from './testing/fixtures';
@@ -50,5 +55,33 @@ describe.skipIf(!hasTestDatabase)('ingredient landing pages', () => {
 		expect(page?.title).toMatch(/^Rezepte mit [Rr]ote Linsen$/);
 		expect(page?.recipes.map(({ id }) => id).sort()).toEqual(['a', 'b']);
 		expect(await loadIngredientLanding(db, 'salz')).toBeNull();
+	});
+
+	test('finds the landing page of an ingredient despite typos', async () => {
+		const { db } = handle;
+		const user = await createTestUser(db, 'suche');
+		await db
+			.update(users)
+			.set({ createdAt: new Date('2020-01-01') })
+			.where(eq(users.id, user.id));
+		const { id: cookbookId } = await createTestCookbook(db, user.id);
+		const options = { cookbookId, userId: user.id };
+		await saveRecipe(db, 'z1', withIngredients('Zwiebelkuchen', ['Zwiebeln']), options);
+		await saveRecipe(db, 'z2', withIngredients('Zwiebelsuppe', ['Zwiebeln']), options);
+
+		for (const query of ['Zwiebeln', 'zwiebel', 'ziwbelen']) {
+			expect((await searchLandings(db, query))[0]?.slug, query).toBe('zwiebeln');
+		}
+		expect(await searchLandings(db, 'Schokolade')).toEqual(
+			expect.not.arrayContaining([expect.objectContaining({ slug: 'zwiebeln' })])
+		);
+	});
+});
+
+describe('similarity', () => {
+	test('is high for typos and low for other words', () => {
+		expect(similarity('ziwbelen', 'zwiebeln')).toBeGreaterThanOrEqual(0.6);
+		expect(similarity('schokolade', 'zwiebeln')).toBeLessThan(0.6);
+		expect(similarity('reis', 'mais')).toBeLessThan(0.6);
 	});
 });
