@@ -80,7 +80,6 @@
 				</li>
 				<li class="separator" aria-hidden="true"></li>
 				<li><a href={resolve('/neu')} onclick={() => (open = false)}>Neues Rezept</a></li>
-				<li><a href={resolve('/import')} onclick={() => (open = false)}>Rezept importieren</a></li>
 				<li><a href={resolve('/konto')} onclick={() => (open = false)}>Konto</a></li>
 				{#if user.role === 'admin'}
 					<li><a href={resolve('/admin')} onclick={() => (open = false)}>Verwaltung</a></li>

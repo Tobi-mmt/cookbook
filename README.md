@@ -44,7 +44,7 @@ Change `src/lib/server/db/schema.ts`, then run `yarn db:generate` to create a mi
 | `/@username`               | All recipes of a person, filterable by cookbook      |
 | `/@username/cookbook`      | A cookbook, `…/einstellungen` for its editors        |
 | `/rezept/{id}/{title}`     | A recipe, `…/bearbeiten` and `…/verlauf` for editors |
-| `/neu`, `/import`          | Create or import a recipe                            |
+| `/neu`                     | Create a recipe or import it from a link             |
 | `/anmelden`, `/willkommen` | Sign in or register, choose a username               |
 | `/konto`                   | Account, passkeys, export, deletion                  |
 | `/einladung/{token}`       | Join a cookbook                                      |

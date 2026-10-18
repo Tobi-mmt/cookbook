@@ -68,7 +68,9 @@
 					<a class="btn btn--primary" href="{resolve('/neu')}?kochbuch={cookbook.id}"
 						>Rezept anlegen</a
 					>
-					<a class="btn" href="{resolve('/import')}?kochbuch={cookbook.id}">Aus Link importieren</a>
+					<a class="btn" href="{resolve('/neu')}?link&kochbuch={cookbook.id}"
+						>Aus Link importieren</a
+					>
 					<a class="btn" href={resolve('/')}>Rezepte entdecken</a>
 				</div>
 			</div>
