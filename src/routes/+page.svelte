@@ -12,8 +12,19 @@
 	import { filterRecipes, presentCategories, readFilter } from '#lib/recipeFilter.js';
 	import { SITE_NAME, SITE_TAGLINE } from '#lib/site.js';
 	import { jsonLdScript } from '#lib/recipeText.js';
+	import LandingLinks from '#components/LandingLinks.svelte';
+	import type { Landing } from '#lib/landings.js';
 
-	let { data }: { data: { popular: RecipeSummary[]; fresh: RecipeSummary[] } } = $props();
+	let {
+		data
+	}: {
+		data: {
+			popular: RecipeSummary[];
+			fresh: RecipeSummary[];
+			landings: Landing[];
+			ingredients: Landing[];
+		};
+	} = $props();
 
 	const url = $derived(page.shallow?.url ?? page.url);
 	const filter = $derived(readFilter(url));
@@ -149,7 +160,39 @@
 	{/if}
 {/if}
 
+{#if data.landings.length}
+	<nav class="explore" aria-label="Rezepte nach Kategorie und Zutat">
+		<h2>Rezepte nach Kategorie</h2>
+		<LandingLinks landings={data.landings} />
+		{#if data.ingredients.length}
+			<h2>Beliebte Zutaten</h2>
+			<LandingLinks landings={data.ingredients} />
+		{/if}
+		<p><a href={resolve('/rezepte')}>Alle Kategorien und Zutaten</a></p>
+	</nav>
+{/if}
+
 <style>
+	.explore {
+		max-width: 46rem;
+		margin: 3rem auto 0;
+		padding: 0 1.5rem;
+	}
+	.explore h2 {
+		margin: 1.5rem 0 0.75rem;
+	}
+	.explore p {
+		margin: 1rem 0 0;
+		font-size: 0.9375rem;
+	}
+	.explore a {
+		color: var(--color-text-muted);
+	}
+	@media (max-width: 599px) {
+		.explore {
+			padding: 0 1rem;
+		}
+	}
 	.slot {
 		display: flex;
 		justify-content: center;
