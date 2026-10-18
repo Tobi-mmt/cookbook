@@ -10,7 +10,7 @@
 	{#if open}
 		<div class="choices">
 			<a class="btn" href="{resolve('/neu')}?kochbuch={cookbookId}">Neues Rezept</a>
-			<a class="btn" href="{resolve('/import')}?kochbuch={cookbookId}">Aus Link importieren</a>
+			<a class="btn" href="{resolve('/neu')}?link&kochbuch={cookbookId}">Aus Link importieren</a>
 		</div>
 	{/if}
 	<button

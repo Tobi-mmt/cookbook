@@ -62,19 +62,19 @@ Leitlinie: so wenige Begriffe, Einstellungen und Rechte wie möglich. Wer nichts
 
 ### Pfade
 
-| Pfad                                        | Inhalt                                                      | Login      |
-| ------------------------------------------- | ----------------------------------------------------------- | ---------- |
-| `/`                                         | Startseite: Suche über alle Rezepte, neue Rezepte, Einstieg | –          |
-| `/@{benutzername}`                          | Profil: Kochbücher und alle Rezepte der Person              | –          |
-| `/@{benutzername}/{kochbuch}`               | Kochbuch: Kacheln, Filter, Suche im Kochbuch                | –          |
-| `/@{benutzername}/{kochbuch}/einstellungen` | Name, Bearbeiter, Einladungen, Statistik, Löschen           | Bearbeiter |
-| `/rezept/{id}/{titel}`                      | Rezept                                                      | –          |
-| `/rezept/{id}/{titel}/bearbeiten`           | Editor                                                      | Bearbeiter |
-| `/neu`, `/import`                           | Rezept anlegen oder importieren, mit Auswahl des Kochbuchs  | ✓          |
-| `/einladung/{token}`                        | Einladung annehmen                                          | ✓          |
-| `/anmelden`                                 | Anmelden und Registrieren in einem                          | –          |
-| `/konto`                                    | Benutzername, E-Mail, Passkeys, Datenexport, Konto löschen  | ✓          |
-| `/admin`                                    | Admin-Bereich: Personen, Kochbücher, Rezepte, Meldungen     | nur Admins |
+| Pfad                                        | Inhalt                                                                   | Login      |
+| ------------------------------------------- | ------------------------------------------------------------------------ | ---------- |
+| `/`                                         | Startseite: Suche über alle Rezepte, neue Rezepte, Einstieg              | –          |
+| `/@{benutzername}`                          | Profil: Kochbücher und alle Rezepte der Person                           | –          |
+| `/@{benutzername}/{kochbuch}`               | Kochbuch: Kacheln, Filter, Suche im Kochbuch                             | –          |
+| `/@{benutzername}/{kochbuch}/einstellungen` | Name, Bearbeiter, Einladungen, Statistik, Löschen                        | Bearbeiter |
+| `/rezept/{id}/{titel}`                      | Rezept                                                                   | –          |
+| `/rezept/{id}/{titel}/bearbeiten`           | Editor                                                                   | Bearbeiter |
+| `/neu`                                      | Rezept anlegen oder oben per Link importieren, mit Auswahl des Kochbuchs | ✓          |
+| `/einladung/{token}`                        | Einladung annehmen                                                       | ✓          |
+| `/anmelden`                                 | Anmelden und Registrieren in einem                                       | –          |
+| `/konto`                                    | Benutzername, E-Mail, Passkeys, Datenexport, Konto löschen               | ✓          |
+| `/admin`                                    | Admin-Bereich: Personen, Kochbücher, Rezepte, Meldungen                  | nur Admins |
 
 ### Warum `/@tobi` statt `/tobi`
 
