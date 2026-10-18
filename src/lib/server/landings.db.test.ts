@@ -67,8 +67,11 @@ describe.skipIf(!hasTestDatabase)('ingredient landing pages', () => {
 		const { id: cookbookId } = await createTestCookbook(db, user.id);
 		const options = { cookbookId, userId: user.id };
 		await saveRecipe(db, 'z1', withIngredients('Zwiebelkuchen', ['Zwiebeln']), options);
-		await saveRecipe(db, 'z2', withIngredients('Zwiebelsuppe', ['Zwiebeln']), options);
+		await saveRecipe(db, 'z2', withIngredients('Zwiebelsuppe', ['Zwiebel']), options);
+		await saveRecipe(db, 'z3', withIngredients('Zwiebelbrot', ['zwiebel (rot)']), options);
 
+		const [zwiebeln] = await listIngredientLandings(db);
+		expect(zwiebeln).toMatchObject({ slug: 'zwiebeln', title: 'Rezepte mit Zwiebeln', count: 3 });
 		for (const query of ['Zwiebeln', 'zwiebel', 'ziwbelen']) {
 			expect((await searchLandings(db, query))[0]?.slug, query).toBe('zwiebeln');
 		}

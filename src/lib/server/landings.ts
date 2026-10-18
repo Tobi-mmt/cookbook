@@ -28,7 +28,9 @@ const STAPLES = new Set([
 
 const listed = () => and(isVisible, indexableOwner(), notAnUnchangedCopy);
 
-const ingredientKey = sql<string>`lower(trim(regexp_replace(${ingredients.name}, '\\s*\\([^)]*\\)', '', 'g')))`;
+const ingredientName = sql<string>`trim(regexp_replace(${ingredients.name}, '\\s*\\([^)]*\\)', '', 'g'))`;
+/** lower case without notes in brackets, a plural "-en", "-ln" or "-rn" loses its "n" */
+const ingredientKey = sql<string>`regexp_replace(lower(${ingredientName}), '([elr])n$', '\\1')`;
 
 const countBy = async <T extends string | number>(
 	db: Database,
@@ -69,36 +71,57 @@ export const listLandings = async (db: Database): Promise<Landing[]> => {
 };
 
 /** Ingredients in at least two recipes, spelled as most recipes spell them */
+/**
+ * Ingredients in at least two recipes. Singular and plural share a page ("Zwiebel" and "Zwiebeln"),
+ * which is named after the plural if any recipe uses it.
+ */
 export const listIngredientLandings = async (
 	db: Database
 ): Promise<(Landing & { key: string })[]> => {
 	const recipeCount = sql<number>`count(distinct ${ingredients.recipeId})::int`;
-	const rows = await db
-		.select({
-			key: ingredientKey,
-			name: sql<string>`mode() within group (order by trim(regexp_replace(${ingredients.name}, '\\s*\\([^)]*\\)', '', 'g')))`,
-			count: recipeCount
-		})
-		.from(ingredients)
-		.innerJoin(recipes, eq(recipes.id, ingredients.recipeId))
-		.innerJoin(cookbooks, eq(cookbooks.id, recipes.cookbookId))
-		.where(and(eq(ingredients.kind, 'ingredient'), listed()))
-		.groupBy(ingredientKey)
-		.having(sql`${recipeCount} >= ${MIN_INGREDIENT_RECIPES}`)
-		.orderBy(sql`${recipeCount} desc`, ingredientKey)
-		.limit(MAX_INGREDIENTS + STAPLES.size);
+	const from = () =>
+		db
+			.select({ key: ingredientKey, name: ingredientName, count: recipeCount })
+			.from(ingredients)
+			.innerJoin(recipes, eq(recipes.id, ingredients.recipeId))
+			.innerJoin(cookbooks, eq(cookbooks.id, recipes.cookbookId))
+			.where(and(eq(ingredients.kind, 'ingredient'), listed()));
+	const [keys, spellings] = await Promise.all([
+		db
+			.select({ key: ingredientKey, count: recipeCount })
+			.from(ingredients)
+			.innerJoin(recipes, eq(recipes.id, ingredients.recipeId))
+			.innerJoin(cookbooks, eq(cookbooks.id, recipes.cookbookId))
+			.where(and(eq(ingredients.kind, 'ingredient'), listed()))
+			.groupBy(ingredientKey)
+			.having(sql`${recipeCount} >= ${MIN_INGREDIENT_RECIPES}`)
+			.orderBy(sql`${recipeCount} desc`, ingredientKey)
+			.limit(MAX_INGREDIENTS + STAPLES.size),
+		from().groupBy(ingredientKey, ingredientName)
+	]);
+
+	const nameOf = (key: string) => {
+		const variants = spellings
+			.filter((spelling) => spelling.key === key)
+			.sort((a, b) => b.count - a.count);
+		const plural = variants.find(({ name }) => name.toLowerCase() !== key);
+		return (plural ?? variants[0])?.name ?? key;
+	};
 
 	const seen = new Set<string>();
-	return rows
+	return keys
 		.filter(({ key }) => key && !STAPLES.has(key))
-		.map(({ key, name, count }) => ({
-			kind: 'ingredient' as const,
-			key,
-			slug: ingredientSlug(key),
-			title: `Rezepte mit ${name}`,
-			name,
-			count
-		}))
+		.map(({ key, count }) => {
+			const name = nameOf(key);
+			return {
+				kind: 'ingredient' as const,
+				key,
+				slug: ingredientSlug(name),
+				title: `Rezepte mit ${name}`,
+				name,
+				count
+			};
+		})
 		.filter(({ slug }) => slug && !seen.has(slug) && seen.add(slug))
 		.slice(0, MAX_INGREDIENTS);
 };
