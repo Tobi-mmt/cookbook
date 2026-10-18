@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 import { getDb } from '#lib/server/context.js';
 import {
 	listIngredientLandings,
@@ -15,7 +15,9 @@ export async function load({ params }) {
 		listLandings(db),
 		listIngredientLandings(db)
 	]);
-	if (!landing?.recipes.length) error(404, 'Keine Rezepte gefunden');
+	if (!landing?.recipes.length) {
+		redirect(307, `/suche?q=${encodeURIComponent(params.zutat.replace(/-/g, ' '))}`);
+	}
 	return {
 		landing,
 		others: landings,
