@@ -824,9 +824,9 @@
   integrity sha512-llBRm4dT4Z89aRsm6u2oEZ8tfwL/2l6BwpZ7JcyieouniDECM5AqNgr/y08zalEIvW3RSK4upYyybDcmjXqAow==
 
 "@lucide/svelte@^1.56.0":
-  version "1.56.0"
-  resolved "https://registry.yarnpkg.com/@lucide/svelte/-/svelte-1.56.0.tgz#3854914b39d3971b1ab86a444fba3a3bf551cbb1"
-  integrity sha512-YzbcmneHmPog3wAdXSl7oORgJhFc6klu8rRLMmm5uXwPQ8B0740c7dcNd3oJ72nCPvlbCW1XEmsWa4I0SDIogw==
+  version "1.59.0"
+  resolved "https://registry.yarnpkg.com/@lucide/svelte/-/svelte-1.59.0.tgz#ca0a20f73ad71d8c341223c34abe55da9c89e8ef"
+  integrity sha512-ga9IrEsFJBkt/34VnRFcQ2HLs8eOpOovXZ62XzwfC7f0zBfo4y116FBIDroZkD0gInYYY2hSSAcsQEm/Vm+AoA==
 
 "@mapbox/node-pre-gyp@^2.0.0":
   version "2.0.3"
