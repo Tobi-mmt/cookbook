@@ -5,6 +5,7 @@
 	import Plus from '@lucide/svelte/icons/plus';
 	import Trash2 from '@lucide/svelte/icons/trash-2';
 	import { move } from './listUtils';
+	import IngredientPicker from './IngredientPicker.svelte';
 
 	let { steps = $bindable(), ingredients }: { steps: StepInput[]; ingredients: IngredientInput[] } =
 		$props();
@@ -27,31 +28,7 @@
 		keys.splice(index, 1);
 	};
 
-	const isLinked = (step: StepInput, clientId: string) =>
-		step.links.some((link) => link.ingredientId === clientId);
-
-	const toggle = (step: StepInput, clientId: string) => {
-		const index = step.links.findIndex((link) => link.ingredientId === clientId);
-		if (index === -1) step.links.push({ ingredientId: clientId, quantity: null });
-		else step.links.splice(index, 1);
-	};
-
-	const ingredientLabel = (ingredient: IngredientInput) =>
-		[ingredient.quantity, ingredient.unit, ingredient.name].filter(Boolean).join(' ') || '(leer)';
-
 	const ingredientById = $derived(new Map(ingredients.map((i) => [i.clientId, i])));
-
-	/** ingredients grouped by their section for the chip list */
-	const groups = $derived(
-		ingredients.reduce<{ section: string | null; items: IngredientInput[] }[]>(
-			(acc, ingredient) => {
-				if (ingredient.kind === 'section') acc.push({ section: ingredient.name, items: [] });
-				else acc[acc.length - 1].items.push(ingredient);
-				return acc;
-			},
-			[{ section: null, items: [] }]
-		)
-	);
 </script>
 
 <ol class="list">
@@ -107,23 +84,7 @@
 					required></textarea>
 
 				{#if ingredients.some((i) => i.kind === 'ingredient')}
-					<div class="chips" role="group" aria-label="Zutaten für diesen Schritt">
-						{#each groups as group, groupIndex (groupIndex)}
-							{#if group.items.length}
-								{#if group.section}<span class="chip-section">{group.section}:</span>{/if}
-								{#each group.items as ingredient (ingredient.clientId)}
-									<button
-										type="button"
-										class="chip"
-										class:chip--active={isLinked(step, ingredient.clientId)}
-										aria-pressed={isLinked(step, ingredient.clientId)}
-										onclick={() => toggle(step, ingredient.clientId)}
-										>{ingredientLabel(ingredient)}</button
-									>
-								{/each}
-							{/if}
-						{/each}
-					</div>
+					<IngredientPicker {step} {ingredients} />
 				{/if}
 
 				{#if step.links.length}
@@ -200,32 +161,6 @@
 	textarea {
 		resize: vertical;
 	}
-	.chips {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.35em;
-		align-items: center;
-	}
-	.chip-section {
-		font-size: 0.8em;
-		font-style: italic;
-		color: #777;
-		margin-left: 0.4em;
-	}
-	.chip {
-		font: inherit;
-		font-size: 0.85em;
-		padding: 0.2em 0.7em;
-		border: 1px solid #ccc;
-		border-radius: 999px;
-		background: #fff;
-		cursor: pointer;
-	}
-	.chip--active {
-		background: #8882a8;
-		border-color: #8882a8;
-		color: #fff;
-	}
 	.partial {
 		font-size: 0.9em;
 	}
@@ -245,9 +180,6 @@
 	@media (max-width: 600px) {
 		.step {
 			padding: 0.6em;
-		}
-		.chip {
-			padding: 0.35em 0.8em;
 		}
 		.partial-row span:first-child {
 			flex: 1;

@@ -348,7 +348,7 @@
 	<section class="section">
 		<h2>Zubereitung</h2>
 		<p class="hint">
-			Klicke die Zutaten an, die in einem Schritt verwendet werden.
+			Wähle unter jedem Schritt die Zutaten aus, die dort dazukommen.
 			{#if imported}Formuliere die Schritte in eigenen Worten.{/if}
 		</p>
 		<StepList bind:steps={recipe.steps} ingredients={recipe.ingredients} />
