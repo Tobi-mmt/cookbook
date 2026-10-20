@@ -75,7 +75,7 @@
 
 <div class="picker" class:picker--open={open}>
 	<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-	<div class="field" onclick={() => input?.focus()}>
+	<div class="picker-field" onclick={() => input?.focus()}>
 		{#each linked as ingredient (ingredient.clientId)}
 			<span class="chip">
 				{ingredient.name}
@@ -139,7 +139,7 @@
 	.picker {
 		position: relative;
 	}
-	.field {
+	.picker-field {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
@@ -151,7 +151,7 @@
 		border-radius: var(--radius-md);
 		cursor: text;
 	}
-	.picker--open .field {
+	.picker--open .picker-field {
 		border-color: var(--color-text-subtle);
 	}
 	.chip {
@@ -176,7 +176,7 @@
 	.chip button:hover {
 		background: rgb(255 255 255 / 0.25);
 	}
-	.field input {
+	.picker-field input {
 		flex: 1;
 		min-width: 9rem;
 		min-height: 0;
