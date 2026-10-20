@@ -6,6 +6,7 @@ import { recipeInputSchema, type RecipeInput } from '../recipeInput';
 import { slugerize } from '../slugerize';
 import { affectedPaths } from './affectedPaths';
 import { parseLicense } from '../imageLicense';
+import { cleanSourceUrl } from '../sourceUrl';
 import { requireEditor, type Editor } from './auth/guards';
 import { isNewAccount } from './profiles';
 import { hitRateLimit } from './rateLimit';
@@ -188,6 +189,13 @@ export const saveRecipeAction = async (event: RequestEvent, existingId?: string)
 
 	const { input, error: inputError } = parseInput(form);
 	if (!input) return fail(400, { error: inputError });
+	const importedFrom = String(form.get('importedFrom') ?? '');
+	if (!previous && importedFrom && URL.canParse(importedFrom)) {
+		input.sourceUrl = cleanSourceUrl(importedFrom);
+	}
+	if (previous?.sourceUrl && !input.sourceUrl) {
+		return fail(400, { error: 'Die Quelle lässt sich ändern, aber nicht entfernen.' });
+	}
 
 	if (!previous && !(await withinDailyLimit(editor, 'recipes'))) {
 		return fail(429, {
@@ -254,7 +262,7 @@ export const importRecipeAction = async (event: RequestEvent) => {
 
 	const parsedUrl = importUrlSchema.safeParse(String(form.get('url') ?? '').trim());
 	if (!parsedUrl.success) return fail(400, { error: 'Bitte eine gültige URL eingeben.' });
-	const url = parsedUrl.data;
+	const url = cleanSourceUrl(parsedUrl.data);
 
 	let html: string;
 	try {
