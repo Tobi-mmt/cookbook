@@ -99,10 +99,6 @@
 				</span>
 			</label>
 			<input type="hidden" name="cookbookId" value={data.cookbookId} />
-			<p class="hint">
-				Zutaten und Schritte werden übernommen, z. B. von Chefkoch oder lecker.de. Du prüfst alles,
-				bevor es gespeichert wird.
-			</p>
 			{#if imported?.duplicate}
 				<div class="message">
 					<p>
@@ -170,7 +166,6 @@
 		flex: 1;
 		min-width: 0;
 	}
-	.import .hint,
 	.message p {
 		margin: 0;
 	}

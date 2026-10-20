@@ -228,11 +228,6 @@
 		<input type="hidden" name="cookbookId" value={selectedCookbook} />
 	{/if}
 
-	<p class="hint">
-		Nötig sind Titel, Portionen, Dauer und mindestens ein Zubereitungsschritt. Alles mit „optional“
-		kannst du leer lassen.
-	</p>
-
 	{#if draft}
 		<div class="message">
 			<p>Es gibt einen ungespeicherten Entwurf von {timeAgo(draft.savedAt)}.</p>
