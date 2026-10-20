@@ -257,9 +257,26 @@
 			<textarea class="input" rows="3" bind:value={recipe.description}></textarea>
 		</label>
 		<label class="field">
-			Quelle <span class="optional">(optional, Pflicht bei Rezepten von anderen Seiten)</span>
-			<input class="input" type="url" bind:value={recipe.sourceUrl} />
+			Quelle
+			{#if !imported && !initialRecipe.sourceUrl}
+				<span class="optional">(optional, Pflicht bei Rezepten von anderen Seiten)</span>
+			{/if}
+			<input
+				class="input"
+				type="url"
+				bind:value={recipe.sourceUrl}
+				readonly={imported}
+				required={Boolean(initialRecipe.sourceUrl)}
+			/>
+			{#if imported}
+				<span class="hint">Die Quelle wird beim Import festgehalten.</span>
+			{:else if initialRecipe.sourceUrl}
+				<span class="hint">Die Quelle lässt sich ändern, aber nicht entfernen.</span>
+			{/if}
 		</label>
+		{#if imported && initialRecipe.sourceUrl}
+			<input type="hidden" name="importedFrom" value={initialRecipe.sourceUrl} />
+		{/if}
 		<div class="grid">
 			<label class="field">
 				Portionen
