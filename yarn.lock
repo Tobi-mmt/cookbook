@@ -1441,10 +1441,10 @@ ajv@^6.14.0:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-altcha-lib@2.6.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/altcha-lib/-/altcha-lib-2.6.0.tgz#1319d973ef7c101f7537b45d493274645960cacb"
-  integrity sha512-mBp/KxMZmQkckWX5iM0gHqCm0qTLGhF9r8hhFjNrBpzP0qHZBadR9oafxVx9cTLHl4h2+f56N4hRIrZzvonYLQ==
+altcha-lib@2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/altcha-lib/-/altcha-lib-2.7.0.tgz#12cc60ddde0ffddc1c05869c5b74dcc3cbc43aa1"
+  integrity sha512-gnysjfIpeT6k3RLaWRd7xVvfs8U0a5DHIS95Xgwn8znKq5uIj6c/oTH8DtcdyJS/ZV3I5kYpyurvmJFb0eFWvA==
 
 ansi-escapes@^7.0.0:
   version "7.3.0"
