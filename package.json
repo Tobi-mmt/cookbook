@@ -65,7 +65,7 @@
 		"@lucide/svelte": "^1.56.0",
 		"@vercel/blob": "^2.8.0",
 		"@vercel/functions": "^3.9.9",
-		"altcha-lib": "2.6.0",
+		"altcha-lib": "2.7.0",
 		"better-auth": "1.7.12",
 		"better-call": "1.4.4",
 		"drizzle-orm": "^0.45.3",
