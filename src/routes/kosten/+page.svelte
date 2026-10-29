@@ -138,26 +138,27 @@
 			timeZone: 'Europe/Berlin'
 		}).format(new Date(usage.measuredAt))
 	);
-	const description = `Was die ${SITE_NAME} kostet, welche Dienste sie nutzt und wo deren Grenzen liegen, mit der aktuellen Nutzung.`;
+	const description = `Die ${SITE_NAME} ist für alle kostenlos. Hier steht offen, was ihr Betrieb kostet, welche Dienste sie nutzt und wo deren Grenzen liegen.`;
 </script>
 
 <svelte:head>
-	<title>Kosten - {SITE_NAME}</title>
+	<title>Betriebskosten - {SITE_NAME}</title>
 	<meta name="description" content={description} />
 	<link rel="canonical" href="{page.url.origin}/kosten" />
 </svelte:head>
 
 <article class="page">
-	<h1>Was die {SITE_NAME} kostet</h1>
+	<h1>Was der Betrieb der {SITE_NAME} kostet</h1>
 	<p class="lead">
-		Die {SITE_NAME} ist ein privates Projekt ohne Werbung und ohne Einnahmen. Hier steht offen, welche
-		Dienste sie nutzt, was sie kosten und wo die kostenlosen Grenzen liegen. Die Arbeitszeit ist nicht
-		eingerechnet.
+		<strong>Für dich ist die {SITE_NAME} kostenlos</strong>, ohne Abo, ohne Werbung und ohne
+		versteckte Kosten. Der Betrieb kostet trotzdem etwas, und das zahle ich als Betreiber aus
+		eigener Tasche. Hier steht offen, welche Dienste die {SITE_NAME} nutzt, was sie kosten und wo die
+		kostenlosen Grenzen liegen. Die Arbeitszeit ist nicht eingerechnet.
 	</p>
 
 	<div class="total">
 		<strong>{euros(perMonth)}</strong>
-		<span>im Monat, also rund {euros(perMonth * 12)} im Jahr</span>
+		<span>im Monat für den Betreiber, also rund {euros(perMonth * 12)} im Jahr</span>
 	</div>
 
 	<p class="hint">
@@ -220,6 +221,9 @@
 	.lead {
 		line-height: 1.6;
 		color: var(--color-text-muted);
+	}
+	.lead strong {
+		color: var(--color-text);
 	}
 	.total {
 		display: flex;
