@@ -61,7 +61,7 @@ Every deployment starts with an empty cache. Therefore `/api/warm-cache` renders
 
 ## Nightly job
 
-`/api/cron/daily` runs every night as Vercel cron (`src/lib/server/dailyJob.ts`). It sums up the page views per recipe and day (used for "Beliebt" on the home page and the statistics of a cookbook), deletes raw page views after 30 months, empties the trash after 30 days, deletes accounts 7 days after their deletion was requested, resends failed mails, closes cases about deleted content and mails the admins a summary of new reports and warnings about many mails or a full database.
+`/api/cron/daily` runs every night as Vercel cron (`src/lib/server/dailyJob.ts`). It sums up the page views per recipe and day (used for "Beliebt" on the home page and the statistics of a cookbook), deletes raw page views after 30 months, empties the trash after 30 days, deletes accounts 7 days after their deletion was requested, resends failed mails, closes cases about deleted content and mails the admins a summary of new reports and warnings about many mails or a full database. On Mondays it mails a report of the last week to the address of the site: new accounts and recipes, page views, visitors and the top pages, compared to the week before.
 
 ## Tracking
 

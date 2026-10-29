@@ -11,6 +11,7 @@ import { addDays, aggregateDailyViews, deleteOldPageViews } from './recipeViews'
 import { LIST_PATHS, revalidate } from './revalidate';
 import type { Storage } from './storage';
 import { trackingDay } from './tracking';
+import { sendWeeklyReport } from './weeklyReport';
 import { purgeTrash } from './trash';
 
 const MAIL_WARNING_THRESHOLD = 1000;
@@ -126,6 +127,7 @@ export const runDailyJob = async (
 	await step('databaseSize', () => warnAboutDatabaseSize(db, now));
 	await step('closedCases', () => closeCasesOfDeletedTargets(db));
 	await step('reportSummary', () => sendDailyReportSummary(db, origin, now));
+	await step('weeklyReport', () => sendWeeklyReport(db, origin, now));
 	await step('mailLog', async () => (await deleteOldMailLog(db, now)).rowCount);
 	await step(
 		'sessions',
