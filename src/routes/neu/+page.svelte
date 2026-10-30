@@ -4,6 +4,8 @@
 	import { resolve } from '$app/paths';
 	import { enhance, type SubmitFunction } from '$app/forms';
 	import Link from '@lucide/svelte/icons/link';
+	import Sparkles from '@lucide/svelte/icons/sparkles';
+	import { aiPrompt, parseAiAnswer } from '#lib/aiImport.js';
 	import RecipeEditor from '#components/editor/RecipeEditor.svelte';
 	import { recipePath } from '#lib/paths.js';
 	import type { RecipeInput } from '#lib/recipeInput.js';
@@ -50,7 +52,30 @@
 
 	const reset = () => {
 		imported = null;
+		aiRecipe = null;
 		url = '';
+	};
+
+	let aiAnswer = $state('');
+	let aiError = $state<string | null>(null);
+	let aiRecipe = $state<RecipeInput | null>(null);
+	let promptCopied = $state(false);
+
+	const copyPrompt = async () => {
+		await navigator.clipboard.writeText(aiPrompt(data.categories));
+		promptCopied = true;
+		setTimeout(() => (promptCopied = false), 2500);
+	};
+
+	const takeAiAnswer = () => {
+		const result = parseAiAnswer(aiAnswer, data.categories);
+		if ('error' in result) {
+			aiError = result.error;
+			return;
+		}
+		aiError = null;
+		aiAnswer = '';
+		aiRecipe = result.input;
 	};
 </script>
 
@@ -62,7 +87,15 @@
 <div class="page">
 	<h1>Neues Rezept</h1>
 
-	{#if showImport && imported}
+	{#if aiRecipe}
+		<div class="message">
+			<p>
+				Übernommen aus der Antwort der KI. Bitte prüfe alles, die KI kann sich irren. Gespeichert
+				wird es erst mit „Speichern“.
+			</p>
+			<button type="button" class="btn btn--quiet" onclick={reset}>Neu beginnen</button>
+		</div>
+	{:else if showImport && imported}
 		<div class="message">
 			<p>
 				Übernommen von <a href={imported.url} target="_blank" rel="noreferrer"
@@ -112,11 +145,66 @@
 			{/if}
 			{#if importError}<p class="message message--error" role="alert">{importError}</p>{/if}
 		</form>
+		<details class="import ai">
+			<summary>
+				<span class="label"
+					><Sparkles size="1em" aria-hidden="true" /> Aus Screenshot, Video oder Text übernehmen</span
+				>
+			</summary>
+			<p class="hint">
+				Screenshots, Instagram-Videos oder Fließtext liest die {SITE_NAME} nicht selbst aus: Eine eingebaute
+				KI würde bei vielen Nutzern laufende Kosten verursachen, die ich als Betreiber nicht tragen kann.
+				Mit einer kostenlosen KI deiner Wahl klappt es trotzdem:
+			</p>
+			<ol>
+				<li>
+					<button type="button" class="btn" onclick={copyPrompt}
+						>{promptCopied ? 'Auftrag kopiert' : 'Auftrag kopieren'}</button
+					>
+				</li>
+				<li>
+					Öffne eine KI, z. B.
+					<!-- eslint-disable svelte/no-navigation-without-resolve -- external links -->
+					<a href="https://chat.mistral.ai" target="_blank" rel="noreferrer">Le Chat</a>,
+					<a href="https://chatgpt.com" target="_blank" rel="noreferrer">ChatGPT</a> oder
+					<a href="https://claude.ai" target="_blank" rel="noreferrer">Claude</a>,
+					<!-- eslint-enable svelte/no-navigation-without-resolve -->
+					füge den Auftrag ein und hänge deinen Screenshot, Link oder Text an.
+				</li>
+				<li>
+					<label class="field">
+						Kopiere die Antwort der KI und füge sie hier ein:
+						<textarea class="input" rows="5" bind:value={aiAnswer}></textarea>
+					</label>
+					<button
+						type="button"
+						class="btn btn--primary"
+						disabled={!aiAnswer.trim()}
+						onclick={takeAiAnswer}>Übernehmen</button
+					>
+				</li>
+			</ol>
+			{#if aiError}<p class="message message--error" role="alert">{aiError}</p>{/if}
+			<p class="hint">
+				Was du der KI gibst, geht an deren Anbieter, nicht an die {SITE_NAME}.
+			</p>
+		</details>
 		<p class="divider">oder selbst eingeben</p>
 	{/if}
 
-	{#key imported?.url}
-		{#if showImport && imported}
+	{#key aiRecipe ?? imported?.url}
+		{#if aiRecipe}
+			<RecipeEditor
+				recipe={aiRecipe}
+				image={null}
+				categories={data.categories}
+				cookbooks={data.cookbooks}
+				cookbookId={data.cookbookId}
+				cancelHref={data.cancelHref}
+				draftKey="ai"
+				result={form}
+			/>
+		{:else if showImport && imported}
 			<RecipeEditor
 				recipe={imported.input}
 				image={null}
@@ -175,6 +263,23 @@
 		align-items: flex-start;
 		gap: 0.5rem;
 		margin: 0 0 1rem;
+	}
+	.ai {
+		margin-top: 0.75rem;
+	}
+	.ai summary {
+		cursor: pointer;
+	}
+	.ai ol {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		margin: 0.5rem 0;
+		padding-left: 1.25rem;
+		line-height: 1.5;
+	}
+	.ai li .btn {
+		margin-top: 0.4rem;
 	}
 	.divider {
 		margin: 1.25rem 0 1.5rem;
