@@ -21,12 +21,17 @@ Antworte ausschließlich mit einem JSON-Objekt in genau diesem Format, ohne Erkl
     { "section": "Für die Soße" },
     { "quantity": null, "unit": null, "name": "Salz" }
   ],
-  "steps": ["Erster Schritt", { "section": "Soße" }, "Nächster Schritt"]
+  "steps": [
+    { "text": "Mehl und Zucker verrühren.", "ingredients": ["Mehl", "Zucker"] },
+    { "section": "Soße" },
+    { "text": "Mit Salz abschmecken.", "ingredients": ["Salz"] }
+  ]
 }
 
 Regeln:
 - Übernimm nur Zutaten und Schritte, die wirklich im Material stehen. Erfinde nichts dazu.
 - Formuliere die Schritte in eigenen Worten, kurz und klar.
+- Gib bei jedem Schritt unter "ingredients" die Zutaten an, die in diesem Schritt verwendet werden, genau so geschrieben wie bei "name" in der Zutatenliste. Jede Zutat sollte in mindestens einem Schritt vorkommen.
 - "quantity" ist eine Zahl (0.5 statt ½) oder null. Einheiten kurz: g, kg, ml, l, EL, TL, Prise, Stück.
 - "portion" ist die Zahl der Portionen, "duration" die gesamte Zeit in Minuten. Schätze sinnvoll, wenn nichts angegeben ist.
 - "category" und "nutritionType" sind genau einer der angegebenen Werte.
@@ -36,7 +41,7 @@ Hier ist das Rezept:
 `;
 
 type AiIngredient = { section?: unknown; quantity?: unknown; unit?: unknown; name?: unknown };
-type AiStep = string | { section?: unknown; text?: unknown };
+type AiStep = string | { section?: unknown; text?: unknown; ingredients?: unknown };
 
 const text = (value: unknown) => (typeof value === 'string' ? value.trim() : '');
 
@@ -94,13 +99,24 @@ export const parseAiAnswer = (
 					}
 		)
 		.filter(({ name }) => name);
+	const usable = ingredients.filter(({ kind }) => kind === 'ingredient');
+	const linksOf = (names: unknown) => {
+		const ids = (Array.isArray(names) ? names : []).flatMap((name) => {
+			const wanted = text(name).toLowerCase();
+			const match =
+				usable.find((ingredient) => ingredient.name.toLowerCase() === wanted) ??
+				(wanted.length >= 4 ? find(usable, wanted) : undefined);
+			return match?.clientId ?? [];
+		});
+		return [...new Set(ids)].map((ingredientId) => ({ ingredientId, quantity: null }));
+	};
 	const steps = (Array.isArray(json.steps) ? (json.steps as AiStep[]) : [])
 		.map((step) =>
 			typeof step === 'string'
 				? { kind: 'step' as const, text: step.trim(), links: [] }
 				: text(step?.section)
 					? { kind: 'section' as const, text: text(step.section), links: [] }
-					: { kind: 'step' as const, text: text(step?.text), links: [] }
+					: { kind: 'step' as const, text: text(step?.text), links: linksOf(step?.ingredients) }
 		)
 		.filter(({ text }) => text);
 
