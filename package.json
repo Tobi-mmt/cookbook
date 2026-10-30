@@ -59,14 +59,14 @@
 		"*.{ts,tsx,js,jsx,svelte,json,md,html}": "yarn format"
 	},
 	"dependencies": {
-		"@better-auth/core": "1.7.13",
-		"@better-auth/passkey": "1.7.13",
+		"@better-auth/core": "1.7.14",
+		"@better-auth/passkey": "1.7.14",
 		"@better-fetch/fetch": "1.3.3",
 		"@lucide/svelte": "^1.56.0",
 		"@vercel/blob": "^2.8.0",
 		"@vercel/functions": "^3.9.9",
 		"altcha-lib": "2.8.0",
-		"better-auth": "1.7.13",
+		"better-auth": "1.7.14",
 		"better-call": "1.4.4",
 		"drizzle-orm": "^0.45.3",
 		"fuse.js": "7.5.0",
