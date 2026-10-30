@@ -16,5 +16,7 @@ export const withExplicitSslMode = (connectionString: string) => {
 
 export const createDb = (connectionString: string) => {
 	const pool = new pg.Pool({ connectionString: withExplicitSslMode(connectionString), max: 5 });
+	// Neon closes idle connections when it suspends, the pool then opens a new one
+	pool.on('error', (error) => console.warn('Idle database connection closed:', error.message));
 	return { db: drizzle(pool, { schema }), pool };
 };
