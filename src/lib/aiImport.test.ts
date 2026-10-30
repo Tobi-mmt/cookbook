@@ -122,18 +122,25 @@ describe('aiPrompt', () => {
 });
 
 describe('aiImagePrompt', () => {
-	test('describes the dish with its title and main ingredients', () => {
+	test('describes the dish with its ingredients and preparation', () => {
 		const prompt = aiImagePrompt({
 			title: 'Linsen-Dal ',
 			description: null,
 			ingredients: [
 				{ clientId: 'a', kind: 'section', name: 'Topping' },
-				{ clientId: 'b', kind: 'ingredient', name: 'rote Linsen' },
-				{ clientId: 'c', kind: 'ingredient', name: 'Koriander' }
+				{ clientId: 'b', kind: 'ingredient', name: 'rote Linsen', quantity: 200, unit: 'g' },
+				{ clientId: 'c', kind: 'ingredient', name: 'Koriander', quantity: 0.5, unit: 'Bund' }
+			],
+			steps: [
+				{ kind: 'step', text: 'Linsen weich kochen und pürieren.', links: [] },
+				{ kind: 'section', text: 'Topping', links: [] },
+				{ kind: 'step', text: 'Mit Koriander bestreuen.', links: [] }
 			]
 		});
 		expect(prompt).toContain('Foodfoto von „Linsen-Dal“');
-		expect(prompt).toContain('Wichtige Zutaten: rote Linsen, Koriander.');
-		expect(prompt).not.toContain('Topping');
+		expect(prompt).toContain('Zutaten: 200 g rote Linsen, 0,5 Bund Koriander.');
+		expect(prompt).toContain(
+			'1. Linsen weich kochen und pürieren. Topping: 2. Mit Koriander bestreuen.'
+		);
 	});
 });
