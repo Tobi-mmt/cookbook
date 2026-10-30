@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { withExplicitSslMode } from './client';
+import { createDb, withExplicitSslMode } from './client';
 
 describe('withExplicitSslMode', () => {
 	test('replaces the aliases of verify-full', () => {
@@ -13,5 +13,13 @@ describe('withExplicitSslMode', () => {
 		expect(withExplicitSslMode(local)).toBe(local);
 		const disabled = `${local}?sslmode=disable`;
 		expect(withExplicitSslMode(disabled)).toBe(disabled);
+	});
+});
+
+describe('createDb', () => {
+	test('survives errors of idle connections, e.g. when Neon suspends', async () => {
+		const { pool } = createDb('postgres://postgres:postgres@localhost:5432/postgres');
+		expect(() => pool.emit('error', new Error('terminating connection'))).not.toThrow();
+		await pool.end();
 	});
 });

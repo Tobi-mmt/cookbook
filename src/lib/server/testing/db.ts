@@ -27,6 +27,12 @@ export const useTestDatabase = () => {
 		const url = new URL(adminUrl!);
 		url.pathname = `/${name}`;
 		const { db, pool } = createDb(url.href);
+		// dropping the database below ends connections that are still closing
+		pool.on('connect', (client) =>
+			client.on('error', (error: Error & { code?: string }) => {
+				if (error.code !== '57P01') console.error(error);
+			})
+		);
 		await migrate(db, { migrationsFolder: 'drizzle' });
 		handle.db = db;
 		close = () => pool.end();
