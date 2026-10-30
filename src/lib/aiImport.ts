@@ -141,3 +141,21 @@ export const parseAiAnswer = (
 		? { input: parsed.data }
 		: { error: [...new Set(parsed.error.issues.map(({ message }) => message))].join(', ') };
 };
+
+/** The request for a photo of the recipe, for an AI that creates images */
+export const aiImagePrompt = (
+	recipe: Pick<RecipeInput, 'title' | 'description' | 'ingredients'>
+) => {
+	const ingredients = recipe.ingredients
+		.filter(({ kind, name }) => kind === 'ingredient' && name.trim())
+		.map(({ name }) => name.trim())
+		.slice(0, 8);
+	return [
+		`Erstelle ein realistisches, appetitliches Foodfoto von „${recipe.title.trim()}“.`,
+		recipe.description?.trim() ? `Zum Gericht: ${recipe.description.trim()}` : '',
+		ingredients.length ? `Wichtige Zutaten: ${ingredients.join(', ')}.` : '',
+		'Das fertige Gericht schlicht angerichtet, natürliches Tageslicht, leicht von schräg oben, heller ruhiger Hintergrund. Keine Personen, kein Text, keine Schrift, kein Logo. Querformat im Seitenverhältnis 3:2.'
+	]
+		.filter(Boolean)
+		.join(' ');
+};

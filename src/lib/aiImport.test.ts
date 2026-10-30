@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { aiPrompt, parseAiAnswer } from './aiImport';
+import { aiImagePrompt, aiPrompt, parseAiAnswer } from './aiImport';
 
 const categories = [
 	{ id: 1, name: 'Hauptgericht' },
@@ -118,5 +118,22 @@ describe('aiPrompt', () => {
 		const prompt = aiPrompt(categories);
 		expect(prompt).toContain('Hauptgericht | Backen & Dessert');
 		expect(prompt).toContain('Vegan | Vegetarisch | Fisch | Fleisch');
+	});
+});
+
+describe('aiImagePrompt', () => {
+	test('describes the dish with its title and main ingredients', () => {
+		const prompt = aiImagePrompt({
+			title: 'Linsen-Dal ',
+			description: null,
+			ingredients: [
+				{ clientId: 'a', kind: 'section', name: 'Topping' },
+				{ clientId: 'b', kind: 'ingredient', name: 'rote Linsen' },
+				{ clientId: 'c', kind: 'ingredient', name: 'Koriander' }
+			]
+		});
+		expect(prompt).toContain('Foodfoto von „Linsen-Dal“');
+		expect(prompt).toContain('Wichtige Zutaten: rote Linsen, Koriander.');
+		expect(prompt).not.toContain('Topping');
 	});
 });
