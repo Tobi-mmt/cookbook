@@ -205,25 +205,29 @@
 						<li>
 							In
 							<!-- eslint-disable svelte/no-navigation-without-resolve -- external links -->
-							<a href="https://chat.mistral.ai" target="_blank" rel="noreferrer">Le Chat</a>,
+							<a href="https://chat.mistral.ai" target="_blank" rel="noreferrer">Le Chat</a>
+							(Frankreich),
+							<a href="https://lumo.proton.me" target="_blank" rel="noreferrer">Lumo</a> (Schweiz),
 							<a href="https://chatgpt.com" target="_blank" rel="noreferrer">ChatGPT</a> oder
 							<a href="https://claude.ai" target="_blank" rel="noreferrer">Claude</a>
 							<!-- eslint-enable svelte/no-navigation-without-resolve -->
 							einfügen{videoLink ? '' : ', Screenshot, Link oder Text dazugeben'}.
 						</li>
-						<li class="answer">
-							<textarea
-								class="input"
-								rows="3"
-								bind:value={aiAnswer}
-								placeholder="Antwort der KI hier einfügen"
-								aria-label="Antwort der KI"></textarea>
-							<button
-								type="button"
-								class="btn btn--primary"
-								disabled={!aiAnswer.trim()}
-								onclick={takeAiAnswer}>Übernehmen</button
-							>
+						<li>
+							<div class="answer">
+								<textarea
+									class="input"
+									rows="3"
+									bind:value={aiAnswer}
+									placeholder="Antwort der KI hier einfügen"
+									aria-label="Antwort der KI"></textarea>
+								<button
+									type="button"
+									class="btn btn--primary"
+									disabled={!aiAnswer.trim()}
+									onclick={takeAiAnswer}>Übernehmen</button
+								>
+							</div>
 						</li>
 					</ol>
 					{#if aiError}<p class="message message--error" role="alert">{aiError}</p>{/if}
