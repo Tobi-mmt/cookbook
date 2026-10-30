@@ -198,7 +198,7 @@
 					<ol>
 						<li>
 							<button type="button" class="btn" onclick={copyPrompt}
-								>{promptCopied ? 'Auftrag kopiert' : 'Auftrag kopieren'}</button
+								>{promptCopied ? 'Anweisung kopiert' : 'Anweisung für die KI kopieren'}</button
 							>
 							{#if videoLink}<span class="hint">mit deinem Link</span>{/if}
 						</li>
