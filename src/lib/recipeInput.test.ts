@@ -42,3 +42,29 @@ describe('findUnusedIngredients', () => {
 		expect(findUnusedIngredients(recipe).map(({ name }) => name)).toEqual(['Salz']);
 	});
 });
+
+describe('recipe limits', () => {
+	test('reject overly long texts and too many entries', () => {
+		const base = {
+			title: 'Dal',
+			portion: 2,
+			duration: 30,
+			categoryId: 1,
+			nutritionType: 'Vegan',
+			ingredients: [],
+			steps: [{ kind: 'step', text: 'Kochen', links: [] }]
+		};
+		const messages = (input: object) => {
+			const result = recipeInputSchema.safeParse({ ...base, ...input });
+			return result.success ? [] : result.error.issues.map(({ message }) => message);
+		};
+		expect(messages({ title: 'x'.repeat(201) })).toEqual([
+			'Der Titel darf höchstens 200 Zeichen lang sein'
+		]);
+		expect(messages({ steps: [{ kind: 'step', text: 'x'.repeat(3001), links: [] }] })).toEqual([
+			'Ein Schritt darf höchstens 3000 Zeichen lang sein'
+		]);
+		expect(messages({ portion: 1001 })).toEqual(['Höchstens 1000 Portionen']);
+		expect(messages({ title: 'x'.repeat(200), portion: 1000, duration: 10000 })).toEqual([]);
+	});
+});

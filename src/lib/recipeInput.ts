@@ -4,18 +4,41 @@ export const NUTRITION_TYPES = ['Vegan', 'Vegetarisch', 'Fisch', 'Fleisch'] as c
 
 const trimmed = z.string().trim();
 
+/** Upper bounds for everything that can be entered, generous for real recipes */
+export const RECIPE_LIMITS = {
+	title: 200,
+	description: 2000,
+	name: 200,
+	unit: 50,
+	step: 3000,
+	ingredients: 150,
+	steps: 100,
+	portion: 1000,
+	duration: 10000
+};
+
 export const ingredientInputSchema = z.object({
 	/** stable id within the editor, referenced by the steps */
 	clientId: z.string().min(1),
 	kind: z.enum(['ingredient', 'section']),
-	name: trimmed.min(1, 'Eine Zutat oder ein Abschnitt hat keinen Namen'),
+	name: trimmed
+		.min(1, 'Eine Zutat oder ein Abschnitt hat keinen Namen')
+		.max(
+			RECIPE_LIMITS.name,
+			`Der Name einer Zutat darf höchstens ${RECIPE_LIMITS.name} Zeichen lang sein`
+		),
 	quantity: z.number().positive().nullable().optional(),
-	unit: trimmed.nullable().optional()
+	unit: trimmed
+		.max(RECIPE_LIMITS.unit, `Eine Einheit darf höchstens ${RECIPE_LIMITS.unit} Zeichen lang sein`)
+		.nullable()
+		.optional()
 });
 
 export const stepInputSchema = z.object({
 	kind: z.enum(['step', 'section']),
-	text: trimmed.min(1, 'Ein Schritt oder Abschnitt hat keinen Text'),
+	text: trimmed
+		.min(1, 'Ein Schritt oder Abschnitt hat keinen Text')
+		.max(RECIPE_LIMITS.step, `Ein Schritt darf höchstens ${RECIPE_LIMITS.step} Zeichen lang sein`),
 	links: z
 		.array(
 			z.object({
@@ -29,8 +52,19 @@ export const stepInputSchema = z.object({
 
 export const recipeInputSchema = z
 	.object({
-		title: trimmed.min(1, 'Titel fehlt'),
-		description: trimmed.nullable().optional(),
+		title: trimmed
+			.min(1, 'Titel fehlt')
+			.max(
+				RECIPE_LIMITS.title,
+				`Der Titel darf höchstens ${RECIPE_LIMITS.title} Zeichen lang sein`
+			),
+		description: trimmed
+			.max(
+				RECIPE_LIMITS.description,
+				`Die Beschreibung darf höchstens ${RECIPE_LIMITS.description} Zeichen lang sein`
+			)
+			.nullable()
+			.optional(),
 		sourceUrl: z.preprocess(
 			(value) => (typeof value === 'string' ? value.trim() || null : value),
 			z
@@ -41,15 +75,25 @@ export const recipeInputSchema = z
 		portion: z
 			.number({ error: 'Portionen fehlen' })
 			.int('Portionen müssen eine ganze Zahl sein')
-			.positive('Portionen müssen mindestens 1 sein'),
+			.positive('Portionen müssen mindestens 1 sein')
+			.max(RECIPE_LIMITS.portion, `Höchstens ${RECIPE_LIMITS.portion} Portionen`),
 		duration: z
 			.number({ error: 'Dauer fehlt' })
 			.int('Dauer muss eine ganze Zahl sein')
-			.positive('Dauer muss mindestens 1 Minute sein'),
+			.positive('Dauer muss mindestens 1 Minute sein')
+			.max(
+				RECIPE_LIMITS.duration,
+				`Die Dauer darf höchstens ${RECIPE_LIMITS.duration} Minuten sein`
+			),
 		categoryId: z.number({ error: 'Kategorie fehlt' }).int().positive(),
 		nutritionType: z.enum(NUTRITION_TYPES, { error: 'Ernährung fehlt' }),
-		ingredients: z.array(ingredientInputSchema),
-		steps: z.array(stepInputSchema).min(1, 'Mindestens ein Zubereitungsschritt fehlt')
+		ingredients: z
+			.array(ingredientInputSchema)
+			.max(RECIPE_LIMITS.ingredients, `Höchstens ${RECIPE_LIMITS.ingredients} Zutaten`),
+		steps: z
+			.array(stepInputSchema)
+			.min(1, 'Mindestens ein Zubereitungsschritt fehlt')
+			.max(RECIPE_LIMITS.steps, `Höchstens ${RECIPE_LIMITS.steps} Schritte`)
 	})
 	.superRefine((recipe, ctx) => {
 		const ingredientIds = new Set(

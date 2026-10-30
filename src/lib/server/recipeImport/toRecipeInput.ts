@@ -1,5 +1,10 @@
 import type { Category, NutritionType } from '../../../types';
-import type { IngredientInput, RecipeInput, StepInput } from '../../recipeInput';
+import {
+	RECIPE_LIMITS,
+	type IngredientInput,
+	type RecipeInput,
+	type StepInput
+} from '../../recipeInput';
 import type { ScrapedRecipe } from './extract';
 import { parseIngredient } from './parseIngredient';
 
@@ -28,7 +33,7 @@ export const parseDuration = (value: string | undefined): number | undefined => 
 
 const parsePortion = (value: string | undefined) => {
 	const portion = Number(value?.match(/\d+/)?.[0]);
-	return portion > 0 ? portion : DEFAULT_PORTION;
+	return portion > 0 ? Math.min(portion, RECIPE_LIMITS.portion) : DEFAULT_PORTION;
 };
 
 const CATEGORY_PATTERNS: [string, RegExp][] = [
@@ -101,39 +106,53 @@ export const toRecipeInput = (
 	sourceUrl: string,
 	categories: Category[]
 ): RecipeInput => {
-	const ingredients: IngredientInput[] = recipe.ingredients.map((text, index) => ({
-		clientId: `import-${index}`,
-		kind: 'ingredient',
-		...parseIngredient(text)
-	}));
+	const ingredients: IngredientInput[] = recipe.ingredients
+		.slice(0, RECIPE_LIMITS.ingredients)
+		.map((text, index) => {
+			const parsed = parseIngredient(text);
+			return {
+				clientId: `import-${index}`,
+				kind: 'ingredient',
+				...parsed,
+				name: parsed.name.slice(0, RECIPE_LIMITS.name),
+				unit: parsed.unit?.slice(0, RECIPE_LIMITS.unit) ?? parsed.unit
+			};
+		});
 
 	const toStep = (text: string): StepInput => ({
 		kind: 'step',
-		text,
+		text: text.slice(0, RECIPE_LIMITS.step),
 		links: linkIngredients(text, ingredients)
 	});
 	const sections = recipe.instructions.filter((item) => typeof item !== 'string');
 	const flatten = recipe.instructions.length === 1 && sections.length === 1;
-	const steps = recipe.instructions.flatMap((item): StepInput[] =>
-		typeof item === 'string'
-			? [toStep(item)]
-			: [
-					...(flatten
-						? []
-						: [{ kind: 'section' as const, text: item.section || 'Zubereitung', links: [] }]),
-					...item.steps.map(toStep)
-				]
-	);
+	const steps = recipe.instructions
+		.flatMap((item): StepInput[] =>
+			typeof item === 'string'
+				? [toStep(item)]
+				: [
+						...(flatten
+							? []
+							: [{ kind: 'section' as const, text: item.section || 'Zubereitung', links: [] }]),
+						...item.steps.map(toStep)
+					]
+		)
+		.slice(0, RECIPE_LIMITS.steps);
 
 	return {
-		title: recipe.name?.replace(/\s+Rezept$/i, '') || 'Importiertes Rezept',
-		description: recipe.description ?? null,
+		title: (recipe.name?.replace(/\s+Rezept$/i, '') || 'Importiertes Rezept').slice(
+			0,
+			RECIPE_LIMITS.title
+		),
+		description: recipe.description?.slice(0, RECIPE_LIMITS.description) ?? null,
 		sourceUrl,
 		portion: parsePortion(recipe.yield),
-		duration:
+		duration: Math.min(
 			parseDuration(recipe.totalTime) ??
-			((parseDuration(recipe.prepTime) ?? 0) + (parseDuration(recipe.cookTime) ?? 0) ||
-				DEFAULT_DURATION),
+				((parseDuration(recipe.prepTime) ?? 0) + (parseDuration(recipe.cookTime) ?? 0) ||
+					DEFAULT_DURATION),
+			RECIPE_LIMITS.duration
+		),
 		categoryId: (
 			categories.find(
 				({ slug }) =>
