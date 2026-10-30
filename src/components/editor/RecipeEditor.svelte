@@ -5,6 +5,9 @@
 	import { resolve } from '$app/paths';
 	import type { Conflict } from '#lib/server/recipeActions.js';
 	import Globe from '@lucide/svelte/icons/globe';
+	import Sparkles from '@lucide/svelte/icons/sparkles';
+	import Upload from '@lucide/svelte/icons/upload';
+	import { aiImagePrompt } from '#lib/aiImport.js';
 	import {
 		NUTRITION_TYPES,
 		findUnusedIngredients,
@@ -126,6 +129,23 @@
 		previewUrl ?? image?.variants.webp.find(({ width }) => width >= 900)?.url ?? null
 	);
 	const unused = $derived(findUnusedIngredients(recipe));
+
+	let imagePromptCopied = $state(false);
+	let imagePromptHint = $state<string | null>(null);
+	let imageFromAi = $state(false);
+
+	const copyImagePrompt = async () => {
+		if (!recipe.title.trim()) {
+			imagePromptHint = 'Gib zuerst einen Titel ein, damit die KI weiß, was sie zeigen soll.';
+			return;
+		}
+		await navigator.clipboard.writeText(aiImagePrompt(recipe));
+		imagePromptCopied = true;
+		imageFromAi = true;
+		imagePromptHint =
+			'In einer KI wie Le Chat oder ChatGPT einfügen, das Bild speichern und hier hochladen.';
+		setTimeout(() => (imagePromptCopied = false), 2500);
+	};
 
 	const onImageChange = async (event: Event) => {
 		const file = (event.currentTarget as HTMLInputElement).files?.[0];
@@ -323,27 +343,31 @@
 				</div>
 			{:else}
 				<div class="image-empty">Noch kein Bild</div>
-				<p class="hint">
-					Lade ein eigenes Foto hoch, such dir ein freies Bild (z. B. auf Unsplash, Pixabay oder
-					Wikimedia Commons) oder lass dir eins mit KI erzeugen und lade es danach hoch.
-				</p>
 			{/if}
-			<label class="field">
-				{currentPreview ? 'Bild ersetzen' : 'Bild hochladen'}
-				<input
-					type="file"
-					name="image"
-					accept="image/jpeg,image/png,image/webp"
-					onchange={onImageChange}
-				/>
-			</label>
+			<div class="image-actions">
+				<label class="btn upload">
+					<Upload size="1em" aria-hidden="true" />
+					{currentPreview ? 'Bild ersetzen' : 'Bild hochladen'}
+					<input
+						type="file"
+						name="image"
+						accept="image/jpeg,image/png,image/webp"
+						onchange={onImageChange}
+					/>
+				</label>
+				<button type="button" class="btn" onclick={copyImagePrompt}>
+					<Sparkles size="1em" aria-hidden="true" />
+					{imagePromptCopied ? 'Anweisung kopiert' : 'Mit KI erzeugen'}
+				</button>
+			</div>
+			{#if imagePromptHint}<p class="hint" role="status">{imagePromptHint}</p>{/if}
 			{#if imageFile}
 				<label class="checkbox">
 					<input type="checkbox" name="imageRights" required />
 					Ich darf dieses Bild verwenden.
 				</label>
 				<label class="checkbox">
-					<input type="checkbox" name="imageAi" />
+					<input type="checkbox" name="imageAi" bind:checked={imageFromAi} />
 					Das Bild ist KI-generiert.
 				</label>
 			{/if}
@@ -496,6 +520,28 @@
 		flex-direction: column;
 		gap: 0.75rem;
 		max-width: 32rem;
+	}
+	.image-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+	.upload {
+		position: relative;
+		overflow: hidden;
+	}
+	.upload:focus-within {
+		outline: 3px solid var(--color-focus);
+		outline-offset: 2px;
+	}
+	.upload input {
+		position: absolute;
+		inset: 0;
+		opacity: 0;
+		cursor: pointer;
+	}
+	.image .hint {
+		margin: 0;
 	}
 	.image img,
 	.image-empty {
