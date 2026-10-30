@@ -23,7 +23,11 @@ const answer = `Hier ist dein Rezept:
     { "quantity": "0,5", "unit": "Bund", "name": "Koriander" },
     { "quantity": null, "unit": null, "name": "Salz" }
   ],
-  "steps": ["Linsen waschen.", { "section": "Zum Schluss" }, "Mit Koriander bestreuen."]
+  "steps": [
+    { "text": "Linsen waschen und mit Salz kochen.", "ingredients": ["Rote Linsen", "Salz", "Pfeffer"] },
+    { "section": "Zum Schluss" },
+    "Mit Koriander bestreuen."
+  ]
 }
 \`\`\`
 Guten Appetit!`;
@@ -45,11 +49,36 @@ describe('parseAiAnswer', () => {
 				{ kind: 'ingredient', name: 'Salz', quantity: null, unit: null }
 			],
 			steps: [
-				{ kind: 'step', text: 'Linsen waschen.' },
+				{
+					kind: 'step',
+					text: 'Linsen waschen und mit Salz kochen.',
+					links: [
+						{ ingredientId: 'ai-0', quantity: null },
+						{ ingredientId: 'ai-3', quantity: null }
+					]
+				},
 				{ kind: 'section', text: 'Zum Schluss' },
-				{ kind: 'step', text: 'Mit Koriander bestreuen.' }
+				{ kind: 'step', text: 'Mit Koriander bestreuen.', links: [] }
 			]
 		});
+	});
+
+	test('does not link short names to longer ingredients', () => {
+		const result = parseAiAnswer(
+			JSON.stringify({
+				title: 'Soße',
+				portion: 2,
+				duration: 10,
+				category: 'Hauptgericht',
+				nutritionType: 'Vegetarisch',
+				ingredients: [{ name: 'Weißwein' }, { name: 'Eier' }],
+				steps: [{ text: 'Verrühren.', ingredients: ['Ei', 'eier'] }]
+			}),
+			categories
+		);
+		expect('input' in result && result.input.steps[0].links).toEqual([
+			{ ingredientId: 'ai-1', quantity: null }
+		]);
 	});
 
 	test('explains what is wrong', () => {
