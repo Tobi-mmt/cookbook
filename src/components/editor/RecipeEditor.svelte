@@ -131,19 +131,18 @@
 	const unused = $derived(findUnusedIngredients(recipe));
 
 	let imagePromptCopied = $state(false);
-	let imagePromptHint = $state<string | null>(null);
+	let imagePromptHint = $state<'copied' | 'title' | null>(null);
 	let imageFromAi = $state(false);
 
 	const copyImagePrompt = async () => {
 		if (!recipe.title.trim()) {
-			imagePromptHint = 'Gib zuerst einen Titel ein, damit die KI weiß, was sie zeigen soll.';
+			imagePromptHint = 'title';
 			return;
 		}
 		await navigator.clipboard.writeText(aiImagePrompt(recipe));
 		imagePromptCopied = true;
 		imageFromAi = true;
-		imagePromptHint =
-			'In einer KI wie Le Chat oder ChatGPT einfügen, das Bild speichern und hier hochladen.';
+		imagePromptHint = 'copied';
 		setTimeout(() => (imagePromptCopied = false), 2500);
 	};
 
@@ -360,7 +359,21 @@
 					{imagePromptCopied ? 'Anweisung kopiert' : 'Mit KI erzeugen'}
 				</button>
 			</div>
-			{#if imagePromptHint}<p class="hint" role="status">{imagePromptHint}</p>{/if}
+			{#if imagePromptHint === 'title'}
+				<p class="hint" role="status">
+					Gib zuerst einen Titel ein, damit die KI weiß, was sie zeigen soll.
+				</p>
+			{:else if imagePromptHint === 'copied'}
+				<p class="hint" role="status">
+					In
+					<!-- eslint-disable svelte/no-navigation-without-resolve -- external links -->
+					<a href="https://lumo.proton.me" target="_blank" rel="noreferrer">Lumo</a>,
+					<a href="https://chat.mistral.ai" target="_blank" rel="noreferrer">Le Chat</a> oder
+					<a href="https://chatgpt.com" target="_blank" rel="noreferrer">ChatGPT</a>
+					<!-- eslint-enable svelte/no-navigation-without-resolve -->
+					einfügen, das Bild speichern und hier hochladen.
+				</p>
+			{/if}
 			{#if imageFile}
 				<label class="checkbox">
 					<input type="checkbox" name="imageRights" required />
@@ -542,6 +555,9 @@
 	}
 	.image .hint {
 		margin: 0;
+	}
+	.image .hint a {
+		color: var(--color-text);
 	}
 	.image img,
 	.image-empty {
