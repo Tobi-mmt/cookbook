@@ -31,7 +31,7 @@ Antworte ausschließlich mit einem JSON-Objekt in genau diesem Format, ohne Erkl
 Regeln:
 - Übernimm nur Zutaten und Schritte, die wirklich im Material stehen. Erfinde nichts dazu.
 - Formuliere die Schritte in eigenen Worten, kurz und klar.
-- Gib bei jedem Schritt unter "ingredients" die Zutaten an, die in diesem Schritt verwendet werden, genau so geschrieben wie bei "name" in der Zutatenliste. Jede Zutat sollte in mindestens einem Schritt vorkommen.
+- Gib bei jedem Schritt unter "ingredients" die Zutaten an, die in diesem Schritt dazukommen, genau so geschrieben wie bei "name" in der Zutatenliste. Jede Zutat gehört zu genau einem Schritt, und zwar zu dem, in dem sie zum ersten Mal verarbeitet wird.
 - "quantity" ist eine Zahl (0.5 statt ½) oder null. Einheiten kurz: g, kg, ml, l, EL, TL, Prise, Stück.
 - "portion" ist die Zahl der Portionen, "duration" die gesamte Zeit in Minuten. Schätze sinnvoll, wenn nichts angegeben ist.
 - "category" und "nutritionType" sind genau einer der angegebenen Werte.
@@ -100,6 +100,7 @@ export const parseAiAnswer = (
 		)
 		.filter(({ name }) => name);
 	const usable = ingredients.filter(({ kind }) => kind === 'ingredient');
+	const linked = new Set<string>();
 	const linksOf = (names: unknown) => {
 		const ids = (Array.isArray(names) ? names : []).flatMap((name) => {
 			const wanted = text(name).toLowerCase();
@@ -108,7 +109,9 @@ export const parseAiAnswer = (
 				(wanted.length >= 4 ? find(usable, wanted) : undefined);
 			return match?.clientId ?? [];
 		});
-		return [...new Set(ids)].map((ingredientId) => ({ ingredientId, quantity: null }));
+		const fresh = [...new Set(ids)].filter((id) => !linked.has(id));
+		for (const id of fresh) linked.add(id);
+		return fresh.map((ingredientId) => ({ ingredientId, quantity: null }));
 	};
 	const steps = (Array.isArray(json.steps) ? (json.steps as AiStep[]) : [])
 		.map((step) =>
