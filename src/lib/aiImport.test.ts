@@ -63,6 +63,28 @@ describe('parseAiAnswer', () => {
 		});
 	});
 
+	test('links every ingredient only to the first step that uses it', () => {
+		const result = parseAiAnswer(
+			JSON.stringify({
+				title: 'Suppe',
+				portion: 2,
+				duration: 10,
+				category: 'Hauptgericht',
+				nutritionType: 'Vegan',
+				ingredients: [{ name: 'Zwiebel' }, { name: 'Brühe' }],
+				steps: [
+					{ text: 'Zwiebel anbraten.', ingredients: ['Zwiebel'] },
+					{ text: 'Mit Brühe aufgießen.', ingredients: ['Zwiebel', 'Brühe'] }
+				]
+			}),
+			categories
+		);
+		expect('input' in result && result.input.steps.map(({ links }) => links)).toEqual([
+			[{ ingredientId: 'ai-0', quantity: null }],
+			[{ ingredientId: 'ai-1', quantity: null }]
+		]);
+	});
+
 	test('does not link short names to longer ingredients', () => {
 		const result = parseAiAnswer(
 			JSON.stringify({
