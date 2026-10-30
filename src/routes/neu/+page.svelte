@@ -34,7 +34,26 @@
 
 	const showImport = $derived(Boolean(imported && (!imported.duplicate || confirmedDuplicate)));
 
-	const importFromLink: SubmitFunction = () => {
+	const VIDEO_SITES =
+		/(^|\.)(instagram\.com|tiktok\.com|youtube\.com|youtu\.be|facebook\.com|pinterest\.[a-z.]+)$/;
+	let mode = $state<'link' | 'ai'>('link');
+	const videoLink = $derived.by(() => {
+		try {
+			return VIDEO_SITES.test(new URL(url.trim()).hostname) ? url.trim() : null;
+		} catch {
+			return null;
+		}
+	});
+	$effect(() => {
+		if (videoLink) mode = 'ai';
+	});
+
+	const importFromLink: SubmitFunction = ({ cancel }) => {
+		if (videoLink) {
+			cancel();
+			mode = 'ai';
+			return;
+		}
 		importing = true;
 		importError = null;
 		confirmedDuplicate = false;
@@ -62,7 +81,9 @@
 	let promptCopied = $state(false);
 
 	const copyPrompt = async () => {
-		await navigator.clipboard.writeText(aiPrompt(data.categories));
+		await navigator.clipboard.writeText(
+			aiPrompt(data.categories) + (videoLink ? `\nLink: ${videoLink}\n` : '')
+		);
 		promptCopied = true;
 		setTimeout(() => (promptCopied = false), 2500);
 	};
@@ -109,86 +130,107 @@
 			<button type="button" class="btn btn--quiet" onclick={reset}>Anderen Link importieren</button>
 		</div>
 	{:else}
-		<form method="POST" action={resolve('/import')} class="import" use:enhance={importFromLink}>
-			<label class="field">
-				<span class="label"
-					><Link size="1em" aria-hidden="true" /> Rezept aus einem Link übernehmen</span
+		<section class="takeover" aria-label="Rezept übernehmen">
+			<div class="takeover-head">
+				<span class="label">Rezept übernehmen</span>
+				<div class="modes" role="tablist" aria-label="Woraus übernehmen">
+					<button
+						type="button"
+						role="tab"
+						aria-selected={mode === 'link'}
+						onclick={() => (mode = 'link')}><Link size="1em" aria-hidden="true" /> Link</button
+					>
+					<button
+						type="button"
+						role="tab"
+						aria-selected={mode === 'ai'}
+						onclick={() => (mode = 'ai')}
+						><Sparkles size="1em" aria-hidden="true" /> Bild, Video oder Text</button
+					>
+				</div>
+			</div>
+
+			{#if mode === 'link'}
+				<form
+					method="POST"
+					action={resolve('/import')}
+					class="row link"
+					use:enhance={importFromLink}
 				>
-				<span class="row">
 					<!-- svelte-ignore a11y_autofocus -->
 					<input
 						class="input"
 						type="url"
 						name="url"
 						bind:value={url}
-						placeholder="https://www.chefkoch.de/rezepte/…"
+						placeholder="Link zum Rezept einfügen, z. B. von Chefkoch"
+						aria-label="Link zum Rezept"
 						required
 						readonly={importing}
 						autofocus={page.url.searchParams.has('link')}
 					/>
+					<input type="hidden" name="cookbookId" value={data.cookbookId} />
 					<button type="submit" class="btn btn--primary" disabled={importing}>
-						{importing ? 'Wird geladen …' : 'Importieren'}
+						{importing ? 'Wird geladen …' : 'Übernehmen'}
 					</button>
-				</span>
-			</label>
-			<input type="hidden" name="cookbookId" value={data.cookbookId} />
-			{#if imported?.duplicate}
-				<div class="message">
-					<p>
-						Dieses Rezept ist schon im Kochbuch:
-						<a href={recipePath(imported.duplicate)}>{imported.duplicate.title}</a>.
+				</form>
+				{#if imported?.duplicate}
+					<div class="message">
+						<p>
+							Dieses Rezept ist schon im Kochbuch:
+							<a href={recipePath(imported.duplicate)}>{imported.duplicate.title}</a>.
+						</p>
+						<button type="button" class="btn" onclick={() => (confirmedDuplicate = true)}
+							>Trotzdem übernehmen</button
+						>
+					</div>
+				{/if}
+				{#if importError}<p class="message message--error" role="alert">{importError}</p>{/if}
+			{:else}
+				<div class="ai">
+					<p class="hint">
+						{#if videoLink}
+							Videos und Beiträge aus sozialen Netzwerken liest die {SITE_NAME} nicht selbst aus.
+						{/if}
+						Eine eingebaute KI würde laufende Kosten verursachen, die ich als Betreiber nicht tragen kann.
+						Mit einer kostenlosen KI deiner Wahl geht es trotzdem:
 					</p>
-					<button type="button" class="btn" onclick={() => (confirmedDuplicate = true)}
-						>Trotzdem importieren</button
-					>
+					<ol>
+						<li>
+							<button type="button" class="btn" onclick={copyPrompt}
+								>{promptCopied ? 'Auftrag kopiert' : 'Auftrag kopieren'}</button
+							>
+							{#if videoLink}<span class="hint">mit deinem Link</span>{/if}
+						</li>
+						<li>
+							In
+							<!-- eslint-disable svelte/no-navigation-without-resolve -- external links -->
+							<a href="https://chat.mistral.ai" target="_blank" rel="noreferrer">Le Chat</a>,
+							<a href="https://chatgpt.com" target="_blank" rel="noreferrer">ChatGPT</a> oder
+							<a href="https://claude.ai" target="_blank" rel="noreferrer">Claude</a>
+							<!-- eslint-enable svelte/no-navigation-without-resolve -->
+							einfügen{videoLink ? '' : ', Screenshot, Link oder Text dazugeben'}.
+						</li>
+						<li class="answer">
+							<textarea
+								class="input"
+								rows="3"
+								bind:value={aiAnswer}
+								placeholder="Antwort der KI hier einfügen"
+								aria-label="Antwort der KI"></textarea>
+							<button
+								type="button"
+								class="btn btn--primary"
+								disabled={!aiAnswer.trim()}
+								onclick={takeAiAnswer}>Übernehmen</button
+							>
+						</li>
+					</ol>
+					{#if aiError}<p class="message message--error" role="alert">{aiError}</p>{/if}
+					<p class="hint small">Was du der KI gibst, geht an deren Anbieter, nicht an uns.</p>
 				</div>
 			{/if}
-			{#if importError}<p class="message message--error" role="alert">{importError}</p>{/if}
-		</form>
-		<details class="import ai">
-			<summary>
-				<span class="label"
-					><Sparkles size="1em" aria-hidden="true" /> Aus Screenshot, Video oder Text übernehmen</span
-				>
-			</summary>
-			<p class="hint">
-				Screenshots, Instagram-Videos oder Fließtext liest die {SITE_NAME} nicht selbst aus: Eine eingebaute
-				KI würde bei vielen Nutzern laufende Kosten verursachen, die ich als Betreiber nicht tragen kann.
-				Mit einer kostenlosen KI deiner Wahl klappt es trotzdem:
-			</p>
-			<ol>
-				<li>
-					<button type="button" class="btn" onclick={copyPrompt}
-						>{promptCopied ? 'Auftrag kopiert' : 'Auftrag kopieren'}</button
-					>
-				</li>
-				<li>
-					Öffne eine KI, z. B.
-					<!-- eslint-disable svelte/no-navigation-without-resolve -- external links -->
-					<a href="https://chat.mistral.ai" target="_blank" rel="noreferrer">Le Chat</a>,
-					<a href="https://chatgpt.com" target="_blank" rel="noreferrer">ChatGPT</a> oder
-					<a href="https://claude.ai" target="_blank" rel="noreferrer">Claude</a>,
-					<!-- eslint-enable svelte/no-navigation-without-resolve -->
-					füge den Auftrag ein und hänge deinen Screenshot, Link oder Text an.
-				</li>
-				<li>
-					<label class="field">
-						Kopiere die Antwort der KI und füge sie hier ein:
-						<textarea class="input" rows="5" bind:value={aiAnswer}></textarea>
-					</label>
-					<button
-						type="button"
-						class="btn btn--primary"
-						disabled={!aiAnswer.trim()}
-						onclick={takeAiAnswer}>Übernehmen</button
-					>
-				</li>
-			</ol>
-			{#if aiError}<p class="message message--error" role="alert">{aiError}</p>{/if}
-			<p class="hint">
-				Was du der KI gibst, geht an deren Anbieter, nicht an die {SITE_NAME}.
-			</p>
-		</details>
+		</section>
 		<p class="divider">oder selbst eingeben</p>
 	{/if}
 
@@ -233,26 +275,86 @@
 </div>
 
 <style>
-	.import {
+	.takeover {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		padding: 0.75rem 1rem 1rem;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+	}
+	.takeover-head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.5rem;
+	}
+	.modes {
+		display: flex;
+		gap: 0.25rem;
+		padding: 0.2rem;
+		background: var(--color-surface-muted);
+		border-radius: var(--radius-pill);
+	}
+	.modes button {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35em;
+		padding: 0.3rem 0.8rem;
+		font: inherit;
+		font-size: 0.875rem;
+		color: var(--color-text-muted);
+		background: none;
+		border: none;
+		border-radius: var(--radius-pill);
+		cursor: pointer;
+	}
+	.modes button[aria-selected='true'] {
+		color: var(--color-text);
+		background: var(--color-surface);
+		box-shadow: 0 1px 3px rgb(0 0 0 / 0.12);
+	}
+	.link {
+		flex-wrap: nowrap;
+	}
+	.link .input {
+		flex: 1;
+		min-width: 0;
+	}
+	.ai {
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
-		padding: 1rem 1.25rem;
-		border: 1px solid var(--color-border);
-		border-radius: var(--radius-md);
+	}
+	.ai .hint {
+		margin: 0;
+	}
+	.ai .small {
+		font-size: 0.8125rem;
+	}
+	.ai ol {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+		margin: 0;
+		padding-left: 1.25rem;
+		line-height: 1.5;
+	}
+	.answer {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.5rem;
+	}
+	.answer textarea {
+		width: 100%;
 	}
 	.label {
 		display: inline-flex;
 		align-items: center;
 		gap: 0.4em;
 		font-weight: 700;
-	}
-	.import .row {
-		flex-wrap: nowrap;
-	}
-	.import .input {
-		flex: 1;
-		min-width: 0;
 	}
 	.message p {
 		margin: 0;
@@ -264,23 +366,6 @@
 		gap: 0.5rem;
 		margin: 0 0 1rem;
 	}
-	.ai {
-		margin-top: 0.75rem;
-	}
-	.ai summary {
-		cursor: pointer;
-	}
-	.ai ol {
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-		margin: 0.5rem 0;
-		padding-left: 1.25rem;
-		line-height: 1.5;
-	}
-	.ai li .btn {
-		margin-top: 0.4rem;
-	}
 	.divider {
 		margin: 1.25rem 0 1.5rem;
 		text-align: center;
@@ -291,10 +376,10 @@
 		color: inherit;
 	}
 	@media (max-width: 599px) {
-		.import .row {
+		.link {
 			flex-wrap: wrap;
 		}
-		.import .row .btn {
+		.link .btn {
 			width: 100%;
 		}
 	}
