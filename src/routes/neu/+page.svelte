@@ -114,7 +114,7 @@
 				Übernommen aus der Antwort der KI. Bitte prüfe alles, die KI kann sich irren. Gespeichert
 				wird es erst mit „Speichern“.
 			</p>
-			<button type="button" class="btn btn--quiet" onclick={reset}>Neu beginnen</button>
+			<button type="button" class="btn" onclick={reset}>Neu beginnen</button>
 		</div>
 	{:else if showImport && imported}
 		<div class="message">
@@ -127,7 +127,7 @@
 					Das Bild der Originalseite wurde nicht übernommen, weil es urheberrechtlich geschützt ist.
 				{/if}
 			</p>
-			<button type="button" class="btn btn--quiet" onclick={reset}>Anderen Link importieren</button>
+			<button type="button" class="btn" onclick={reset}>Anderen Link importieren</button>
 		</div>
 	{:else}
 		<section class="takeover" aria-label="Rezept übernehmen">
