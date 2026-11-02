@@ -1,8 +1,8 @@
 import { and, count, countDistinct, desc, gte, inArray, lte, sql } from 'drizzle-orm';
-import { SITE_DOMAIN, SITE_NAME, SUPPORT_MAILBOX } from '../site';
+import { SITE_DOMAIN, SUPPORT_MAILBOX } from '../site';
 import type { Database } from './db/client';
 import { pageViews, recipes, users } from './db/schema';
-import { renderMail, sendMail } from './mail';
+import { escapeHtml, renderMail, sendMail } from './mail';
 import { hitRateLimit } from './rateLimit';
 import { addDays } from './recipeViews';
 import { trackingDay } from './tracking';
@@ -89,44 +89,104 @@ export const buildWeeklyReport = async (db: Database, now = new Date()) => {
 	return { current, previous, thisWeek, lastWeek, top };
 };
 
-const formatDay = (day: string) =>
-	new Intl.DateTimeFormat('de-DE', { day: 'numeric', month: 'numeric', timeZone: 'UTC' }).format(
-		new Date(`${day}T00:00:00Z`)
-	);
+const formatDay = (day: string, month = false) =>
+	new Intl.DateTimeFormat('de-DE', {
+		day: 'numeric',
+		...(month && { month: 'numeric' }),
+		timeZone: 'UTC'
+	}).format(new Date(`${day}T00:00:00Z`));
 
-export const compare = (value: number, before: number) => {
-	const difference = value - before;
-	const percent = before
-		? ` bzw. ${difference >= 0 ? '+' : ''}${Math.round((difference / before) * 100)} %`
-		: '';
-	return `${value.toLocaleString('de-DE')} (Vorwoche ${before.toLocaleString('de-DE')}, ${difference >= 0 ? '+' : ''}${difference.toLocaleString('de-DE')}${percent})`;
+const number = (value: number) => value.toLocaleString('de-DE');
+
+/** "+22 %", "−50 %", "±0" or "neu" when there was nothing the week before */
+export const change = (value: number, before: number) => {
+	if (value === before) return { label: '±0', tone: 'same' as const };
+	if (!before) return { label: 'neu', tone: 'up' as const };
+	const percent = Math.round(((value - before) / before) * 100);
+	return {
+		label: `${percent > 0 ? '+' : '−'}${Math.abs(percent)} %`,
+		tone: value > before ? ('up' as const) : ('down' as const)
+	};
 };
+
+/** A readable name for a page of the statistics */
+export const pageLabel = (path: string, title?: string) => {
+	if (title) return title;
+	if (path === '/') return 'Startseite';
+	if (path === '/rezepte') return 'Rezepte nach Kategorie';
+	if (path === '/ueber') return 'Über die Kochbuchbande';
+	if (path === '/kosten') return 'Betriebskosten';
+	if (path === '/suche') return 'Suche';
+	const words = (slug: string) => decodeURIComponent(slug).replace(/-/g, ' ');
+	const ingredient = path.match(/^\/rezepte\/mit\/([^/]+)$/)?.[1];
+	if (ingredient) return `Rezepte mit ${words(ingredient).replace(/^./, (c) => c.toUpperCase())}`;
+	const landing = path.match(/^\/rezepte\/([^/]+)$/)?.[1];
+	if (landing) return words(landing).replace(/^./, (c) => c.toUpperCase());
+	if (path.startsWith('/@')) return decodeURIComponent(path.slice(1));
+	return path;
+};
+
+const TONE_COLORS = { up: '#2e7d32', down: '#c62828', same: '#888888' };
+const cell = 'padding:10px 0;border-top:1px solid #eeeeee';
 
 export const renderWeeklyReport = (
 	report: Awaited<ReturnType<typeof buildWeeklyReport>>,
 	origin: string
 ) => {
 	const { current, thisWeek, lastWeek, top } = report;
-	const range = `${formatDay(current.from)} bis ${formatDay(current.to)}`;
+	const range = `${formatDay(current.from)}.–${formatDay(current.to, true)}`;
+	const rows = [
+		['Besucher', thisWeek.visitors, lastWeek.visitors],
+		['Seitenaufrufe', thisWeek.pageViews, lastWeek.pageViews],
+		['Neue Konten', thisWeek.accounts, lastWeek.accounts],
+		['Neue Rezepte', thisWeek.recipes, lastWeek.recipes]
+	] as const;
+	const visitors = change(thisWeek.visitors, lastWeek.visitors);
+
+	const numbers = {
+		html: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:0 0 32px;font-size:15px">
+<tr style="color:#888888;font-size:13px"><td style="padding:0 0 6px"></td><td align="right" style="padding:0 0 6px">Diese Woche</td><td align="right" style="padding:0 0 6px">Vorwoche</td><td align="right" style="padding:0 0 6px"></td></tr>
+${rows
+	.map(([label, value, before]) => {
+		const { label: difference, tone } = change(value, before);
+		return `<tr><td style="${cell}">${label}</td><td align="right" style="${cell};font-size:20px">${number(value)}</td><td align="right" style="${cell};color:#888888">${number(before)}</td><td align="right" style="${cell};width:64px;color:${TONE_COLORS[tone]}">${difference}</td></tr>`;
+	})
+	.join('\n')}
+</table>`,
+		text: [
+			'Diese Woche (Vorwoche, Veränderung)',
+			...rows.map(
+				([label, value, before]) =>
+					`${label}: ${number(value)} (${number(before)}, ${change(value, before).label})`
+			)
+		].join('\n')
+	};
+
+	const pages = top.length
+		? {
+				html: `<p style="margin:0 0 8px;font-size:13px;color:#888888">Meistbesuchte Seiten</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:0 0 8px;font-size:15px">
+${top
+	.map(
+		({ path, views, title }, index) =>
+			`<tr><td style="${cell};width:24px;color:#888888">${index + 1}.</td><td style="${cell}"><a href="${escapeHtml(origin + path)}" style="color:#222222;text-decoration:none">${escapeHtml(pageLabel(path, title))}</a></td><td align="right" style="${cell};color:#888888">${number(views)}</td></tr>`
+	)
+	.join('\n')}
+</table>`,
+				text: [
+					'Meistbesuchte Seiten',
+					...top.map(
+						({ path, views, title }, index) =>
+							`${index + 1}. ${pageLabel(path, title)}: ${number(views)}`
+					)
+				].join('\n')
+			}
+		: { html: '', text: 'In dieser Woche gab es keine Seitenaufrufe.' };
+
 	return renderMail({
-		subject: `${SITE_NAME}: Wochenbericht ${range}`,
-		paragraphs: [
-			`Die Woche vom ${range} im Vergleich zur Vorwoche:`,
-			[
-				`Neue Konten: ${compare(thisWeek.accounts, lastWeek.accounts)}`,
-				`Neue Rezepte: ${compare(thisWeek.recipes, lastWeek.recipes)}`,
-				`Seitenaufrufe: ${compare(thisWeek.pageViews, lastWeek.pageViews)}`,
-				`Besucher: ${compare(thisWeek.visitors, lastWeek.visitors)}`
-			].join('\n'),
-			top.length
-				? `Die meistbesuchten Seiten:\n${top
-						.map(
-							({ path, views, title }, index) =>
-								`${index + 1}. ${title ? `${title} (${path})` : path}: ${views.toLocaleString('de-DE')} Aufrufe`
-						)
-						.join('\n')}`
-				: 'In dieser Woche gab es keine Seitenaufrufe.'
-		],
+		subject: `Wochenbericht ${range}: ${number(thisWeek.visitors)} Besucher (${visitors.label})`,
+		paragraphs: [`Wochenbericht vom ${range}`],
+		blocks: [numbers, pages],
 		button: { label: 'Zur Statistik', url: `${origin}/admin/stats` }
 	});
 };
