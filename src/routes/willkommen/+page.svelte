@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { enhance } from '$app/forms';
 	import { page } from '$app/state';
 	import { me } from '#lib/me.svelte.js';
@@ -99,8 +100,10 @@
 			<label class="checkbox">
 				<input type="checkbox" name="terms" required />
 				<span>
-					Ich stimme den <a href="/nutzungsbedingungen" target="_blank">Nutzungsbedingungen</a> und
-					der <a href="/datenschutz" target="_blank">Datenschutzerklärung</a> zu.
+					Ich stimme den <a href={resolve('/nutzungsbedingungen')} target="_blank"
+						>Nutzungsbedingungen</a
+					>
+					und der <a href={resolve('/datenschutz')} target="_blank">Datenschutzerklärung</a> zu.
 				</span>
 			</label>
 			<p class="message">

@@ -31,9 +31,11 @@
 		{#if pagination.page > 1 || hasNext}
 			<span class="row">
 				{#if pagination.page > 1}
+					<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- only the query of the current page changes -->
 					<a class="btn" href={pageHref(previous)}>Vorherige</a>
 				{/if}
 				{#if hasNext}
+					<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- only the query of the current page changes -->
 					<a class="btn" href={pageHref(pagination.page + 1)}>Nächste</a>
 				{/if}
 			</span>

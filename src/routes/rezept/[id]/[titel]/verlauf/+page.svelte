@@ -1,7 +1,8 @@
 <script lang="ts">
+	import { slugerize } from '#lib/slugerize.js';
+	import { resolve } from '$app/paths';
 	import type { Recipe } from '#types';
 	import { enhance } from '$app/forms';
-	import { page } from '$app/state';
 	import RecipeComponent from '#components/Recipe.svelte';
 	import { recipePath } from '#lib/paths.js';
 	import type { Conflict } from '#lib/server/recipeActions.js';
@@ -46,7 +47,10 @@
 		{#each data.versions as item (item.version)}
 			<li>
 				<a
-					href="{page.url.pathname}?version={item.version}"
+					href="{resolve('/rezept/[id]/[titel]/verlauf', {
+						id: data.recipe.id,
+						titel: slugerize(data.recipe.title)
+					})}?version={item.version}"
 					aria-current={item.version === data.selected ? 'true' : undefined}
 				>
 					{formatDate(item.createdAt)} – {item.author ?? 'ehemalige Person'}

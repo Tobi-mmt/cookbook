@@ -85,6 +85,7 @@
 	{#if error}<p class="message message--error" role="alert">{error}</p>{/if}
 
 	{#snippet actions()}
+		<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- the path of the cookbook comes from the server -->
 		<a class="btn" href={cookbook.path}>Zum Kochbuch</a>
 		<button type="button" class="btn btn--primary" onclick={() => (open = false)}>Fertig</button>
 	{/snippet}

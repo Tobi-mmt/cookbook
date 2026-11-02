@@ -42,6 +42,7 @@
 
 	const signedIn = async () => {
 		await me.refresh();
+		// eslint-disable-next-line svelte/no-navigation-without-resolve -- the server checked the target
 		await goto(data.next, { invalidateAll: true });
 	};
 
@@ -87,9 +88,9 @@
 				kannst ihn auch auf einem anderen Gerät öffnen.
 			</p>
 			<p class="hint">
-				Keine Mail bekommen? Schau im Spam-Ordner nach oder <a href="?weiter={data.next}"
-					>fordere einen neuen Link an</a
-				>.
+				Keine Mail bekommen? Schau im Spam-Ordner nach oder
+				<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- only the query of the current page changes -->
+				<a href="?weiter={data.next}">fordere einen neuen Link an</a>.
 			</p>
 		</div>
 	{:else}
