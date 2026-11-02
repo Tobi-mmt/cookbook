@@ -28,6 +28,17 @@ export default [
 		}
 	},
 	{
+		// type information lets svelte/no-navigation-without-resolve recognise paths built with resolve()
+		files: ['src/**/*.svelte', 'src/**/*.ts'],
+		languageOptions: {
+			parserOptions: {
+				projectService: true,
+				extraFileExtensions: ['.svelte'],
+				tsconfigRootDir: import.meta.dirname
+			}
+		}
+	},
+	{
 		ignores: ['build/', '.svelte-kit/', 'dist/', '.vercel/output']
 	}
 ];

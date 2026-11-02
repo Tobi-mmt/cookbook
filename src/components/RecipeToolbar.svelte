@@ -107,6 +107,7 @@
 		choosing = null;
 		if (body.isNew) await me.refresh();
 		const shareParam = body.isNew ? `&teilen=${body.cookbook.id}` : '';
+		// eslint-disable-next-line svelte/no-navigation-without-resolve -- the path of the new recipe comes from the server
 		await goto(`${body.url}?kopiert=${encodeURIComponent(body.cookbook.name)}${shareParam}`);
 	};
 
@@ -129,6 +130,7 @@
 		} else {
 			notice = `Verschoben nach „${body.cookbook.name}“.`;
 		}
+		// eslint-disable-next-line svelte/no-navigation-without-resolve -- reloads the current page
 		await goto(page.url.pathname, { invalidateAll: true, replace: true, reset: false });
 	};
 

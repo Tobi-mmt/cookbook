@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { profilePath } from '#lib/paths.js';
 	import { enhance } from '$app/forms';
 	import { resolve } from '$app/paths';
 	import { REPORT_TARGET_LABELS, reasonLabel, type ReportTarget } from '#lib/reportReasons.js';
@@ -105,8 +106,9 @@
 		<p>Kochbuch „{data.current.title}“</p>
 	{:else}
 		<p>
-			{#if data.current.username}<a href="/@{data.current.username}" target="_blank"
-					>@{data.current.username}</a
+			{#if data.current.username}<a
+					href={profilePath(String(data.current.username))}
+					target="_blank">@{data.current.username}</a
 				>{/if}
 			{data.current.banned ? '(gesperrt)' : ''}
 			· <a href={resolve('/admin/personen/[id]', { id: item.targetId })}>In der Verwaltung</a>
@@ -149,7 +151,7 @@
 							<strong>{reasonLabel(report.reason)}</strong>
 							{#if report.comment}<br />{report.comment}{/if}
 							{#if report.originalUrl}<br />Original:
-								<a href={report.originalUrl} rel="noreferrer" target="_blank"
+								<a href={report.originalUrl} rel="noreferrer external" target="_blank"
 									>{report.originalUrl}</a
 								>
 								({report.isRightsHolder ? 'Rechteinhaber' : 'im Auftrag'}){/if}

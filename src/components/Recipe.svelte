@@ -128,7 +128,7 @@
 		{#if caption}
 			<p class="image-caption">
 				{caption}{#if recipe.image?.license}
-					· <a href={licenseUrl(recipe.image.license)} rel="license">Lizenz</a>{/if}
+					· <a href={licenseUrl(recipe.image.license)} rel="license external">Lizenz</a>{/if}
 			</p>
 		{/if}
 		<div class="content-wrapper">

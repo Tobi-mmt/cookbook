@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cookbookPath } from '#lib/paths.js';
 	import { enhance } from '$app/forms';
 	import { resolve } from '$app/paths';
 	import { SITE_NAME } from '#lib/site.js';
@@ -45,9 +46,11 @@
 		Ausgeblendet: {cookbook.hiddenReason}
 	</p>{/if}
 <p class="hint">
-	<a href="/@{owner?.username}/{cookbook.slug}" target="_blank"
-		>/@{owner?.username}/{cookbook.slug}</a
-	>
+	{#if owner?.username}
+		<a href={cookbookPath({ ownerUsername: owner.username, slug: cookbook.slug })} target="_blank"
+			>/@{owner.username}/{cookbook.slug}</a
+		>
+	{/if}
 </p>
 
 <h2>Name und Adresse</h2>
