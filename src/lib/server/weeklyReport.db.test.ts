@@ -2,7 +2,13 @@ import { describe, expect, test } from 'vitest';
 import { pageViews, users } from './db/schema';
 import { hasTestDatabase, useTestDatabase } from './testing/db';
 import { createTestUser } from './testing/fixtures';
-import { buildWeeklyReport, compare, lastWeeks } from './weeklyReport';
+import {
+	buildWeeklyReport,
+	change,
+	lastWeeks,
+	pageLabel,
+	renderWeeklyReport
+} from './weeklyReport';
 import { eq } from 'drizzle-orm';
 
 describe('lastWeeks', () => {
@@ -18,11 +24,42 @@ describe('lastWeeks', () => {
 	});
 });
 
-describe('compare', () => {
-	test('shows the difference to the week before', () => {
-		expect(compare(12, 10)).toBe('12 (Vorwoche 10, +2 bzw. +20 %)');
-		expect(compare(3, 0)).toBe('3 (Vorwoche 0, +3)');
-		expect(compare(5, 10)).toBe('5 (Vorwoche 10, -5 bzw. -50 %)');
+describe('change', () => {
+	test('shows the difference in percent', () => {
+		expect(change(12, 10)).toEqual({ label: '+20 %', tone: 'up' });
+		expect(change(5, 10)).toEqual({ label: '−50 %', tone: 'down' });
+		expect(change(3, 0)).toEqual({ label: 'neu', tone: 'up' });
+		expect(change(4, 4)).toEqual({ label: '±0', tone: 'same' });
+	});
+});
+
+describe('pageLabel', () => {
+	test('names pages instead of showing paths', () => {
+		expect(pageLabel('/rezept/abc/Dal', 'Dal')).toBe('Dal');
+		expect(pageLabel('/')).toBe('Startseite');
+		expect(pageLabel('/rezepte/mit/rote-linsen')).toBe('Rezepte mit Rote linsen');
+		expect(pageLabel('/rezepte/vegan')).toBe('Vegan');
+		expect(pageLabel('/@tobi/unser-kochbuch')).toBe('@tobi/unser-kochbuch');
+	});
+});
+
+describe('renderWeeklyReport', () => {
+	test('names the previous week once and links the pages', () => {
+		const mail = renderWeeklyReport(
+			{
+				current: { from: '2026-10-19', to: '2026-10-25' },
+				previous: { from: '2026-10-12', to: '2026-10-18' },
+				thisWeek: { accounts: 4, recipes: 7, pageViews: 1830, visitors: 412 },
+				lastWeek: { accounts: 2, recipes: 9, pageViews: 1500, visitors: 380 },
+				top: [{ path: '/rezept/abc/Dal', views: 140, title: 'Dal' }]
+			},
+			'https://kochbuchbande.de'
+		);
+		expect(mail.subject).toBe('Wochenbericht 19.–25.10.: 412 Besucher (+8 %)');
+		expect(mail.html.match(/Vorwoche/g)).toHaveLength(1);
+		expect(mail.html).toContain('href="https://kochbuchbande.de/rezept/abc/Dal"');
+		expect(mail.html).not.toContain('>/rezept/abc/Dal<');
+		expect(mail.text).toContain('Besucher: 412 (380, +8 %)');
 	});
 });
 

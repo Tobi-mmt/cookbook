@@ -8,7 +8,7 @@ export type MailContent = { subject: string; text: string; html: string };
 
 const SCALEWAY_URL = 'https://api.scaleway.com/transactional-email/v1alpha1/regions/fr-par/emails';
 
-const escapeHtml = (text: string) =>
+export const escapeHtml = (text: string) =>
 	text.replace(
 		/[&<>"']/g,
 		(char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]!
@@ -18,11 +18,14 @@ const escapeHtml = (text: string) =>
 export const renderMail = ({
 	subject,
 	paragraphs,
+	blocks = [],
 	button,
 	footer
 }: {
 	subject: string;
 	paragraphs: string[];
+	/** prepared content such as tables, with a plain text version */
+	blocks?: { html: string; text: string }[];
 	button?: { label: string; url: string };
 	footer?: string;
 }): MailContent => {
@@ -30,6 +33,7 @@ export const renderMail = ({
 	const text = [
 		SITE_NAME,
 		...paragraphs,
+		...blocks.map(({ text }) => text),
 		...(button ? [`${button.label}: ${button.url}`] : []),
 		'--',
 		...(footer ? [footer] : []),
@@ -40,6 +44,7 @@ export const renderMail = ({
 <div style="max-width:520px;margin:0 auto">
 <p style="margin:0 0 24px;font-size:20px;letter-spacing:-0.01em">${SITE_NAME}</p>
 ${paragraphs.map((paragraph) => `<p style="margin:0 0 16px">${escapeHtml(paragraph).replace(/\n/g, '<br>')}</p>`).join('\n')}
+${blocks.map(({ html }) => html).join('\n')}
 ${button ? `<p style="margin:24px 0"><a href="${escapeHtml(button.url)}" style="display:inline-block;padding:10px 20px;border-radius:999px;background:#27343a;color:#fff;text-decoration:none">${escapeHtml(button.label)}</a></p>` : ''}
 <div style="margin:32px 0 0;padding-top:16px;border-top:1px solid #ddd;color:#888;font-size:13px">
 ${footer ? `<p style="margin:0 0 12px">${escapeHtml(footer)}</p>` : ''}
