@@ -6,7 +6,6 @@
 	import ReportDialog from '#components/ReportDialog.svelte';
 	import { me } from '#lib/me.svelte.js';
 	import { resolve } from '$app/paths';
-	import { page } from '$app/state';
 	import { profilePath } from '#lib/paths.js';
 	import type { CookbookWithMembers } from '#lib/server/profiles.js';
 	import { SITE_NAME } from '#lib/site.js';
@@ -41,7 +40,10 @@
 		{#if me.canEdit(cookbook.id)}
 			<a
 				class="settings"
-				href="{page.url.pathname}/einstellungen"
+				href={resolve('/[handle=handle]/[cookbook]/einstellungen', {
+					handle: `@${cookbook.ownerUsername}`,
+					cookbook: cookbook.slug
+				})}
 				aria-label="Einstellungen des Kochbuchs"
 				title="Einstellungen"><Settings size="1.25rem" aria-hidden="true" /></a
 			>

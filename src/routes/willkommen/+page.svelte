@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import KeyRound from '@lucide/svelte/icons/key-round';
@@ -45,6 +46,7 @@
 				'Der Passkey wurde nicht angelegt. Du kannst das später unter „Konto“ nachholen.';
 			return;
 		}
+		// eslint-disable-next-line svelte/no-navigation-without-resolve -- the server checked the target
 		await goto(data.next, { invalidateAll: true });
 	};
 </script>
@@ -105,8 +107,10 @@
 			<label class="checkbox">
 				<input type="checkbox" name="terms" required />
 				<span>
-					Ich stimme den <a href="/nutzungsbedingungen" target="_blank">Nutzungsbedingungen</a> und
-					der <a href="/datenschutz" target="_blank">Datenschutzerklärung</a> zu.
+					Ich stimme den <a href={resolve('/nutzungsbedingungen')} target="_blank"
+						>Nutzungsbedingungen</a
+					>
+					und der <a href={resolve('/datenschutz')} target="_blank">Datenschutzerklärung</a> zu.
 				</span>
 			</label>
 			<p class="message">
@@ -135,6 +139,7 @@
 			{#if passkeyError}
 				<p class="message message--error" role="alert">{passkeyError}</p>
 			{/if}
+			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- the server checked the target -->
 			<a class="btn btn--quiet btn--block" href={data.next} data-sveltekit-reload>Später</a>
 		</div>
 	{/if}

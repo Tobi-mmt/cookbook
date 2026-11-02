@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms';
 	import Dialog from '#components/Dialog.svelte';
 	import { resolve } from '$app/paths';
-	import { cookbookPath } from '#lib/paths.js';
+	import { cookbookPath, profilePath } from '#lib/paths.js';
 	import type { EditableCookbook } from '#lib/server/cookbooks.js';
 	import { SITE_NAME } from '#lib/site.js';
 
@@ -48,7 +48,7 @@
 <p class="hint">
 	Seit {person.createdAt.toLocaleDateString('de-DE')} · {data.storageUsedMb} MB Bilder ·
 	{data.reportsBy} eigene Meldungen
-	{#if person.username}· <a href="/@{person.username}" target="_blank">Profil</a>{/if}
+	{#if person.username}· <a href={profilePath(person.username)} target="_blank">Profil</a>{/if}
 </p>
 
 <form method="POST" action="?/save" class="stack" use:enhance>
