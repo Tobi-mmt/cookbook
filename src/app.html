@@ -15,6 +15,8 @@
 		<script nonce="%sveltekit.nonce%">
 			try {
 				if (localStorage.getItem('signed-in')) document.documentElement.classList.add('signed-in');
+				if (localStorage.getItem('passkey-on-device'))
+					document.documentElement.classList.add('passkey-device');
 			} catch {}
 		</script>
 

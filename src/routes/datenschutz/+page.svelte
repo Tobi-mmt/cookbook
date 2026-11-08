@@ -110,8 +110,9 @@
 		Ohne Konto setzen wir keine Cookies. Nach dem Anmelden setzen wir ein Sitzungs-Cookie, das dich
 		angemeldet hält. Wählst du „angemeldet bleiben“ ab, kommt ein zweites dazu, damit die Sitzung
 		mit dem Browser endet. Im Speicher deines Browsers (localStorage) merken wir uns, ob du
-		angemeldet bist, und ungespeicherte Entwürfe beim Bearbeiten eines Rezepts. Diese Daten
-		verlassen deinen Browser nicht.
+		angemeldet bist, ob es auf diesem Gerät einen Passkey gibt oder wir nicht mehr nach einem fragen
+		sollen, und ungespeicherte Entwürfe beim Bearbeiten eines Rezepts. Diese Daten verlassen deinen
+		Browser nicht.
 	</p>
 	<p class="basis">Rechtsgrundlage: technisch notwendig, § 25 Abs. 2 Nr. 2 TDDDG.</p>
 

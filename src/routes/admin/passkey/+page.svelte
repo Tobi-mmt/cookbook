@@ -2,15 +2,14 @@
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import KeyRound from '@lucide/svelte/icons/key-round';
+	import { signInWithPasskey } from '#lib/passkeys.js';
 	import { SITE_NAME } from '#lib/site.js';
 
 	let error = $state<string | null>(null);
 
 	const signIn = async () => {
 		error = null;
-		const { authClient } = await import('#lib/authClient.js');
-		const result = await authClient.signIn.passkey();
-		if (result.error) {
+		if (await signInWithPasskey()) {
 			error = 'Die Anmeldung mit Passkey hat nicht geklappt.';
 			return;
 		}
