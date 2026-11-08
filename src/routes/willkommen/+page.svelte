@@ -1,18 +1,23 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
-	import KeyRound from '@lucide/svelte/icons/key-round';
 	import { page } from '$app/state';
 	import { me } from '#lib/me.svelte.js';
 	import { validateUsername } from '#lib/username.js';
-	import { createPasskey, deviceName } from '#lib/passkeys.js';
+	import PasskeyPrompt from '#components/PasskeyPrompt.svelte';
 	import { SITE_NAME } from '#lib/site.js';
 
 	let {
 		data,
 		form
 	}: {
-		data: { next: string; done: boolean; name: string; username: string };
+		data: {
+			next: string;
+			done: boolean;
+			name: string;
+			username: string;
+			hasPasskeys: boolean;
+			remember: boolean;
+		};
 		form: { saved?: boolean; name?: string; username?: string; error?: string } | null;
 	} = $props();
 
@@ -20,7 +25,6 @@
 	let username = $state(form?.username ?? data.username);
 	let usernameError = $state<string | null>(null);
 	let saving = $state(false);
-	let passkeyError = $state<string | null>(null);
 
 	const showPasskeyStep = $derived(data.done || form?.saved);
 	$effect(() => {
@@ -36,16 +40,6 @@
 			const response = await fetch(`/api/benutzername?name=${encodeURIComponent(username)}`);
 			usernameError = (await response.json()).error;
 		}, 300);
-	};
-
-	const addPasskey = async () => {
-		passkeyError = null;
-		if (!(await createPasskey(deviceName()))) {
-			passkeyError =
-				'Der Passkey wurde nicht angelegt. Du kannst das später unter „Konto“ nachholen.';
-			return;
-		}
-		await goto(data.next, { invalidateAll: true });
 	};
 </script>
 
@@ -123,20 +117,7 @@
 			</button>
 		</form>
 	{:else}
-		<h1>Schneller anmelden</h1>
-		<div class="stack">
-			<p>
-				Mit einem Passkey meldest du dich künftig per Fingerabdruck, Gesicht oder Geräte-PIN an,
-				ganz ohne Mail.
-			</p>
-			<button type="button" class="btn btn--primary btn--block" onclick={addPasskey}>
-				<KeyRound size="1.1em" aria-hidden="true" /> Passkey anlegen
-			</button>
-			{#if passkeyError}
-				<p class="message message--error" role="alert">{passkeyError}</p>
-			{/if}
-			<a class="btn btn--quiet btn--block" href={data.next} data-sveltekit-reload>Später</a>
-		</div>
+		<PasskeyPrompt next={data.next} hasPasskeys={data.hasPasskeys} remember={data.remember} />
 	{/if}
 </div>
 

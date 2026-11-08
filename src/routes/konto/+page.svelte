@@ -50,9 +50,12 @@
 		passkeyError = null;
 		const { id, name } = naming;
 		naming = null;
-		const saved = id ? await renamePasskey(id, name) : await createPasskey(name);
-		if (!saved) {
-			passkeyError = id ? 'Der Name wurde nicht gespeichert.' : 'Der Passkey wurde nicht angelegt.';
+		if (id) {
+			if (!(await renamePasskey(id, name))) passkeyError = 'Der Name wurde nicht gespeichert.';
+		} else {
+			const result = await createPasskey(name);
+			if (result === 'exists') passkeyError = 'Auf diesem Gerät gibt es schon einen Passkey.';
+			if (result === 'failed') passkeyError = 'Der Passkey wurde nicht angelegt.';
 		}
 		await loadPasskeys();
 	};

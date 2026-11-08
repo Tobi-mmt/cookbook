@@ -2,7 +2,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import { z } from 'zod';
 import { safeRedirectTarget } from '#lib/redirectTarget.js';
 import { getAuth } from '#lib/server/auth/config.js';
-import { setRememberChoice } from '#lib/server/auth/remember.js';
+import { readRememberChoice, setRememberChoice } from '#lib/server/auth/remember.js';
 import { verifyCaptcha } from '#lib/server/captcha.js';
 import { getDb } from '#lib/server/context.js';
 import { MailError } from '#lib/server/mail.js';
@@ -12,10 +12,14 @@ import { hashIp } from '#lib/server/secret.js';
 const HOUR = 60 * 60;
 const emailSchema = z.email();
 
-export async function load({ locals, url }) {
+export async function load({ locals, url, cookies }) {
 	const next = safeRedirectTarget(url.searchParams.get('weiter'));
 	if (await locals.getSession()) redirect(303, next);
-	return { next, linkFailed: url.searchParams.has('fehler') };
+	return {
+		next,
+		linkFailed: url.searchParams.has('fehler'),
+		remember: readRememberChoice(cookies, url)
+	};
 }
 
 export const actions = {
@@ -50,7 +54,8 @@ export const actions = {
 			await getAuth(url.origin).api.signInMagicLink({
 				body: {
 					email,
-					callbackURL: next,
+					// asks for a passkey on the way, see /passkey-anlegen
+					callbackURL: `/passkey-anlegen?weiter=${encodeURIComponent(next)}`,
 					newUserCallbackURL: `/willkommen?weiter=${encodeURIComponent(next)}`,
 					errorCallbackURL: '/anmelden?fehler=link'
 				},

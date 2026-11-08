@@ -1,21 +1,28 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { safeRedirectTarget } from '#lib/redirectTarget.js';
+import { readRememberChoice } from '#lib/server/auth/remember.js';
 import { getDb } from '#lib/server/context.js';
 import { ensureCookbook, listEditableCookbooks } from '#lib/server/cookbooks.js';
 import { affectedPaths } from '#lib/server/affectedPaths.js';
 import { revalidate } from '#lib/server/revalidate.js';
-import { users } from '#lib/server/db/schema.js';
+import { passkeys, users } from '#lib/server/db/schema.js';
 import { changeUsername, isUsernameAvailable } from '#lib/server/users.js';
 import { suggestUsername, validateUsername } from '#lib/username.js';
 
-export async function load({ locals, url }) {
+export async function load({ locals, url, cookies }) {
 	const session = await locals.getSession();
 	const next = safeRedirectTarget(url.searchParams.get('weiter'));
 	if (!session) redirect(303, `/anmelden?weiter=${encodeURIComponent(url.pathname + url.search)}`);
 
 	const { user } = session;
+	const existing = await getDb().query.passkeys.findFirst({
+		where: eq(passkeys.userId, user.id),
+		columns: { id: true }
+	});
 	return {
+		hasPasskeys: Boolean(existing),
+		remember: readRememberChoice(cookies, url),
 		next,
 		done: Boolean(user.username && user.acceptedTermsAt),
 		name: user.name,
