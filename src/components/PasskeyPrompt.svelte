@@ -41,6 +41,7 @@
 		const result = await createPasskey(deviceName());
 		creating = false;
 		if (result === 'created') {
+			// eslint-disable-next-line svelte/no-navigation-without-resolve -- the server checked the target
 			await goto(next, { invalidateAll: true, replaceState: true });
 		} else if (result === 'exists') {
 			exists = true;
