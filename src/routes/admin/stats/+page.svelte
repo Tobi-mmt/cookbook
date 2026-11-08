@@ -83,6 +83,7 @@
 				{#each data.pages as page (page.path)}
 					<tr>
 						<td>
+							<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- a tracked path of this site -->
 							<a href={page.path} target="_blank" rel="noreferrer">{page.title ?? page.path}</a>
 							{#if page.title}<span class="path">{page.path}</span>{/if}
 						</td>

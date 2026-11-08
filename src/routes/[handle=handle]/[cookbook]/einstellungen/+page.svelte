@@ -23,7 +23,7 @@
 			cookbook: { id: string; name: string; slug: string; hiddenReason: string | null };
 			members: Member[];
 			invitations: { id: string; email: string | null; createdAt: Date; expiresAt: Date }[];
-			me: { id: string; isOwner: boolean };
+			me: { isOwner: boolean };
 			isLastCookbook: boolean;
 			trash: { id: string; title: string; deletedAt: Date | null; deletedBy: string | null }[];
 			stats: {

@@ -119,7 +119,7 @@
 	{:else if showImport && imported}
 		<div class="message">
 			<p>
-				Übernommen von <a href={imported.url} target="_blank" rel="noreferrer"
+				Übernommen von <a href={imported.url} target="_blank" rel="noreferrer external"
 					>{new URL(imported.url).hostname.replace(/^www\./, '')}</a
 				>. Bitte prüfe das Rezept und formuliere die Schritte in eigenen Worten. Gespeichert wird es
 				erst mit „Speichern“.
