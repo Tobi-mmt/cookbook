@@ -1600,16 +1600,6 @@ better-auth@1.7.18:
     nanostores "^1.3.0"
     zod "^4.5.4"
 
-better-call@1.4.4:
-  version "1.4.4"
-  resolved "https://registry.yarnpkg.com/better-call/-/better-call-1.4.4.tgz#769bcda6ca1f69e6a99fafe7e8ef78af2d43cc46"
-  integrity sha512-Gq4XdGFy4dmUxFEAX2nj0ycFcFbD9ZWh8YROouZoyXeF1M11TpYbplk0pDByTFF8Wz+MYa6W9052c9m7dD+mfw==
-  dependencies:
-    "@better-auth/utils" "^0.5.0"
-    "@better-fetch/fetch" "^1.3.1"
-    rou3 "^0.9.1"
-    set-cookie-parser "^3.1.2"
-
 better-call@1.4.5:
   version "1.4.5"
   resolved "https://registry.yarnpkg.com/better-call/-/better-call-1.4.5.tgz#e5701f1dfdb1b9a6ed813f1e2e75454f64e8aed9"
