@@ -11,6 +11,12 @@ export const IMAGE_WIDTHS = [480, 960, 1600, 2400];
  */
 export const WEBP_WIDTH = 1200;
 
+/**
+ * The print image for the PDF of a cookbook: at 3000 px it fills an A4 page in width with more
+ * than 300 dpi. A JPEG in high quality, since the AVIF variants are compressed for the web.
+ */
+export const PRINT_SIZE = 3000;
+
 const FORMAT_OPTIONS: Record<ImageFormat, (image: Sharp) => Sharp> = {
 	avif: (image) => image.avif({ quality: 55 }),
 	webp: (image) => image.webp({ quality: 78 })
@@ -40,6 +46,19 @@ const storeVariant = async (
 	return { variant: { width, url }, bytes: body.length };
 };
 
+const storePrintImage = async (
+	normalized: Buffer,
+	{ folder, hash, storage }: { folder: string; hash: string; storage: Storage }
+) => {
+	const { data, info } = await sharp(normalized)
+		.resize(PRINT_SIZE, PRINT_SIZE, { fit: 'inside', withoutEnlargement: true })
+		.toColorspace('srgb')
+		.jpeg({ quality: 88, chromaSubsampling: '4:4:4' })
+		.toBuffer({ resolveWithObject: true });
+	const url = await storage.putFile(`${folder}/${hash}-print.jpg`, data, 'image/jpeg');
+	return { variant: { width: info.width, height: info.height, url }, bytes: data.length };
+};
+
 export type AvifVariants = { variants: ImageVariant[]; bytes: number };
 
 /**
@@ -57,14 +76,18 @@ export const storeImagePreview = async (input: Buffer, folder: string, storage: 
 		hash: createHash('sha256').update(input).digest('hex').slice(0, 10),
 		storage
 	};
-	const webp = await storeVariant(normalized, 'webp', Math.min(WEBP_WIDTH, info.width), target);
+	const [webp, print] = await Promise.all([
+		storeVariant(normalized, 'webp', Math.min(WEBP_WIDTH, info.width), target),
+		storePrintImage(normalized, target)
+	]);
 
 	const image: RecipeImage = {
 		width: info.width,
 		height: info.height,
 		placeholder: await createPlaceholder(normalized),
 		variants: { avif: [], webp: [webp.variant] },
-		bytes: webp.bytes
+		print: print.variant,
+		bytes: webp.bytes + print.bytes
 	};
 	const createAvif = async (): Promise<AvifVariants> => {
 		const widths = [...new Set(IMAGE_WIDTHS.map((width) => Math.min(width, info.width)))];
@@ -93,8 +116,14 @@ export const processAndStoreImage = async (
 	};
 };
 
+/** All files of an image, the first one identifies it */
 export const imageUrls = (image: RecipeImage | null | undefined) =>
-	image ? Object.values(image.variants).flatMap((variants) => variants.map(({ url }) => url)) : [];
+	image
+		? [
+				...Object.values(image.variants).flatMap((variants) => variants.map(({ url }) => url)),
+				...(image.print ? [image.print.url] : [])
+			]
+		: [];
 
 export const copyImage = async (
 	image: RecipeImage,
@@ -108,9 +137,14 @@ export const copyImage = async (
 				url: await storage.copyFile(url, `${folder}/${url.split('/').pop()}`)
 			}))
 		);
-	const [avif, webp] = await Promise.all([
+	const [avif, webp, print] = await Promise.all([
 		copyVariants(image.variants.avif),
-		copyVariants(image.variants.webp)
+		copyVariants(image.variants.webp),
+		image.print ? copyVariants([image.print]) : []
 	]);
-	return { ...image, variants: { avif, webp } };
+	return {
+		...image,
+		variants: { avif, webp },
+		...(image.print ? { print: { ...image.print, url: print[0].url } } : {})
+	};
 };

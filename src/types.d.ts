@@ -68,7 +68,9 @@ export interface RecipeImage {
 	/** tiny base64 data URL used as blurred placeholder */
 	placeholder: string;
 	variants: Record<ImageFormat, ImageVariant[]>;
-	/** size of all variants, counted against the storage limit of `uploadedBy` */
+	/** a large JPEG in high quality for the PDF of a cookbook, only for images since its introduction */
+	print?: ImageVariant & { height: number };
+	/** size of all variants and the print image, counted against the storage limit of `uploadedBy` */
 	bytes?: number;
 	uploadedBy?: string;
 	/** only for images under a free license taken over from another site */

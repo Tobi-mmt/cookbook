@@ -4,7 +4,9 @@ import { readLocalFile } from '#lib/server/storage.js';
 
 const CONTENT_TYPES: Record<string, string> = {
 	avif: 'image/avif',
-	webp: 'image/webp'
+	webp: 'image/webp',
+	jpg: 'image/jpeg',
+	pdf: 'application/pdf'
 };
 
 /** Serves the images of the local storage driver, replaces Vercel Blob during development */

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { RecipeSummary } from '#types';
 	import AddRecipeButton from '#components/AddRecipeButton.svelte';
+	import FileDown from '@lucide/svelte/icons/file-down';
 	import Settings from '@lucide/svelte/icons/settings';
 	import RecipeBrowser from '#components/RecipeBrowser.svelte';
 	import ReportDialog from '#components/ReportDialog.svelte';
@@ -39,13 +40,25 @@
 		<h1>{cookbook.name}</h1>
 		{#if me.canEdit(cookbook.id)}
 			<a
-				class="settings"
+				class="action"
 				href={resolve('/[handle=handle]/[cookbook]/einstellungen', {
 					handle: `@${cookbook.ownerUsername}`,
 					cookbook: cookbook.slug
 				})}
 				aria-label="Einstellungen des Kochbuchs"
 				title="Einstellungen"><Settings size="1.25rem" aria-hidden="true" /></a
+			>
+		{/if}
+		{#if data.recipes.length}
+			<!-- a plain link, the PDF page asks to sign in first -->
+			<a
+				class="action"
+				href={resolve('/[handle=handle]/[cookbook]/pdf', {
+					handle: `@${cookbook.ownerUsername}`,
+					cookbook: cookbook.slug
+				})}
+				aria-label="Als PDF herunterladen"
+				title="Als PDF"><FileDown size="1.25rem" aria-hidden="true" /></a
 			>
 		{/if}
 	</div>
@@ -117,13 +130,13 @@
 		justify-content: center;
 		gap: 0.5rem;
 	}
-	.settings {
+	.action {
 		display: flex;
 		padding: 0.4rem;
 		color: var(--color-text-subtle);
 		border-radius: var(--radius-pill);
 	}
-	.settings:hover {
+	.action:hover {
 		color: var(--color-text);
 		background: var(--color-surface-muted);
 	}
