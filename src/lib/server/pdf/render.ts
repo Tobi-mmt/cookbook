@@ -21,7 +21,7 @@ import { toPrintJpeg } from './printImage';
 const WORKSPACE = '/cookbook-pdf';
 
 /** Converting images takes the most time, a few run in parallel without using too much memory */
-const IMAGE_CONCURRENCY = 2;
+const IMAGE_CONCURRENCY = 3;
 
 export type PdfInput = {
 	cookbook: { name: string; url: string; members: string[] };

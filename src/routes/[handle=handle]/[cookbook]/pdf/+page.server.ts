@@ -14,8 +14,11 @@ import { hitRateLimit } from '#lib/server/rateLimit.js';
 import { countCookbookRecipes } from '#lib/server/recipes.js';
 import { downloadUrl } from '#lib/server/storage.js';
 
-/** Rendering a large cookbook with all images takes a while */
-export const config = { maxDuration: 300 };
+/**
+ * 60 seconds is the most the Hobby plan of Vercel allows, 75 recipes with images take about 20 to
+ * 30 seconds on one CPU. A function of its own, so that only this route carries the Typst binary.
+ */
+export const config = { maxDuration: 60, split: true };
 
 /** PDFs that are not stored yet, per person and hour */
 const RENDERS_PER_HOUR = 10;
