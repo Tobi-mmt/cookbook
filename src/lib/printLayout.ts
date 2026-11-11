@@ -6,7 +6,7 @@ export type PdfQuality = 'lesen' | 'druck';
 /** Resolution of the images in the PDF: small for the screen, full for printing */
 export const QUALITY = {
 	lesen: { dpi: 150, jpeg: 78 },
-	druck: { dpi: 300, jpeg: 90 }
+	druck: { dpi: 300, jpeg: 85 }
 } satisfies Record<PdfQuality, { dpi: number; jpeg: number }>;
 
 /** Below this resolution a photo looks soft on paper */

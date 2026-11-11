@@ -70,7 +70,7 @@ Every deployment starts with an empty cache. Therefore `/api/warm-cache` renders
 - The PDF is stored in Vercel Blob under `exports/` and reused as long as nothing in it changes (`cookbook_exports`, the key is a hash of everything the PDF shows). A new state replaces the old file, the nightly job deletes PDFs after 30 days. Creating new PDFs is limited to 10 per person and hour.
 - Images are cropped to their box and converted to JPEG. An image with at least 200 dpi at the full width of the page spans it, a smaller one is printed smaller next to the title, a tiny one is left out. The PDF page and the editor point out such images.
 - Since the PDF, the browser scales photos to 3000 instead of 2400 px before the upload and the server also stores a print image (`image.print`, JPEG with up to 3000 px), which counts against the storage limit. Older images only have the AVIF variants with 2400 px, which is enough for the full width.
-- Only the function of the PDF route contains the native Typst binary: `src/lib/server/cookbookPdf.ts` imports the renderer on demand, and the nightly job uses `src/lib/server/cookbookExports.ts`. Raise `LAYOUT_VERSION` after changing the layout, so that stored PDFs are replaced.
+- Only the function of the PDF route contains the native Typst binary: `src/lib/server/cookbookPdf.ts` imports the renderer on demand, the nightly job uses `src/lib/server/cookbookExports.ts` and the route is deployed as a function of its own (`split: true`). It may run 60 seconds, the most the Hobby plan of Vercel allows, 75 recipes take about 20 to 30 seconds on one CPU. Raise `LAYOUT_VERSION` after changing the layout, so that stored PDFs are replaced.
 
 ## Nightly job
 
