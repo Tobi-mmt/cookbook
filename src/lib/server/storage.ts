@@ -23,7 +23,12 @@ const blobOptions = (token: string) => ({
 /** Vercel Blob, used in production and preview */
 export const createBlobStorage = (token: string): Storage => ({
 	async putFile(pathname, body, contentType) {
-		const blob = await put(pathname, body, { ...blobOptions(token), contentType });
+		const blob = await put(pathname, body, {
+			...blobOptions(token),
+			contentType,
+			// large PDFs go up in parts
+			multipart: body.length > 20 * 1024 * 1024
+		});
 		return blob.url;
 	},
 	async deleteFiles(urls) {
@@ -70,3 +75,17 @@ export const readLocalFile = (pathname: string, baseDir = LOCAL_BLOB_DIR) => {
 
 export const createStorage = (blobToken: string | undefined): Storage =>
 	blobToken ? createBlobStorage(blobToken) : createLocalStorage();
+
+/** Reads a stored file by its URL, from Vercel Blob or from the local storage */
+export const readStoredFile = async (url: string) => {
+	if (url.startsWith(LOCAL_BLOB_URL_PREFIX)) {
+		return readLocalFile(url.slice(LOCAL_BLOB_URL_PREFIX.length));
+	}
+	const response = await fetch(url);
+	if (!response.ok) throw new Error(`Downloading ${url} failed: ${response.status}`);
+	return Buffer.from(await response.arrayBuffer());
+};
+
+/** A link that downloads the file instead of opening it */
+export const downloadUrl = (url: string) =>
+	url.startsWith(LOCAL_BLOB_URL_PREFIX) ? url : `${url}?download=1`;

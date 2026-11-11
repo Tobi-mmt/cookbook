@@ -43,6 +43,7 @@ Change `src/lib/server/db/schema.ts`, then run `yarn db:generate` to create a mi
 | `/`                        | Search over all recipes, popular and new recipes     |
 | `/@username`               | All recipes of a person, filterable by cookbook      |
 | `/@username/cookbook`      | A cookbook, `…/einstellungen` for its editors        |
+| `/@username/cookbook/pdf`  | The cookbook as PDF, for everybody signed in         |
 | `/rezept/{id}/{title}`     | A recipe, `…/bearbeiten` and `…/verlauf` for editors |
 | `/neu`                     | Create a recipe or import it from a link             |
 | `/anmelden`, `/willkommen` | Sign in or register, choose a username               |
@@ -59,9 +60,21 @@ The public pages use Vercel ISR: they are rendered once and then served from the
 
 Every deployment starts with an empty cache. Therefore `/api/warm-cache` renders the home page, the profiles and the newest recipes after every production deployment (`.github/workflows/warm-cache.yml`) and once a week as Vercel cron (`vercel.json`). All other pages render on their first visit.
 
+## Cookbook as PDF
+
+`/@username/cookbook/pdf` creates a book of all visible recipes of a cookbook: cover, table of contents by category, one A4 page per recipe (long recipes continue on the next page) and a page with the license and the image credits. It is rendered with [Typst](https://typst.app) through `@myriaddreamin/typst-ts-node-compiler`, the template is `src/lib/server/pdf/cookbook.typ`. The recipes go in as JSON and are never inserted into the markup. The font is Roboto Serif (`src/lib/server/pdf/fonts`, SIL Open Font License).
+
+- Only people who are signed in can create a PDF, the link on the cookbook page leads through the sign-in.
+- A PDF has at most 75 recipes (`PDF_RECIPE_LIMIT`), larger cookbooks have to be split.
+- There are two qualities: `lesen` with 150 dpi images and `druck` with 300 dpi for printing at home.
+- The PDF is stored in Vercel Blob under `exports/` and reused as long as nothing in it changes (`cookbook_exports`, the key is a hash of everything the PDF shows). A new state replaces the old file, the nightly job deletes PDFs after 30 days. Creating new PDFs is limited to 10 per person and hour.
+- Images are cropped to their box and converted to JPEG. An image with at least 200 dpi at the full width of the page spans it, a smaller one is printed smaller next to the title, a tiny one is left out. The PDF page and the editor point out such images.
+- Since the PDF, the browser scales photos to 3000 instead of 2400 px before the upload and the server also stores a print image (`image.print`, JPEG with up to 3000 px), which counts against the storage limit. Older images only have the AVIF variants with 2400 px, which is enough for the full width.
+- Only the function of the PDF route contains the native Typst binary: `src/lib/server/cookbookPdf.ts` imports the renderer on demand, and the nightly job uses `src/lib/server/cookbookExports.ts`. Raise `LAYOUT_VERSION` after changing the layout, so that stored PDFs are replaced.
+
 ## Nightly job
 
-`/api/cron/daily` runs every night as Vercel cron (`src/lib/server/dailyJob.ts`). It sums up the page views per recipe and day (used for "Beliebt" on the home page and the statistics of a cookbook), deletes raw page views after 30 months, empties the trash after 30 days, deletes accounts 7 days after their deletion was requested, resends failed mails, closes cases about deleted content and mails the admins a summary of new reports and warnings about many mails or a full database. On Mondays it mails a report of the last week to the address of the site: new accounts and recipes, page views, visitors and the top pages, compared to the week before.
+`/api/cron/daily` runs every night as Vercel cron (`src/lib/server/dailyJob.ts`). It sums up the page views per recipe and day (used for "Beliebt" on the home page and the statistics of a cookbook), deletes raw page views after 30 months, empties the trash after 30 days, deletes generated PDFs after 30 days, deletes accounts 7 days after their deletion was requested, resends failed mails, closes cases about deleted content and mails the admins a summary of new reports and warnings about many mails or a full database. On Mondays it mails a report of the last week to the address of the site: new accounts and recipes, page views, visitors and the top pages, compared to the week before.
 
 ## Tracking
 
@@ -69,7 +82,7 @@ Visitors are counted without cookies, like [Plausible](https://plausible.io/data
 
 ## Backups
 
-Every night `.github/workflows/backup.yml` dumps the database with a read-only role, refuses a dump smaller than half of the last one, restores it into a temporary Postgres as a test, encrypts it with [age](https://age-encryption.org) and uploads it to Scaleway Object Storage with a key that may only write. On the first of a month the dump is also stored as a monthly backup. On Sundays the images of Vercel Blob follow, the first Sunday of a month also as a monthly backup. Lifecycle rules of the bucket delete daily dumps and weekly images after 30 days, monthly backups of both after 360 days.
+Every night `.github/workflows/backup.yml` dumps the database with a read-only role, refuses a dump smaller than half of the last one, restores it into a temporary Postgres as a test, encrypts it with [age](https://age-encryption.org) and uploads it to Scaleway Object Storage with a key that may only write. On the first of a month the dump is also stored as a monthly backup. On Sundays the images of Vercel Blob follow (without the generated PDFs), the first Sunday of a month also as a monthly backup. Lifecycle rules of the bucket delete daily dumps and weekly images after 30 days, monthly backups of both after 360 days.
 
 ### Restore
 

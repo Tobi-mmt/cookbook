@@ -216,6 +216,29 @@ export const invitations = pgTable('invitations', {
 	revokedAt: timestamp('revoked_at', { withTimezone: true })
 });
 
+/**
+ * Generated PDFs of a cookbook in Vercel Blob, reused while the cookbook does not change. No
+ * foreign key: the nightly job deletes the files after 30 days, also of deleted cookbooks.
+ */
+export const cookbookExports = pgTable(
+	'cookbook_exports',
+	{
+		id: serial('id').primaryKey(),
+		cookbookId: text('cookbook_id').notNull(),
+		/** `lesen` or `druck` */
+		quality: text('quality').notNull(),
+		/** hash of the recipes, their versions and the layout, see `src/lib/server/cookbookExports.ts` */
+		key: text('key').notNull(),
+		url: text('url').notNull(),
+		bytes: integer('bytes').notNull(),
+		pages: integer('pages').notNull(),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
+	},
+	(table) => [
+		uniqueIndex('cookbook_exports_key_idx').on(table.cookbookId, table.quality, table.key)
+	]
+);
+
 /** One entry per step of a copy chain, the names are resolved when rendering */
 export type Attribution = { recipeId: string; title: string; userId: string | null }[];
 

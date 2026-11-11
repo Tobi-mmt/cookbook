@@ -146,6 +146,31 @@ export const getRecipe = async (db: Database, id: string) => {
 	};
 };
 
+/** Number of visible recipes of a cookbook */
+export const countCookbookRecipes = async (db: Database, cookbookId: string) => {
+	const [row] = await db
+		.select({ count: sql<number>`count(*)::int` })
+		.from(recipes)
+		.innerJoin(cookbooks, eq(cookbooks.id, recipes.cookbookId))
+		.where(and(eq(recipes.cookbookId, cookbookId), isVisible));
+	return row?.count ?? 0;
+};
+
+/** The visible recipes of a cookbook with ingredients and steps, sorted like on its page */
+export const listCookbookRecipes = async (db: Database, cookbookId: string) => {
+	const ids = await db
+		.select({ id: recipes.id })
+		.from(recipes)
+		.innerJoin(cookbooks, eq(cookbooks.id, recipes.cookbookId))
+		.where(and(eq(recipes.cookbookId, cookbookId), isVisible));
+	if (!ids.length) return [];
+	const rows = await loadRows(
+		db,
+		ids.map(({ id }) => id)
+	);
+	return sortRecipes(rows.map((row) => mapRecipe(row)));
+};
+
 export const getRecipeInput = async (db: Database, id: string) => {
 	const [rows] = await loadRows(db, [id]);
 	return (

@@ -13,6 +13,7 @@ import type { Storage } from './storage';
 import { trackingDay } from './tracking';
 import { sendWeeklyReport } from './weeklyReport';
 import { purgeTrash } from './trash';
+import { deleteOldExports } from './cookbookExports';
 
 const MAIL_WARNING_THRESHOLD = 1000;
 
@@ -95,7 +96,7 @@ const warnAboutMailVolume = async (db: Database, now: Date) => {
 };
 
 /**
- * The nightly maintenance: daily view numbers, retention of raw data, trash, account
+ * The nightly maintenance: daily view numbers, retention of raw data, trash, old PDFs, account
  * deletions, pending mails. Each step runs even if another one fails.
  */
 export const runDailyJob = async (
@@ -121,6 +122,7 @@ export const runDailyJob = async (
 	});
 	await step('pageViewRetention', async () => (await deleteOldPageViews(db, now)).rowCount);
 	await step('trash', () => purgeTrash(db, storage, now));
+	await step('pdfExports', () => deleteOldExports(db, storage, now));
 	await step('accounts', () => deleteRequestedAccounts(db, storage, now));
 	await step('mails', () => resendPendingMails(db));
 	await step('mailVolume', () => warnAboutMailVolume(db, now));

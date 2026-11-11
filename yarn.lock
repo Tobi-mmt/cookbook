@@ -852,6 +852,78 @@
     semver "^7.5.3"
     tar "^7.4.0"
 
+"@myriaddreamin/typst-ts-node-compiler-android-arm-eabi@0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@myriaddreamin/typst-ts-node-compiler-android-arm-eabi/-/typst-ts-node-compiler-android-arm-eabi-0.7.0.tgz#2f56b8f2860fa24631416364b6465afc3f3d96a2"
+  integrity sha512-25gKyErQai/u/EWBOSSZvV0rFfSL4tqHgYEyd4rZPXSHMpkvvgPmfA/Ees8InB1nnPV9Jlu9r0sftV6oiccprg==
+
+"@myriaddreamin/typst-ts-node-compiler-android-arm64@0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@myriaddreamin/typst-ts-node-compiler-android-arm64/-/typst-ts-node-compiler-android-arm64-0.7.0.tgz#a804cf62a614f29c82f98a1733ee43a1ecb3624c"
+  integrity sha512-CT3Ukt3E0FugdnjfEpmmxudre6kmJzbURVFGTYGEvFQbTMsIwnxGx6Z/9gVPe6V8oLO+5pa8aSkhOQaGdEQw1g==
+
+"@myriaddreamin/typst-ts-node-compiler-darwin-arm64@0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@myriaddreamin/typst-ts-node-compiler-darwin-arm64/-/typst-ts-node-compiler-darwin-arm64-0.7.0.tgz#a1af7b0c5b1d0cc929ae9dc4a6301ac67a2f567b"
+  integrity sha512-UAbhhUtUaJn7t6KyOgomUKUQWbjh8ycleJX6nPTqhKHvKqA9Py0c3Tvd1CLBrAj6lPl3TOz3pcjNMO0xy8/rjg==
+
+"@myriaddreamin/typst-ts-node-compiler-darwin-x64@0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@myriaddreamin/typst-ts-node-compiler-darwin-x64/-/typst-ts-node-compiler-darwin-x64-0.7.0.tgz#963aa240b973371f44d4d9166c506a9bd60bd2d8"
+  integrity sha512-oIGYODTlQdEZoJLvH44F906hLLZhICfxkFnkMU0hCYUAmmNlTK6SCP1SYb/kmwMgUSXz/aO9iT50w/DKDG/cww==
+
+"@myriaddreamin/typst-ts-node-compiler-linux-arm-gnueabihf@0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@myriaddreamin/typst-ts-node-compiler-linux-arm-gnueabihf/-/typst-ts-node-compiler-linux-arm-gnueabihf-0.7.0.tgz#8fc4558cc4bed42f0ba06375c4cf6cc4a76541a5"
+  integrity sha512-/RF/4F1BSpMRyIVFiyEgLRGygprjrptRRhB7ocbtOG+qEJphMpaqtETlDiQ4AJVGiFFWiQv8ahJsfYftMJeZAQ==
+
+"@myriaddreamin/typst-ts-node-compiler-linux-arm64-gnu@0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@myriaddreamin/typst-ts-node-compiler-linux-arm64-gnu/-/typst-ts-node-compiler-linux-arm64-gnu-0.7.0.tgz#efd976c1b6eca46b12bf141787ca27c81c7d480b"
+  integrity sha512-wYC/lfxWW14sbWmtT1u2maLjV7ifF7BuPbRFZYFb6fuxJJP12Xm212PTSz/ZHAcpX9H2bWIOFKVPJkeHHDZeSg==
+
+"@myriaddreamin/typst-ts-node-compiler-linux-arm64-musl@0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@myriaddreamin/typst-ts-node-compiler-linux-arm64-musl/-/typst-ts-node-compiler-linux-arm64-musl-0.7.0.tgz#e2ef559e56f1f868c2ef319535f95d4f0d0af0b7"
+  integrity sha512-pIfvHLJCf9Kr1RM0F6gXv6ceHuRXfr1TlgGpAM2yUcq6YLF6YAW+bybzKqzl4pR/Vv7n6tHRxFs5qGaiO/h6Qw==
+
+"@myriaddreamin/typst-ts-node-compiler-linux-x64-gnu@0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@myriaddreamin/typst-ts-node-compiler-linux-x64-gnu/-/typst-ts-node-compiler-linux-x64-gnu-0.7.0.tgz#0f79b99433109519190d890a6a661281d6e7c635"
+  integrity sha512-Q+ywVMYaxrS7u+PBuCwi9p+lSBpQ3YNkoXKDiS2mMdRka8ddurt5tJvuR0I1ku0bsXTR1/u4IsLwyyHWpKqUuw==
+
+"@myriaddreamin/typst-ts-node-compiler-linux-x64-musl@0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@myriaddreamin/typst-ts-node-compiler-linux-x64-musl/-/typst-ts-node-compiler-linux-x64-musl-0.7.0.tgz#3936d58b3814cee919e79ad90a56df98e09b73e1"
+  integrity sha512-TTU41wdtp/AnKWAcTPx5tZlMCX0iwyT++pcmxRUkOBr3zaFK0tyD2YG/LbpWEoJIGpX/3Y6DyH+dtDTAp8RKYQ==
+
+"@myriaddreamin/typst-ts-node-compiler-win32-arm64-msvc@0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@myriaddreamin/typst-ts-node-compiler-win32-arm64-msvc/-/typst-ts-node-compiler-win32-arm64-msvc-0.7.0.tgz#17e3527e6b8464a202795871b68c370f2d845799"
+  integrity sha512-/bgoB2Z2LmmgcXeF6tEoHkNluGqeh9qKM8xOYajpsd8aEb9Z+05YlPTZhsdLHFVp+SBHvM8Dh3Dtg5fwpkPbfw==
+
+"@myriaddreamin/typst-ts-node-compiler-win32-x64-msvc@0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@myriaddreamin/typst-ts-node-compiler-win32-x64-msvc/-/typst-ts-node-compiler-win32-x64-msvc-0.7.0.tgz#7f9a7528abe589d168840c64ad389b212cd3a2e9"
+  integrity sha512-6dteoOBTeOwrHPDU69W25nTZM4V3+hjdT6JnjOrcdtUWqDBwrEMtNwoxZOMUz5VRvtlguvLjjdfbTc2TgBdqBg==
+
+"@myriaddreamin/typst-ts-node-compiler@0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@myriaddreamin/typst-ts-node-compiler/-/typst-ts-node-compiler-0.7.0.tgz#37bed483b33b8cce1e359acd7cde49e6b5ca5f1f"
+  integrity sha512-snM2byzDcqqQbT6FiGeCgkbviJkxsuaUS/x2RiLoMngFC3UEiciM4LcUKDcIygsH70TroRLPzPIevF0LNGBJNA==
+  optionalDependencies:
+    "@myriaddreamin/typst-ts-node-compiler-android-arm-eabi" "0.7.0"
+    "@myriaddreamin/typst-ts-node-compiler-android-arm64" "0.7.0"
+    "@myriaddreamin/typst-ts-node-compiler-darwin-arm64" "0.7.0"
+    "@myriaddreamin/typst-ts-node-compiler-darwin-x64" "0.7.0"
+    "@myriaddreamin/typst-ts-node-compiler-linux-arm-gnueabihf" "0.7.0"
+    "@myriaddreamin/typst-ts-node-compiler-linux-arm64-gnu" "0.7.0"
+    "@myriaddreamin/typst-ts-node-compiler-linux-arm64-musl" "0.7.0"
+    "@myriaddreamin/typst-ts-node-compiler-linux-x64-gnu" "0.7.0"
+    "@myriaddreamin/typst-ts-node-compiler-linux-x64-musl" "0.7.0"
+    "@myriaddreamin/typst-ts-node-compiler-win32-arm64-msvc" "0.7.0"
+    "@myriaddreamin/typst-ts-node-compiler-win32-x64-msvc" "0.7.0"
+
 "@noble/ciphers@^2.2.0":
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/@noble/ciphers/-/ciphers-2.4.0.tgz#04cf9e0f1cd3d521e8e5ca92dc0c02238180f676"

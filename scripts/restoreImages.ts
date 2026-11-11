@@ -117,6 +117,8 @@ if (rewriteUrls) {
 					);
 			console.log(`${table}.${column}: ${result.rowCount} rows`);
 		}
+		// the PDFs are not part of the backup, they are created again on the next request
+		if (!dryRun) await db.execute(sql`delete from cookbook_exports`);
 	}
 	await pool.end();
 }

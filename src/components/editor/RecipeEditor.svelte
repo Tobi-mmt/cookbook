@@ -17,6 +17,7 @@
 	import IngredientList from './IngredientList.svelte';
 	import StepList from './StepList.svelte';
 	import { resizeImage } from './resizeImage';
+	import { bestSource, imageLayout } from '#lib/printLayout.js';
 
 	let {
 		recipe: initialRecipe,
@@ -58,6 +59,7 @@
 	// svelte-ignore state_referenced_locally
 	let selectedCookbook = $state(cookbookId ?? cookbooks?.[0]?.id ?? '');
 	let imageFile = $state<Blob | null>(null);
+	let imageFileSize = $state<{ width: number; height: number } | null>(null);
 	let previewUrl = $state<string | null>(null);
 	let imageError = $state<string | null>(null);
 	// svelte-ignore state_referenced_locally
@@ -129,6 +131,11 @@
 		previewUrl ?? image?.variants.webp.find(({ width }) => width >= 900)?.url ?? null
 	);
 	const unused = $derived(findUnusedIngredients(recipe));
+	/** too few pixels to fill the width of a page in the PDF of the cookbook */
+	const smallForPrint = $derived.by(() => {
+		const size = imageFile ? imageFileSize : image && bestSource(image);
+		return Boolean(size && imageLayout(size)?.layout !== 'full');
+	});
 
 	let imagePromptCopied = $state(false);
 	let imagePromptHint = $state<'copied' | 'title' | null>(null);
@@ -151,7 +158,9 @@
 		imageError = null;
 		if (!file) return;
 		try {
-			imageFile = await resizeImage(file);
+			const resized = await resizeImage(file);
+			imageFile = resized.blob;
+			imageFileSize = { width: resized.width, height: resized.height };
 			if (previewUrl) URL.revokeObjectURL(previewUrl);
 			previewUrl = URL.createObjectURL(imageFile);
 		} catch (resizeError) {
@@ -359,6 +368,12 @@
 					{imagePromptCopied ? 'Anweisung kopiert' : 'Mit KI erzeugen'}
 				</button>
 			</div>
+			{#if smallForPrint && currentPreview}
+				<p class="hint">
+					Das Bild ist etwas klein für den Druck: Im PDF des Kochbuchs steht es kleiner neben dem
+					Titel. Ein größeres Foto füllt dort die ganze Seitenbreite.
+				</p>
+			{/if}
 			{#if imagePromptHint === 'title'}
 				<p class="hint" role="status">
 					Gib zuerst einen Titel ein, damit die KI weiß, was sie zeigen soll.

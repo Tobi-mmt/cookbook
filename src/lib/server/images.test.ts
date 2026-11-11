@@ -1,6 +1,6 @@
 import sharp from 'sharp';
 import { describe, expect, test } from 'vitest';
-import { copyImage, processAndStoreImage } from './images';
+import { copyImage, imageUrls, processAndStoreImage } from './images';
 import type { Storage } from './storage';
 
 const memoryStorage = (): Storage => ({
@@ -22,6 +22,17 @@ describe('processAndStoreImage', () => {
 		expect(image.variants.webp.map(({ width }) => width)).toEqual([1200]);
 	});
 
+	test('stores a print image of at most 3000 px, counted in the bytes', async () => {
+		const large = await processAndStoreImage(await createImage(4000, 3000), 'a', memoryStorage());
+		expect(large.print).toMatchObject({ width: 3000, height: 2250 });
+		expect(large.print!.url).toMatch(/-print\.jpg$/);
+
+		const small = await processAndStoreImage(await createImage(800, 600), 'a', memoryStorage());
+		expect(small.print).toMatchObject({ width: 800, height: 600 });
+		expect(imageUrls(small)).toContain(small.print!.url);
+		expect(small.bytes).toBeGreaterThan(0);
+	});
+
 	test('never scales small images up', async () => {
 		const image = await processAndStoreImage(await createImage(800, 600), 'a', memoryStorage());
 
@@ -39,5 +50,7 @@ describe('copyImage', () => {
 			'/blob/b'
 		]);
 		expect(copy.placeholder).toBe(image.placeholder);
+		expect(copy.print?.url).toMatch(/^\/blob\/b\/.*-print\.jpg$/);
+		expect(copy.print?.width).toBe(800);
 	});
 });

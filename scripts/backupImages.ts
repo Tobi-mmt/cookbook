@@ -1,5 +1,5 @@
 /**
- * Downloads all files of Vercel Blob into a folder, for the weekly backup:
+ * Downloads all files of Vercel Blob except the generated PDFs into a folder, for the weekly backup:
  *
  *   BLOB_READ_WRITE_TOKEN=… yarn backup:images <folder>
  */
@@ -19,6 +19,8 @@ let count = 0;
 do {
 	const page = await list({ token, cursor, limit: 1000 });
 	for (const blob of page.blobs) {
+		// generated PDFs of cookbooks can be created again at any time
+		if (blob.pathname.startsWith('exports/')) continue;
 		const target = path.join(folder, blob.pathname);
 		const response = await fetch(blob.url);
 		if (!response.ok) throw new Error(`Downloading ${blob.pathname} failed: ${response.status}`);
