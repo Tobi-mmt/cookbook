@@ -39,6 +39,7 @@ describe('parseAiAnswer', () => {
 			title: 'Linsen-Dal',
 			sourceUrl: 'https://www.instagram.com/p/abc/',
 			portion: 4,
+			portionUnit: 'Portionen',
 			duration: 35,
 			categoryId: 1,
 			nutritionType: 'Vegan',

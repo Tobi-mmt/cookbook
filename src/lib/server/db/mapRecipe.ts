@@ -40,6 +40,7 @@ export const mapRecipe = (
 		isUnchangedCopy: Boolean(recipe.copiedFromId) && recipe.version === 1,
 		meta: {
 			portion: recipe.portion,
+			portionUnit: recipe.portionUnit,
 			duration: recipe.duration,
 			category,
 			nutritionType: recipe.nutritionType
@@ -79,6 +80,7 @@ export const mapRecipeInput = ({
 	description: recipe.description,
 	sourceUrl: recipe.sourceUrl,
 	portion: recipe.portion,
+	portionUnit: recipe.portionUnit,
 	duration: recipe.duration,
 	categoryId: recipe.categoryId,
 	nutritionType: recipe.nutritionType,

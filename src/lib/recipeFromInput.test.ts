@@ -14,6 +14,7 @@ test('maps an editor input to the recipe shown on the page', () => {
 			title: 'Dal',
 			description: null,
 			portion: 2,
+			portionUnit: 'Muffins',
 			duration: 40,
 			categoryId: 5,
 			nutritionType: 'Vegan',

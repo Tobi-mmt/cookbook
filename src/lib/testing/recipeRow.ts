@@ -5,6 +5,7 @@ export const testRecipeRow = (overrides: Partial<RecipeRow> = {}): RecipeRow => 
 	title: 'Rezept',
 	description: null,
 	portion: 2,
+	portionUnit: 'Portionen',
 	duration: 30,
 	categoryId: 5,
 	nutritionType: 'Vegetarisch',

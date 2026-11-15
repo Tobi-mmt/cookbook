@@ -1,6 +1,7 @@
 import { renderSVG } from 'uqr';
 import type { Ingredient, Recipe, RecipeImage, Section, Step } from '../../../types';
 import { imageCaption, licenseUrl } from '../../imageLicense';
+import { portionLabel } from '../../portionUnit';
 import { recipeUrl } from '../../recipeText';
 import { SITE_DOMAIN } from '../../site';
 import template from './cookbook.typ?raw';
@@ -142,9 +143,9 @@ export const renderCookbookPdf = async (
 				tab: categoryIndex
 			},
 			firstOfCategory: categories[categoryIndex].recipes[0].id === recipe.id,
-			portion: recipe.meta.portion,
+			portion: portionLabel(recipe.meta.portion, recipe.meta.portionUnit),
 			meta: [
-				`${recipe.meta.portion} ${recipe.meta.portion === 1 ? 'Portion' : 'Portionen'}`,
+				portionLabel(recipe.meta.portion, recipe.meta.portionUnit),
 				`${recipe.meta.duration} min`,
 				recipe.meta.nutritionType
 			].join(' · '),

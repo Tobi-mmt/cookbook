@@ -247,6 +247,8 @@ export const recipes = pgTable('recipes', {
 	title: text('title').notNull(),
 	description: text('description'),
 	portion: integer('portion').notNull(),
+	/** what `portion` counts, e.g. "Portionen", "Muffins" or "Kuchen" */
+	portionUnit: text('portion_unit').notNull().default('Portionen'),
 	duration: integer('duration').notNull(),
 	categoryId: integer('category_id')
 		.notNull()

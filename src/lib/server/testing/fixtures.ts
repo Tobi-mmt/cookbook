@@ -27,6 +27,7 @@ export const testInput = (title = 'Dal'): RecipeInput => ({
 	description: null,
 	sourceUrl: null,
 	portion: 2,
+	portionUnit: 'Portionen',
 	duration: 30,
 	categoryId: 5,
 	nutritionType: 'Vegan',

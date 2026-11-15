@@ -25,6 +25,7 @@ const image = (width: number, height: number): RecipeImage => ({
 const recipe = (overrides: Partial<Recipe> & { id: string; title: string }): Recipe => ({
 	meta: {
 		portion: 4,
+		portionUnit: 'Portionen',
 		duration: 45,
 		category: testCategories.hauptgericht,
 		nutritionType: 'Vegetarisch'
@@ -49,7 +50,13 @@ const recipes = [
 	recipe({
 		id: 'salat',
 		title: 'Bunter Linsensalat',
-		meta: { portion: 2, duration: 20, category: testCategories.salat, nutritionType: 'Vegan' },
+		meta: {
+			portion: 2,
+			portionUnit: 'Portionen',
+			duration: 20,
+			category: testCategories.salat,
+			nutritionType: 'Vegan'
+		},
 		description: 'Schnell gemacht und gut vorzubereiten.',
 		image: image(2400, 1600),
 		ingredients: [
@@ -89,7 +96,8 @@ const recipes = [
 		id: 'kuchen',
 		title: 'Apfelkuchen',
 		meta: {
-			portion: 12,
+			portion: 1,
+			portionUnit: 'Kuchen',
 			duration: 90,
 			category: testCategories.backen,
 			nutritionType: 'Vegetarisch'

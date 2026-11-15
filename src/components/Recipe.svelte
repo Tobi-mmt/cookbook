@@ -4,9 +4,11 @@
 	import Minus from '@lucide/svelte/icons/minus';
 	import Plus from '@lucide/svelte/icons/plus';
 	import Users from '@lucide/svelte/icons/users';
+	import Utensils from '@lucide/svelte/icons/utensils';
 	import { page } from '$app/state';
 
 	import { nutritionIcons } from '#lib/nutritionIcon.js';
+	import { isServing, portionLabel, portionUnitFor } from '#lib/portionUnit.js';
 	import { cookbookPath, profilePath, recipePath } from '#lib/paths.js';
 	import { imageCaption, licenseUrl } from '#lib/imageLicense.js';
 	import RecipeImage from './RecipeImage.svelte';
@@ -28,6 +30,9 @@
 	// svelte-ignore state_referenced_locally
 	let portion = $state(recipe.meta.portion);
 	const NutritionIcon = $derived(nutritionIcons[recipe.meta.nutritionType]);
+	const PortionIcon = $derived(isServing(recipe.meta.portionUnit) ? Users : Utensils);
+	const unit = $derived(portionUnitFor(portion, recipe.meta.portionUnit));
+	const units = $derived(portionUnitFor(2, recipe.meta.portionUnit));
 
 	const increasePortion = () => {
 		portion = portion + 1;
@@ -107,8 +112,8 @@
 				<h1 itemprop="name" class="title">{recipe.title}</h1>
 				<div class="meta">
 					<div class="meta-item">
-						<span class="icon"><Users size="1.1em" aria-hidden="true" /></span>
-						<p><span class="visually-hidden">Portionen: </span>{portion}</p>
+						<span class="icon"><PortionIcon size="1.1em" aria-hidden="true" /></span>
+						<p><span class="visually-hidden">Ergibt: </span>{portion} {unit}</p>
 					</div>
 					<div class="meta-item">
 						<span class="icon"><Hourglass size="1.1em" aria-hidden="true" /></span>
@@ -162,23 +167,27 @@
 				<aside class="ingredients">
 					<h2 class="part-title">Zutaten</h2>
 					<div class="portions">
-						<span>Portionen</span>
+						<span id="portion-unit">{unit}</span>
 						<div class="stepper">
 							<button
 								type="button"
 								class="stepper-button"
 								onclick={reducePortion}
 								disabled={portion <= 1}
-								aria-label="Eine Portion weniger"><Minus size="1em" aria-hidden="true" /></button
+								aria-label="Weniger {units}"><Minus size="1em" aria-hidden="true" /></button
 							>
-							<output itemprop="recipeYield" aria-live="polite">{portion}</output>
+							<output aria-live="polite" aria-describedby="portion-unit">{portion}</output>
 							<button
 								type="button"
 								class="stepper-button"
 								onclick={increasePortion}
-								aria-label="Eine Portion mehr"><Plus size="1em" aria-hidden="true" /></button
+								aria-label="Mehr {units}"><Plus size="1em" aria-hidden="true" /></button
 							>
 						</div>
+						<meta
+							itemprop="recipeYield"
+							content={portionLabel(recipe.meta.portion, recipe.meta.portionUnit)}
+						/>
 					</div>
 
 					<ul class="ingredient-list">

@@ -14,6 +14,7 @@ export const RECIPE_LIMITS = {
 	ingredients: 150,
 	steps: 100,
 	portion: 1000,
+	portionUnit: 30,
 	duration: 10000
 };
 
@@ -73,10 +74,17 @@ export const recipeInputSchema = z
 				.optional()
 		),
 		portion: z
-			.number({ error: 'Portionen fehlen' })
-			.int('Portionen müssen eine ganze Zahl sein')
-			.positive('Portionen müssen mindestens 1 sein')
-			.max(RECIPE_LIMITS.portion, `Höchstens ${RECIPE_LIMITS.portion} Portionen`),
+			.number({ error: 'Die Menge fehlt' })
+			.int('Die Menge muss eine ganze Zahl sein')
+			.positive('Die Menge muss mindestens 1 sein')
+			.max(RECIPE_LIMITS.portion, `Die Menge darf höchstens ${RECIPE_LIMITS.portion} sein`),
+		/** missing in versions and drafts from before, empty means "Portionen" */
+		portionUnit: trimmed
+			.max(
+				RECIPE_LIMITS.portionUnit,
+				`Die Einheit der Menge darf höchstens ${RECIPE_LIMITS.portionUnit} Zeichen lang sein`
+			)
+			.optional(),
 		duration: z
 			.number({ error: 'Dauer fehlt' })
 			.int('Dauer muss eine ganze Zahl sein')

@@ -1,4 +1,5 @@
 import type { Category, Ingredient, Recipe, RecipeImage, Section, Step } from '../types';
+import { DEFAULT_PORTION_UNIT } from './portionUnit';
 import type { RecipeInput } from './recipeInput';
 
 /** Shows a stored version like a recipe, `base` provides what a version does not store */
@@ -30,6 +31,7 @@ export const recipeFromInput = (
 		image,
 		meta: {
 			portion: input.portion,
+			portionUnit: input.portionUnit || DEFAULT_PORTION_UNIT,
 			duration: input.duration,
 			category,
 			nutritionType: input.nutritionType
