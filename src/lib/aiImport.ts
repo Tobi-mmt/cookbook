@@ -1,5 +1,6 @@
 import type { Category } from '../types';
-import { NUTRITION_TYPES, recipeInputSchema, type RecipeInput } from './recipeInput';
+import { DEFAULT_PORTION_UNIT } from './portionUnit';
+import { NUTRITION_TYPES, RECIPE_LIMITS, recipeInputSchema, type RecipeInput } from './recipeInput';
 
 /** The request people give to an AI of their choice together with a screenshot, link or text */
 export const aiPrompt = (
@@ -13,6 +14,7 @@ Antworte ausschließlich mit einem JSON-Objekt in genau diesem Format, ohne Erkl
   "description": "ein bis zwei Sätze oder null",
   "sourceUrl": "der Link, falls ich einen angegeben habe, sonst null",
   "portion": 4,
+  "portionUnit": "Portionen",
   "duration": 30,
   "category": "${categories.map(({ name }) => name).join(' | ')}",
   "nutritionType": "${NUTRITION_TYPES.join(' | ')}",
@@ -33,7 +35,8 @@ Regeln:
 - Formuliere die Schritte in eigenen Worten, kurz und klar.
 - Gib bei jedem Schritt unter "ingredients" die Zutaten an, die in diesem Schritt dazukommen, genau so geschrieben wie bei "name" in der Zutatenliste. Jede Zutat gehört zu genau einem Schritt, und zwar zu dem, in dem sie zum ersten Mal verarbeitet wird.
 - "quantity" ist eine Zahl (0.5 statt ½) oder null. Einheiten kurz: g, kg, ml, l, EL, TL, Prise, Stück.
-- "portion" ist die Zahl der Portionen, "duration" die gesamte Zeit in Minuten. Schätze sinnvoll, wenn nichts angegeben ist.
+- "portion" ist die Menge, die das Rezept ergibt, als ganze Zahl, und "portionUnit" ihre Einheit im Plural, z. B. Portionen, Stück, Muffins, Kuchen oder Bleche. Nimm Portionen, wenn das Rezept nichts anderes angibt.
+- "duration" ist die gesamte Zeit in Minuten. Schätze Menge und Dauer sinnvoll, wenn nichts angegeben ist.
 - "category" und "nutritionType" sind genau einer der angegebenen Werte.
 - Antworte auf Deutsch.
 
@@ -131,6 +134,8 @@ export const parseAiAnswer = (
 		description: text(json.description) || null,
 		sourceUrl: /^https?:\/\//.test(text(json.sourceUrl)) ? text(json.sourceUrl) : null,
 		portion: Math.round(number(json.portion) ?? 4),
+		portionUnit:
+			text(json.portionUnit).slice(0, RECIPE_LIMITS.portionUnit).trim() || DEFAULT_PORTION_UNIT,
 		duration: Math.round(number(json.duration) ?? 30),
 		categoryId: (find(categories, json.category) ?? categories[0])?.id,
 		nutritionType,

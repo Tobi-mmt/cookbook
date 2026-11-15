@@ -21,6 +21,8 @@ export const loadNewRecipePage = async (event: RequestEvent) => {
 		description: null,
 		sourceUrl: null,
 		portion: 2,
+		// the placeholder shows "Portionen", typing replaces it
+		portionUnit: '',
 		duration: 30,
 		categoryId: (categories.find(({ slug }) => slug === 'hauptgericht') ?? categories[0]).id,
 		nutritionType: 'Vegetarisch',

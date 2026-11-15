@@ -124,7 +124,7 @@
 
 #let ingredient-list(recipe) = {
   heading(level: 3, outlined: false, bookmarked: false)[Zutaten]
-  text(size: 8.5pt, fill: muted)[für #recipe.portion #if recipe.portion == 1 [Portion] else [Portionen]]
+  text(size: 8.5pt, fill: muted)[für #recipe.portion]
   v(2mm)
   set par(leading: 0.5em)
   grid(

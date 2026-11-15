@@ -47,6 +47,7 @@ describe('toRecipeInput', () => {
 			description: 'Knusprig',
 			sourceUrl: 'https://www.lecker.de/brezel-chips-1.html',
 			portion: 4,
+			portionUnit: 'Personen',
 			duration: 70,
 			categoryId: 2,
 			nutritionType: 'Vegetarisch'

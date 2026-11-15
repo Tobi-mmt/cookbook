@@ -1,4 +1,5 @@
 import type { Ingredient, Recipe, Section, Step } from '../types';
+import { portionLabel } from './portionUnit';
 import { slugerize } from './slugerize';
 import { SITE_NAME } from './site';
 
@@ -60,7 +61,7 @@ export const recipeJsonLd = (
 			}
 		}),
 		dateModified: new Date(recipe.updatedAt).toISOString(),
-		recipeYield: `${recipe.meta.portion} Portionen`,
+		recipeYield: portionLabel(recipe.meta.portion, recipe.meta.portionUnit),
 		totalTime: `PT${recipe.meta.duration}M`,
 		recipeCategory: recipe.meta.category.name,
 		...(DIETS[recipe.meta.nutritionType] && { suitableForDiet: DIETS[recipe.meta.nutritionType] }),
@@ -86,7 +87,7 @@ export const recipeMarkdown = (recipe: Recipe, origin: string) => {
 	const lines = [`# ${recipe.title}`, ''];
 	if (recipe.description) lines.push(recipe.description, '');
 	lines.push(
-		`- Portionen: ${recipe.meta.portion}`,
+		`- Ergibt: ${portionLabel(recipe.meta.portion, recipe.meta.portionUnit)}`,
 		`- Dauer: ${recipe.meta.duration} Minuten`,
 		`- Kategorie: ${recipe.meta.category.name}`,
 		`- Ernährung: ${recipe.meta.nutritionType}`,

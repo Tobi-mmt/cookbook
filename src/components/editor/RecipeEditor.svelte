@@ -14,7 +14,9 @@
 		recipeInputSchema,
 		type RecipeInput
 	} from '#lib/recipeInput.js';
+	import { portionLabel } from '#lib/portionUnit.js';
 	import IngredientList from './IngredientList.svelte';
+	import PortionInput from './PortionInput.svelte';
 	import StepList from './StepList.svelte';
 	import { resizeImage } from './resizeImage';
 	import { bestSource, imageLayout } from '#lib/printLayout.js';
@@ -301,10 +303,7 @@
 			<input type="hidden" name="importedFrom" value={initialRecipe.sourceUrl} />
 		{/if}
 		<div class="grid">
-			<label class="field">
-				Portionen
-				<input class="input" type="number" min="1" step="1" bind:value={recipe.portion} required />
-			</label>
+			<PortionInput bind:portion={recipe.portion} bind:unit={recipe.portionUnit} />
 			<label class="field">
 				Dauer (min)
 				<input class="input" type="number" min="1" step="1" bind:value={recipe.duration} required />
@@ -405,7 +404,9 @@
 
 	<section class="section">
 		<h2>Zutaten</h2>
-		<p class="hint">Mengen beziehen sich auf {recipe.portion} Portionen.</p>
+		<p class="hint">
+			Mengen beziehen sich auf {portionLabel(recipe.portion, recipe.portionUnit)}.
+		</p>
 		<IngredientList bind:ingredients={recipe.ingredients} onremove={removeLinks} />
 	</section>
 

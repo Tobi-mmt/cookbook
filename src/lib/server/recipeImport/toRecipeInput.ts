@@ -5,6 +5,7 @@ import {
 	type RecipeInput,
 	type StepInput
 } from '../../recipeInput';
+import { DEFAULT_PORTION_UNIT, parseYield } from '../../portionUnit';
 import type { ScrapedRecipe } from './extract';
 import { parseIngredient } from './parseIngredient';
 
@@ -32,8 +33,15 @@ export const parseDuration = (value: string | undefined): number | undefined => 
 };
 
 const parsePortion = (value: string | undefined) => {
-	const portion = Number(value?.match(/\d+/)?.[0]);
-	return portion > 0 ? Math.min(portion, RECIPE_LIMITS.portion) : DEFAULT_PORTION;
+	const parsed = parseYield(value);
+	if (!parsed || !(parsed.count > 0)) {
+		return { portion: DEFAULT_PORTION, portionUnit: DEFAULT_PORTION_UNIT };
+	}
+	return {
+		portion: Math.min(parsed.count, RECIPE_LIMITS.portion),
+		portionUnit:
+			parsed.unit.length <= RECIPE_LIMITS.portionUnit ? parsed.unit : DEFAULT_PORTION_UNIT
+	};
 };
 
 const CATEGORY_PATTERNS: [string, RegExp][] = [
@@ -146,7 +154,7 @@ export const toRecipeInput = (
 		),
 		description: recipe.description?.slice(0, RECIPE_LIMITS.description) ?? null,
 		sourceUrl,
-		portion: parsePortion(recipe.yield),
+		...parsePortion(recipe.yield),
 		duration: Math.min(
 			parseDuration(recipe.totalTime) ??
 				((parseDuration(recipe.prepTime) ?? 0) + (parseDuration(recipe.cookTime) ?? 0) ||

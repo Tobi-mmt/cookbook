@@ -37,6 +37,8 @@ export interface Recipe {
 	id: string;
 	meta: {
 		portion: number;
+		/** e.g. "Portionen", "Muffins" or "Kuchen", see `src/lib/portionUnit.ts` */
+		portionUnit: string;
 		duration: number;
 		category: Category;
 		nutritionType: NutritionType;

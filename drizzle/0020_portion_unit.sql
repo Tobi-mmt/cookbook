@@ -1,0 +1,1 @@
+ALTER TABLE "recipes" ADD COLUMN "portion_unit" text DEFAULT 'Portionen' NOT NULL;

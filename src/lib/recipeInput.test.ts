@@ -64,7 +64,7 @@ describe('recipe limits', () => {
 		expect(messages({ steps: [{ kind: 'step', text: 'x'.repeat(3001), links: [] }] })).toEqual([
 			'Ein Schritt darf höchstens 3000 Zeichen lang sein'
 		]);
-		expect(messages({ portion: 1001 })).toEqual(['Höchstens 1000 Portionen']);
+		expect(messages({ portion: 1001 })).toEqual(['Die Menge darf höchstens 1000 sein']);
 		expect(messages({ title: 'x'.repeat(200), portion: 1000, duration: 10000 })).toEqual([]);
 	});
 });

@@ -19,6 +19,7 @@ import type {
 	RecipeSummary
 } from '../../types';
 import { isNewRecipe } from '../newRecipe';
+import { DEFAULT_PORTION_UNIT } from '../portionUnit';
 import type { RecipeInput } from '../recipeInput';
 import { sortRecipes } from '../sortRecipes';
 import { categoriesById } from './categories';
@@ -208,6 +209,7 @@ export const toSummary = (
 	author: person(authorUsername, authorName),
 	meta: {
 		portion: recipe.portion,
+		portionUnit: recipe.portionUnit,
 		duration: recipe.duration,
 		category: categoryMap.get(recipe.categoryId)!,
 		nutritionType: recipe.nutritionType
@@ -245,6 +247,7 @@ export const listRecipeIndex = async (db: Database, where?: SQL): Promise<Recipe
 			title: recipe.title,
 			meta: {
 				portion: recipe.portion,
+				portionUnit: recipe.portionUnit,
 				duration: recipe.duration,
 				category: categoryMap.get(recipe.categoryId)!,
 				nutritionType: recipe.nutritionType
@@ -288,6 +291,7 @@ export const saveRecipe = async (
 			description: input.description || null,
 			sourceUrl: input.sourceUrl || null,
 			portion: input.portion,
+			portionUnit: input.portionUnit || DEFAULT_PORTION_UNIT,
 			duration: input.duration,
 			categoryId: input.categoryId,
 			nutritionType: input.nutritionType,
