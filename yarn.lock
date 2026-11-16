@@ -1516,20 +1516,20 @@
     "@vercel/cli-exec" "1.0.1"
     jose "^5.9.6"
 
-"@vitest/mocker@5.0.5":
-  version "5.0.5"
-  resolved "https://registry.yarnpkg.com/@vitest/mocker/-/mocker-5.0.5.tgz#0d591e22de595595b549e14af1115c69868ba099"
-  integrity sha512-xLL3lkDegJZw+MGoGaCCsFayDZthGgpAtr3Vziyfc4p7xH89K7KRPcRBBh/kEYm0Aqkt5DtTmkYpBtRV/FrHZg==
+"@vitest/mocker@5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@vitest/mocker/-/mocker-5.1.0.tgz#fba68dd77810c2f053b2ad7ea7ffc56e8d94eb8e"
+  integrity sha512-5umB9/jlWcqVS6fsrFmv5Gdnpu6wAUio/lEOwAmvB7v+lFo/IW2B9FhAD0p19GCULTgMzLCdUmuCDCnAzWgppQ==
   dependencies:
     "@jridgewell/trace-mapping" "0.3.31"
-    "@vitest/spy" "5.0.5"
+    "@vitest/spy" "5.1.0"
     estree-walker "^3.0.3"
     magic-string "^1.4.3"
 
-"@vitest/spy@5.0.5":
-  version "5.0.5"
-  resolved "https://registry.yarnpkg.com/@vitest/spy/-/spy-5.0.5.tgz#d5629d07a1182899f2159f700d0cd4e73785d6b9"
-  integrity sha512-lwJRExuH417257Q5wv9QYugN9IMJkoxcrKrYxGPQkBzl7wlNpTUxD/5yNX4ESKVUIShKPgkGchYPFMWOOk0wzw==
+"@vitest/spy@5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@vitest/spy/-/spy-5.1.0.tgz#0a10d0ca39c0df70951715ba1081dd186a451c23"
+  integrity sha512-2DPO5OMHWKrBngC+fCmTQqemNF0gidRhp3lxbBmRhW+M1XJrfgPpqNqWVevXtn2f2ufD5ZaR1B6B641aAlcX5A==
 
 abbrev@^3.0.0:
   version "3.0.1"
@@ -1963,10 +1963,10 @@ cssesc@^3.0.0:
   resolved "https://registry.yarnpkg.com/cssesc/-/cssesc-3.0.0.tgz#37741919903b868565e1c09ea747445cd18983ee"
   integrity sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==
 
-cypress@16.2.1:
-  version "16.2.1"
-  resolved "https://registry.yarnpkg.com/cypress/-/cypress-16.2.1.tgz#98993dd2e6669e303f4ec3391c380b2c59e3b005"
-  integrity sha512-3Vqf1Krr92hKww/Owob9JrDO7TgBCR2ct+OQrvBOFGSnoGsikL4YF5arqDrJb+SM8Fzi7xXIeVmCeaOqJKPhRA==
+cypress@16.3.0:
+  version "16.3.0"
+  resolved "https://registry.yarnpkg.com/cypress/-/cypress-16.3.0.tgz#c1335704442ea67effe0643bf1ee098e1f690eda"
+  integrity sha512-h5qq6G9wgNEMWEUFejeBwj7fzwJljrO54n3wAa7yW2Q/8ORnkq4tQBqUhY4g9UM5uOazKmr4ay8YcKi+SJJ1ng==
   dependencies:
     "@cypress/request" "^4.0.0"
     "@cypress/xvfb" "^1.2.4"
@@ -2002,7 +2002,7 @@ cypress@16.2.1:
     proxy-from-env "1.0.0"
     request-progress "^3.0.0"
     supports-color "^8.1.1"
-    systeminformation "^5.31.1"
+    systeminformation "^5.33.16"
     tmp "~0.2.4"
     tree-kill "1.2.2"
     untildify "^4.0.0"
@@ -3985,10 +3985,10 @@ svelte@5.57.3:
     magic-string "^0.30.11"
     zimmerframe "^1.1.2"
 
-systeminformation@^5.31.1:
-  version "5.33.18"
-  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-5.33.18.tgz#cae5983875ba291f6f036cfde86a26b422c5b71c"
-  integrity sha512-SF8DBQx3ypa8zDqZlezpHQ6M2g7TrqSEWpAtC4OsHCdLmi7J2WdxaSbA8/DJyEn2l/CHPrW0VFenoqoDccrw6g==
+systeminformation@^5.33.16:
+  version "5.33.23"
+  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-5.33.23.tgz#380ac88050d9ea23ea04d29d4d7ec651bcee9466"
+  integrity sha512-OBOvemo4WHf8bGMszwszn3JcFxkIMZt7adjhdgJh3eePo37EIBZovZbhJDQ2zfVYPEtXScHDJXGik8eYd3WMNw==
 
 tar@^7.4.0:
   version "7.5.19"
@@ -4207,13 +4207,13 @@ vitefu@^1.1.2:
   resolved "https://registry.yarnpkg.com/vitefu/-/vitefu-1.1.3.tgz#59b9885b1c200856319d7e9ceb0e99a065430009"
   integrity sha512-ub4okH7Z5KLjb6hDyjqrGXqWtWvoYdU3IGm/NorpgHncKoLTCfRIbvlhBm7r0YstIaQRYlp4yEbFqDcKSzXSSg==
 
-vitest@5.0.5:
-  version "5.0.5"
-  resolved "https://registry.yarnpkg.com/vitest/-/vitest-5.0.5.tgz#266e335f4177541e3e60f876e0694f966a9601f2"
-  integrity sha512-cPODOMF8YnkiiYtDdHo6n4wWmBrOBBbOIYH2d33M4l3CdNn72h+qMmO6uXffUN6A5AZFXNND/d+krS9mgkXRfg==
+vitest@5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/vitest/-/vitest-5.1.0.tgz#5c6d94179dcb84bb153e87c3fc4e73cf7f29f9a0"
+  integrity sha512-MzmNFnrwa8v8lF1bLxw3UJ4EREwVOVb75VqJZmUDRjJ6EluK/x9th7qTbaeDk41WxE1GxWqmTXcdsfobfH5sOA==
   dependencies:
     "@types/chai" "^5.2.2"
-    "@vitest/mocker" "5.0.5"
+    "@vitest/mocker" "5.1.0"
     chai "^6.3.0"
     es-module-lexer "^2.3.2"
     expect-type "^1.4.0"
