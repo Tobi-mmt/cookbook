@@ -1474,9 +1474,9 @@
     execa "5.1.1"
 
 "@vercel/functions@^3.9.9":
-  version "3.11.2"
-  resolved "https://registry.yarnpkg.com/@vercel/functions/-/functions-3.11.2.tgz#4bc336f1878add3c574500b7740f173b1e3d781e"
-  integrity sha512-SFC8w2S9p39HMe3EFWjH2wY3IJUOTxPI7Ypn9MzPShqTbpUE2arV+AkklE90chi+2s3tda3nDMiy7CkGaPMVSg==
+  version "3.11.3"
+  resolved "https://registry.yarnpkg.com/@vercel/functions/-/functions-3.11.3.tgz#2e85ec582ddd1fcf118e80721fd9d0bdec28f9b4"
+  integrity sha512-WOOYeJXbA1CeqQzCu9JLCJQnNdisrGpNgS3K5qSTyMPsXlfs4y47S3EiRCyDPYw6vajPoqQffbFI05zgjYIJcQ==
   dependencies:
     "@vercel/oidc" "4.0.9"
 
