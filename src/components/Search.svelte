@@ -140,7 +140,11 @@
 	>
 
 	{#if showPanel}
-		<div class="panel" id="search-results">
+		<!-- Safari does not focus a link when it is tapped or clicked, so the field would lose
+		     the focus to nothing, the panel would close and the tap would miss the link.
+		     Keeping the focus in the field until the click lands avoids that. -->
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<div class="panel" id="search-results" on:mousedown|preventDefault>
 			{#if loading && !results.length && !landings.length}
 				<p class="hint">Suche…</p>
 			{:else if !results.length && !landings.length}
